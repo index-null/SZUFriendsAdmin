@@ -1,9 +1,14 @@
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
+import path from 'path'
 
 export default defineConfig({
   plugins: [vue()],
-  
+  resolve: {
+    alias: {
+      '@': path.resolve(__dirname, 'src'),  // 把 @ 指向 src
+    },
+  },
   // 基础路径 - 根据你的部署位置调整
   base: '/',
   
