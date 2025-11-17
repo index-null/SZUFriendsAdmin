@@ -410,6 +410,9 @@ html.dark .home {
 /* 欢迎卡片 */
 .home-header {
   margin-bottom: 24px;
+  max-width: 1600px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .welcome-card {
@@ -427,7 +430,12 @@ html.dark .home {
 }
 
 .user-avatar {
-  border: 3px solid #409eff;
+  border: 3px solid #990033;
+  box-shadow: 0 2px 12px rgba(153, 0, 51, 0.3);
+}
+
+html.dark .user-avatar {
+  border-color: #409eff;
   box-shadow: 0 2px 12px rgba(64, 158, 255, 0.3);
 }
 

@@ -3,6 +3,7 @@ import { computed } from 'vue'
 import { useRoute } from 'vue-router'
 import { useUserStore } from '@/stores/modules/user'
 import ThemeToggle from './components/ThemeToggle.vue'
+import SzuLogo from './components/SzuLogo.vue'
 
 const route = useRoute()
 const userStore = useUserStore()
@@ -23,9 +24,10 @@ const hasCollegePermission = computed(() => {
     <nav v-if="showNavbar" class="navbar">
       <div class="nav-container">
         <div class="nav-brand">
-          <router-link to="/home" class="brand-link"
-            >深大校友录管理后台</router-link
-          >
+          <router-link to="/home" class="brand-link">
+            <SzuLogo :size="128" variant="navbar" />
+            <span class="brand-text">校友录管理后台</span>
+          </router-link>
         </div>
         <ul class="nav-menu">
           <li>
@@ -68,17 +70,19 @@ const hasCollegePermission = computed(() => {
 }
 
 .navbar {
-  background-color: #f5f5f5;
-  border-bottom: 1px solid #e0e0e0;
+  background-color: #ffffff;
+  border-bottom: 1px solid #e5e7eb;
   position: sticky;
   top: 0;
   z-index: 10;
   width: 100%;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
 }
 
 html.dark .navbar {
   background-color: #1a1a1a;
   border-bottom: 1px solid #333;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
 }
 
 .nav-container {
@@ -88,7 +92,7 @@ html.dark .navbar {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  height: 60px;
+  height: 64px;
   width: 100%;
 }
 
@@ -98,9 +102,12 @@ html.dark .navbar {
 }
 
 .brand-link {
-  color: #333;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: #2c3e50;
   text-decoration: none;
-  transition: color 0.3s;
+  transition: all 0.3s;
 }
 
 html.dark .brand-link {
@@ -108,6 +115,17 @@ html.dark .brand-link {
 }
 
 .brand-link:hover {
+  opacity: 0.8;
+}
+
+.brand-text {
+  font-size: 18px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  color: #990033;
+}
+
+html.dark .brand-text {
   color: #409eff;
 }
 
@@ -123,8 +141,10 @@ html.dark .brand-link {
   color: #606266;
   text-decoration: none;
   font-weight: 500;
-  transition: color 0.3s;
+  transition: all 0.3s;
   position: relative;
+  padding: 8px 16px;
+  border-radius: 6px;
 }
 
 html.dark .nav-menu a {
@@ -132,20 +152,38 @@ html.dark .nav-menu a {
 }
 
 .nav-menu a:hover {
+  color: #990033;
+  background-color: rgba(153, 0, 51, 0.05);
+}
+
+html.dark .nav-menu a:hover {
   color: #409eff;
+  background-color: rgba(64, 158, 255, 0.1);
 }
 
 .nav-menu a.active {
+  color: #990033;
+  background-color: rgba(153, 0, 51, 0.1);
+  font-weight: 600;
+}
+
+html.dark .nav-menu a.active {
   color: #409eff;
+  background-color: rgba(64, 158, 255, 0.15);
 }
 
 .nav-menu a.active::after {
   content: '';
   position: absolute;
-  bottom: -5px;
+  bottom: 0px;
   left: 0;
   right: 0;
   height: 2px;
+  background-color: #990033;
+  border-radius: 2px 2px 0 0;
+}
+
+html.dark .nav-menu a.active::after {
   background-color: #409eff;
 }
 
