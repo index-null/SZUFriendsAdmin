@@ -2,8 +2,9 @@ import { createRouter, createWebHistory, type RouteRecordRaw } from 'vue-router'
 import { setupRouterGuards } from './guards'
 
 // 页面组件 - 使用动态导入实现代码分割
+const Login = () => import('../views/Login.vue')
+const Register = () => import('../views/Register.vue')
 const Home = () => import('../views/Home.vue')
-const About = () => import('../views/About.vue')
 const NotFound = () => import('../views/NotFound.vue')
 
 /**
@@ -15,23 +16,41 @@ const NotFound = () => import('../views/NotFound.vue')
  * 4. 统一的错误处理
  */
 const routes: RouteRecordRaw[] = [
+  // 根路径重定向到登录页
   {
     path: '/',
+    redirect: '/login',
+  },
+  // 登录页
+  {
+    path: '/login',
+    name: 'Login',
+    component: Login,
+    meta: {
+      title: '登录',
+      requiresAuth: false,
+      hideNavbar: true,
+    },
+  },
+  // 注册页
+  {
+    path: '/register',
+    name: 'Register',
+    component: Register,
+    meta: {
+      title: '注册',
+      requiresAuth: false,
+      hideNavbar: true,
+    },
+  },
+  // 首页
+  {
+    path: '/home',
     name: 'Home',
     component: Home,
     meta: {
       title: '首页',
-      requiresAuth: false,
-      showInMenu: true,
-    },
-  },
-  {
-    path: '/about',
-    name: 'About',
-    component: About,
-    meta: {
-      title: '关于我们',
-      requiresAuth: false,
+      requiresAuth: true,
       showInMenu: true,
     },
   },

@@ -1,26 +1,26 @@
 <script setup lang="ts">
+import { computed } from 'vue'
 import { useRoute } from 'vue-router'
+import ThemeToggle from './components/ThemeToggle.vue'
 
 const route = useRoute()
+
+// 判断是否显示导航栏（登录/注册页面不显示）
+const showNavbar = computed(() => !route.meta.hideNavbar)
 </script>
 
 <template>
   <div id="app">
-    <!-- 导航栏 -->
-    <nav class="navbar">
+    <!-- 导航栏 - 仅在非登录/注册页面显示 -->
+    <nav v-if="showNavbar" class="navbar">
       <div class="nav-container">
         <div class="nav-brand">
-          <router-link to="/" class="brand-link">深大校友录管理后台</router-link>
+          <router-link to="/home" class="brand-link">深大校友录管理后台</router-link>
         </div>
         <ul class="nav-menu">
           <li>
-            <router-link to="/" :class="{ active: route.name === 'Home' }">
+            <router-link to="/home" :class="{ active: route.name === 'Home' }">
               首页
-            </router-link>
-          </li>
-          <li>
-            <router-link to="/about" :class="{ active: route.name === 'About' }">
-              关于
             </router-link>
           </li>
         </ul>
@@ -28,19 +28,23 @@ const route = useRoute()
     </nav>
 
     <!-- 路由视图 -->
-    <main class="main-content">
-      <router-view v-slot="{ Component }" >
+    <main :class="['main-content', { 'no-navbar': !showNavbar }]">
+      <router-view v-slot="{ Component }">
         <transition name="fade" mode="out-in">
           <component :is="Component" :key="route.path" />
         </transition>
       </router-view>
     </main>
+
+    <!-- 全局主题切换按钮 -->
+    <ThemeToggle />
   </div>
 </template>
 
 <style scoped>
 #app {
   min-height: 100vh;
+  width: 100%;
   display: flex;
   flex-direction: column;
 }
@@ -51,16 +55,23 @@ const route = useRoute()
   position: sticky;
   top: 0;
   z-index: 100;
+  width: 100%;
+}
+
+html.dark .navbar {
+  background-color: #1a1a1a;
+  border-bottom: 1px solid #333;
 }
 
 .nav-container {
-  max-width: 1200px;
+  max-width: 1400px;
   margin: 0 auto;
-  padding: 0 1rem;
+  padding: 0 24px;
   display: flex;
   justify-content: space-between;
   align-items: center;
   height: 60px;
+  width: 100%;
 }
 
 .nav-brand {
@@ -74,8 +85,12 @@ const route = useRoute()
   transition: color 0.3s;
 }
 
+html.dark .brand-link {
+  color: #e5e7eb;
+}
+
 .brand-link:hover {
-  color: #1e90ff;
+  color: #409eff;
 }
 
 .nav-menu {
@@ -87,19 +102,23 @@ const route = useRoute()
 }
 
 .nav-menu a {
-  color: #666;
+  color: #606266;
   text-decoration: none;
   font-weight: 500;
   transition: color 0.3s;
   position: relative;
 }
 
+html.dark .nav-menu a {
+  color: #9ca3af;
+}
+
 .nav-menu a:hover {
-  color: #1e90ff;
+  color: #409eff;
 }
 
 .nav-menu a.active {
-  color: #1e90ff;
+  color: #409eff;
 }
 
 .nav-menu a.active::after {
@@ -109,14 +128,17 @@ const route = useRoute()
   left: 0;
   right: 0;
   height: 2px;
-  background-color: #1e90ff;
+  background-color: #409eff;
 }
 
 .main-content {
   flex: 1;
-  max-width: 1200px;
-  margin: 0 auto;
   width: 100%;
+  overflow-x: hidden;
+}
+
+.main-content.no-navbar {
+  padding: 0;
 }
 
 /* 过渡动画 */

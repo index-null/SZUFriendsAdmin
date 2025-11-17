@@ -20,5 +20,7 @@ declare module 'vue-router' {
     breadcrumb?: boolean
     /** 是否缓存组件 */
     keepAlive?: boolean
+    /** 是否隐藏导航栏（登录/注册页使用） */
+    hideNavbar?: boolean
   }
 }
