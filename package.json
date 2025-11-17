@@ -13,7 +13,8 @@
     "format:check": "prettier --check .",
     "download-api": "curl -o openapi.json 'http://127.0.0.1:4523/export/openapi/3?version=openapi30'",
     "generate-api": "orval --config ./orval.config.ts",
-    "api": "npm run download-api && npm run generate-api"
+    "api": "npm run download-api && npm run generate-api",
+    "prepare": "husky"
   },
   "dependencies": {
     "@element-plus/icons-vue": "^2.3.2",
@@ -35,6 +36,8 @@
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-prettier": "^5.5.4",
     "eslint-plugin-vue": "^10.5.1",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.2.6",
     "prettier": "^3.6.2",
     "typescript": "~5.9.3",
     "typescript-eslint": "^8.46.4",
@@ -45,5 +48,14 @@
   },
   "overrides": {
     "vite": "npm:rolldown-vite@7.1.14"
+  },
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx,vue}": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "*.{json,md,css,scss,html}": [
+      "prettier --write"
+    ]
   }
 }
