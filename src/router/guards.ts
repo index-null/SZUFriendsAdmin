@@ -3,6 +3,7 @@
  * 最佳实践：将守卫逻辑分离到独立文件，提高代码可维护性
  */
 import type { Router, RouteLocationNormalized } from 'vue-router'
+import { getToken } from '@/api'
 
 /**
  * 权限检查函数
@@ -27,12 +28,8 @@ export const checkPermission = (requiredRoles?: string[]): boolean => {
  * @returns 是否已认证
  */
 export const isAuthenticated = (): boolean => {
-  // 这里应该从状态管理或 localStorage 获取认证状态
-  // const token = localStorage.getItem('token')
-  // return !!token
-
-  // 示例实现
-  return true
+  const token = getToken()
+  return !!token
 }
 
 /**
@@ -52,46 +49,44 @@ export const setPageTitle = (to: RouteLocationNormalized): void => {
 export const setupRouterGuards = (router: Router): void => {
   /**
    * 全局前置守卫
-   * 执行顺序：beforeEach -> 组件内 beforeRouteUpdate -> afterEach
    */
   router.beforeEach((to, _from, next) => {
-    // 1. 设置页面标题
     setPageTitle(to)
 
-    // 2. 权限检查
-    if (to.meta.requiresAuth && !isAuthenticated()) {
-      // 未认证，重定向到登录页
-      next('/login')
+    const authenticated = isAuthenticated()
+
+    if (to.meta.requiresAuth && !authenticated) {
+      next({
+        path: '/login',
+        query: { redirect: to.fullPath }
+      })
       return
     }
 
-    // 3. 角色权限检查
+    if (authenticated && to.path === '/login') {
+      next('/home')
+      return
+    }
+
     if (to.meta.roles && !checkPermission(to.meta.roles as string[])) {
-      // 无权限，重定向到 403 页面
       next('/403')
       return
     }
 
-    // 4. 继续导航
     next()
   })
 
   /**
    * 全局后置钩子
-   * 用于关闭加载状态、记录日志等
    */
-  router.afterEach((to, from) => {
-    // 关闭加载状态
-    // NProgress.done()
-
-    // 记录页面访问日志
-    console.log(`Navigated from ${from.path} to ${to.path}`)
+  router.afterEach(() => {
+    // 可在此处添加页面访问统计等逻辑
   })
 
   /**
    * 路由错误处理
    */
   router.onError((error) => {
-    console.error('Router error:', error)
+    console.error('❌ Router error:', error)
   })
 }

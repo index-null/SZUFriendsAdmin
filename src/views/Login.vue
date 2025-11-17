@@ -13,10 +13,10 @@
         class="login-form"
         size="large"
       >
-        <el-form-item prop="email">
+        <el-form-item prop="username">
           <el-input
-            v-model="loginForm.email"
-            placeholder="请输入邮箱"
+            v-model="loginForm.username"
+            placeholder="请输入用户名"
             prefix-icon="User"
             clearable
           />
@@ -63,35 +63,61 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive } from 'vue'
-import { useRouter } from 'vue-router'
-import { ElMessage, type FormInstance, type FormRules } from 'element-plus'
+import { ref, reactive, onMounted } from 'vue'
+import { useRouter, useRoute } from 'vue-router'
+import { type FormInstance, type FormRules } from 'element-plus'
+import { useUserStore } from '@/stores/modules/user'
 
 const router = useRouter()
+const route = useRoute()
+const userStore = useUserStore()
+
 const loginFormRef = ref<FormInstance>()
 const loading = ref(false)
 
+// LocalStorage key
+const REMEMBER_USERNAME_KEY = 'remember_username'
+
 // 表单数据
 const loginForm = reactive({
-  email: '',
+  username: '',
   password: '',
   remember: false,
 })
 
 // 表单验证规则
 const loginRules: FormRules = {
-  email: [
-    { required: true, message: '请输入邮箱', trigger: 'blur' },
-    {
-      type: 'email',
-      message: '请输入正确的邮箱格式',
-      trigger: ['blur', 'change'],
-    },
+  username: [
+    { required: true, message: '请输入用户名', trigger: 'blur' },
+    { min: 3, message: '用户名长度不能小于 3 位', trigger: 'blur' },
   ],
   password: [
     { required: true, message: '请输入密码', trigger: 'blur' },
     { min: 6, message: '密码长度不能小于 6 位', trigger: 'blur' },
   ],
+}
+
+// 从 localStorage 加载记住的用户名
+const loadRememberedUsername = () => {
+  try {
+    const rememberedUsername = localStorage.getItem(REMEMBER_USERNAME_KEY)
+    
+    if (rememberedUsername) {
+      loginForm.username = rememberedUsername
+      loginForm.remember = true
+    }
+  } catch (error) {
+    localStorage.removeItem(REMEMBER_USERNAME_KEY)
+  }
+}
+
+// 保存或清除记住的用户名
+const saveOrClearUsername = () => {
+  if (loginForm.remember) {
+    localStorage.setItem(REMEMBER_USERNAME_KEY, loginForm.username)
+  } else {
+    localStorage.removeItem(REMEMBER_USERNAME_KEY)
+  }
 }
 
 // 登录处理
@@ -101,16 +127,17 @@ const handleLogin = async () => {
   try {
     await loginFormRef.value.validate()
     loading.value = true
+    
+    const success = await userStore.login({
+      username: loginForm.username,
+      password: loginForm.password,
+    })
 
-    // TODO: 这里后续接入真实的登录 API
-    // 模拟登录请求
-    await new Promise((resolve) => setTimeout(resolve, 1000))
-
-    ElMessage.success('登录成功！')
-    // 登录成功后跳转到首页
-    router.push('/home')
-  } catch (error) {
-    console.error('登录失败:', error)
+    if (success) {
+      saveOrClearUsername()
+      const redirect = (route.query.redirect as string) || '/home'
+      await router.push(redirect)
+    }
   } finally {
     loading.value = false
   }
@@ -120,6 +147,11 @@ const handleLogin = async () => {
 const goToRegister = () => {
   router.push('/register')
 }
+
+// 组件挂载时加载记住的用户名
+onMounted(() => {
+  loadRememberedUsername()
+})
 </script>
 
 <style scoped>

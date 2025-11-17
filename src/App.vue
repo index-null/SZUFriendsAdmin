@@ -54,7 +54,7 @@ const showNavbar = computed(() => !route.meta.hideNavbar)
   border-bottom: 1px solid #e0e0e0;
   position: sticky;
   top: 0;
-  z-index: 100;
+  z-index: 10;
   width: 100%;
 }
 

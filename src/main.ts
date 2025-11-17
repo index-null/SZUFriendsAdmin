@@ -4,6 +4,8 @@ import App from './App.vue'
 import router from './router'
 import pinia from './stores'
 
+// 引入 Element Plus 基础样式（必须在 dark.css 之前）
+import 'element-plus/dist/index.css'
 // 引入 Element Plus 暗色主题
 import './element-plus/dark.css'
 import { initTheme } from './element-plus'

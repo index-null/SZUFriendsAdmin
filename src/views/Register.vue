@@ -16,17 +16,17 @@
         <el-form-item prop="username">
           <el-input
             v-model="registerForm.username"
-            placeholder="请输入用户名"
+            placeholder="请输入用户名（用于登录）"
             prefix-icon="User"
             clearable
           />
         </el-form-item>
 
-        <el-form-item prop="email">
+        <el-form-item prop="nickname">
           <el-input
-            v-model="registerForm.email"
-            placeholder="请输入邮箱"
-            prefix-icon="Message"
+            v-model="registerForm.nickname"
+            placeholder="请输入昵称（用于显示）"
+            prefix-icon="Avatar"
             clearable
           />
         </el-form-item>
@@ -86,16 +86,19 @@
 <script setup lang="ts">
 import { ref, reactive } from 'vue'
 import { useRouter } from 'vue-router'
-import { ElMessage, type FormInstance, type FormRules } from 'element-plus'
+import { type FormInstance, type FormRules } from 'element-plus'
+import { useUserStore } from '@/stores/modules/user'
 
 const router = useRouter()
+const userStore = useUserStore()
+
 const registerFormRef = ref<FormInstance>()
 const loading = ref(false)
 
-// 表单数据
+// 表单数据（匹配后端的 RegisterRequest）
 const registerForm = reactive({
-  username: '',
-  email: '',
+  username: '',   // 用户名（登录账号）
+  nickname: '',   // 用户昵称（显示用）
   password: '',
   confirmPassword: '',
   agree: false,
@@ -126,18 +129,19 @@ const registerRules: FormRules = {
   username: [
     { required: true, message: '请输入用户名', trigger: 'blur' },
     {
-      min: 2,
+      min: 3,
       max: 20,
-      message: '用户名长度为 2-20 个字符',
+      message: '用户名长度为 3-20 个字符',
       trigger: 'blur',
     },
   ],
-  email: [
-    { required: true, message: '请输入邮箱', trigger: 'blur' },
+  nickname: [
+    { required: true, message: '请输入昵称', trigger: 'blur' },
     {
-      type: 'email',
-      message: '请输入正确的邮箱格式',
-      trigger: ['blur', 'change'],
+      min: 2,
+      max: 20,
+      message: '昵称长度为 2-20 个字符',
+      trigger: 'blur',
     },
   ],
   password: [
@@ -158,17 +162,17 @@ const handleRegister = async () => {
     await registerFormRef.value.validate()
     loading.value = true
 
-    // TODO: 这里后续接入真实的注册 API
-    // 模拟注册请求
-    await new Promise((resolve) => setTimeout(resolve, 1500))
+    const success = await userStore.register({
+      username: registerForm.username,
+      nickname: registerForm.nickname,
+      password: registerForm.password,
+    })
 
-    ElMessage.success('注册成功！即将跳转到登录页...')
-    // 注册成功后跳转到登录页
-    setTimeout(() => {
-      router.push('/login')
-    }, 1500)
-  } catch (error) {
-    console.error('注册失败:', error)
+    if (success) {
+      setTimeout(() => {
+        router.push('/login')
+      }, 1000)
+    }
   } finally {
     loading.value = false
   }

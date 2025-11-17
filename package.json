@@ -6,7 +6,10 @@
   "scripts": {
     "dev": "vite",
     "build": "vue-tsc -b && vite build",
-    "preview": "npm run build && vite preview"
+    "preview": "npm run build && vite preview",
+    "download-api": "curl -o openapi.json 'http://127.0.0.1:4523/export/openapi/3?version=openapi30'",
+    "generate-api": "orval --config ./orval.config.ts",
+    "api": "npm run download-api && npm run generate-api"
   },
   "dependencies": {
     "@element-plus/icons-vue": "^2.3.2",
@@ -14,6 +17,7 @@
     "axios": "^1.13.1",
     "element-plus": "^2.11.7",
     "lodash": "^4.17.21",
+    "orval": "^8.0.0-rc.2",
     "pinia": "^3.0.3",
     "vue": "^3.5.22",
     "vue-router": "^4.6.3"
@@ -22,6 +26,7 @@
     "@types/node": "^24.6.0",
     "@vitejs/plugin-vue": "^6.0.1",
     "@vue/tsconfig": "^0.8.1",
+    "prettier": "^3.6.2",
     "typescript": "~5.9.3",
     "unplugin-auto-import": "^20.2.0",
     "unplugin-vue-components": "^30.0.0",

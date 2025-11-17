@@ -22,3 +22,7 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Orval 自动生成的文件（可选，取决于团队协作方式）
+src/api/generated
+openapi.json
