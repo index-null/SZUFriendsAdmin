@@ -7,9 +7,9 @@ import { post } from '../request'
 
 // 登录请求参数（参考后端生成的 LoginRequest 类型）
 export interface LoginParams {
-  username: string  // 后端使用 username 而不是 email
+  username: string // 后端使用 username 而不是 email
   password: string
-  wxMpCode?: string  // 微信小程序登录凭证（可选）
+  wxMpCode?: string // 微信小程序登录凭证（可选）
 }
 
 // 登录响应数据（匹配后端实际返回的字段）
@@ -17,18 +17,18 @@ export interface LoginData {
   token: string
   userId: number
   username: string
-  nickname?: string           // 后端实际返回的字段
-  avatar?: string | null      // 后端实际返回的字段
-  permissionTree?: any[]      // 后端实际返回的字段
+  nickname?: string // 后端实际返回的字段
+  avatar?: string | null // 后端实际返回的字段
+  permissionTree?: any[] // 后端实际返回的字段
   roles?: string[]
   permissions?: string[]
 }
 
 // 注册请求参数（参考后端生成的 RegisterRequest 类型）
 export interface RegisterParams {
-  username: string      // 用户名（登录账号）
-  password: string      // 密码
-  nickname: string      // 用户昵称（显示用）
+  username: string // 用户名（登录账号）
+  password: string // 密码
+  nickname: string // 用户昵称（显示用）
 }
 
 // 注册响应数据

@@ -24,5 +24,4 @@ export const toggleDark = useToggle(isDark)
  */
 export function initTheme() {
   // useDark 会自动从 localStorage 恢复状态
-  console.log('主题初始化，当前状态:', isDark.value)
 }

@@ -1,7 +1,7 @@
 import { get as getCollegeApi } from '@/api/generated/学院信息控制器/学院信息控制器'
 import type {
   CollegeEntity,
-  CollegePagesRequest
+  CollegePagesRequest,
 } from '@/api/generated/.ts.schemas'
 
 const collegeApi = getCollegeApi()
@@ -27,8 +27,10 @@ export interface CollegeSearchParams extends CollegePagesRequest {
   status?: number
 }
 
-export const getCollegePages = async (params: CollegeSearchParams): Promise<PageResult> => {
-  return await collegeApi.postCommunityCollegePages(params as any) as any
+export const getCollegePages = async (
+  params: CollegeSearchParams,
+): Promise<PageResult> => {
+  return (await collegeApi.postCommunityCollegePages(params as any)) as any
 }
 
 export const createCollege = async (data: CollegeEntity): Promise<any> => {

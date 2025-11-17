@@ -84,14 +84,32 @@
         <el-table-column type="selection" width="55" />
         <el-table-column prop="id" label="ID" width="80" />
         <el-table-column prop="collegeCode" label="学院编码" min-width="120" />
-        <el-table-column prop="collegeName" label="学院名称" min-width="150" show-overflow-tooltip />
+        <el-table-column
+          prop="collegeName"
+          label="学院名称"
+          min-width="150"
+          show-overflow-tooltip
+        />
         <el-table-column prop="dean" label="院长" min-width="100" />
         <el-table-column prop="contactPhone" label="联系电话" min-width="120" />
-        <el-table-column prop="email" label="邮箱" min-width="150" show-overflow-tooltip />
-        <el-table-column prop="sortOrder" label="排序" width="80" align="center" />
+        <el-table-column
+          prop="email"
+          label="邮箱"
+          min-width="150"
+          show-overflow-tooltip
+        />
+        <el-table-column
+          prop="sortOrder"
+          label="排序"
+          width="80"
+          align="center"
+        />
         <el-table-column prop="status" label="状态" width="80" align="center">
           <template #default="{ row }">
-            <el-tag :type="row.status === 1 ? 'success' : 'danger'" size="small">
+            <el-tag
+              :type="row.status === 1 ? 'success' : 'danger'"
+              size="small"
+            >
               {{ row.status === 1 ? '启用' : '禁用' }}
             </el-tag>
           </template>
@@ -156,7 +174,7 @@ import {
   createCollege,
   updateCollege,
   deleteCollege,
-  type CollegeEntity
+  type CollegeEntity,
 } from '@/api/modules/college'
 import { useUserStore } from '@/stores/modules/user'
 import CollegeFormDialog from './components/CollegeFormDialog.vue'
@@ -172,13 +190,13 @@ const searchForm = reactive({
   collegeCode: '',
   collegeName: '',
   dean: '',
-  status: undefined as number | undefined
+  status: undefined as number | undefined,
 })
 
 const pagination = reactive({
   current: 1,
   size: 10,
-  total: 0
+  total: 0,
 })
 
 const tableData = ref<CollegeEntity[]>([])
@@ -199,7 +217,7 @@ const fetchData = async () => {
     const data = await getCollegePages({
       current: pagination.current,
       size: pagination.size,
-      ...searchForm
+      ...searchForm,
     })
 
     tableData.value = data.records || []
@@ -242,8 +260,8 @@ const handleDelete = async (row: CollegeEntity) => {
       {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
-        type: 'warning'
-      }
+        type: 'warning',
+      },
     )
 
     if (!row.id) return
@@ -272,16 +290,16 @@ const handleBatchDelete = async () => {
       {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
-        type: 'warning'
-      }
+        type: 'warning',
+      },
     )
 
     loading.value = true
-    const deletePromises = selectedIds.value.map(id => deleteCollege(id))
+    const deletePromises = selectedIds.value.map((id) => deleteCollege(id))
     const results = await Promise.allSettled(deletePromises)
 
-    const successCount = results.filter(r => r.status === 'fulfilled').length
-    const failCount = results.filter(r => r.status === 'rejected').length
+    const successCount = results.filter((r) => r.status === 'fulfilled').length
+    const failCount = results.filter((r) => r.status === 'rejected').length
 
     if (failCount === 0) {
       ElMessage.success(`成功删除 ${successCount} 个学院`)
@@ -298,7 +316,7 @@ const handleBatchDelete = async () => {
 }
 
 const handleSelectionChange = (selection: CollegeEntity[]) => {
-  selectedIds.value = selection.map(item => item.id!).filter(Boolean)
+  selectedIds.value = selection.map((item) => item.id!).filter(Boolean)
 }
 
 const handleSizeChange = () => {

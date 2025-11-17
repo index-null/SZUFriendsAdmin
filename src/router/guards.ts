@@ -17,7 +17,7 @@ export const checkPermission = (permissionCode?: string): boolean => {
   }
 
   const userStore = useUserStore()
-  
+
   if (userStore.isAdmin) {
     return true
   }
@@ -61,7 +61,7 @@ export const setupRouterGuards = (router: Router): void => {
     if (to.meta.requiresAuth && !authenticated) {
       next({
         path: '/login',
-        query: { redirect: to.fullPath }
+        query: { redirect: to.fullPath },
       })
       return
     }

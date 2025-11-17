@@ -49,6 +49,6 @@ export const useCounterStore = defineStore('counter', () => {
     decrement,
     reset,
     setCount,
-    clearHistory
+    clearHistory,
   }
 })

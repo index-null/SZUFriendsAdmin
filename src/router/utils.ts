@@ -4,7 +4,6 @@
  */
 import type { Router, RouteLocationRaw } from 'vue-router'
 
-
 /**
  * 检查路由是否存在
  * @param router Vue Router 实例
@@ -34,7 +33,7 @@ export const getAllRoutePaths = (router: Router): string[] => {
 export const delayedNavigate = (
   router: Router,
   to: RouteLocationRaw,
-  delay: number = 300
+  delay: number = 300,
 ): Promise<void> => {
   return new Promise((resolve) => {
     setTimeout(() => {
@@ -61,7 +60,7 @@ export const getQueryParam = (router: Router, key: string): string | null => {
  */
 export const setQueryParams = (
   router: Router,
-  params: Record<string, string | number>
+  params: Record<string, string | number>,
 ): void => {
   const query = {
     ...router.currentRoute.value.query,

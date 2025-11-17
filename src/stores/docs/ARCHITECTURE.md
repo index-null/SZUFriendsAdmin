@@ -406,7 +406,7 @@ App.vue 挂载
 export const useProductStore = defineStore('product', () => {
   const products = ref([])
   const loading = ref(false)
-  
+
   const fetchProducts = async () => {
     loading.value = true
     try {
@@ -415,7 +415,7 @@ export const useProductStore = defineStore('product', () => {
       loading.value = false
     }
   }
-  
+
   return { products, loading, fetchProducts }
 })
 ```
@@ -427,7 +427,7 @@ export const useProductStore = defineStore('product', () => {
 export const useProductManagement = () => {
   const productStore = useProductStore()
   const appStore = useAppStore()
-  
+
   const addProduct = async (product) => {
     try {
       await api.addProduct(product)
@@ -437,7 +437,7 @@ export const useProductManagement = () => {
       appStore.addNotification('添加失败', 'error')
     }
   }
-  
+
   return { addProduct }
 }
 ```
@@ -456,6 +456,7 @@ export const createCustomPlugin = () => {
 ## 🎯 总结
 
 这个架构设计提供了：
+
 - ✅ 清晰的模块化结构
 - ✅ 完整的类型支持
 - ✅ 可扩展的插件系统

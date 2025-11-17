@@ -14,7 +14,7 @@ const goHome = () => {
       <h1 class="error-code">404</h1>
       <h2 class="error-title">页面未找到</h2>
       <p class="error-message">抱歉，您访问的页面不存在或已被移除。</p>
-      <button @click="goHome" class="home-btn">返回首页</button>
+      <button class="home-btn" @click="goHome">返回首页</button>
     </div>
   </div>
 </template>

@@ -33,14 +33,17 @@ service.interceptors.response.use(
   (response) => {
     const { data } = response
     // 统一返回 data.data 或 data
-    if (data && (data.code === 0 || data.code === 200 || data.success === true)) {
+    if (
+      data &&
+      (data.code === 0 || data.code === 200 || data.success === true)
+    ) {
       return data.data || data
     }
     return data
   },
   (error) => {
     return Promise.reject(error)
-  }
+  },
 )
 
 /**
@@ -49,13 +52,13 @@ service.interceptors.response.use(
  */
 export const customInstance = <T>(config: AxiosRequestConfig): Promise<T> => {
   const source = axios.CancelToken.source()
-  
+
   const promise = service({
     ...config,
     cancelToken: source.token,
   }).then((data) => data as T)
 
-  // @ts-ignore
+  // @ts-ignore: 为 promise 添加 cancel 方法，用于取消请求
   promise.cancel = () => {
     source.cancel('Query was cancelled')
   }

@@ -25,19 +25,19 @@ import { ref, computed } from 'vue'
 export const useUserStore = defineStore('user', () => {
   // State
   const userInfo = ref({ name: '', email: '' })
-  
+
   // Computed
   const userName = computed(() => userInfo.value.name)
-  
+
   // Actions
   const setUserInfo = (info) => {
     userInfo.value = info
   }
-  
+
   return {
     userInfo,
     userName,
-    setUserInfo
+    setUserInfo,
   }
 })
 ```
@@ -63,7 +63,9 @@ userStore.setUserInfo({ name: '张三', email: 'test@example.com' })
 <template>
   <div>
     <p>{{ userStore.userName }}</p>
-    <button @click="userStore.setUserInfo({ name: '李四', email: 'li@example.com' })">
+    <button
+      @click="userStore.setUserInfo({ name: '李四', email: 'li@example.com' })"
+    >
       更新用户
     </button>
   </div>
@@ -103,7 +105,7 @@ const loading = ref(false) // 命名不够清晰
 const login = async (email: string, password: string) => {
   loading.value = true
   error.value = null
-  
+
   try {
     const response = await api.login(email, password)
     setUserInfo(response.data)
@@ -153,16 +155,16 @@ const initTheme = () => {
 export const useUserStore = defineStore('user', () => {
   const userInfo = ref(null)
   const isLoggedIn = computed(() => !!userInfo.value)
-  
+
   const login = async (credentials) => {
     const data = await api.login(credentials)
     userInfo.value = data
   }
-  
+
   const logout = () => {
     userInfo.value = null
   }
-  
+
   return { userInfo, isLoggedIn, login, logout }
 })
 ```
@@ -173,7 +175,7 @@ export const useUserStore = defineStore('user', () => {
 export const useProductStore = defineStore('product', () => {
   const products = ref([])
   const loading = ref(false)
-  
+
   const fetchProducts = async () => {
     loading.value = true
     try {
@@ -182,11 +184,11 @@ export const useProductStore = defineStore('product', () => {
       loading.value = false
     }
   }
-  
+
   const addProduct = (product) => {
     products.value.push(product)
   }
-  
+
   return { products, loading, fetchProducts, addProduct }
 })
 ```
@@ -198,20 +200,20 @@ export const useFormStore = defineStore('form', () => {
   const formData = ref({
     name: '',
     email: '',
-    message: ''
+    message: '',
   })
-  
+
   const errors = ref({})
-  
+
   const updateField = (field: string, value: any) => {
     formData.value[field] = value
   }
-  
+
   const resetForm = () => {
     formData.value = { name: '', email: '', message: '' }
     errors.value = {}
   }
-  
+
   return { formData, errors, updateField, resetForm }
 })
 ```
@@ -232,7 +234,9 @@ export const useFormStore = defineStore('form', () => {
 import { useUserStore } from '@/stores'
 const store = useUserStore()
 console.log(store.$state) // 查看完整状态
-store.$patch({ /* 部分更新 */ }) // 直接修改状态
+store.$patch({
+  /* 部分更新 */
+}) // 直接修改状态
 store.$reset() // 重置为初始状态
 ```
 
@@ -242,10 +246,20 @@ store.$reset() // 重置为初始状态
 
 ```typescript
 // ❌ 不好：订阅整个 store
-watch(() => userStore.$state, () => { /* ... */ })
+watch(
+  () => userStore.$state,
+  () => {
+    /* ... */
+  },
+)
 
 // ✅ 好：只订阅需要的属性
-watch(() => userStore.userName, () => { /* ... */ })
+watch(
+  () => userStore.userName,
+  () => {
+    /* ... */
+  },
+)
 ```
 
 ### 2. 使用 storeToRefs
@@ -266,23 +280,27 @@ const { userInfo, userName } = storeToRefs(userStore)
 ## 常见问题
 
 ### Q: 如何在 store 中使用路由？
+
 A: 注入路由实例：
+
 ```typescript
 import { useRouter } from 'vue-router'
 
 export const useAppStore = defineStore('app', () => {
   const router = useRouter()
-  
+
   const navigate = (path) => {
     router.push(path)
   }
-  
+
   return { navigate }
 })
 ```
 
 ### Q: 如何在 store 中使用 API？
+
 A: 创建 API 服务层：
+
 ```typescript
 import { api } from '@/services/api'
 
@@ -290,13 +308,15 @@ export const useUserStore = defineStore('user', () => {
   const fetchUser = async (id) => {
     return await api.getUser(id)
   }
-  
+
   return { fetchUser }
 })
 ```
 
 ### Q: 如何重置 store？
+
 A: 使用 `$reset()` 方法：
+
 ```typescript
 userStore.$reset() // 重置为初始状态
 ```

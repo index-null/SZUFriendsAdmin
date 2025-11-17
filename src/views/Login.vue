@@ -101,7 +101,7 @@ const loginRules: FormRules = {
 const loadRememberedUsername = () => {
   try {
     const rememberedUsername = localStorage.getItem(REMEMBER_USERNAME_KEY)
-    
+
     if (rememberedUsername) {
       loginForm.username = rememberedUsername
       loginForm.remember = true
@@ -127,7 +127,7 @@ const handleLogin = async () => {
   try {
     await loginFormRef.value.validate()
     loading.value = true
-    
+
     const success = await userStore.login({
       username: loginForm.username,
       password: loginForm.password,

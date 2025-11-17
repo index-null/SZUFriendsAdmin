@@ -1,9 +1,0 @@
-dist
-node_modules
-coverage
-.vscode
-.idea
-generated
-auto-imports.d.ts
-components.d.ts
-*.min.js

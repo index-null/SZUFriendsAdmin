@@ -28,7 +28,7 @@ export const usePermission = () => {
     hasPermission,
     canRead,
     canWrite,
-    canDelete
+    canDelete,
   }
 }
 
@@ -39,14 +39,17 @@ export const useNotificationWithUser = () => {
   const appStore = useAppStore()
   const userStore = useUserStore()
 
-  const notifyUser = (message: string, type: 'success' | 'error' | 'warning' | 'info' = 'info') => {
+  const notifyUser = (
+    message: string,
+    type: 'success' | 'error' | 'warning' | 'info' = 'info',
+  ) => {
     const prefix = userStore.isLoggedIn ? `${userStore.userName}: ` : ''
     appStore.addNotification(prefix + message, type)
   }
 
   return {
     notifyUser,
-    notifications: computed(() => appStore.notifications)
+    notifications: computed(() => appStore.notifications),
   }
 }
 
@@ -58,13 +61,17 @@ export const useThemeWithNotification = () => {
 
   const switchTheme = (theme: 'light' | 'dark') => {
     appStore.setTheme(theme)
-    appStore.addNotification(`主题已切换为${theme === 'light' ? '浅色' : '深色'}`, 'info', 2000)
+    appStore.addNotification(
+      `主题已切换为${theme === 'light' ? '浅色' : '深色'}`,
+      'info',
+      2000,
+    )
   }
 
   return {
     theme: computed(() => appStore.theme),
     isDarkMode: computed(() => appStore.isDarkMode),
-    switchTheme
+    switchTheme,
   }
 }
 
@@ -91,6 +98,6 @@ export const useAuth = () => {
     currentUser,
     isLoading,
     login,
-    logout
+    logout,
   }
 }

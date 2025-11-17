@@ -13,9 +13,7 @@ import { Sunny, Moon } from '@element-plus/icons-vue'
 import { isDark, toggleDark } from '@/element-plus'
 
 const handleToggle = () => {
-  console.log('点击前 isDark:', isDark.value)
   toggleDark()
-  console.log('点击后 isDark:', isDark.value)
 }
 </script>
 

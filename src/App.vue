@@ -23,7 +23,9 @@ const hasCollegePermission = computed(() => {
     <nav v-if="showNavbar" class="navbar">
       <div class="nav-container">
         <div class="nav-brand">
-          <router-link to="/home" class="brand-link">深大校友录管理后台</router-link>
+          <router-link to="/home" class="brand-link"
+            >深大校友录管理后台</router-link
+          >
         </div>
         <ul class="nav-menu">
           <li>
@@ -32,7 +34,10 @@ const hasCollegePermission = computed(() => {
             </router-link>
           </li>
           <li v-if="hasCollegePermission">
-            <router-link to="/college-management" :class="{ active: route.name === 'CollegeManagement' }">
+            <router-link
+              to="/college-management"
+              :class="{ active: route.name === 'CollegeManagement' }"
+            >
               学院管理
             </router-link>
           </li>

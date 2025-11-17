@@ -7,7 +7,7 @@ import type { RequestConfig } from './types'
 export const get = <T = any>(
   url: string,
   params?: Record<string, any>,
-  config?: RequestConfig
+  config?: RequestConfig,
 ): Promise<T> => {
   return service.get(url, {
     params,
@@ -21,7 +21,7 @@ export const get = <T = any>(
 export const post = <T = any>(
   url: string,
   data?: Record<string, any>,
-  config?: RequestConfig
+  config?: RequestConfig,
 ): Promise<T> => {
   return service.post(url, data, config)
 }
@@ -32,7 +32,7 @@ export const post = <T = any>(
 export const put = <T = any>(
   url: string,
   data?: Record<string, any>,
-  config?: RequestConfig
+  config?: RequestConfig,
 ): Promise<T> => {
   return service.put(url, data, config)
 }
@@ -43,7 +43,7 @@ export const put = <T = any>(
 export const del = <T = any>(
   url: string,
   params?: Record<string, any>,
-  config?: RequestConfig
+  config?: RequestConfig,
 ): Promise<T> => {
   return service.delete(url, {
     params,
@@ -57,7 +57,7 @@ export const del = <T = any>(
 export const patch = <T = any>(
   url: string,
   data?: Record<string, any>,
-  config?: RequestConfig
+  config?: RequestConfig,
 ): Promise<T> => {
   return service.patch(url, data, config)
 }

@@ -97,8 +97,8 @@ const loading = ref(false)
 
 // 表单数据（匹配后端的 RegisterRequest）
 const registerForm = reactive({
-  username: '',   // 用户名（登录账号）
-  nickname: '',   // 用户昵称（显示用）
+  username: '', // 用户名（登录账号）
+  nickname: '', // 用户昵称（显示用）
   password: '',
   confirmPassword: '',
   agree: false,

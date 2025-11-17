@@ -7,7 +7,11 @@
 import { useUserStore, useAppStore, useCounterStore } from '@/stores'
 
 // 导入组合函数
-import { useAuth, usePermission, useNotificationWithUser } from '@/stores/composables'
+import {
+  useAuth,
+  usePermission,
+  useNotificationWithUser,
+} from '@/stores/composables'
 
 // 导入类型
 import type { UserInfo, Theme, Notification } from '@/stores/types'
@@ -24,13 +28,13 @@ import { ref, computed } from 'vue'
 export const useMyStore = defineStore('myStore', () => {
   // State
   const count = ref(0)
-  
+
   // Computed
   const doubled = computed(() => count.value * 2)
-  
+
   // Actions
   const increment = () => count.value++
-  
+
   return { count, doubled, increment }
 })
 ```
@@ -52,13 +56,13 @@ myStore.increment()
 
 ## 🔄 状态操作
 
-| 操作 | 代码 |
-|------|------|
-| 访问状态 | `store.count` |
-| 修改状态 | `store.count = 10` |
-| 批量修改 | `store.$patch({ count: 10, name: 'test' })` |
-| 重置状态 | `store.$reset()` |
-| 获取完整状态 | `store.$state` |
+| 操作         | 代码                                        |
+| ------------ | ------------------------------------------- |
+| 访问状态     | `store.count`                               |
+| 修改状态     | `store.count = 10`                          |
+| 批量修改     | `store.$patch({ count: 10, name: 'test' })` |
+| 重置状态     | `store.$reset()`                            |
+| 获取完整状态 | `store.$state`                              |
 
 ## 📡 订阅
 
@@ -82,13 +86,13 @@ store.$onAction(({ name, args, after, onError }) => {
 const userStore = useUserStore()
 
 // 状态
-userStore.userInfo          // 用户信息
-userStore.isLoggedIn        // 是否登录
-userStore.loading           // 加载状态
+userStore.userInfo // 用户信息
+userStore.isLoggedIn // 是否登录
+userStore.loading // 加载状态
 
 // 计算属性
-userStore.userName          // 用户名
-userStore.isAdmin           // 是否管理员
+userStore.userName // 用户名
+userStore.isAdmin // 是否管理员
 
 // 方法
 await userStore.login(email, password)
@@ -103,13 +107,13 @@ userStore.updateProfile(updates)
 const appStore = useAppStore()
 
 // 状态
-appStore.theme              // 主题
-appStore.sidebarCollapsed   // 侧边栏状态
-appStore.notifications      // 通知列表
+appStore.theme // 主题
+appStore.sidebarCollapsed // 侧边栏状态
+appStore.notifications // 通知列表
 
 // 计算属性
-appStore.isDarkMode         // 是否深色模式
-appStore.notificationCount  // 通知数量
+appStore.isDarkMode // 是否深色模式
+appStore.notificationCount // 通知数量
 
 // 方法
 appStore.toggleTheme()
@@ -127,13 +131,13 @@ appStore.initTheme()
 const counterStore = useCounterStore()
 
 // 状态
-counterStore.count          // 计数值
-counterStore.history        // 历史记录
+counterStore.count // 计数值
+counterStore.history // 历史记录
 
 // 计算属性
-counterStore.doubled        // 翻倍值
-counterStore.isEven         // 是否偶数
-counterStore.historyLength  // 历史长度
+counterStore.doubled // 翻倍值
+counterStore.isEven // 是否偶数
+counterStore.historyLength // 历史长度
 
 // 方法
 counterStore.increment()
@@ -205,7 +209,7 @@ appStore.clearNotifications()
 const fetchData = async () => {
   loading.value = true
   error.value = null
-  
+
   try {
     data.value = await api.getData()
   } catch (err) {
@@ -242,7 +246,7 @@ const initTheme = () => {
 ```typescript
 export const useUserStore = defineStore('user', () => {
   const appStore = useAppStore()
-  
+
   const login = async (credentials) => {
     try {
       // 登录逻辑
@@ -251,7 +255,7 @@ export const useUserStore = defineStore('user', () => {
       appStore.addNotification('登录失败', 'error')
     }
   }
-  
+
   return { login }
 })
 ```
@@ -287,7 +291,7 @@ export default {
   setup() {
     const userStore = useUserStore()
     return { userStore }
-  }
+  },
 }
 ```
 
@@ -307,21 +311,22 @@ const userStore = useUserStore()
 
 ## 🔗 文件位置
 
-| 文件 | 说明 |
-|------|------|
-| `stores/index.ts` | Pinia 初始化 |
-| `stores/types.ts` | TypeScript 类型 |
-| `stores/modules/user.ts` | 用户 store |
-| `stores/modules/app.ts` | 应用 store |
-| `stores/modules/counter.ts` | 计数器 store |
-| `stores/plugins/index.ts` | 插件 |
-| `stores/composables/index.ts` | 组合函数 |
-| `stores/README.md` | 详细文档 |
-| `stores/INTEGRATION_GUIDE.md` | 集成指南 |
+| 文件                          | 说明            |
+| ----------------------------- | --------------- |
+| `stores/index.ts`             | Pinia 初始化    |
+| `stores/types.ts`             | TypeScript 类型 |
+| `stores/modules/user.ts`      | 用户 store      |
+| `stores/modules/app.ts`       | 应用 store      |
+| `stores/modules/counter.ts`   | 计数器 store    |
+| `stores/plugins/index.ts`     | 插件            |
+| `stores/composables/index.ts` | 组合函数        |
+| `stores/README.md`            | 详细文档        |
+| `stores/INTEGRATION_GUIDE.md` | 集成指南        |
 
 ## 💡 最佳实践
 
 ✅ **做这些:**
+
 - 使用 Composition API 风格定义 store
 - 为每个功能创建独立的 store
 - 使用 TypeScript 类型
@@ -330,6 +335,7 @@ const userStore = useUserStore()
 - 为 store 添加清晰的文档
 
 ❌ **避免这些:**
+
 - 在 state 中存储可派生的数据
 - 直接修改 state（使用 action）
 - 创建过大的 store

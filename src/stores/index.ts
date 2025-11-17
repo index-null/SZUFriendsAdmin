@@ -4,10 +4,12 @@ import { createPersistPlugin } from './plugins'
 const pinia = createPinia()
 
 // 添加持久化插件，持久化 user store
-pinia.use(createPersistPlugin({
-  key: 'app-store',
-  storage: localStorage
-}))
+pinia.use(
+  createPersistPlugin({
+    key: 'app-store',
+    storage: localStorage,
+  }),
+)
 
 export default pinia
 

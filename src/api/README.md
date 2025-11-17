@@ -21,12 +21,14 @@ src/api/
 ## 🎯 使用原则
 
 ### 1️⃣ **手写 API（`modules/`）- 正式调用**
+
 - ✅ 所有业务代码使用手写的 API
 - ✅ 类型定义参考 `generated/` 中的类型
 - ✅ 灵活处理业务逻辑
 - ✅ 统一的错误处理和 Loading
 
 **示例：**
+
 ```typescript
 import { login, register } from '@/api/modules/auth'
 
@@ -35,12 +37,14 @@ const result = await login({ username: 'test', password: '123456' })
 ```
 
 ### 2️⃣ **生成的 API（`generated/`）- 仅供参考**
+
 - 📖 查看后端接口定义和类型
 - 📖 参考请求参数和响应结构
 - 📖 了解可用的接口列表
 - ❌ 不直接在业务代码中调用
 
 **作用：**
+
 - 帮助理解后端 API 结构
 - 提供准确的 TypeScript 类型定义
 - 自动同步后端接口变更
@@ -48,6 +52,7 @@ const result = await login({ username: 'test', password: '123456' })
 ## 🔄 工作流程
 
 ### 步骤 1：生成 API 代码
+
 ```bash
 npm run api
 # 或分步执行
@@ -56,6 +61,7 @@ npm run generate-api   # 生成 TypeScript 代码
 ```
 
 ### 步骤 2：查看生成的类型
+
 ```typescript
 // 打开 src/api/generated/.ts.schemas.ts
 // 找到需要的类型定义，例如：
@@ -75,17 +81,18 @@ export interface LoginResponse {
 ```
 
 ### 步骤 3：更新手写的 API
+
 ```typescript
 // src/api/modules/auth.ts
 // 根据生成的类型定义，更新接口
 export interface LoginParams {
-  username: string    // 参考 LoginRequest
+  username: string // 参考 LoginRequest
   password: string
   wxMpCode?: string
 }
 
 export interface LoginData {
-  token: string       // 参考 LoginResponse
+  token: string // 参考 LoginResponse
   userId: number
   username: string
   roles?: string[]
@@ -97,6 +104,7 @@ export const login = (params: LoginParams) => {
 ```
 
 ### 步骤 4：在业务代码中使用
+
 ```typescript
 // Store
 import { login } from '@/api/modules/auth'
@@ -111,6 +119,7 @@ const userLogin = async (username: string, password: string) => {
 ## 🔧 核心功能
 
 ### Axios 拦截器（`index.ts`）
+
 ✅ 自动添加 JWT Token  
 ✅ 统一错误处理和提示  
 ✅ 自动 Loading 动画  
@@ -118,6 +127,7 @@ const userLogin = async (username: string, password: string) => {
 ✅ 详细的请求/响应日志（开发环境）
 
 ### 请求封装（`request.ts`）
+
 ```typescript
 // 支持泛型，类型安全
 const user = await get<UserInfo>('/user/info')
@@ -127,6 +137,7 @@ await delete('/user/123')
 ```
 
 ### 自定义配置
+
 ```typescript
 // 禁用 Loading
 await getUserInfo({ showLoading: false })
@@ -136,7 +147,7 @@ await login({
   showError: false,
   errorHandler: (error) => {
     console.log('自定义处理:', error)
-  }
+  },
 })
 ```
 
@@ -165,6 +176,7 @@ await login({
 ## 🚀 后端接口对接示例
 
 ### 登录接口
+
 ```typescript
 // 后端定义（generated/.ts.schemas.ts）
 interface LoginRequest {
@@ -181,16 +193,16 @@ interface LoginResponse {
 
 // 前端使用（modules/auth.ts）
 export interface LoginParams {
-  username: string     // 必填
-  password: string     // 必填
-  wxMpCode?: string    // 可选
+  username: string // 必填
+  password: string // 必填
+  wxMpCode?: string // 可选
 }
 
 export interface LoginData {
-  token: string        // 必填
-  userId: number       // 必填
-  username: string     // 必填
-  roles?: string[]     // 扩展
+  token: string // 必填
+  userId: number // 必填
+  username: string // 必填
+  roles?: string[] // 扩展
   permissions?: string[] // 扩展
 }
 
@@ -200,12 +212,13 @@ export const login = (params: LoginParams) => {
 ```
 
 ### 注册接口
+
 ```typescript
 // 后端定义
 interface RegisterRequest {
-  username: string    // 登录账号
-  password: string    // 密码
-  nickname: string    // 显示昵称
+  username: string // 登录账号
+  password: string // 密码
+  nickname: string // 显示昵称
 }
 
 // 前端使用

@@ -29,11 +29,11 @@ import { useUserStore } from '@/stores'
 export default {
   setup() {
     const userStore = useUserStore()
-    
+
     return {
-      userStore
+      userStore,
     }
-  }
+  },
 }
 ```
 
@@ -71,6 +71,7 @@ const { canRead, canWrite } = usePermission()
 **文件:** `modules/user.ts`
 
 **功能:**
+
 - 用户登录/登出
 - 用户信息管理
 - 权限检查
@@ -104,6 +105,7 @@ userStore.logout()
 **文件:** `modules/app.ts`
 
 **功能:**
+
 - 主题切换
 - 侧边栏状态
 - 通知管理
@@ -135,6 +137,7 @@ appStore.initTheme()
 **文件:** `modules/counter.ts`
 
 **功能:**
+
 - 计数操作
 - 历史记录
 - 派生状态
@@ -173,6 +176,7 @@ pinia.use(createLoggerPlugin())
 ```
 
 **输出示例:**
+
 ```
 [Pinia] Store "user" initialized {...}
 [Pinia] user state changed: {...}
@@ -187,11 +191,13 @@ pinia.use(createLoggerPlugin())
 ```typescript
 import { createPersistPlugin } from '@/stores/plugins'
 
-pinia.use(createPersistPlugin({
-  key: 'app-state',
-  paths: ['theme', 'sidebarCollapsed'],  // 只持久化这些字段
-  storage: localStorage
-}))
+pinia.use(
+  createPersistPlugin({
+    key: 'app-state',
+    paths: ['theme', 'sidebarCollapsed'], // 只持久化这些字段
+    storage: localStorage,
+  }),
+)
 ```
 
 ### 重置插件
@@ -204,7 +210,7 @@ import { createResetPlugin } from '@/stores/plugins'
 pinia.use(createResetPlugin())
 
 // 使用
-userStore.$reset()  // 重置为初始状态
+userStore.$reset() // 重置为初始状态
 ```
 
 ## 🎯 组合函数
@@ -278,14 +284,14 @@ const userInfo = ref({
   id: '',
   name: '',
   email: '',
-  role: 'user'
+  role: 'user',
 })
 const isLoading = ref(false)
 const error = ref<string | null>(null)
 
 // ❌ 避免
-const user = ref(null)  // 类型不明确
-const data = ref({})    // 命名不清晰
+const user = ref(null) // 类型不明确
+const data = ref({}) // 命名不清晰
 ```
 
 ### 2. 异步操作模式
@@ -294,7 +300,7 @@ const data = ref({})    // 命名不清晰
 const fetchData = async () => {
   loading.value = true
   error.value = null
-  
+
   try {
     const response = await api.getData()
     data.value = response
@@ -316,16 +322,19 @@ const isAdmin = computed(() => userInfo.value.role === 'admin')
 const displayName = computed(() => userInfo.value.name || '游客')
 
 // ❌ 避免在 state 中存储可派生的数据
-const isAdmin = ref(false)  // 容易不同步
+const isAdmin = ref(false) // 容易不同步
 ```
 
 ### 4. 状态订阅
 
 ```typescript
 // 订阅特定属性
-watch(() => userStore.userName, (newName) => {
-  console.log('用户名已更改:', newName)
-})
+watch(
+  () => userStore.userName,
+  (newName) => {
+    console.log('用户名已更改:', newName)
+  },
+)
 
 // 订阅整个 store
 userStore.$subscribe((mutation, state) => {
@@ -386,7 +395,7 @@ export const useProductStore = defineStore('product', () => {
   }
 
   const removeProduct = (id: string) => {
-    const index = products.value.findIndex(p => p.id === id)
+    const index = products.value.findIndex((p) => p.id === id)
     if (index > -1) {
       products.value.splice(index, 1)
     }
@@ -403,7 +412,7 @@ export const useFormStore = defineStore('form', () => {
   const formData = ref({
     name: '',
     email: '',
-    message: ''
+    message: '',
   })
 
   const errors = ref({})
@@ -478,10 +487,20 @@ console.log(store.$id)
 
 ```typescript
 // ❌ 不好：订阅整个 store
-watch(() => userStore.$state, () => { /* ... */ })
+watch(
+  () => userStore.$state,
+  () => {
+    /* ... */
+  },
+)
 
 // ✅ 好：只订阅需要的属性
-watch(() => userStore.userName, () => { /* ... */ })
+watch(
+  () => userStore.userName,
+  () => {
+    /* ... */
+  },
+)
 ```
 
 ### 2. 使用 storeToRefs
@@ -513,23 +532,27 @@ const { userInfo, userName } = storeToRefs(userStore)
 ## ❓ 常见问题
 
 ### Q: 如何在 store 中使用路由？
+
 A: 注入路由实例：
+
 ```typescript
 import { useRouter } from 'vue-router'
 
 export const useAppStore = defineStore('app', () => {
   const router = useRouter()
-  
+
   const navigate = (path) => {
     router.push(path)
   }
-  
+
   return { navigate }
 })
 ```
 
 ### Q: 如何在 store 中使用 API？
+
 A: 创建 API 服务层：
+
 ```typescript
 import { api } from '@/services/api'
 
@@ -537,17 +560,19 @@ export const useUserStore = defineStore('user', () => {
   const fetchUser = async (id) => {
     return await api.getUser(id)
   }
-  
+
   return { fetchUser }
 })
 ```
 
 ### Q: 如何处理 store 之间的依赖？
+
 A: 在 action 中使用其他 store：
+
 ```typescript
 export const useUserStore = defineStore('user', () => {
   const appStore = useAppStore()
-  
+
   const login = async (credentials) => {
     try {
       // 登录逻辑
@@ -556,23 +581,29 @@ export const useUserStore = defineStore('user', () => {
       appStore.addNotification('登录失败', 'error')
     }
   }
-  
+
   return { login }
 })
 ```
 
 ### Q: 如何重置 store？
+
 A: 使用 `$reset()` 方法：
+
 ```typescript
-userStore.$reset()  // 重置为初始状态
+userStore.$reset() // 重置为初始状态
 ```
 
 ### Q: 如何持久化状态？
+
 A: 使用持久化插件：
+
 ```typescript
 import { createPersistPlugin } from '@/stores/plugins'
 
-pinia.use(createPersistPlugin({
-  paths: ['theme', 'sidebarCollapsed']
-}))
+pinia.use(
+  createPersistPlugin({
+    paths: ['theme', 'sidebarCollapsed'],
+  }),
+)
 ```

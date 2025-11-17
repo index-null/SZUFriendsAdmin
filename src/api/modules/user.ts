@@ -65,7 +65,7 @@ export const getUserList = (params: PageParams & { keyword?: string }) => {
 export const uploadAvatar = (file: File) => {
   const formData = new FormData()
   formData.append('file', file)
-  
+
   return post<{ url: string }>('/user/upload-avatar', formData, {
     headers: {
       'Content-Type': 'multipart/form-data',

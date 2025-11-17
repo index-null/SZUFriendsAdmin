@@ -38,6 +38,7 @@ import About from '../views/About.vue'
 ```
 
 **优势：**
+
 - 减少初始包体积
 - 按需加载页面组件
 - 提高首屏加载速度
@@ -65,6 +66,7 @@ const routes = [
 ```
 
 **常用元数据字段：**
+
 - `title`: 页面标题
 - `requiresAuth`: 是否需要认证
 - `roles`: 所需角色
@@ -81,19 +83,19 @@ const routes = [
 router.beforeEach((to, from, next) => {
   // 1. 设置页面标题
   setPageTitle(to)
-  
+
   // 2. 权限检查
   if (to.meta.requiresAuth && !isAuthenticated()) {
     next('/login')
     return
   }
-  
+
   // 3. 角色检查
   if (to.meta.roles && !checkPermission(to.meta.roles)) {
     next('/403')
     return
   }
-  
+
   next()
 })
 
@@ -105,6 +107,7 @@ router.afterEach((to, from) => {
 ```
 
 **守卫执行顺序：**
+
 1. `beforeEach` - 全局前置守卫
 2. `beforeRouteUpdate` - 组件内守卫
 3. `beforeEnter` - 路由独享守卫
@@ -132,11 +135,7 @@ export const userRoutes: RouteRecordRaw[] = [
 // src/router/index.ts
 import { userRoutes } from './modules/user'
 
-const routes = [
-  ...baseRoutes,
-  ...userRoutes,
-  ...adminRoutes,
-]
+const routes = [...baseRoutes, ...userRoutes, ...adminRoutes]
 ```
 
 ### 5. 类型安全
@@ -165,7 +164,6 @@ declare module 'vue-router' {
 ```typescript
 // 安全导航（防止重复导航）
 safeNavigate(router, '/home')
-
 
 // 获取查询参数
 const page = getQueryParam(router, 'page')
@@ -226,11 +224,12 @@ const router = createRouter({
 const Home = () => import('../views/Home.vue')
 
 // 带 Webpack 魔法注释的懒加载
-const Home = () => import(
-  /* webpackChunkName: "home" */
-  /* webpackPrefetch: true */
-  '../views/Home.vue'
-)
+const Home = () =>
+  import(
+    /* webpackChunkName: "home" */
+    /* webpackPrefetch: true */
+    '../views/Home.vue'
+  )
 ```
 
 ### 10. 错误处理
@@ -262,7 +261,7 @@ router.beforeEach((to, from, next) => {
       next('/login')
       return
     }
-    
+
     if (to.meta.roles && !userStore.hasRole(to.meta.roles)) {
       next('/403')
       return
@@ -277,7 +276,7 @@ router.beforeEach((to, from, next) => {
 ```typescript
 // 根据用户权限动态添加路由
 const addDynamicRoutes = (routes: RouteRecordRaw[]) => {
-  routes.forEach(route => {
+  routes.forEach((route) => {
     router.addRoute(route)
   })
 }

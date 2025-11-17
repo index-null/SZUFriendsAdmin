@@ -1,7 +1,10 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
 import { login as loginApi, register as registerApi } from '@/api/modules/auth'
-import { getUserInfo as getUserInfoApi, updateUserInfo as updateUserInfoApi } from '@/api/modules/user'
+import {
+  getUserInfo as getUserInfoApi,
+  updateUserInfo as updateUserInfoApi,
+} from '@/api/modules/user'
 import { setToken, removeToken } from '@/api'
 import type { LoginParams, LoginData, RegisterParams } from '@/api/modules/auth'
 import type { UpdateUserParams } from '@/api/modules/user'
@@ -21,14 +24,16 @@ export const useUserStore = defineStore('user', () => {
   const loading = ref(false)
 
   const userName = computed(() => userInfo.value.username || '游客')
-  const isAdmin = computed(() => userInfo.value.roles?.includes('admin') || false)
+  const isAdmin = computed(
+    () => userInfo.value.roles?.includes('admin') || false,
+  )
 
   const setUserInfo = (info: Partial<LoginData>) => {
     if (info.permissionTree) {
       const extractPermissions = (tree: any[]): string[] => {
         const codes: string[] = []
         const traverse = (nodes: any[]) => {
-          nodes.forEach(node => {
+          nodes.forEach((node) => {
             if (node.permissionCode) {
               codes.push(node.permissionCode)
             }
@@ -42,7 +47,7 @@ export const useUserStore = defineStore('user', () => {
       }
       info.permissions = extractPermissions(info.permissionTree)
     }
-    
+
     userInfo.value = info
     isLoggedIn.value = true
   }
@@ -51,11 +56,11 @@ export const useUserStore = defineStore('user', () => {
     loading.value = true
     try {
       const data = await loginApi(params)
-      
+
       token.value = data.token
       setToken(data.token)
       setUserInfo(data)
-      
+
       ElMessage.success('登录成功')
       return true
     } catch (error: any) {
@@ -89,7 +94,7 @@ export const useUserStore = defineStore('user', () => {
     token.value = ''
     isLoggedIn.value = false
     removeToken()
-    
+
     ElMessage.success('已退出登录')
   }
 
@@ -125,6 +130,6 @@ export const useUserStore = defineStore('user', () => {
     register,
     logout,
     getUserInfo,
-    updateProfile
+    updateProfile,
   }
 })

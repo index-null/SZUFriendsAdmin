@@ -5,8 +5,8 @@
       <el-card shadow="never" class="welcome-card">
         <div class="welcome-content">
           <div class="user-avatar-section">
-            <el-avatar 
-              :size="80" 
+            <el-avatar
+              :size="80"
               :src="userStore.userInfo.avatar || undefined"
               class="user-avatar"
             >
@@ -17,18 +17,28 @@
           </div>
           <div class="user-info-section">
             <h1 class="welcome-title">
-              欢迎回来，{{ userStore.userInfo.nickname || userStore.userInfo.username || '用户' }}！
+              欢迎回来，{{
+                userStore.userInfo.nickname ||
+                userStore.userInfo.username ||
+                '用户'
+              }}！
             </h1>
             <div class="user-meta">
-              <el-tag type="info" size="small">ID: {{ userStore.userInfo.userId || '-' }}</el-tag>
-              <el-tag type="success" size="small">@{{ userStore.userInfo.username || '-' }}</el-tag>
-              <el-tag v-if="userStore.isAdmin" type="danger" size="small">管理员</el-tag>
+              <el-tag type="info" size="small"
+                >ID: {{ userStore.userInfo.userId || '-' }}</el-tag
+              >
+              <el-tag type="success" size="small"
+                >@{{ userStore.userInfo.username || '-' }}</el-tag
+              >
+              <el-tag v-if="userStore.isAdmin" type="danger" size="small"
+                >管理员</el-tag
+              >
               <el-tag type="warning" size="small">在线</el-tag>
             </div>
           </div>
           <div class="logout-section">
-            <el-button 
-              type="danger" 
+            <el-button
+              type="danger"
               :loading="logoutLoading"
               @click="handleLogout"
             >
@@ -92,17 +102,10 @@
                 class="token-input"
               />
               <div class="token-actions">
-                <el-button 
-                  size="small" 
-                  @click="copyToken"
-                >
+                <el-button size="small" @click="copyToken">
                   复制 Token
                 </el-button>
-                <el-button 
-                  size="small" 
-                  type="info"
-                  @click="viewTokenPayload"
-                >
+                <el-button size="small" type="info" @click="viewTokenPayload">
                   解析 Token
                 </el-button>
               </div>
@@ -123,11 +126,14 @@
               <div class="permission-item">
                 <div class="permission-label">角色列表：</div>
                 <div class="permission-value">
-                  <el-tag 
-                    v-if="userStore.userInfo.roles && userStore.userInfo.roles.length > 0"
-                    v-for="role in userStore.userInfo.roles" 
+                  <el-tag
+                    v-for="role in userStore.userInfo.roles"
+                    v-if="
+                      userStore.userInfo.roles &&
+                      userStore.userInfo.roles.length > 0
+                    "
                     :key="role"
-                    type="primary" 
+                    type="primary"
                     size="small"
                     class="permission-tag"
                   >
@@ -140,11 +146,14 @@
               <div class="permission-item">
                 <div class="permission-label">权限列表：</div>
                 <div class="permission-value">
-                  <el-tag 
-                    v-if="userStore.userInfo.permissions && userStore.userInfo.permissions.length > 0"
-                    v-for="perm in userStore.userInfo.permissions" 
+                  <el-tag
+                    v-for="perm in userStore.userInfo.permissions"
+                    v-if="
+                      userStore.userInfo.permissions &&
+                      userStore.userInfo.permissions.length > 0
+                    "
                     :key="perm"
-                    type="success" 
+                    type="success"
                     size="small"
                     class="permission-tag"
                   >
@@ -166,16 +175,21 @@
               <div class="card-header">
                 <el-icon><Grid /></el-icon>
                 <span>权限树结构</span>
-                <el-button 
-                  size="small" 
-                  @click="expandAll = !expandAll"
+                <el-button
+                  size="small"
                   class="expand-btn"
+                  @click="expandAll = !expandAll"
                 >
                   {{ expandAll ? '收起全部' : '展开全部' }}
                 </el-button>
               </div>
             </template>
-            <div v-if="userStore.userInfo.permissionTree && userStore.userInfo.permissionTree.length > 0">
+            <div
+              v-if="
+                userStore.userInfo.permissionTree &&
+                userStore.userInfo.permissionTree.length > 0
+              "
+            >
               <el-tree
                 :data="userStore.userInfo.permissionTree"
                 :props="treeProps"
@@ -186,12 +200,16 @@
                 <template #default="{ node, data }">
                   <div class="tree-node">
                     <el-icon v-if="data.permissionType === 1"><Menu /></el-icon>
-                    <el-icon v-else-if="data.permissionType === 2"><Document /></el-icon>
+                    <el-icon v-else-if="data.permissionType === 2"
+                      ><Document
+                    /></el-icon>
                     <el-icon v-else><Operation /></el-icon>
-                    <span class="tree-label">{{ data.permissionName || node.label }}</span>
-                    <el-tag 
-                      v-if="data.permissionCode" 
-                      size="small" 
+                    <span class="tree-label">{{
+                      data.permissionName || node.label
+                    }}</span>
+                    <el-tag
+                      v-if="data.permissionCode"
+                      size="small"
                       type="info"
                       class="tree-tag"
                     >
@@ -201,11 +219,7 @@
                 </template>
               </el-tree>
             </div>
-            <el-empty 
-              v-else 
-              description="暂无权限树数据" 
-              :image-size="100"
-            />
+            <el-empty v-else description="暂无权限树数据" :image-size="100" />
           </el-card>
         </el-col>
       </el-row>
@@ -218,15 +232,14 @@
               <div class="card-header">
                 <el-icon><Document /></el-icon>
                 <span>原始数据（调试用）</span>
-                <el-button 
-                  size="small" 
-                  @click="copyUserInfo"
-                >
+                <el-button size="small" @click="copyUserInfo">
                   复制数据
                 </el-button>
               </div>
             </template>
-            <pre class="json-viewer">{{ JSON.stringify(userStore.userInfo, null, 2) }}</pre>
+            <pre class="json-viewer">{{
+              JSON.stringify(userStore.userInfo, null, 2)
+            }}</pre>
           </el-card>
         </el-col>
       </el-row>
@@ -254,8 +267,8 @@
                 <el-icon><Setting /></el-icon>
                 系统设置
               </el-button>
-              <el-button 
-                type="danger" 
+              <el-button
+                type="danger"
                 :loading="logoutLoading"
                 @click="handleLogout"
               >
@@ -275,9 +288,19 @@ import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useUserStore } from '@/stores/modules/user'
 import { ElMessage, ElMessageBox } from 'element-plus'
-import { 
-  User, UserFilled, Key, Lock, Grid, Menu, Document, 
-  Operation, Setting, Refresh, EditPen, SwitchButton 
+import {
+  User,
+  UserFilled,
+  Key,
+  Lock,
+  Grid,
+  Menu,
+  Document,
+  Operation,
+  Setting,
+  Refresh,
+  EditPen,
+  SwitchButton,
 } from '@element-plus/icons-vue'
 
 const router = useRouter()
@@ -289,7 +312,7 @@ const expandAll = ref(false)
 // 树形控件配置
 const treeProps = {
   children: 'children',
-  label: 'permissionName'
+  label: 'permissionName',
 }
 
 // 退出登录
@@ -329,26 +352,26 @@ const viewTokenPayload = () => {
       ElMessage.warning('Token 不存在')
       return
     }
-    
+
     const parts = token.split('.')
     if (parts.length !== 3 || !parts[1]) {
       throw new Error('无效的 JWT Token')
     }
-    
+
     // 解码 Payload
     const payloadPart = parts[1]
     if (!payloadPart) {
       throw new Error('Token Payload 部分缺失')
     }
     const payload = JSON.parse(atob(payloadPart))
-    
+
     ElMessageBox.alert(
       `<pre style="text-align: left; max-height: 400px; overflow: auto;">${JSON.stringify(payload, null, 2)}</pre>`,
       'Token Payload',
       {
         dangerouslyUseHTMLString: true,
-        confirmButtonText: '关闭'
-      }
+        confirmButtonText: '关闭',
+      },
     )
   } catch (error) {
     ElMessage.error('Token 解析失败')
@@ -358,7 +381,9 @@ const viewTokenPayload = () => {
 // 复制用户信息
 const copyUserInfo = async () => {
   try {
-    await navigator.clipboard.writeText(JSON.stringify(userStore.userInfo, null, 2))
+    await navigator.clipboard.writeText(
+      JSON.stringify(userStore.userInfo, null, 2),
+    )
     ElMessage.success('用户信息已复制到剪贴板')
   } catch (error) {
     ElMessage.error('复制失败，请手动复制')

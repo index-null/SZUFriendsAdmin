@@ -152,7 +152,7 @@ interface Emits {
 
 const props = withDefaults(defineProps<Props>(), {
   visible: false,
-  data: null
+  data: null,
 })
 
 const emit = defineEmits<Emits>()
@@ -169,14 +169,14 @@ const defaultFormData: CollegeEntity = {
   address: '',
   description: '',
   sortOrder: 0,
-  status: 1
+  status: 1,
 }
 
 const formData = ref<CollegeEntity>({ ...defaultFormData })
 
 const dialogVisible = computed({
   get: () => props.visible,
-  set: (val) => emit('update:visible', val)
+  set: (val) => emit('update:visible', val),
 })
 
 const isEdit = computed(() => !!props.data?.id)
@@ -184,27 +184,25 @@ const isEdit = computed(() => !!props.data?.id)
 const rules: FormRules = {
   collegeCode: [
     { required: true, message: '请输入学院编码', trigger: 'blur' },
-    { min: 2, max: 50, message: '长度在 2 到 50 个字符', trigger: 'blur' }
+    { min: 2, max: 50, message: '长度在 2 到 50 个字符', trigger: 'blur' },
   ],
   collegeName: [
     { required: true, message: '请输入学院名称', trigger: 'blur' },
-    { min: 2, max: 100, message: '长度在 2 到 100 个字符', trigger: 'blur' }
+    { min: 2, max: 100, message: '长度在 2 到 100 个字符', trigger: 'blur' },
   ],
-  dean: [
-    { max: 50, message: '长度不能超过 50 个字符', trigger: 'blur' }
-  ],
+  dean: [{ max: 50, message: '长度不能超过 50 个字符', trigger: 'blur' }],
   contactPhone: [
-    { pattern: /^1[3-9]\d{9}$/, message: '请输入正确的手机号码', trigger: 'blur' }
+    {
+      pattern: /^1[3-9]\d{9}$/,
+      message: '请输入正确的手机号码',
+      trigger: 'blur',
+    },
   ],
-  email: [
-    { type: 'email', message: '请输入正确的邮箱地址', trigger: 'blur' }
-  ],
+  email: [{ type: 'email', message: '请输入正确的邮箱地址', trigger: 'blur' }],
   sortOrder: [
-    { type: 'number', message: '排序顺序必须是数字', trigger: 'blur' }
+    { type: 'number', message: '排序顺序必须是数字', trigger: 'blur' },
   ],
-  status: [
-    { required: true, message: '请选择状态', trigger: 'change' }
-  ]
+  status: [{ required: true, message: '请选择状态', trigger: 'change' }],
 }
 
 watch(
@@ -215,7 +213,7 @@ watch(
     } else if (val) {
       formData.value = { ...defaultFormData }
     }
-  }
+  },
 )
 
 const handleClose = () => {
@@ -238,7 +236,7 @@ const handleSubmit = async () => {
 }
 
 defineExpose({
-  formData
+  formData,
 })
 </script>
 

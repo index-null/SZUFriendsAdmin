@@ -10,7 +10,7 @@
 html.dark {
   /* 设置颜色方案为 dark，浏览器会自动调整滚动条等原生组件 */
   color-scheme: dark;
-  
+
   /* 自定义背景色 */
   background-color: #0a0a0a;
 }
@@ -23,5 +23,8 @@ html:not(.dark) {
 
 /* 全局过渡动画 */
 * {
-  transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+  transition:
+    background-color 0.3s,
+    color 0.3s,
+    border-color 0.3s;
 }

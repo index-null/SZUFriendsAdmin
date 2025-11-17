@@ -1,4 +1,9 @@
-import axios, { type AxiosInstance, type InternalAxiosRequestConfig, type AxiosError, type AxiosResponse} from 'axios'
+import axios, {
+  type AxiosInstance,
+  type InternalAxiosRequestConfig,
+  type AxiosError,
+  type AxiosResponse,
+} from 'axios'
 import { ElMessage, ElLoading } from 'element-plus'
 import type { ApiResponse, RequestConfig } from './types'
 import router from '../router'
@@ -6,7 +11,8 @@ import router from '../router'
 /**
  * API 基础配置
  */
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://49.235.189.33:9000/api'
+const API_BASE_URL =
+  import.meta.env.VITE_API_BASE_URL || 'http://49.235.189.33:9000/api'
 const REQUEST_TIMEOUT = 30000
 const TOKEN_KEY = 'access_token'
 
@@ -66,7 +72,7 @@ service.interceptors.request.use(
     hideLoading()
     ElMessage.error('请求配置错误，请稍后重试')
     return Promise.reject(error)
-  }
+  },
 )
 
 /**
@@ -84,7 +90,7 @@ service.interceptors.response.use(
     }
 
     const errorMessage = data.message || '请求失败，请稍后重试'
-    
+
     if (customConfig.errorHandler) {
       customConfig.errorHandler(data)
     } else if (customConfig.showError !== false) {
@@ -135,7 +141,8 @@ service.interceptors.response.use(
           errorMessage = '网关超时 (504)'
           break
         default:
-          errorMessage = response.data?.message || `请求失败 (${response.status})`
+          errorMessage =
+            response.data?.message || `请求失败 (${response.status})`
       }
     } else if (message.includes('timeout')) {
       errorMessage = '请求超时，请检查网络连接'
@@ -152,7 +159,7 @@ service.interceptors.response.use(
     }
 
     return Promise.reject(error)
-  }
+  },
 )
 
 /**
@@ -175,7 +182,7 @@ export const removeToken = (): void => {
  */
 const handleTokenExpired = () => {
   removeToken()
-  
+
   // 避免重复跳转
   if (router.currentRoute.value.path !== '/login') {
     router.push({

@@ -7,12 +7,14 @@ export const useAppStore = defineStore('app', () => {
   // State
   const theme = ref<Theme>('light')
   const sidebarCollapsed = ref(false)
-  const notifications = ref<Array<{
-    id: string
-    message: string
-    type: 'success' | 'error' | 'warning' | 'info'
-    timestamp: number
-  }>>([])
+  const notifications = ref<
+    Array<{
+      id: string
+      message: string
+      type: 'success' | 'error' | 'warning' | 'info'
+      timestamp: number
+    }>
+  >([])
 
   // Computed
   const isDarkMode = computed(() => theme.value === 'dark')
@@ -36,14 +38,14 @@ export const useAppStore = defineStore('app', () => {
   const addNotification = (
     message: string,
     type: 'success' | 'error' | 'warning' | 'info' = 'info',
-    duration = 3000
+    duration = 3000,
   ) => {
     const id = Date.now().toString()
     notifications.value.push({
       id,
       message,
       type,
-      timestamp: Date.now()
+      timestamp: Date.now(),
     })
 
     if (duration > 0) {
@@ -56,7 +58,7 @@ export const useAppStore = defineStore('app', () => {
   }
 
   const removeNotification = (id: string) => {
-    const index = notifications.value.findIndex(n => n.id === id)
+    const index = notifications.value.findIndex((n) => n.id === id)
     if (index > -1) {
       notifications.value.splice(index, 1)
     }
@@ -89,6 +91,6 @@ export const useAppStore = defineStore('app', () => {
     addNotification,
     removeNotification,
     clearNotifications,
-    initTheme
+    initTheme,
   }
 })

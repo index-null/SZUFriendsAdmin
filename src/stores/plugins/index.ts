@@ -38,16 +38,14 @@ export const createLoggerPlugin = () => {
 /**
  * 持久化插件 - 自动保存和恢复状态
  */
-export const createPersistPlugin = (options: {
-  key?: string
-  paths?: string[]
-  storage?: Storage
-} = {}) => {
-  const {
-    key = 'pinia-state',
-    paths = [],
-    storage = localStorage
-  } = options
+export const createPersistPlugin = (
+  options: {
+    key?: string
+    paths?: string[]
+    storage?: Storage
+  } = {},
+) => {
+  const { key = 'pinia-state', paths = [], storage = localStorage } = options
 
   return (context: PiniaPluginContext) => {
     const { store } = context
@@ -58,7 +56,6 @@ export const createPersistPlugin = (options: {
       try {
         const state = JSON.parse(saved)
         store.$patch(state)
-        console.log(`[Pinia] Restored state for ${store.$id}`)
       } catch (error) {
         console.error(`Failed to restore state for ${store.$id}:`, error)
       }
@@ -67,11 +64,12 @@ export const createPersistPlugin = (options: {
     // 监听状态变化并保存
     store.$subscribe((_mutation, state) => {
       try {
-        const toSave = paths.length > 0
-          ? Object.fromEntries(
-              paths.map(path => [path, (state as any)[path]])
-            )
-          : state
+        const toSave =
+          paths.length > 0
+            ? Object.fromEntries(
+                paths.map((path) => [path, (state as any)[path]]),
+              )
+            : state
 
         storage.setItem(`${key}-${store.$id}`, JSON.stringify(toSave))
       } catch (error) {
