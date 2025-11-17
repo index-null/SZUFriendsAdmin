@@ -10,10 +10,17 @@ import 'element-plus/dist/index.css'
 import './element-plus/dark.css'
 import { initTheme } from './element-plus'
 
+// 引入 Element Plus 中文语言包
+import ElementPlus from 'element-plus'
+import zhCn from 'element-plus/es/locale/lang/zh-cn'
+
 const app = createApp(App)
 
 app.use(router)
 app.use(pinia)
+app.use(ElementPlus, {
+  locale: zhCn,
+})
 
 // 初始化主题
 initTheme()

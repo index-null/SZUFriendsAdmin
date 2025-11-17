@@ -58,17 +58,18 @@ export const createPersistPlugin = (options: {
       try {
         const state = JSON.parse(saved)
         store.$patch(state)
+        console.log(`[Pinia] Restored state for ${store.$id}`)
       } catch (error) {
         console.error(`Failed to restore state for ${store.$id}:`, error)
       }
     }
 
     // 监听状态变化并保存
-    store.$subscribe((state) => {
+    store.$subscribe((_mutation, state) => {
       try {
         const toSave = paths.length > 0
           ? Object.fromEntries(
-              paths.map(path => [path, state[path as keyof typeof state]])
+              paths.map(path => [path, (state as any)[path]])
             )
           : state
 

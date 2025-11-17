@@ -8,7 +8,6 @@ import type { UpdateUserParams } from '@/api/modules/user'
 import { ElMessage } from 'element-plus'
 
 export const useUserStore = defineStore('user', () => {
-  // State - 基于后端实际返回的数据结构
   const userInfo = ref<Partial<LoginData>>({
     userId: 0,
     username: '',
@@ -21,19 +20,33 @@ export const useUserStore = defineStore('user', () => {
   const isLoggedIn = ref(false)
   const loading = ref(false)
 
-  // Computed
   const userName = computed(() => userInfo.value.username || '游客')
   const isAdmin = computed(() => userInfo.value.roles?.includes('admin') || false)
 
-  // Actions
   const setUserInfo = (info: Partial<LoginData>) => {
+    if (info.permissionTree) {
+      const extractPermissions = (tree: any[]): string[] => {
+        const codes: string[] = []
+        const traverse = (nodes: any[]) => {
+          nodes.forEach(node => {
+            if (node.permissionCode) {
+              codes.push(node.permissionCode)
+            }
+            if (node.children && node.children.length > 0) {
+              traverse(node.children)
+            }
+          })
+        }
+        traverse(tree)
+        return codes
+      }
+      info.permissions = extractPermissions(info.permissionTree)
+    }
+    
     userInfo.value = info
     isLoggedIn.value = true
   }
 
-  /**
-   * 用户登录
-   */
   const login = async (params: LoginParams) => {
     loading.value = true
     try {
@@ -52,9 +65,6 @@ export const useUserStore = defineStore('user', () => {
     }
   }
 
-  /**
-   * 用户注册
-   */
   const register = async (params: RegisterParams) => {
     loading.value = true
     try {
@@ -68,9 +78,6 @@ export const useUserStore = defineStore('user', () => {
     }
   }
 
-  /**
-   * 用户登出
-   */
   const logout = async () => {
     userInfo.value = {
       userId: 0,
@@ -86,9 +93,6 @@ export const useUserStore = defineStore('user', () => {
     ElMessage.success('已退出登录')
   }
 
-  /**
-   * 获取用户信息
-   */
   const getUserInfo = async () => {
     try {
       const data = await getUserInfoApi()
@@ -98,9 +102,6 @@ export const useUserStore = defineStore('user', () => {
     }
   }
 
-  /**
-   * 更新用户信息
-   */
   const updateProfile = async (updates: UpdateUserParams) => {
     try {
       const data = await updateUserInfoApi(updates)
@@ -113,15 +114,12 @@ export const useUserStore = defineStore('user', () => {
   }
 
   return {
-    // State
     userInfo,
     token,
     isLoggedIn,
     loading,
-    // Computed
     userName,
     isAdmin,
-    // Actions
     setUserInfo,
     login,
     register,

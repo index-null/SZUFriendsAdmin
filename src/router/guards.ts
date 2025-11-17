@@ -4,23 +4,26 @@
  */
 import type { Router, RouteLocationNormalized } from 'vue-router'
 import { getToken } from '@/api'
+import { useUserStore } from '@/stores/modules/user'
 
 /**
  * 权限检查函数
- * @param requiredRoles 需要的角色列表
+ * @param permissionCode 需要的权限码
  * @returns 是否有权限
  */
-export const checkPermission = (requiredRoles?: string[]): boolean => {
-  if (!requiredRoles || requiredRoles.length === 0) {
+export const checkPermission = (permissionCode?: string): boolean => {
+  if (!permissionCode) {
     return true
   }
 
-  // 这里应该从状态管理（如 Pinia）获取用户信息
-  // const userStore = useUserStore()
-  // return requiredRoles.some(role => userStore.user?.roles.includes(role))
+  const userStore = useUserStore()
+  
+  if (userStore.isAdmin) {
+    return true
+  }
 
-  // 示例实现
-  return true
+  const permissions = userStore.userInfo.permissions || []
+  return permissions.includes(permissionCode)
 }
 
 /**
@@ -68,8 +71,8 @@ export const setupRouterGuards = (router: Router): void => {
       return
     }
 
-    if (to.meta.roles && !checkPermission(to.meta.roles as string[])) {
-      next('/403')
+    if (to.meta.permission && !checkPermission(to.meta.permission as string)) {
+      next('/home')
       return
     }
 

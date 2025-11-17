@@ -1,12 +1,20 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { useRoute } from 'vue-router'
+import { useUserStore } from '@/stores/modules/user'
 import ThemeToggle from './components/ThemeToggle.vue'
 
 const route = useRoute()
+const userStore = useUserStore()
 
 // 判断是否显示导航栏（登录/注册页面不显示）
 const showNavbar = computed(() => !route.meta.hideNavbar)
+
+// 检查是否有学院管理权限
+const hasCollegePermission = computed(() => {
+  if (userStore.isAdmin) return true
+  return userStore.userInfo.permissions?.includes('college:page') || false
+})
 </script>
 
 <template>
@@ -21,6 +29,11 @@ const showNavbar = computed(() => !route.meta.hideNavbar)
           <li>
             <router-link to="/home" :class="{ active: route.name === 'Home' }">
               首页
+            </router-link>
+          </li>
+          <li v-if="hasCollegePermission">
+            <router-link to="/college-management" :class="{ active: route.name === 'CollegeManagement' }">
+              学院管理
             </router-link>
           </li>
         </ul>

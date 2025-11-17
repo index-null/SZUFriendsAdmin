@@ -5,6 +5,7 @@ import { setupRouterGuards } from './guards'
 const Login = () => import('../views/Login.vue')
 const Register = () => import('../views/Register.vue')
 const Home = () => import('../views/Home.vue')
+const CollegeManagement = () => import('../views/CollegeManagement/index.vue')
 const NotFound = () => import('../views/NotFound.vue')
 
 /**
@@ -51,6 +52,18 @@ const routes: RouteRecordRaw[] = [
     meta: {
       title: '首页',
       requiresAuth: true,
+      showInMenu: true,
+    },
+  },
+  // 学院管理
+  {
+    path: '/college-management',
+    name: 'CollegeManagement',
+    component: CollegeManagement,
+    meta: {
+      title: '学院管理',
+      requiresAuth: true,
+      permission: 'college:page',
       showInMenu: true,
     },
   },
