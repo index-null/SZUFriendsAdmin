@@ -16,26 +16,30 @@ import type {
   ResultEmbeddingResponse,
   ResultListDocument,
   ResultString,
-  ResultStudentRecords,
-} from '../.ts.schemas'
+  ResultStudentRecords
+} from '../.ts.schemas';
 
-import { customInstance } from '../../mutator'
+import { customInstance } from '../../mutator';
 
-export const get = () => {
-  /**
+
+
+  export const get = () => {
+/**
  * 生成帖子模板
 根据主题生成生活帖子的内容模板
 生成帖子模板
 [agent:post:generate] 根据主题生成生活帖子的内容模板
  * @summary 生成帖子模板
  */
-  const postAgentPostGenerate = (params: PostAgentPostGenerateParams) => {
-    return customInstance<string[]>({
-      url: `/agent/post/generate`,
-      method: 'POST',
-      params,
-    })
-  }
+const postAgentPostGenerate = (
+    params: PostAgentPostGenerateParams,
+ ) => {
+      return customInstance<string[]>(
+      {url: `/agent/post/generate`, method: 'POST',
+        params
+    },
+      );
+    }
   /**
  * 格式化输出
 根据姓名和邮箱格式化输出学生信息
@@ -43,13 +47,15 @@ export const get = () => {
 [agent:format] 格式化输出学生信息
  * @summary 格式化输出
  */
-  const postAgentFormat = (params: PostAgentFormatParams) => {
-    return customInstance<ResultStudentRecords>({
-      url: `/agent/format`,
-      method: 'POST',
-      params,
-    })
-  }
+const postAgentFormat = (
+    params: PostAgentFormatParams,
+ ) => {
+      return customInstance<ResultStudentRecords>(
+      {url: `/agent/format`, method: 'POST',
+        params
+    },
+      );
+    }
   /**
  * 工具对话
 使用工具增强的对话能力
@@ -57,13 +63,15 @@ export const get = () => {
 [agent:tool:chat] 使用工具增强的对话能力，支持流式返回
  * @summary 工具对话
  */
-  const postAgentToolChat = (params: PostAgentToolChatParams) => {
-    return customInstance<string[]>({
-      url: `/agent/tool/chat`,
-      method: 'POST',
-      params,
-    })
-  }
+const postAgentToolChat = (
+    params: PostAgentToolChatParams,
+ ) => {
+      return customInstance<string[]>(
+      {url: `/agent/tool/chat`, method: 'POST',
+        params
+    },
+      );
+    }
   /**
  * RAG对话
 检索增强生成对话，基于知识库检索相关文档并生成回答
@@ -71,13 +79,15 @@ RAG对话
 [agent:rag:chat] 检索增强生成对话，基于知识库生成回答
  * @summary RAG对话
  */
-  const postAgentRagChat = (params: PostAgentRagChatParams) => {
-    return customInstance<string[]>({
-      url: `/agent/rag/chat`,
-      method: 'POST',
-      params,
-    })
-  }
+const postAgentRagChat = (
+    params: PostAgentRagChatParams,
+ ) => {
+      return customInstance<string[]>(
+      {url: `/agent/rag/chat`, method: 'POST',
+        params
+    },
+      );
+    }
   /**
  * 生成图片
 根据文本描述生成图片
@@ -85,13 +95,15 @@ RAG对话
 [agent:image:generate] 根据文本描述生成图片
  * @summary 生成图片
  */
-  const postAgentImageGenerate = (params: PostAgentImageGenerateParams) => {
-    return customInstance<ResultString>({
-      url: `/agent/image/generate`,
-      method: 'POST',
-      params,
-    })
-  }
+const postAgentImageGenerate = (
+    params: PostAgentImageGenerateParams,
+ ) => {
+      return customInstance<ResultString>(
+      {url: `/agent/image/generate`, method: 'POST',
+        params
+    },
+      );
+    }
   /**
  * 向量化
 将数据转换为向量表示
@@ -99,14 +111,16 @@ RAG对话
 [agent:embedding] 将数据转换为向量表示
  * @summary 向量化
  */
-  const postAgentEmbedding = (postAgentEmbeddingBody: string) => {
-    return customInstance<ResultEmbeddingResponse>({
-      url: `/agent/embedding`,
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      data: postAgentEmbeddingBody,
-    })
-  }
+const postAgentEmbedding = (
+    postAgentEmbeddingBody: string,
+ ) => {
+      return customInstance<ResultEmbeddingResponse>(
+      {url: `/agent/embedding`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: postAgentEmbeddingBody
+    },
+      );
+    }
   /**
  * 删除向量
 清空向量数据库中的数据
@@ -114,12 +128,14 @@ RAG对话
 [agent:embedding:delete] 清空向量数据库中的数据
  * @summary 删除向量
  */
-  const deleteAgentEmbedding = () => {
-    return customInstance<ResultBoolean>({
-      url: `/agent/embedding`,
-      method: 'DELETE',
-    })
-  }
+const deleteAgentEmbedding = (
+    
+ ) => {
+      return customInstance<ResultBoolean>(
+      {url: `/agent/embedding`, method: 'DELETE'
+    },
+      );
+    }
   /**
  * 添加向量
 将数据向量化并存储到向量数据库
@@ -127,14 +143,16 @@ RAG对话
 [agent:embedding:add] 将数据向量化并存储到向量数据库
  * @summary 添加向量
  */
-  const postAgentEmbeddingAdd = (postAgentEmbeddingAddBody: string) => {
-    return customInstance<ResultBoolean>({
-      url: `/agent/embedding/add`,
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      data: postAgentEmbeddingAddBody,
-    })
-  }
+const postAgentEmbeddingAdd = (
+    postAgentEmbeddingAddBody: string,
+ ) => {
+      return customInstance<ResultBoolean>(
+      {url: `/agent/embedding/add`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: postAgentEmbeddingAddBody
+    },
+      );
+    }
   /**
  * 搜索向量
 在向量数据库中搜索相似文档
@@ -142,13 +160,15 @@ RAG对话
 [agent:embedding:search] 在向量数据库中搜索相似文档
  * @summary 搜索向量
  */
-  const postAgentEmbeddingSearch = (params: PostAgentEmbeddingSearchParams) => {
-    return customInstance<ResultListDocument>({
-      url: `/agent/embedding/search`,
-      method: 'POST',
-      params,
-    })
-  }
+const postAgentEmbeddingSearch = (
+    params: PostAgentEmbeddingSearchParams,
+ ) => {
+      return customInstance<ResultListDocument>(
+      {url: `/agent/embedding/search`, method: 'POST',
+        params
+    },
+      );
+    }
   /**
  * 通用对话
 与智能助手"荔宝"进行对话交流
@@ -156,53 +176,23 @@ RAG对话
 [agent:chat] 与智能助手进行对话交流，支持流式返回
  * @summary 通用对话
  */
-  const postAgentChat = (params: PostAgentChatParams) => {
-    return customInstance<string[]>({
-      url: `/agent/chat`,
-      method: 'POST',
-      params,
-    })
-  }
-  return {
-    postAgentPostGenerate,
-    postAgentFormat,
-    postAgentToolChat,
-    postAgentRagChat,
-    postAgentImageGenerate,
-    postAgentEmbedding,
-    deleteAgentEmbedding,
-    postAgentEmbeddingAdd,
-    postAgentEmbeddingSearch,
-    postAgentChat,
-  }
-}
-export type PostAgentPostGenerateResult = NonNullable<
-  Awaited<ReturnType<ReturnType<typeof get>['postAgentPostGenerate']>>
->
-export type PostAgentFormatResult = NonNullable<
-  Awaited<ReturnType<ReturnType<typeof get>['postAgentFormat']>>
->
-export type PostAgentToolChatResult = NonNullable<
-  Awaited<ReturnType<ReturnType<typeof get>['postAgentToolChat']>>
->
-export type PostAgentRagChatResult = NonNullable<
-  Awaited<ReturnType<ReturnType<typeof get>['postAgentRagChat']>>
->
-export type PostAgentImageGenerateResult = NonNullable<
-  Awaited<ReturnType<ReturnType<typeof get>['postAgentImageGenerate']>>
->
-export type PostAgentEmbeddingResult = NonNullable<
-  Awaited<ReturnType<ReturnType<typeof get>['postAgentEmbedding']>>
->
-export type DeleteAgentEmbeddingResult = NonNullable<
-  Awaited<ReturnType<ReturnType<typeof get>['deleteAgentEmbedding']>>
->
-export type PostAgentEmbeddingAddResult = NonNullable<
-  Awaited<ReturnType<ReturnType<typeof get>['postAgentEmbeddingAdd']>>
->
-export type PostAgentEmbeddingSearchResult = NonNullable<
-  Awaited<ReturnType<ReturnType<typeof get>['postAgentEmbeddingSearch']>>
->
-export type PostAgentChatResult = NonNullable<
-  Awaited<ReturnType<ReturnType<typeof get>['postAgentChat']>>
->
+const postAgentChat = (
+    params: PostAgentChatParams,
+ ) => {
+      return customInstance<string[]>(
+      {url: `/agent/chat`, method: 'POST',
+        params
+    },
+      );
+    }
+  return {postAgentPostGenerate,postAgentFormat,postAgentToolChat,postAgentRagChat,postAgentImageGenerate,postAgentEmbedding,deleteAgentEmbedding,postAgentEmbeddingAdd,postAgentEmbeddingSearch,postAgentChat}};
+export type PostAgentPostGenerateResult = NonNullable<Awaited<ReturnType<ReturnType<typeof get>['postAgentPostGenerate']>>>
+export type PostAgentFormatResult = NonNullable<Awaited<ReturnType<ReturnType<typeof get>['postAgentFormat']>>>
+export type PostAgentToolChatResult = NonNullable<Awaited<ReturnType<ReturnType<typeof get>['postAgentToolChat']>>>
+export type PostAgentRagChatResult = NonNullable<Awaited<ReturnType<ReturnType<typeof get>['postAgentRagChat']>>>
+export type PostAgentImageGenerateResult = NonNullable<Awaited<ReturnType<ReturnType<typeof get>['postAgentImageGenerate']>>>
+export type PostAgentEmbeddingResult = NonNullable<Awaited<ReturnType<ReturnType<typeof get>['postAgentEmbedding']>>>
+export type DeleteAgentEmbeddingResult = NonNullable<Awaited<ReturnType<ReturnType<typeof get>['deleteAgentEmbedding']>>>
+export type PostAgentEmbeddingAddResult = NonNullable<Awaited<ReturnType<ReturnType<typeof get>['postAgentEmbeddingAdd']>>>
+export type PostAgentEmbeddingSearchResult = NonNullable<Awaited<ReturnType<ReturnType<typeof get>['postAgentEmbeddingSearch']>>>
+export type PostAgentChatResult = NonNullable<Awaited<ReturnType<ReturnType<typeof get>['postAgentChat']>>>

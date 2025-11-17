@@ -12,29 +12,31 @@ import type {
   ResultListPermissionTreeNodeResponse,
   ResultPageResultPermissionResponse,
   ResultPermissionResponse,
-  UpdatePermissionRequest,
-} from '../.ts.schemas'
+  UpdatePermissionRequest
+} from '../.ts.schemas';
 
-import { customInstance } from '../../mutator'
+import { customInstance } from '../../mutator';
 
-export const get = () => {
-  /**
+
+
+  export const get = () => {
+/**
  * 创建权限
 添加新的权限到系统中
 创建权限
 添加新的权限到系统中
  * @summary 创建权限
  */
-  const postAuthPermission = (
+const postAuthPermission = (
     createPermissionRequest: CreatePermissionRequest,
-  ) => {
-    return customInstance<ResultPermissionResponse>({
-      url: `/auth/permission`,
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      data: createPermissionRequest,
-    })
-  }
+ ) => {
+      return customInstance<ResultPermissionResponse>(
+      {url: `/auth/permission`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: createPermissionRequest
+    },
+      );
+    }
   /**
  * 更新权限
 修改已有权限的信息
@@ -42,16 +44,16 @@ export const get = () => {
 修改已有权限的信息
  * @summary 更新权限
  */
-  const putAuthPermission = (
+const putAuthPermission = (
     updatePermissionRequest: UpdatePermissionRequest,
-  ) => {
-    return customInstance<ResultPermissionResponse>({
-      url: `/auth/permission`,
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
-      data: updatePermissionRequest,
-    })
-  }
+ ) => {
+      return customInstance<ResultPermissionResponse>(
+      {url: `/auth/permission`, method: 'PUT',
+      headers: {'Content-Type': 'application/json', },
+      data: updatePermissionRequest
+    },
+      );
+    }
   /**
  * 删除权限
 删除指定ID的权限，会同时删除其所有子权限
@@ -59,12 +61,14 @@ export const get = () => {
 删除指定ID的权限，会同时删除其所有子权限
  * @summary 删除权限
  */
-  const deleteAuthPermissionPermissionId = (permissionId: number) => {
-    return customInstance<ResultBoolean>({
-      url: `/auth/permission/${permissionId}`,
-      method: 'DELETE',
-    })
-  }
+const deleteAuthPermissionPermissionId = (
+    permissionId: number,
+ ) => {
+      return customInstance<ResultBoolean>(
+      {url: `/auth/permission/${permissionId}`, method: 'DELETE'
+    },
+      );
+    }
   /**
  * 根据ID查询权限详情
 获取指定ID的权限详细信息
@@ -72,12 +76,14 @@ export const get = () => {
 获取指定ID的权限详细信息
  * @summary 查询权限详情
  */
-  const getAuthPermissionPermissionId = (permissionId: number) => {
-    return customInstance<ResultPermissionResponse>({
-      url: `/auth/permission/${permissionId}`,
-      method: 'GET',
-    })
-  }
+const getAuthPermissionPermissionId = (
+    permissionId: number,
+ ) => {
+      return customInstance<ResultPermissionResponse>(
+      {url: `/auth/permission/${permissionId}`, method: 'GET'
+    },
+      );
+    }
   /**
  * 分页查询权限列表
 根据条件分页查询权限列表
@@ -85,16 +91,16 @@ export const get = () => {
 根据条件分页查询权限列表
  * @summary 分页查询权限
  */
-  const postAuthPermissionQuery = (
+const postAuthPermissionQuery = (
     permissionQueryRequest: PermissionQueryRequest,
-  ) => {
-    return customInstance<ResultPageResultPermissionResponse>({
-      url: `/auth/permission/query`,
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      data: permissionQueryRequest,
-    })
-  }
+ ) => {
+      return customInstance<ResultPageResultPermissionResponse>(
+      {url: `/auth/permission/query`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: permissionQueryRequest
+    },
+      );
+    }
   /**
  * 查询所有权限列表（不分页）
 获取所有权限，不分页
@@ -102,12 +108,14 @@ export const get = () => {
 获取所有权限，不分页
  * @summary 查询所有权限
  */
-  const getAuthPermissionList = () => {
-    return customInstance<ResultListPermissionResponse>({
-      url: `/auth/permission/list`,
-      method: 'GET',
-    })
-  }
+const getAuthPermissionList = (
+    
+ ) => {
+      return customInstance<ResultListPermissionResponse>(
+      {url: `/auth/permission/list`, method: 'GET'
+    },
+      );
+    }
   /**
  * 查询所有权限树（包含所有权限）
 获取所有权限的树形结构，不论状态
@@ -115,42 +123,19 @@ export const get = () => {
 获取所有权限的树形结构，不论状态
  * @summary 查询权限树
  */
-  const getAuthPermissionTreeAll = () => {
-    return customInstance<ResultListPermissionTreeNodeResponse>({
-      url: `/auth/permission/tree/all`,
-      method: 'GET',
-    })
-  }
-  return {
-    postAuthPermission,
-    putAuthPermission,
-    deleteAuthPermissionPermissionId,
-    getAuthPermissionPermissionId,
-    postAuthPermissionQuery,
-    getAuthPermissionList,
-    getAuthPermissionTreeAll,
-  }
-}
-export type PostAuthPermissionResult = NonNullable<
-  Awaited<ReturnType<ReturnType<typeof get>['postAuthPermission']>>
->
-export type PutAuthPermissionResult = NonNullable<
-  Awaited<ReturnType<ReturnType<typeof get>['putAuthPermission']>>
->
-export type DeleteAuthPermissionPermissionIdResult = NonNullable<
-  Awaited<
-    ReturnType<ReturnType<typeof get>['deleteAuthPermissionPermissionId']>
-  >
->
-export type GetAuthPermissionPermissionIdResult = NonNullable<
-  Awaited<ReturnType<ReturnType<typeof get>['getAuthPermissionPermissionId']>>
->
-export type PostAuthPermissionQueryResult = NonNullable<
-  Awaited<ReturnType<ReturnType<typeof get>['postAuthPermissionQuery']>>
->
-export type GetAuthPermissionListResult = NonNullable<
-  Awaited<ReturnType<ReturnType<typeof get>['getAuthPermissionList']>>
->
-export type GetAuthPermissionTreeAllResult = NonNullable<
-  Awaited<ReturnType<ReturnType<typeof get>['getAuthPermissionTreeAll']>>
->
+const getAuthPermissionTreeAll = (
+    
+ ) => {
+      return customInstance<ResultListPermissionTreeNodeResponse>(
+      {url: `/auth/permission/tree/all`, method: 'GET'
+    },
+      );
+    }
+  return {postAuthPermission,putAuthPermission,deleteAuthPermissionPermissionId,getAuthPermissionPermissionId,postAuthPermissionQuery,getAuthPermissionList,getAuthPermissionTreeAll}};
+export type PostAuthPermissionResult = NonNullable<Awaited<ReturnType<ReturnType<typeof get>['postAuthPermission']>>>
+export type PutAuthPermissionResult = NonNullable<Awaited<ReturnType<ReturnType<typeof get>['putAuthPermission']>>>
+export type DeleteAuthPermissionPermissionIdResult = NonNullable<Awaited<ReturnType<ReturnType<typeof get>['deleteAuthPermissionPermissionId']>>>
+export type GetAuthPermissionPermissionIdResult = NonNullable<Awaited<ReturnType<ReturnType<typeof get>['getAuthPermissionPermissionId']>>>
+export type PostAuthPermissionQueryResult = NonNullable<Awaited<ReturnType<ReturnType<typeof get>['postAuthPermissionQuery']>>>
+export type GetAuthPermissionListResult = NonNullable<Awaited<ReturnType<ReturnType<typeof get>['getAuthPermissionList']>>>
+export type GetAuthPermissionTreeAllResult = NonNullable<Awaited<ReturnType<ReturnType<typeof get>['getAuthPermissionTreeAll']>>>

@@ -13,27 +13,31 @@ import type {
   ResultPageResultRoleResponse,
   ResultRoleResponse,
   RoleQueryRequest,
-  UpdateRoleRequest,
-} from '../.ts.schemas'
+  UpdateRoleRequest
+} from '../.ts.schemas';
 
-import { customInstance } from '../../mutator'
+import { customInstance } from '../../mutator';
 
-export const get = () => {
-  /**
+
+
+  export const get = () => {
+/**
  * 创建角色
 添加新的角色到系统中
 创建角色
 添加新的角色到系统中
  * @summary 创建角色
  */
-  const postAuthRole = (createRoleRequest: CreateRoleRequest) => {
-    return customInstance<ResultRoleResponse>({
-      url: `/auth/role`,
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      data: createRoleRequest,
-    })
-  }
+const postAuthRole = (
+    createRoleRequest: CreateRoleRequest,
+ ) => {
+      return customInstance<ResultRoleResponse>(
+      {url: `/auth/role`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: createRoleRequest
+    },
+      );
+    }
   /**
  * 更新角色
 修改已有角色的信息
@@ -41,14 +45,16 @@ export const get = () => {
 修改已有角色的信息
  * @summary 更新角色
  */
-  const putAuthRole = (updateRoleRequest: UpdateRoleRequest) => {
-    return customInstance<ResultRoleResponse>({
-      url: `/auth/role`,
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
-      data: updateRoleRequest,
-    })
-  }
+const putAuthRole = (
+    updateRoleRequest: UpdateRoleRequest,
+ ) => {
+      return customInstance<ResultRoleResponse>(
+      {url: `/auth/role`, method: 'PUT',
+      headers: {'Content-Type': 'application/json', },
+      data: updateRoleRequest
+    },
+      );
+    }
   /**
  * 删除角色
 删除指定ID的角色
@@ -56,12 +62,14 @@ export const get = () => {
 删除指定ID的角色
  * @summary 删除角色
  */
-  const deleteAuthRoleRoleId = (roleId: number) => {
-    return customInstance<ResultBoolean>({
-      url: `/auth/role/${roleId}`,
-      method: 'DELETE',
-    })
-  }
+const deleteAuthRoleRoleId = (
+    roleId: number,
+ ) => {
+      return customInstance<ResultBoolean>(
+      {url: `/auth/role/${roleId}`, method: 'DELETE'
+    },
+      );
+    }
   /**
  * 根据ID查询角色详情
 获取指定ID的角色详细信息
@@ -69,12 +77,14 @@ export const get = () => {
 获取指定ID的角色详细信息
  * @summary 查询角色详情
  */
-  const getAuthRoleRoleId = (roleId: number) => {
-    return customInstance<ResultRoleResponse>({
-      url: `/auth/role/${roleId}`,
-      method: 'GET',
-    })
-  }
+const getAuthRoleRoleId = (
+    roleId: number,
+ ) => {
+      return customInstance<ResultRoleResponse>(
+      {url: `/auth/role/${roleId}`, method: 'GET'
+    },
+      );
+    }
   /**
  * 分页查询角色列表
 根据条件分页查询角色列表
@@ -82,14 +92,16 @@ export const get = () => {
 根据条件分页查询角色列表
  * @summary 分页查询角色
  */
-  const postAuthRoleQuery = (roleQueryRequest: RoleQueryRequest) => {
-    return customInstance<ResultPageResultRoleResponse>({
-      url: `/auth/role/query`,
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      data: roleQueryRequest,
-    })
-  }
+const postAuthRoleQuery = (
+    roleQueryRequest: RoleQueryRequest,
+ ) => {
+      return customInstance<ResultPageResultRoleResponse>(
+      {url: `/auth/role/query`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: roleQueryRequest
+    },
+      );
+    }
   /**
  * 查询所有角色列表（不分页）
 获取所有角色，不分页
@@ -97,12 +109,14 @@ export const get = () => {
 获取所有角色，不分页
  * @summary 查询所有角色
  */
-  const getAuthRoleList = () => {
-    return customInstance<ResultListRoleResponse>({
-      url: `/auth/role/list`,
-      method: 'GET',
-    })
-  }
+const getAuthRoleList = (
+    
+ ) => {
+      return customInstance<ResultListRoleResponse>(
+      {url: `/auth/role/list`, method: 'GET'
+    },
+      );
+    }
   /**
  * 给角色授权
 将指定的权限分配给角色
@@ -110,16 +124,16 @@ export const get = () => {
 将指定的权限分配给角色
  * @summary 角色授权
  */
-  const postAuthRolePermissionGrant = (
+const postAuthRolePermissionGrant = (
     grantPermissionsRequest: GrantPermissionsRequest,
-  ) => {
-    return customInstance<ResultBoolean>({
-      url: `/auth/role/permission/grant`,
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      data: grantPermissionsRequest,
-    })
-  }
+ ) => {
+      return customInstance<ResultBoolean>(
+      {url: `/auth/role/permission/grant`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: grantPermissionsRequest
+    },
+      );
+    }
   /**
  * 给角色取消授权
 移除角色的指定权限
@@ -127,16 +141,16 @@ export const get = () => {
 移除角色的指定权限
  * @summary 角色取消授权
  */
-  const postAuthRolePermissionRevoke = (
+const postAuthRolePermissionRevoke = (
     grantPermissionsRequest: GrantPermissionsRequest,
-  ) => {
-    return customInstance<ResultBoolean>({
-      url: `/auth/role/permission/revoke`,
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      data: grantPermissionsRequest,
-    })
-  }
+ ) => {
+      return customInstance<ResultBoolean>(
+      {url: `/auth/role/permission/revoke`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: grantPermissionsRequest
+    },
+      );
+    }
   /**
  * 查询角色权限树
 获取角色拥有的所有权限，以树形结构返回
@@ -144,48 +158,21 @@ export const get = () => {
 获取角色拥有的所有权限，以树形结构返回
  * @summary 查询角色权限
  */
-  const getAuthRoleRoleIdPermissions = (roleId: number) => {
-    return customInstance<ResultListPermissionTreeNodeResponse>({
-      url: `/auth/role/${roleId}/permissions`,
-      method: 'GET',
-    })
-  }
-  return {
-    postAuthRole,
-    putAuthRole,
-    deleteAuthRoleRoleId,
-    getAuthRoleRoleId,
-    postAuthRoleQuery,
-    getAuthRoleList,
-    postAuthRolePermissionGrant,
-    postAuthRolePermissionRevoke,
-    getAuthRoleRoleIdPermissions,
-  }
-}
-export type PostAuthRoleResult = NonNullable<
-  Awaited<ReturnType<ReturnType<typeof get>['postAuthRole']>>
->
-export type PutAuthRoleResult = NonNullable<
-  Awaited<ReturnType<ReturnType<typeof get>['putAuthRole']>>
->
-export type DeleteAuthRoleRoleIdResult = NonNullable<
-  Awaited<ReturnType<ReturnType<typeof get>['deleteAuthRoleRoleId']>>
->
-export type GetAuthRoleRoleIdResult = NonNullable<
-  Awaited<ReturnType<ReturnType<typeof get>['getAuthRoleRoleId']>>
->
-export type PostAuthRoleQueryResult = NonNullable<
-  Awaited<ReturnType<ReturnType<typeof get>['postAuthRoleQuery']>>
->
-export type GetAuthRoleListResult = NonNullable<
-  Awaited<ReturnType<ReturnType<typeof get>['getAuthRoleList']>>
->
-export type PostAuthRolePermissionGrantResult = NonNullable<
-  Awaited<ReturnType<ReturnType<typeof get>['postAuthRolePermissionGrant']>>
->
-export type PostAuthRolePermissionRevokeResult = NonNullable<
-  Awaited<ReturnType<ReturnType<typeof get>['postAuthRolePermissionRevoke']>>
->
-export type GetAuthRoleRoleIdPermissionsResult = NonNullable<
-  Awaited<ReturnType<ReturnType<typeof get>['getAuthRoleRoleIdPermissions']>>
->
+const getAuthRoleRoleIdPermissions = (
+    roleId: number,
+ ) => {
+      return customInstance<ResultListPermissionTreeNodeResponse>(
+      {url: `/auth/role/${roleId}/permissions`, method: 'GET'
+    },
+      );
+    }
+  return {postAuthRole,putAuthRole,deleteAuthRoleRoleId,getAuthRoleRoleId,postAuthRoleQuery,getAuthRoleList,postAuthRolePermissionGrant,postAuthRolePermissionRevoke,getAuthRoleRoleIdPermissions}};
+export type PostAuthRoleResult = NonNullable<Awaited<ReturnType<ReturnType<typeof get>['postAuthRole']>>>
+export type PutAuthRoleResult = NonNullable<Awaited<ReturnType<ReturnType<typeof get>['putAuthRole']>>>
+export type DeleteAuthRoleRoleIdResult = NonNullable<Awaited<ReturnType<ReturnType<typeof get>['deleteAuthRoleRoleId']>>>
+export type GetAuthRoleRoleIdResult = NonNullable<Awaited<ReturnType<ReturnType<typeof get>['getAuthRoleRoleId']>>>
+export type PostAuthRoleQueryResult = NonNullable<Awaited<ReturnType<ReturnType<typeof get>['postAuthRoleQuery']>>>
+export type GetAuthRoleListResult = NonNullable<Awaited<ReturnType<ReturnType<typeof get>['getAuthRoleList']>>>
+export type PostAuthRolePermissionGrantResult = NonNullable<Awaited<ReturnType<ReturnType<typeof get>['postAuthRolePermissionGrant']>>>
+export type PostAuthRolePermissionRevokeResult = NonNullable<Awaited<ReturnType<ReturnType<typeof get>['postAuthRolePermissionRevoke']>>>
+export type GetAuthRoleRoleIdPermissionsResult = NonNullable<Awaited<ReturnType<ReturnType<typeof get>['getAuthRoleRoleIdPermissions']>>>

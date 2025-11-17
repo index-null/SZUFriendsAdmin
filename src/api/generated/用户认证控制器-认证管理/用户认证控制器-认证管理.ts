@@ -9,51 +9,55 @@ import type {
   RegisterRequest,
   ResultBoolean,
   ResultLoginResponse,
-  ResultString,
-} from '../.ts.schemas'
+  ResultString
+} from '../.ts.schemas';
 
-import { customInstance } from '../../mutator'
+import { customInstance } from '../../mutator';
 
-export const get = () => {
+
+
+  export const get = () => {
+/**
+ * @summary 用户登录接口（Web和小程序双端登录）
+ */
+const postAuthLogin = (
+    loginRequest: LoginRequest,
+ ) => {
+      return customInstance<ResultLoginResponse>(
+      {url: `/auth/login`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: loginRequest
+    },
+      );
+    }
   /**
-   * @summary 用户登录接口（Web和小程序双端登录）
-   */
-  const postAuthLogin = (loginRequest: LoginRequest) => {
-    return customInstance<ResultLoginResponse>({
-      url: `/auth/login`,
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      data: loginRequest,
-    })
-  }
-  /**
-   * @summary 用户注册接口
-   */
-  const postAuthRegister = (registerRequest: RegisterRequest) => {
-    return customInstance<ResultBoolean>({
-      url: `/auth/register`,
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      data: registerRequest,
-    })
-  }
+ * @summary 用户注册接口
+ */
+const postAuthRegister = (
+    registerRequest: RegisterRequest,
+ ) => {
+      return customInstance<ResultBoolean>(
+      {url: `/auth/register`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: registerRequest
+    },
+      );
+    }
   /**
  * 测试接口
 test
 将指定的权限分配给角色
  * @summary 测试接口
  */
-  const getAuthTest = () => {
-    return customInstance<ResultString>({ url: `/auth/test`, method: 'GET' })
-  }
-  return { postAuthLogin, postAuthRegister, getAuthTest }
-}
-export type PostAuthLoginResult = NonNullable<
-  Awaited<ReturnType<ReturnType<typeof get>['postAuthLogin']>>
->
-export type PostAuthRegisterResult = NonNullable<
-  Awaited<ReturnType<ReturnType<typeof get>['postAuthRegister']>>
->
-export type GetAuthTestResult = NonNullable<
-  Awaited<ReturnType<ReturnType<typeof get>['getAuthTest']>>
->
+const getAuthTest = (
+    
+ ) => {
+      return customInstance<ResultString>(
+      {url: `/auth/test`, method: 'GET'
+    },
+      );
+    }
+  return {postAuthLogin,postAuthRegister,getAuthTest}};
+export type PostAuthLoginResult = NonNullable<Awaited<ReturnType<ReturnType<typeof get>['postAuthLogin']>>>
+export type PostAuthRegisterResult = NonNullable<Awaited<ReturnType<ReturnType<typeof get>['postAuthRegister']>>>
+export type GetAuthTestResult = NonNullable<Awaited<ReturnType<ReturnType<typeof get>['getAuthTest']>>>

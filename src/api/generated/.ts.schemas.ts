@@ -10,133 +10,133 @@ export interface TbActivity {
    * @minimum 1
    * @maximum 2147483647
    */
-  id: number
+  id: number;
   /**
    * 活动名称
    * @maxLength 200
    */
-  activityName: string
+  activityName: string;
   /**
    * 发起人用户ID
    * @minimum -2147483648
    * @maximum 2147483647
    */
-  creatorUserId: number
+  creatorUserId: number;
   /**
    * 关联班级ID（可为空）
    * @minimum -2147483648
    * @maximum 2147483647
    */
-  classId?: number
+  classId?: number;
   /**
    * 活动类型（1-班级活动，2-校友聚会，3-行业交流，4-其他）
    * @minimum -2147483648
    * @maximum 2147483647
    */
-  activityType?: number
+  activityType?: number;
   /**
    * 活动封面图
    * @maxLength 500
    */
-  coverImage?: string
+  coverImage?: string;
   /**
    * 活动描述
    * @maxLength 65535
    */
-  description: string
+  description: string;
   /** 开始时间 */
-  startTime: string
+  startTime: string;
   /** 结束时间 */
-  endTime: string
+  endTime: string;
   /** 报名截止时间 */
-  registrationDeadline?: string
+  registrationDeadline?: string;
   /**
    * 省份
    * @maxLength 50
    */
-  province?: string
+  province?: string;
   /**
    * 城市
    * @maxLength 50
    */
-  city?: string
+  city?: string;
   /**
    * 区/县
    * @maxLength 50
    */
-  district?: string
+  district?: string;
   /**
    * 活动地址
    * @maxLength 255
    */
-  address?: string
+  address?: string;
   /** 经度 */
-  longitude?: number
+  longitude?: number;
   /** 纬度 */
-  latitude?: number
+  latitude?: number;
   /**
    * 最大参与人数（NULL表示不限制）
    * @minimum -2147483648
    * @maximum 2147483647
    */
-  maxParticipants?: number
+  maxParticipants?: number;
   /**
    * 当前参与人数
    * @minimum -2147483648
    * @maximum 2147483647
    */
-  currentParticipants?: number
+  currentParticipants?: number;
   /**
    * 联系人
    * @maxLength 50
    */
-  contactPerson?: string
+  contactPerson?: string;
   /**
    * 联系电话
    * @maxLength 20
    */
-  contactPhone?: string
+  contactPhone?: string;
   /** 活动费用 */
-  fees?: number
+  fees?: number;
   /**
    * 活动标签（逗号分隔）
    * @maxLength 255
    */
-  tags?: string
+  tags?: string;
   /**
    * 是否公开（0-私密，1-公开）
    * @minimum -2147483648
    * @maximum 2147483647
    */
-  isPublic?: number
+  isPublic?: number;
   /**
    * 是否需要审批（0-否，1-是）
    * @minimum -2147483648
    * @maximum 2147483647
    */
-  needApproval?: number
+  needApproval?: number;
   /**
    * 浏览次数
    * @minimum -2147483648
    * @maximum 2147483647
    */
-  viewCount?: number
+  viewCount?: number;
   /**
    * 活动状态（1-报名中，2-进行中，3-已结束，4-已取消）
    * @minimum -2147483648
    * @maximum 2147483647
    */
-  status?: number
+  status?: number;
   /** 创建时间 */
-  createTime: string
+  createTime: string;
   /** 更新时间 */
-  updateTime: string
+  updateTime: string;
   /**
    * 删除标志（0-未删除，1-已删除）
    * @minimum -2147483648
    * @maximum 2147483647
    */
-  deleted: number
+  deleted: number;
 }
 
 export interface TbActivityParticipant {
@@ -145,55 +145,55 @@ export interface TbActivityParticipant {
    * @minimum 1
    * @maximum 2147483647
    */
-  id: number
+  id: number;
   /**
    * 活动ID
    * @minimum -2147483648
    * @maximum 2147483647
    */
-  activityId: number
+  activityId: number;
   /**
    * 参与用户ID
    * @minimum -2147483648
    * @maximum 2147483647
    */
-  userId: number
+  userId: number;
   /**
    * 参与状态（1-已报名，2-已签到，3-已取消，4-待审核，5-审核拒绝）
    * @minimum -2147483648
    * @maximum 2147483647
    */
-  participantStatus?: number
+  participantStatus?: number;
   /**
    * 携带人数
    * @minimum -2147483648
    * @maximum 2147483647
    */
-  guestCount?: number
+  guestCount?: number;
   /**
    * 报名备注
    * @maxLength 255
    */
-  registrationRemark?: string
+  registrationRemark?: string;
   /**
    * 审核人ID
    * @minimum -2147483648
    * @maximum 2147483647
    */
-  approvalUserId?: number
+  approvalUserId?: number;
   /** 审核时间 */
-  approvalTime?: string
+  approvalTime?: string;
   /**
    * 审核备注
    * @maxLength 255
    */
-  approvalRemark?: string
+  approvalRemark?: string;
   /** 签到时间 */
-  checkInTime?: string
+  checkInTime?: string;
   /** 创建时间 */
-  createTime: string
+  createTime: string;
   /** 更新时间 */
-  updateTime: string
+  updateTime: string;
 }
 
 export interface TbBusinessCard {
@@ -202,106 +202,106 @@ export interface TbBusinessCard {
    * @minimum 1
    * @maximum 2147483647
    */
-  id: number
+  id: number;
   /**
    * 用户ID
    * @minimum -2147483648
    * @maximum 2147483647
    */
-  userId: number
+  userId: number;
   /**
    * 名片名称
    * @maxLength 100
    */
-  cardName: string
+  cardName: string;
   /**
    * 真实姓名
    * @maxLength 50
    */
-  realName: string
+  realName: string;
   /**
    * 公司名称
    * @maxLength 200
    */
-  company?: string
+  company?: string;
   /**
    * 职位
    * @maxLength 100
    */
-  jobTitle?: string
+  jobTitle?: string;
   /**
    * 电话
    * @maxLength 20
    */
-  phone?: string
+  phone?: string;
   /**
    * 邮箱
    * @maxLength 100
    */
-  email?: string
+  email?: string;
   /**
    * 微信号
    * @maxLength 50
    */
-  wechat?: string
+  wechat?: string;
   /**
    * QQ号
    * @maxLength 20
    */
-  qq?: string
+  qq?: string;
   /**
    * 地址
    * @maxLength 255
    */
-  address?: string
+  address?: string;
   /**
    * 网站
    * @maxLength 255
    */
-  website?: string
+  website?: string;
   /**
    * 头像
    * @maxLength 500
    */
-  avatar?: string
+  avatar?: string;
   /**
    * 二维码
    * @maxLength 500
    */
-  qrCode?: string
+  qrCode?: string;
   /**
    * 个人简介
    * @maxLength 500
    */
-  introduction?: string
+  introduction?: string;
   /**
    * 是否为默认名片（0-否，1-是）
    * @minimum -2147483648
    * @maximum 2147483647
    */
-  isDefault?: number
+  isDefault?: number;
   /**
    * 是否公开（0-私密，1-公开）
    * @minimum -2147483648
    * @maximum 2147483647
    */
-  isPublic?: number
+  isPublic?: number;
   /**
    * 分享次数
    * @minimum -2147483648
    * @maximum 2147483647
    */
-  shareCount?: number
+  shareCount?: number;
   /** 创建时间 */
-  createTime: string
+  createTime: string;
   /** 更新时间 */
-  updateTime: string
+  updateTime: string;
   /**
    * 删除标志（0-未删除，1-已删除）
    * @minimum -2147483648
    * @maximum 2147483647
    */
-  deleted: number
+  deleted: number;
 }
 
 export interface TbCardExchange {
@@ -310,52 +310,52 @@ export interface TbCardExchange {
    * @minimum 1
    * @maximum 2147483647
    */
-  id: number
+  id: number;
   /**
    * 发送方用户ID
    * @minimum -2147483648
    * @maximum 2147483647
    */
-  senderId: number
+  senderId: number;
   /**
    * 接收方用户ID
    * @minimum -2147483648
    * @maximum 2147483647
    */
-  receiverId: number
+  receiverId: number;
   /**
    * 发送方名片ID
    * @minimum -2147483648
    * @maximum 2147483647
    */
-  senderCardId: number
+  senderCardId: number;
   /**
    * 接收方名片ID（互换时填写）
    * @minimum -2147483648
    * @maximum 2147483647
    */
-  receiverCardId?: number
+  receiverCardId?: number;
   /**
    * 交换类型（1-单向分享，2-双向交换）
    * @minimum -2147483648
    * @maximum 2147483647
    */
-  exchangeType?: number
+  exchangeType?: number;
   /**
    * 状态（1-待接收，2-已接收，3-已拒绝）
    * @minimum -2147483648
    * @maximum 2147483647
    */
-  status?: number
+  status?: number;
   /**
    * 附加消息
    * @maxLength 255
    */
-  message?: string
+  message?: string;
   /** 创建时间 */
-  createTime: string
+  createTime: string;
   /** 更新时间 */
-  updateTime: string
+  updateTime: string;
 }
 
 export interface TbClass {
@@ -364,83 +364,83 @@ export interface TbClass {
    * @minimum 1
    * @maximum 2147483647
    */
-  id: number
+  id: number;
   /**
    * 所属学院ID
    * @minimum -2147483648
    * @maximum 2147483647
    */
-  collegeId: number
+  collegeId: number;
   /**
    * 班级编码（唯一）
    * @maxLength 50
    */
-  classCode: string
+  classCode: string;
   /**
    * 班级名称
    * @maxLength 100
    */
-  className: string
+  className: string;
   /**
    * 年级（如：2020）
    * @minimum -2147483648
    * @maximum 2147483647
    */
-  grade: number
+  grade: number;
   /**
    * 专业
    * @maxLength 100
    */
-  major?: string
+  major?: string;
   /**
    * 班级类型（1-本科，2-硕士，3-博士）
    * @minimum -2147483648
    * @maximum 2147483647
    */
-  classType?: number
+  classType?: number;
   /**
    * 档长用户ID
    * @minimum -2147483648
    * @maximum 2147483647
    */
-  leaderUserId?: number
+  leaderUserId?: number;
   /**
    * 成员数量
    * @minimum -2147483648
    * @maximum 2147483647
    */
-  memberCount?: number
+  memberCount?: number;
   /**
    * 班级简介
    * @maxLength 500
    */
-  description?: string
+  description?: string;
   /**
    * 班级封面图
    * @maxLength 500
    */
-  coverImage?: string
+  coverImage?: string;
   /**
    * 班级公告
    * @maxLength 65535
    */
-  notice?: string
+  notice?: string;
   /**
    * 状态（0-禁用，1-启用）
    * @minimum -2147483648
    * @maximum 2147483647
    */
-  status?: number
+  status?: number;
   /** 创建时间 */
-  createTime: string
+  createTime: string;
   /** 更新时间 */
-  updateTime: string
+  updateTime: string;
   /**
    * 删除标志（0-未删除，1-已删除）
    * @minimum -2147483648
    * @maximum 2147483647
    */
-  deleted: number
+  deleted: number;
 }
 
 export interface TbCollege {
@@ -449,69 +449,69 @@ export interface TbCollege {
    * @minimum 1
    * @maximum 2147483647
    */
-  id: number
+  id: number;
   /**
    * 学院编码（唯一）
    * @maxLength 50
    */
-  collegeCode: string
+  collegeCode: string;
   /**
    * 学院名称
    * @maxLength 100
    */
-  collegeName: string
+  collegeName: string;
   /**
    * 学院简介
    * @maxLength 500
    */
-  description?: string
+  description?: string;
   /**
    * 学院Logo
    * @maxLength 500
    */
-  logo?: string
+  logo?: string;
   /**
    * 院长姓名
    * @maxLength 50
    */
-  dean?: string
+  dean?: string;
   /**
    * 联系电话
    * @maxLength 20
    */
-  contactPhone?: string
+  contactPhone?: string;
   /**
    * 联系邮箱
    * @maxLength 100
    */
-  email?: string
+  email?: string;
   /**
    * 学院地址
    * @maxLength 255
    */
-  address?: string
+  address?: string;
   /**
    * 排序顺序
    * @minimum -2147483648
    * @maximum 2147483647
    */
-  sortOrder?: number
+  sortOrder?: number;
   /**
    * 状态（0-禁用，1-启用）
    * @minimum -2147483648
    * @maximum 2147483647
    */
-  status?: number
+  status?: number;
   /** 创建时间 */
-  createTime: string
+  createTime: string;
   /** 更新时间 */
-  updateTime: string
+  updateTime: string;
   /**
    * 删除标志（0-未删除，1-已删除）
    * @minimum -2147483648
    * @maximum 2147483647
    */
-  deleted: number
+  deleted: number;
 }
 
 export interface TbCompany {
@@ -520,131 +520,131 @@ export interface TbCompany {
    * @minimum 1
    * @maximum 2147483647
    */
-  id: number
+  id: number;
   /**
    * 企业名称
    * @maxLength 200
    */
-  companyName: string
+  companyName: string;
   /**
    * 企业编码/统一社会信用代码
    * @maxLength 100
    */
-  companyCode?: string
+  companyCode?: string;
   /**
    * 所属行业
    * @maxLength 100
    */
-  industry?: string
+  industry?: string;
   /**
    * 企业类型
    * @maxLength 50
    */
-  companyType?: string
+  companyType?: string;
   /**
    * 企业规模
    * @maxLength 50
    */
-  scale?: string
+  scale?: string;
   /** 成立日期 */
-  foundedDate?: string
+  foundedDate?: string;
   /**
    * 法人代表
    * @maxLength 50
    */
-  legalPerson?: string
+  legalPerson?: string;
   /**
    * 注册资本
    * @maxLength 50
    */
-  registeredCapital?: string
+  registeredCapital?: string;
   /**
    * 省份
    * @maxLength 50
    */
-  province?: string
+  province?: string;
   /**
    * 城市
    * @maxLength 50
    */
-  city?: string
+  city?: string;
   /**
    * 区/县
    * @maxLength 50
    */
-  district?: string
+  district?: string;
   /**
    * 详细地址
    * @maxLength 255
    */
-  address?: string
+  address?: string;
   /** 经度 */
-  longitude?: number
+  longitude?: number;
   /** 纬度 */
-  latitude?: number
+  latitude?: number;
   /**
    * 联系电话
    * @maxLength 20
    */
-  contactPhone?: string
+  contactPhone?: string;
   /**
    * 企业邮箱
    * @maxLength 100
    */
-  email?: string
+  email?: string;
   /**
    * 企业网站
    * @maxLength 255
    */
-  website?: string
+  website?: string;
   /**
    * 企业Logo
    * @maxLength 500
    */
-  logo?: string
+  logo?: string;
   /**
    * 企业简介
    * @maxLength 65535
    */
-  description?: string
+  description?: string;
   /**
    * 经营范围
    * @maxLength 65535
    */
-  businessScope?: string
+  businessScope?: string;
   /**
    * 主营业务
    * @maxLength 65535
    */
-  mainProducts?: string
+  mainProducts?: string;
   /**
    * 创建人用户ID（校友）
    * @minimum -2147483648
    * @maximum 2147483647
    */
-  creatorUserId: number
+  creatorUserId: number;
   /**
    * 浏览次数
    * @minimum -2147483648
    * @maximum 2147483647
    */
-  viewCount?: number
+  viewCount?: number;
   /**
    * 状态（0-禁用，1-启用）
    * @minimum -2147483648
    * @maximum 2147483647
    */
-  status?: number
+  status?: number;
   /** 创建时间 */
-  createTime: string
+  createTime: string;
   /** 更新时间 */
-  updateTime: string
+  updateTime: string;
   /**
    * 删除标志（0-未删除，1-已删除）
    * @minimum -2147483648
    * @maximum 2147483647
    */
-  deleted: number
+  deleted: number;
 }
 
 export interface TbPermission {
@@ -653,66 +653,66 @@ export interface TbPermission {
    * @minimum 1
    * @maximum 2147483647
    */
-  id: number
+  id: number;
   /**
    * 父权限ID（0表示顶级权限）
    * @minimum -2147483648
    * @maximum 2147483647
    */
-  parentId?: number
+  parentId?: number;
   /**
    * 权限编码（唯一，如：post:create、user:update）
    * @maxLength 100
    */
-  permissionCode: string
+  permissionCode: string;
   /**
    * 权限名称
    * @maxLength 100
    */
-  permissionName: string
+  permissionName: string;
   /**
    * 权限类型（1-菜单，2-按钮，3-接口）
    * @minimum -2147483648
    * @maximum 2147483647
    */
-  permissionType?: number
+  permissionType?: number;
   /**
    * 权限URL/接口路径
    * @maxLength 255
    */
-  url?: string
+  url?: string;
   /**
    * HTTP方法（GET、POST等）
    * @maxLength 10
    */
-  method?: string
+  method?: string;
   /**
    * 权限描述
    * @maxLength 255
    */
-  description?: string
+  description?: string;
   /**
    * 排序顺序
    * @minimum -2147483648
    * @maximum 2147483647
    */
-  sortOrder?: number
+  sortOrder?: number;
   /**
    * 状态（0-禁用，1-启用）
    * @minimum -2147483648
    * @maximum 2147483647
    */
-  status?: number
+  status?: number;
   /** 创建时间 */
-  createTime: string
+  createTime: string;
   /** 更新时间 */
-  updateTime: string
+  updateTime: string;
   /**
    * 删除标志（0-未删除，1-已删除）
    * @minimum -2147483648
    * @maximum 2147483647
    */
-  deleted: number
+  deleted: number;
 }
 
 export interface TbPost {
@@ -721,97 +721,97 @@ export interface TbPost {
    * @minimum 1
    * @maximum 2147483647
    */
-  id: number
+  id: number;
   /**
    * 发帖用户ID
    * @minimum -2147483648
    * @maximum 2147483647
    */
-  userId: number
+  userId: number;
   /**
    * 所属班级ID（可为空，为空表示个人动态）
    * @minimum -2147483648
    * @maximum 2147483647
    */
-  classId?: number
+  classId?: number;
   /**
    * 帖子内容
    * @maxLength 65535
    */
-  content: string
+  content: string;
   /**
    * 图片URL列表（JSON数组格式）
    * @maxLength 65535
    */
-  images?: string
+  images?: string;
   /**
    * 视频URL
    * @maxLength 500
    */
-  videoUrl?: string
+  videoUrl?: string;
   /**
    * 发帖地点
    * @maxLength 255
    */
-  location?: string
+  location?: string;
   /** 经度 */
-  longitude?: number
+  longitude?: number;
   /** 纬度 */
-  latitude?: number
+  latitude?: number;
   /**
    * 帖子类型（1-普通动态，2-班级动态，3-通知公告）
    * @minimum -2147483648
    * @maximum 2147483647
    */
-  postType?: number
+  postType?: number;
   /**
    * 是否置顶（0-否，1-是）
    * @minimum -2147483648
    * @maximum 2147483647
    */
-  isTop?: number
+  isTop?: number;
   /** 置顶时间 */
-  topTime?: string
+  topTime?: string;
   /**
    * 浏览次数
    * @minimum -2147483648
    * @maximum 2147483647
    */
-  viewCount?: number
+  viewCount?: number;
   /**
    * 点赞数
    * @minimum -2147483648
    * @maximum 2147483647
    */
-  likeCount?: number
+  likeCount?: number;
   /**
    * 评论数
    * @minimum -2147483648
    * @maximum 2147483647
    */
-  commentCount?: number
+  commentCount?: number;
   /**
    * 分享数
    * @minimum -2147483648
    * @maximum 2147483647
    */
-  shareCount?: number
+  shareCount?: number;
   /**
    * 状态（0-已删除，1-正常，2-已屏蔽）
    * @minimum -2147483648
    * @maximum 2147483647
    */
-  status?: number
+  status?: number;
   /** 创建时间 */
-  createTime: string
+  createTime: string;
   /** 更新时间 */
-  updateTime: string
+  updateTime: string;
   /**
    * 删除标志（0-未删除，1-已删除）
    * @minimum -2147483648
    * @maximum 2147483647
    */
-  deleted: number
+  deleted: number;
 }
 
 export interface TbPostComment {
@@ -820,63 +820,63 @@ export interface TbPostComment {
    * @minimum 1
    * @maximum 2147483647
    */
-  id: number
+  id: number;
   /**
    * 帖子ID
    * @minimum -2147483648
    * @maximum 2147483647
    */
-  postId: number
+  postId: number;
   /**
    * 评论用户ID
    * @minimum -2147483648
    * @maximum 2147483647
    */
-  userId: number
+  userId: number;
   /**
    * 父评论ID（0表示顶级评论）
    * @minimum -2147483648
    * @maximum 2147483647
    */
-  parentId?: number
+  parentId?: number;
   /**
    * 回复目标用户ID
    * @minimum -2147483648
    * @maximum 2147483647
    */
-  replyToUserId?: number
+  replyToUserId?: number;
   /**
    * 评论内容
    * @maxLength 65535
    */
-  content: string
+  content: string;
   /**
    * 评论图片URL列表（JSON数组格式）
    * @maxLength 65535
    */
-  images?: string
+  images?: string;
   /**
    * 点赞数
    * @minimum -2147483648
    * @maximum 2147483647
    */
-  likeCount?: number
+  likeCount?: number;
   /**
    * 状态（0-已删除，1-正常，2-已屏蔽）
    * @minimum -2147483648
    * @maximum 2147483647
    */
-  status?: number
+  status?: number;
   /** 创建时间 */
-  createTime: string
+  createTime: string;
   /** 更新时间 */
-  updateTime: string
+  updateTime: string;
   /**
    * 删除标志（0-未删除，1-已删除）
    * @minimum -2147483648
    * @maximum 2147483647
    */
-  deleted: number
+  deleted: number;
 }
 
 export interface TbPostLike {
@@ -885,21 +885,21 @@ export interface TbPostLike {
    * @minimum 1
    * @maximum 2147483647
    */
-  id: number
+  id: number;
   /**
    * 帖子ID
    * @minimum -2147483648
    * @maximum 2147483647
    */
-  postId: number
+  postId: number;
   /**
    * 点赞用户ID
    * @minimum -2147483648
    * @maximum 2147483647
    */
-  userId: number
+  userId: number;
   /** 创建时间 */
-  createTime: string
+  createTime: string;
 }
 
 export interface TbRole {
@@ -908,44 +908,44 @@ export interface TbRole {
    * @minimum 1
    * @maximum 2147483647
    */
-  id: number
+  id: number;
   /**
    * 角色编码（唯一，如：ADMIN、USER、CLASS_LEADER）
    * @maxLength 50
    */
-  roleCode: string
+  roleCode: string;
   /**
    * 角色名称
    * @maxLength 100
    */
-  roleName: string
+  roleName: string;
   /**
    * 角色描述
    * @maxLength 255
    */
-  description?: string
+  description?: string;
   /**
    * 排序顺序
    * @minimum -2147483648
    * @maximum 2147483647
    */
-  sortOrder?: number
+  sortOrder?: number;
   /**
    * 状态（0-禁用，1-启用）
    * @minimum -2147483648
    * @maximum 2147483647
    */
-  status?: number
+  status?: number;
   /** 创建时间 */
-  createTime: string
+  createTime: string;
   /** 更新时间 */
-  updateTime: string
+  updateTime: string;
   /**
    * 删除标志（0-未删除，1-已删除）
    * @minimum -2147483648
    * @maximum 2147483647
    */
-  deleted: number
+  deleted: number;
 }
 
 export interface TbRolePermission {
@@ -954,21 +954,21 @@ export interface TbRolePermission {
    * @minimum 1
    * @maximum 2147483647
    */
-  id: number
+  id: number;
   /**
    * 角色ID
    * @minimum -2147483648
    * @maximum 2147483647
    */
-  roleId: number
+  roleId: number;
   /**
    * 权限ID
    * @minimum -2147483648
    * @maximum 2147483647
    */
-  permissionId: number
+  permissionId: number;
   /** 创建时间 */
-  createTime: string
+  createTime: string;
 }
 
 export interface TbUser {
@@ -977,159 +977,159 @@ export interface TbUser {
    * @minimum 1
    * @maximum 2147483647
    */
-  id: number
+  id: number;
   /**
    * 用户名（唯一）
    * @maxLength 50
    */
-  username: string
+  username: string;
   /**
    * 密码（加密后）
    * @maxLength 255
    */
-  password: string
+  password: string;
   /**
    * 微信小程序OpenID
    * @maxLength 100
    */
-  wxMpCode?: string
+  wxMpCode?: string;
   /**
    * 昵称
    * @maxLength 50
    */
-  nickname?: string
+  nickname?: string;
   /**
    * 头像URL
    * @maxLength 500
    */
-  avatar?: string
+  avatar?: string;
   /**
    * 邮箱
    * @maxLength 100
    */
-  email?: string
+  email?: string;
   /**
    * 手机号
    * @maxLength 20
    */
-  phone?: string
+  phone?: string;
   /**
    * 性别（0-未知，1-男，2-女）
    * @minimum -2147483648
    * @maximum 2147483647
    */
-  gender?: number
+  gender?: number;
   /**
    * 状态（0-禁用，1-启用）
    * @minimum -2147483648
    * @maximum 2147483647
    */
-  status?: number
+  status?: number;
   /**
    * 真实姓名
    * @maxLength 50
    */
-  realName?: string
+  realName?: string;
   /**
    * 学号/工号
    * @maxLength 50
    */
-  studentId?: string
+  studentId?: string;
   /**
    * 用户类型（1-学生，2-教师，3-校友）
    * @minimum -2147483648
    * @maximum 2147483647
    */
-  userType?: number
+  userType?: number;
   /**
    * 入学年份
    * @minimum -2147483648
    * @maximum 2147483647
    */
-  admissionYear?: number
+  admissionYear?: number;
   /**
    * 毕业年份
    * @minimum -2147483648
    * @maximum 2147483647
    */
-  graduationYear?: number
+  graduationYear?: number;
   /**
    * 专业
    * @maxLength 100
    */
-  major?: string
+  major?: string;
   /**
    * 当前工作单位
    * @maxLength 200
    */
-  companyName?: string
+  companyName?: string;
   /**
    * 职位
    * @maxLength 100
    */
-  jobTitle?: string
+  jobTitle?: string;
   /**
    * 所在行业
    * @maxLength 100
    */
-  industry?: string
+  industry?: string;
   /**
    * 省份
    * @maxLength 50
    */
-  province?: string
+  province?: string;
   /**
    * 城市
    * @maxLength 50
    */
-  city?: string
+  city?: string;
   /**
    * 区/县
    * @maxLength 50
    */
-  district?: string
+  district?: string;
   /**
    * 详细地址
    * @maxLength 255
    */
-  address?: string
+  address?: string;
   /** 经度 */
-  longitude?: number
+  longitude?: number;
   /** 纬度 */
-  latitude?: number
+  latitude?: number;
   /**
    * 个人简介/一句话介绍
    * @maxLength 500
    */
-  bio?: string
+  bio?: string;
   /** 生日 */
-  birthday?: string
+  birthday?: string;
   /**
    * QQ号
    * @maxLength 20
    */
-  qq?: string
+  qq?: string;
   /**
    * 微信号
    * @maxLength 50
    */
-  wechat?: string
+  wechat?: string;
   /**
    * 是否为档长（0-否，1-是）
    * @minimum -2147483648
    * @maximum 2147483647
    */
-  isClassLeader?: number
+  isClassLeader?: number;
   /** 创建时间 */
-  createTime: string
+  createTime: string;
   /** 更新时间 */
-  updateTime: string
+  updateTime: string;
   /**
    * 删除标志（0-未删除，1-已删除）
    * @minimum -2147483648
    * @maximum 2147483647
    */
-  deleted: number
+  deleted: number;
 }
 
 export interface TbUserClass {
@@ -1138,56 +1138,56 @@ export interface TbUserClass {
    * @minimum 1
    * @maximum 2147483647
    */
-  id: number
+  id: number;
   /**
    * 用户ID
    * @minimum -2147483648
    * @maximum 2147483647
    */
-  userId: number
+  userId: number;
   /**
    * 班级ID
    * @minimum -2147483648
    * @maximum 2147483647
    */
-  classId: number
+  classId: number;
   /**
    * 加入方式（1-系统录入，2-用户申请）
    * @minimum -2147483648
    * @maximum 2147483647
    */
-  joinType?: number
+  joinType?: number;
   /**
    * 审核状态（1-待审核，2-已通过，3-已拒绝）
    * @minimum -2147483648
    * @maximum 2147483647
    */
-  verifyStatus?: number
+  verifyStatus?: number;
   /**
    * 审核人ID
    * @minimum -2147483648
    * @maximum 2147483647
    */
-  verifyUserId?: number
+  verifyUserId?: number;
   /** 审核时间 */
-  verifyTime?: string
+  verifyTime?: string;
   /**
    * 审核备注
    * @maxLength 255
    */
-  verifyRemark?: string
+  verifyRemark?: string;
   /** 加入时间 */
-  joinTime?: string
+  joinTime?: string;
   /** 创建时间 */
-  createTime: string
+  createTime: string;
   /** 更新时间 */
-  updateTime: string
+  updateTime: string;
   /**
    * 删除标志（0-未删除，1-已删除）
    * @minimum -2147483648
    * @maximum 2147483647
    */
-  deleted: number
+  deleted: number;
 }
 
 export interface TbUserCompany {
@@ -1196,60 +1196,60 @@ export interface TbUserCompany {
    * @minimum 1
    * @maximum 2147483647
    */
-  id: number
+  id: number;
   /**
    * 用户ID
    * @minimum -2147483648
    * @maximum 2147483647
    */
-  userId: number
+  userId: number;
   /**
    * 企业ID
    * @minimum -2147483648
    * @maximum 2147483647
    */
-  companyId: number
+  companyId: number;
   /**
    * 关系类型（1-创始人，2-员工，3-投资人，4-合作伙伴）
    * @minimum -2147483648
    * @maximum 2147483647
    */
-  relationshipType?: number
+  relationshipType?: number;
   /**
    * 职位
    * @maxLength 100
    */
-  jobTitle?: string
+  jobTitle?: string;
   /**
    * 部门
    * @maxLength 100
    */
-  department?: string
+  department?: string;
   /** 入职日期 */
-  joinDate?: string
+  joinDate?: string;
   /** 离职日期 */
-  leaveDate?: string
+  leaveDate?: string;
   /**
    * 是否在职（0-已离职，1-在职）
    * @minimum -2147483648
    * @maximum 2147483647
    */
-  isCurrent?: number
+  isCurrent?: number;
   /**
    * 关系描述
    * @maxLength 500
    */
-  description?: string
+  description?: string;
   /** 创建时间 */
-  createTime: string
+  createTime: string;
   /** 更新时间 */
-  updateTime: string
+  updateTime: string;
   /**
    * 删除标志（0-未删除，1-已删除）
    * @minimum -2147483648
    * @maximum 2147483647
    */
-  deleted: number
+  deleted: number;
 }
 
 export interface TbUserFollow {
@@ -1258,26 +1258,26 @@ export interface TbUserFollow {
    * @minimum 1
    * @maximum 2147483647
    */
-  id: number
+  id: number;
   /**
    * 关注者用户ID
    * @minimum -2147483648
    * @maximum 2147483647
    */
-  followerId: number
+  followerId: number;
   /**
    * 被关注者用户ID
    * @minimum -2147483648
    * @maximum 2147483647
    */
-  followeeId: number
+  followeeId: number;
   /**
    * 备注
    * @maxLength 100
    */
-  remark?: string
+  remark?: string;
   /** 创建时间 */
-  createTime: string
+  createTime: string;
 }
 
 export interface TbUserRole {
@@ -1286,589 +1286,589 @@ export interface TbUserRole {
    * @minimum 1
    * @maximum 2147483647
    */
-  id: number
+  id: number;
   /**
    * 用户ID
    * @minimum -2147483648
    * @maximum 2147483647
    */
-  userId: number
+  userId: number;
   /**
    * 角色ID
    * @minimum -2147483648
    * @maximum 2147483647
    */
-  roleId: number
+  roleId: number;
   /** 创建时间 */
-  createTime: string
+  createTime: string;
 }
 
 export interface ResultLong {
   /** 响应状态码 */
-  code?: number
+  code?: number;
   /** 响应消息 */
-  message?: string
+  message?: string;
   /** 响应数据 */
-  data?: number
+  data?: number;
   /** 时间戳 */
-  timestamp?: number
+  timestamp?: number;
 }
 
 export interface ResultString {
   /** 响应状态码 */
-  code?: number
+  code?: number;
   /** 响应消息 */
-  message?: string
+  message?: string;
   /** 响应数据 */
-  data?: string
+  data?: string;
   /** 时间戳 */
-  timestamp?: number
+  timestamp?: number;
 }
 
 export interface LoginResponse {
   /** 访问令牌 */
-  token?: string
+  token?: string;
   /** 用户ID */
-  userId?: number
+  userId?: number;
   /** 用户名 */
-  username?: string
+  username?: string;
   /** 昵称 */
-  nickname?: string
+  nickname?: string;
   /** 头像 */
-  avatar?: string
+  avatar?: string;
   /** 管理学院id (0-全部 -1 - 无数据权限 其它对应相应学院id) */
-  collegeLeaderId: string
+  collegeLeaderId: string;
   /** 权限树
 支持前端根据权限标识动态生成页面元素 */
-  permissionTree?: PermissionTreeNodeResponse[]
+  permissionTree?: PermissionTreeNodeResponse[];
 }
 
 export interface ResultLoginResponse {
   /** 响应状态码 */
-  code?: number
+  code?: number;
   /** 响应消息 */
-  message?: string
+  message?: string;
   /** 响应数据 */
-  data?: LoginResponse
+  data?: LoginResponse;
   /** 时间戳 */
-  timestamp?: number
+  timestamp?: number;
 }
 
 export interface LoginRequest {
   /** 用户名 */
-  username?: string
+  username?: string;
   /** 密码 */
-  password?: string
+  password?: string;
   /** 微信小程序登录凭证 */
-  wxMpCode?: string
+  wxMpCode?: string;
 }
 
 export interface ResultBoolean {
   /** 响应状态码 */
-  code?: number
+  code?: number;
   /** 响应消息 */
-  message?: string
+  message?: string;
   /** 响应数据 */
-  data?: boolean
+  data?: boolean;
   /** 时间戳 */
-  timestamp?: number
+  timestamp?: number;
 }
 
 export interface RegisterRequest {
   /** 用户名（登录账号） */
-  username: string
+  username: string;
   /** 密码（需符合格式要求） */
-  password: string
+  password: string;
   /** 用户昵称（显示用） */
-  nickname: string
+  nickname: string;
 }
 
 export interface PermissionTreeNodeResponse {
   /** 权限ID */
-  id?: number
+  id?: number;
   /** 父权限ID */
-  parentId?: number
+  parentId?: number;
   /** 权限编码 */
-  permissionCode?: string
+  permissionCode?: string;
   /** 权限名称 */
-  permissionName?: string
+  permissionName?: string;
   /** 权限类型 */
-  permissionType?: number
+  permissionType?: number;
   /** 访问路径 */
-  url?: string
+  url?: string;
   /** 请求方法 */
-  method?: string
+  method?: string;
   /** 权限描述 */
-  description?: string
+  description?: string;
   /** 排序字段 */
-  sortOrder?: number
+  sortOrder?: number;
   /** 子权限列表
 使用默认初始化避免序列化时出现空指针 */
-  children?: PermissionTreeNodeResponse[]
+  children?: PermissionTreeNodeResponse[];
 }
 
 export interface GrantPermissionsRequest {
   /** 角色ID */
-  roleId: number
+  roleId: number;
   /** 权限ID列表 */
-  permissionIds: number[]
+  permissionIds: number[];
 }
 
 export interface ResultListPermissionTreeNodeResponse {
   /** 响应状态码 */
-  code?: number
+  code?: number;
   /** 响应消息 */
-  message?: string
+  message?: string;
   /** 响应数据 */
-  data?: PermissionTreeNodeResponse[]
+  data?: PermissionTreeNodeResponse[];
   /** 时间戳 */
-  timestamp?: number
+  timestamp?: number;
 }
 
 export interface PermissionResponse {
   /** 权限ID */
-  id?: number
+  id?: number;
   /** 父权限ID（0表示顶级权限） */
-  parentId?: number
+  parentId?: number;
   /** 权限编码（唯一） */
-  permissionCode?: string
+  permissionCode?: string;
   /** 权限名称 */
-  permissionName?: string
+  permissionName?: string;
   /** 权限类型（1-菜单，2-按钮，3-接口） */
-  permissionType?: number
+  permissionType?: number;
   /** 权限URL/接口路径 */
-  url?: string
+  url?: string;
   /** HTTP方法（GET、POST等） */
-  method?: string
+  method?: string;
   /** 权限描述 */
-  description?: string
+  description?: string;
   /** 排序顺序 */
-  sortOrder?: number
+  sortOrder?: number;
   /** 状态（0-禁用，1-启用） */
-  status?: number
+  status?: number;
   /** 创建时间 */
-  createTime?: string
+  createTime?: string;
   /** 更新时间 */
-  updateTime?: string
+  updateTime?: string;
 }
 
 export interface ResultPermissionResponse {
   /** 响应状态码 */
-  code?: number
+  code?: number;
   /** 响应消息 */
-  message?: string
+  message?: string;
   /** 响应数据 */
-  data?: PermissionResponse
+  data?: PermissionResponse;
   /** 时间戳 */
-  timestamp?: number
+  timestamp?: number;
 }
 
 export interface CreatePermissionRequest {
   /** 父权限ID（0表示顶级权限） */
-  parentId: number
+  parentId: number;
   /** 权限编码（唯一） */
-  permissionCode: string
+  permissionCode: string;
   /** 权限名称 */
-  permissionName: string
+  permissionName: string;
   /** 权限类型（1-菜单，2-按钮，3-接口） */
-  permissionType: number
+  permissionType: number;
   /** 权限URL/接口路径 */
-  url?: string
+  url?: string;
   /** HTTP方法（GET、POST等） */
-  method?: string
+  method?: string;
   /** 权限描述 */
-  description?: string
+  description?: string;
   /** 排序顺序 */
-  sortOrder?: number
+  sortOrder?: number;
   /** 状态（0-禁用，1-启用） */
-  status?: number
+  status?: number;
 }
 
 export interface UpdatePermissionRequest {
   /** 权限ID */
-  id: number
+  id: number;
   /** 父权限ID（0表示顶级权限） */
-  parentId?: number
+  parentId?: number;
   /** 权限编码（唯一） */
-  permissionCode: string
+  permissionCode: string;
   /** 权限名称 */
-  permissionName: string
+  permissionName: string;
   /** 权限类型（1-菜单，2-按钮，3-接口） */
-  permissionType?: number
+  permissionType?: number;
   /** 权限URL/接口路径 */
-  url?: string
+  url?: string;
   /** HTTP方法（GET、POST等） */
-  method?: string
+  method?: string;
   /** 权限描述 */
-  description?: string
+  description?: string;
   /** 排序顺序 */
-  sortOrder?: number
+  sortOrder?: number;
   /** 状态（0-禁用，1-启用） */
-  status?: number
+  status?: number;
 }
 
 export interface PageResultPermissionResponse {
   /** 数据列表 */
-  records?: PermissionResponse[]
+  records?: PermissionResponse[];
   /** 总记录数 */
-  total?: number
+  total?: number;
   /** 当前页码 */
-  current?: number
+  current?: number;
   /** 每页大小 */
-  size?: number
+  size?: number;
   /** 总页数 */
-  pages?: number
+  pages?: number;
 }
 
 export interface ResultPageResultPermissionResponse {
   /** 响应状态码 */
-  code?: number
+  code?: number;
   /** 响应消息 */
-  message?: string
+  message?: string;
   /** 响应数据 */
-  data?: PageResultPermissionResponse
+  data?: PageResultPermissionResponse;
   /** 时间戳 */
-  timestamp?: number
+  timestamp?: number;
 }
 
 export interface PermissionQueryRequest {
   /** 当前页码（从1开始） */
-  current?: number
+  current?: number;
   /** 每页大小 */
-  size?: number
+  size?: number;
   /** 父权限ID（可选，用于查询子权限） */
-  parentId?: number
+  parentId?: number;
   /** 权限编码（模糊查询） */
-  permissionCode?: string
+  permissionCode?: string;
   /** 权限名称（模糊查询） */
-  permissionName?: string
+  permissionName?: string;
   /** 权限类型（1-菜单，2-按钮，3-接口） */
-  permissionType?: number
+  permissionType?: number;
   /** 状态（0-禁用，1-启用） */
-  status?: number
+  status?: number;
 }
 
 export interface ResultListPermissionResponse {
   /** 响应状态码 */
-  code?: number
+  code?: number;
   /** 响应消息 */
-  message?: string
+  message?: string;
   /** 响应数据 */
-  data?: PermissionResponse[]
+  data?: PermissionResponse[];
   /** 时间戳 */
-  timestamp?: number
+  timestamp?: number;
 }
 
 export interface RoleResponse {
   /** 角色ID */
-  id?: number
+  id?: number;
   /** 角色编码（唯一） */
-  roleCode?: string
+  roleCode?: string;
   /** 角色名称 */
-  roleName?: string
+  roleName?: string;
   /** 角色描述 */
-  description?: string
+  description?: string;
   /** 排序顺序 */
-  sortOrder?: number
+  sortOrder?: number;
   /** 状态（0-禁用，1-启用） */
-  status?: number
+  status?: number;
   /** 创建时间 */
-  createTime?: string
+  createTime?: string;
   /** 更新时间 */
-  updateTime?: string
+  updateTime?: string;
 }
 
 export interface ResultRoleResponse {
   /** 响应状态码 */
-  code?: number
+  code?: number;
   /** 响应消息 */
-  message?: string
+  message?: string;
   /** 响应数据 */
-  data?: RoleResponse
+  data?: RoleResponse;
   /** 时间戳 */
-  timestamp?: number
+  timestamp?: number;
 }
 
 export interface CreateRoleRequest {
   /** 角色编码（唯一） */
-  roleCode: string
+  roleCode: string;
   /** 角色名称 */
-  roleName: string
+  roleName: string;
   /** 角色描述 */
-  description?: string
+  description?: string;
   /** 排序顺序 */
-  sortOrder?: number
+  sortOrder?: number;
   /** 状态（0-禁用，1-启用） */
-  status?: number
+  status?: number;
 }
 
 export interface UpdateRoleRequest {
   /** 角色ID */
-  id: number
+  id: number;
   /** 角色编码（唯一） */
-  roleCode: string
+  roleCode: string;
   /** 角色名称 */
-  roleName: string
+  roleName: string;
   /** 角色描述 */
-  description?: string
+  description?: string;
   /** 排序顺序 */
-  sortOrder?: number
+  sortOrder?: number;
   /** 状态（0-禁用，1-启用） */
-  status?: number
+  status?: number;
 }
 
 export interface PageResultRoleResponse {
   /** 数据列表 */
-  records?: RoleResponse[]
+  records?: RoleResponse[];
   /** 总记录数 */
-  total?: number
+  total?: number;
   /** 当前页码 */
-  current?: number
+  current?: number;
   /** 每页大小 */
-  size?: number
+  size?: number;
   /** 总页数 */
-  pages?: number
+  pages?: number;
 }
 
 export interface ResultPageResultRoleResponse {
   /** 响应状态码 */
-  code?: number
+  code?: number;
   /** 响应消息 */
-  message?: string
+  message?: string;
   /** 响应数据 */
-  data?: PageResultRoleResponse
+  data?: PageResultRoleResponse;
   /** 时间戳 */
-  timestamp?: number
+  timestamp?: number;
 }
 
 export interface RoleQueryRequest {
   /** 当前页码（从1开始） */
-  current?: number
+  current?: number;
   /** 每页大小 */
-  size?: number
+  size?: number;
   /** 角色编码（模糊查询） */
-  roleCode?: string
+  roleCode?: string;
   /** 角色名称（模糊查询） */
-  roleName?: string
+  roleName?: string;
   /** 状态（0-禁用，1-启用） */
-  status?: number
+  status?: number;
 }
 
 export interface ResultListRoleResponse {
   /** 响应状态码 */
-  code?: number
+  code?: number;
   /** 响应消息 */
-  message?: string
+  message?: string;
   /** 响应数据 */
-  data?: RoleResponse[]
+  data?: RoleResponse[];
   /** 时间戳 */
-  timestamp?: number
+  timestamp?: number;
 }
 
 export interface AssignRolesRequest {
   /** 用户ID */
-  userId: number
+  userId: number;
   /** 角色ID列表 */
-  roleIds: number[]
+  roleIds: number[];
 }
 
 export interface RemoveRolesRequest {
   /** 用户ID */
-  userId: number
+  userId: number;
   /** 角色ID列表 */
-  roleIds: number[]
+  roleIds: number[];
 }
 
 export interface UpdateUserRolesRequest {
   /** 角色ID列表（会覆盖用户现有的所有角色）
 角色ID列表 */
-  roleIds: number[]
+  roleIds: number[];
 }
 
 export interface CollegeEntity {
   /** 主键ID */
-  id?: number
+  id?: number;
   /** 创建时间 */
-  createTime?: string
+  createTime?: string;
   /** 更新时间 */
-  updateTime?: string
+  updateTime?: string;
   /** 学院编码（唯一） */
-  collegeCode?: string
+  collegeCode?: string;
   /** 学院名称 */
-  collegeName?: string
+  collegeName?: string;
   /** 学院简介 */
-  description?: string
+  description?: string;
   /** 学院Logo */
-  logo?: string
+  logo?: string;
   /** 院长姓名 */
-  dean?: string
+  dean?: string;
   /** 联系电话 */
-  contactPhone?: string
+  contactPhone?: string;
   /** 联系邮箱 */
-  email?: string
+  email?: string;
   /** 学院地址 */
-  address?: string
+  address?: string;
   /** 排序顺序 */
-  sortOrder?: number
+  sortOrder?: number;
   /** 状态（0-禁用，1-启用） */
-  status?: number
+  status?: number;
 }
 
 export interface PageResultCollegeEntity {
   /** 数据列表 */
-  records?: CollegeEntity[]
+  records?: CollegeEntity[];
   /** 总记录数 */
-  total?: number
+  total?: number;
   /** 当前页码 */
-  current?: number
+  current?: number;
   /** 每页大小 */
-  size?: number
+  size?: number;
   /** 总页数 */
-  pages?: number
+  pages?: number;
 }
 
 export interface ResultPageResultCollegeEntity {
   /** 响应状态码 */
-  code?: number
+  code?: number;
   /** 响应消息 */
-  message?: string
+  message?: string;
   /** 响应数据 */
-  data?: PageResultCollegeEntity
+  data?: PageResultCollegeEntity;
   /** 时间戳 */
-  timestamp?: number
+  timestamp?: number;
 }
 
 export interface CollegePagesRequest {
   /** 当前页码 */
-  current?: number
+  current?: number;
   /** 每页大小 */
-  size?: number
+  size?: number;
   /** 学院编码（唯一） */
-  collegeCode?: string
+  collegeCode?: string;
   /** 学院名称 */
-  collegeName?: string
+  collegeName?: string;
   /** 院长姓名 */
-  dean?: string
+  dean?: string;
   /** 状态（0-禁用，1-启用） */
-  status?: number
+  status?: number;
 }
 
 export interface ClassEntity {
   /** 主键ID */
-  id?: number
+  id?: number;
   /** 创建时间 */
-  createTime?: string
+  createTime?: string;
   /** 更新时间 */
-  updateTime?: string
+  updateTime?: string;
   /** 所属学院ID */
-  collegeId?: number
+  collegeId?: number;
   /** 班级编码（唯一） */
-  classCode?: string
+  classCode?: string;
   /** 班级名称 */
-  className?: string
+  className?: string;
   /** 年级（如：2020） */
-  grade?: number
+  grade?: number;
   /** 专业 */
-  major?: string
+  major?: string;
   /** 班级类型（1-本科，2-硕士，3-博士） */
-  classType?: number
+  classType?: number;
   /** 成员数量 */
-  memberCount?: number
+  memberCount?: number;
   /** 班级简介 */
-  description?: string
+  description?: string;
   /** 班级封面图 */
-  coverImage?: string
+  coverImage?: string;
   /** 班级公告 */
-  notice?: string
+  notice?: string;
   /** 状态（0-禁用，1-启用） */
-  status?: number
+  status?: number;
 }
 
 export interface PageResultClassEntity {
   /** 数据列表 */
-  records?: ClassEntity[]
+  records?: ClassEntity[];
   /** 总记录数 */
-  total?: number
+  total?: number;
   /** 当前页码 */
-  current?: number
+  current?: number;
   /** 每页大小 */
-  size?: number
+  size?: number;
   /** 总页数 */
-  pages?: number
+  pages?: number;
 }
 
 export interface ResultPageResultClassEntity {
   /** 响应状态码 */
-  code?: number
+  code?: number;
   /** 响应消息 */
-  message?: string
+  message?: string;
   /** 响应数据 */
-  data?: PageResultClassEntity
+  data?: PageResultClassEntity;
   /** 时间戳 */
-  timestamp?: number
+  timestamp?: number;
 }
 
 export interface ClassPagesRequest {
   /** 当前页码 */
-  current?: number
+  current?: number;
   /** 每页大小 */
-  size?: number
+  size?: number;
   /** 年级 */
-  grade?: number
+  grade?: number;
   /** 所属学院ID */
-  collegeId?: number
+  collegeId?: number;
   /** 班级名称 */
-  className?: string
+  className?: string;
   /** 班级类型（1-本科，2-硕士，3-博士） */
-  classType?: number
+  classType?: number;
   /** 状态（0-禁用，1-启用） */
-  status?: number
+  status?: number;
 }
 
 export interface ResultListString {
   /** 响应状态码 */
-  code?: number
+  code?: number;
   /** 响应消息 */
-  message?: string
+  message?: string;
   /** 响应数据 */
-  data?: string[]
+  data?: string[];
   /** 时间戳 */
-  timestamp?: number
+  timestamp?: number;
 }
 
 export interface StudentRecords {
-  name?: string
-  email?: string
+  name?: string;
+  email?: string;
 }
 
 export interface ResultStudentRecords {
   /** 响应状态码 */
-  code?: number
+  code?: number;
   /** 响应消息 */
-  message?: string
+  message?: string;
   /** 响应数据 */
-  data?: StudentRecords
+  data?: StudentRecords;
   /** 时间戳 */
-  timestamp?: number
+  timestamp?: number;
 }
 
 export interface MapString {
-  key?: string
+  key?: string;
 }
 
 export interface MimeType {
-  type?: string
-  subtype?: string
-  parameters?: MapString
+  type?: string;
+  subtype?: string;
+  parameters?: MapString;
   /** @nullable */
-  toStringValue?: string | null
+  toStringValue?: string | null;
 }
 
 /**
  * The{@link ModalityType} of the source data used to generate the embedding.
  */
-export type EmbeddingResultMetadataModalityType =
-  (typeof EmbeddingResultMetadataModalityType)[keyof typeof EmbeddingResultMetadataModalityType]
+export type EmbeddingResultMetadataModalityType = typeof EmbeddingResultMetadataModalityType[keyof typeof EmbeddingResultMetadataModalityType];
+
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const EmbeddingResultMetadataModalityType = {
@@ -1876,62 +1876,58 @@ export const EmbeddingResultMetadataModalityType = {
   IMAGE: 'IMAGE',
   AUDIO: 'AUDIO',
   VIDEO: 'VIDEO',
-} as const
+} as const;
 
-export type EmbeddingResultMetadataDocumentData = { [key: string]: unknown }
+export type EmbeddingResultMetadataDocumentData = { [key: string]: unknown };
 
 export interface EmbeddingResultMetadata {
   /** The{@link ModalityType} of the source data used to generate the embedding. */
-  modalityType?: EmbeddingResultMetadataModalityType
-  documentId?: string
-  mimeType?: MimeType
-  documentData?: EmbeddingResultMetadataDocumentData
+  modalityType?: EmbeddingResultMetadataModalityType;
+  documentId?: string;
+  mimeType?: MimeType;
+  documentData?: EmbeddingResultMetadataDocumentData;
 }
 
 export interface Embedding {
-  embedding?: number[]
-  index?: number
-  metadata?: EmbeddingResultMetadata
+  embedding?: number[];
+  index?: number;
+  metadata?: EmbeddingResultMetadata;
 }
 
-export interface Key {
-  [key: string]: unknown
-}
+export interface Key { [key: string]: unknown }
 
 export interface MapObject {
-  key?: Key1
+  key?: Key1;
 }
 
-export interface Usage {
-  [key: string]: unknown
-}
+export interface Usage { [key: string]: unknown }
 
 export interface EmbeddingResponseMetadata {
   /** Metadata map. */
-  map?: MapObject
-  model?: string
-  usage?: Usage
+  map?: MapObject;
+  model?: string;
+  usage?: Usage;
 }
 
 export interface EmbeddingResponse {
   /** Embedding data. */
-  embeddings?: Embedding[]
+  embeddings?: Embedding[];
   /** Embedding metadata. */
-  metadata?: EmbeddingResponseMetadata
+  metadata?: EmbeddingResponseMetadata;
 }
 
 export interface ResultEmbeddingResponse {
   /** 响应状态码 */
-  code?: number
+  code?: number;
   /** 响应消息 */
-  message?: string
+  message?: string;
   /** 响应数据 */
-  data?: EmbeddingResponse
+  data?: EmbeddingResponse;
   /** 时间戳 */
-  timestamp?: number
+  timestamp?: number;
 }
 
-export type MediaData = { [key: string]: unknown }
+export type MediaData = { [key: string]: unknown };
 
 export interface Media {
   /**
@@ -1939,9 +1935,9 @@ export interface Media {
 media it has been passed.
    * @nullable
    */
-  id?: string | null
-  mimeType?: MimeType
-  data?: MediaData
+  id?: string | null;
+  mimeType?: MimeType;
+  data?: MediaData;
   /** The name of the media object that can be referenced by the AI model.
 <p>
 Important security note: This field is vulnerable to prompt injections, as the
@@ -1957,22 +1953,20 @@ The name must only contain:
 <li>Parentheses
 <li>Square brackets
 </ul> */
-  name?: string
+  name?: string;
 }
 
-export interface Key1 {
-  [key: string]: unknown
-}
+export interface Key1 { [key: string]: unknown }
 
 export interface Document {
   /** Unique ID */
-  id?: string
+  id?: string;
   /** Document string content. */
-  text?: string
+  text?: string;
   /** Document media content */
-  media?: Media
+  media?: Media;
   /** Metadata map. */
-  metadata?: MapObject
+  metadata?: MapObject;
   /**
    * A numeric score associated with this document that can represent various types of
 relevance measures.
@@ -1989,148 +1983,149 @@ distance measure)
 Higher values typically indicate greater relevance or similarity.
    * @nullable
    */
-  score?: number | null
+  score?: number | null;
 }
 
 export interface ResultListDocument {
   /** 响应状态码 */
-  code?: number
+  code?: number;
   /** 响应消息 */
-  message?: string
+  message?: string;
   /** 响应数据 */
-  data?: Document[]
+  data?: Document[];
   /** 时间戳 */
-  timestamp?: number
+  timestamp?: number;
 }
 
 export interface HashMapString {
-  '0'?: string
+  '0'?: string;
 }
 
 export interface CollegeDictResponse {
   /** 学院字典 id - 名称 */
-  collegeDict?: HashMapString
+  collegeDict?: HashMapString;
 }
 
 export interface ResultCollegeDictResponse {
   /** 响应状态码 */
-  code?: number
+  code?: number;
   /** 响应消息 */
-  message?: string
+  message?: string;
   /** 响应数据 */
-  data?: CollegeDictResponse
+  data?: CollegeDictResponse;
   /** 时间戳 */
-  timestamp?: number
+  timestamp?: number;
 }
 
 export type PostCommunityPostParams = {
-  /**
-   * 帖子标题
-   */
-  title: string
-  /**
-   * 帖子内容
-   */
-  content: string
-}
+/**
+ * 帖子标题
+ */
+title: string;
+/**
+ * 帖子内容
+ */
+content: string;
+};
 
 /**
  * 新增的班级
  */
 export type PostCommunityClassBody = {
   /** 主键ID */
-  id?: number
+  id?: number;
   /** 创建时间 */
-  createTime?: string
+  createTime?: string;
   /** 更新时间 */
-  updateTime?: string
+  updateTime?: string;
   /** 所属学院ID */
-  collegeId?: number
+  collegeId?: number;
   /** 班级编码（唯一） */
-  classCode?: string
+  classCode?: string;
   /** 班级名称 */
-  className?: string
+  className?: string;
   /** 年级（如：2020） */
-  grade?: number
+  grade?: number;
   /** 专业 */
-  major?: string
+  major?: string;
   /** 班级类型（1-本科，2-硕士，3-博士） */
-  classType?: number
+  classType?: number;
   /** 成员数量 */
-  memberCount?: number
+  memberCount?: number;
   /** 班级简介 */
-  description?: string
+  description?: string;
   /** 班级封面图 */
-  coverImage?: string
+  coverImage?: string;
   /** 班级公告 */
-  notice?: string
+  notice?: string;
   /** 状态（0-禁用，1-启用） */
-  status?: number
-}
+  status?: number;
+};
 
 export type PostCommunityAlumniBatchParams = {
-  /**
-   * 行号
-   */
-  lineNumber?: number
-  name?: string
-  number?: string
-  identity?: number
-  enrollmentYear?: number
-  collegeName?: string
-  major?: string
-  className?: string
-}
+/**
+ * 行号
+ */
+lineNumber?: number;
+name?: string;
+number?: string;
+identity?: number;
+enrollmentYear?: number;
+collegeName?: string;
+major?: string;
+className?: string;
+};
 
 export type PostAgentPostGenerateParams = {
-  /**
-   * 帖子主题 帖子主题
-   */
-  topic: string
-}
+/**
+ * 帖子主题 帖子主题
+ */
+topic: string;
+};
 
 export type PostAgentFormatParams = {
-  /**
-   * 姓名 姓名
-   */
-  name: string
-  /**
-   * 邮箱 邮箱
-   */
-  email: string
-}
+/**
+ * 姓名 姓名
+ */
+name: string;
+/**
+ * 邮箱 邮箱
+ */
+email: string;
+};
 
 export type PostAgentToolChatParams = {
-  /**
-   * 用户消息 用户消息
-   */
-  message: string
-}
+/**
+ * 用户消息 用户消息
+ */
+message: string;
+};
 
 export type PostAgentRagChatParams = {
-  /**
-   * 用户消息 用户消息
-   */
-  message: string
-}
+/**
+ * 用户消息 用户消息
+ */
+message: string;
+};
 
 export type PostAgentImageGenerateParams = {
-  /**
-   * 图片描述提示词 图片描述提示词
-   */
-  prompt: string
-}
+/**
+ * 图片描述提示词 图片描述提示词
+ */
+prompt: string;
+};
 
 export type PostAgentEmbeddingSearchParams = {
-  /**
-   * 搜索查询 搜索查询
-   */
-  query: string
-}
+/**
+ * 搜索查询 搜索查询
+ */
+query: string;
+};
 
 export type PostAgentChatParams = {
-  /**
-   * 用户消息 用户消息
-   */
-  message: string
-}
+/**
+ * 用户消息 用户消息
+ */
+message: string;
+};
+

@@ -7,36 +7,37 @@
 import type {
   PostCommunityPostParams,
   ResultLong,
-  ResultString,
-} from '../.ts.schemas'
+  ResultString
+} from '../.ts.schemas';
 
-import { customInstance } from '../../mutator'
+import { customInstance } from '../../mutator';
 
-export const get = () => {
+
+
+  export const get = () => {
+/**
+ * @summary 发布帖子接口
+ */
+const postCommunityPost = (
+    params: PostCommunityPostParams,
+ ) => {
+      return customInstance<ResultLong>(
+      {url: `/community/post`, method: 'POST',
+        params
+    },
+      );
+    }
   /**
-   * @summary 发布帖子接口
-   */
-  const postCommunityPost = (params: PostCommunityPostParams) => {
-    return customInstance<ResultLong>({
-      url: `/community/post`,
-      method: 'POST',
-      params,
-    })
-  }
-  /**
-   * @summary 测试接口
-   */
-  const getCommunityTest = () => {
-    return customInstance<ResultString>({
-      url: `/community/test`,
-      method: 'GET',
-    })
-  }
-  return { postCommunityPost, getCommunityTest }
-}
-export type PostCommunityPostResult = NonNullable<
-  Awaited<ReturnType<ReturnType<typeof get>['postCommunityPost']>>
->
-export type GetCommunityTestResult = NonNullable<
-  Awaited<ReturnType<ReturnType<typeof get>['getCommunityTest']>>
->
+ * @summary 测试接口
+ */
+const getCommunityTest = (
+    
+ ) => {
+      return customInstance<ResultString>(
+      {url: `/community/test`, method: 'GET'
+    },
+      );
+    }
+  return {postCommunityPost,getCommunityTest}};
+export type PostCommunityPostResult = NonNullable<Awaited<ReturnType<ReturnType<typeof get>['postCommunityPost']>>>
+export type GetCommunityTestResult = NonNullable<Awaited<ReturnType<ReturnType<typeof get>['getCommunityTest']>>>
