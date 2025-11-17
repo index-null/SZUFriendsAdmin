@@ -16,14 +16,8 @@ export const usePermission = () => {
     // 管理员拥有所有权限
     if (userStore.isAdmin) return true
 
-    // 其他权限检查逻辑
-    const permissions: Record<string, string[]> = {
-      user: ['read', 'write'],
-      guest: ['read']
-    }
-
-    const userPermissions = permissions[userStore.userInfo.role] || []
-    return userPermissions.includes(permission)
+    // 检查用户的权限数组
+    return userStore.userInfo.permissions?.includes(permission) || false
   }
 
   const canRead = computed(() => hasPermission('read'))
@@ -84,8 +78,8 @@ export const useAuth = () => {
   const currentUser = computed(() => userStore.userInfo)
   const isLoading = computed(() => userStore.loading)
 
-  const login = async (email: string, password: string) => {
-    return await userStore.login(email, password)
+  const login = async (username: string, password: string) => {
+    return await userStore.login({ username, password })
   }
 
   const logout = () => {
