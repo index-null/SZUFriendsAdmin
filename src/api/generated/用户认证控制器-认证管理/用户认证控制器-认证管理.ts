@@ -57,7 +57,19 @@ const getAuthTest = (
     },
       );
     }
-  return {postAuthLogin,postAuthRegister,getAuthTest}};
+  /**
+ * @summary 用户登出接口
+ */
+const postAuthLogout = (
+    
+ ) => {
+      return customInstance<ResultBoolean>(
+      {url: `/auth/logout`, method: 'POST'
+    },
+      );
+    }
+  return {postAuthLogin,postAuthRegister,getAuthTest,postAuthLogout}};
 export type PostAuthLoginResult = NonNullable<Awaited<ReturnType<ReturnType<typeof get>['postAuthLogin']>>>
 export type PostAuthRegisterResult = NonNullable<Awaited<ReturnType<ReturnType<typeof get>['postAuthRegister']>>>
 export type GetAuthTestResult = NonNullable<Awaited<ReturnType<ReturnType<typeof get>['getAuthTest']>>>
+export type PostAuthLogoutResult = NonNullable<Awaited<ReturnType<ReturnType<typeof get>['postAuthLogout']>>>

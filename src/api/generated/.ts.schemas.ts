@@ -1337,7 +1337,7 @@ export interface LoginResponse {
   /** 头像 */
   avatar?: string;
   /** 管理学院id (0-全部 -1 - 无数据权限 其它对应相应学院id) */
-  collegeLeaderId: string;
+  collegeLeaderId?: number;
   /** 权限树
 支持前端根据权限标识动态生成页面元素 */
   permissionTree?: PermissionTreeNodeResponse[];
@@ -2013,6 +2013,40 @@ export interface ResultCollegeDictResponse {
   message?: string;
   /** 响应数据 */
   data?: CollegeDictResponse;
+  /** 时间戳 */
+  timestamp?: number;
+}
+
+export interface DeviceInfo {
+  /** 设备ID */
+  deviceId?: string;
+  /** Token字符串 */
+  token?: string;
+  /** 设备类型：WEB、MOBILE、TABLET */
+  deviceType?: string;
+  /** 设备名称 */
+  deviceName?: string;
+  /** 操作系统 */
+  os?: string;
+  /** 浏览器 */
+  browser?: string;
+  /** 登录时间（时间戳，毫秒） */
+  loginTime?: number;
+  /** 最后访问时间（时间戳，毫秒） */
+  lastAccessTime?: number;
+  /** 登录IP地址 */
+  ip?: string;
+  /** 登录地点 */
+  location?: string;
+}
+
+export interface ResultListDeviceInfo {
+  /** 响应状态码 */
+  code?: number;
+  /** 响应消息 */
+  message?: string;
+  /** 响应数据 */
+  data?: DeviceInfo[];
   /** 时间戳 */
   timestamp?: number;
 }
