@@ -16,6 +16,12 @@ const hasCollegePermission = computed(() => {
   if (userStore.isAdmin) return true
   return userStore.userInfo.permissions?.includes('college:page') || false
 })
+
+// 检查是否有班级管理权限
+const hasClassPermission = computed(() => {
+  if (userStore.isAdmin) return true
+  return userStore.userInfo.permissions?.includes('class') || false
+})
 </script>
 
 <template>
@@ -41,6 +47,14 @@ const hasCollegePermission = computed(() => {
               :class="{ active: route.name === 'CollegeManagement' }"
             >
               学院管理
+            </router-link>
+          </li>
+          <li v-if="hasClassPermission">
+            <router-link
+              to="/class-management"
+              :class="{ active: route.name === 'ClassManagement' }"
+            >
+              班级管理
             </router-link>
           </li>
         </ul>

@@ -76,6 +76,15 @@ export const setupRouterGuards = (router: Router): void => {
       return
     }
 
+    // 检查是否需要管理员权限
+    if (to.meta.adminOnly) {
+      const userStore = useUserStore()
+      if (!userStore.isAdmin) {
+        next('/home')
+        return
+      }
+    }
+
     next()
   })
 

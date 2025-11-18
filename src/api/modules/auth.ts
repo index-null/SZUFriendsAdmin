@@ -19,6 +19,7 @@ export interface LoginData {
   username: string
   nickname?: string // 后端实际返回的字段
   avatar?: string | null // 后端实际返回的字段
+  collegeLeaderId?: number // 管理学院id (0-全部 -1 - 无数据权限 其它对应相应学院id)
   permissionTree?: any[] // 后端实际返回的字段
   roles?: string[]
   permissions?: string[]

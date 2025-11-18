@@ -15,6 +15,7 @@ export const useUserStore = defineStore('user', () => {
     userId: 0,
     username: '',
     token: '',
+    collegeLeaderId: -1,
     roles: [],
     permissions: [],
   })
@@ -88,6 +89,7 @@ export const useUserStore = defineStore('user', () => {
       userId: 0,
       username: '',
       token: '',
+      collegeLeaderId: -1,
       roles: [],
       permissions: [],
     }

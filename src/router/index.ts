@@ -6,6 +6,7 @@ const Login = () => import('../views/Login.vue')
 const Register = () => import('../views/Register.vue')
 const Home = () => import('../views/Home.vue')
 const CollegeManagement = () => import('../views/CollegeManagement/index.vue')
+const ClassManagement = () => import('../views/ClassManagement/index.vue')
 const NotFound = () => import('../views/NotFound.vue')
 
 /**
@@ -64,6 +65,18 @@ const routes: RouteRecordRaw[] = [
       title: '学院管理',
       requiresAuth: true,
       permission: 'college:page',
+      showInMenu: true,
+    },
+  },
+  // 班级管理
+  {
+    path: '/class-management',
+    name: 'ClassManagement',
+    component: ClassManagement,
+    meta: {
+      title: '班级管理',
+      requiresAuth: true,
+      permission: 'class', // 需要 class 权限
       showInMenu: true,
     },
   },
