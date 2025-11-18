@@ -11,8 +11,10 @@ import router from '../router'
 /**
  * API 基础配置
  */
-const API_BASE_URL =
-  import.meta.env.VITE_API_BASE_URL || 'http://49.235.189.33:9000/api'
+// 使用环境变量配置 API 基础路径
+// 开发环境：通过 Vite 代理访问 /api
+// 生产环境：前后端同域，直接访问 /api
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || '/api'
 const REQUEST_TIMEOUT = 30000
 const TOKEN_KEY = 'access_token'
 

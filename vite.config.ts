@@ -23,6 +23,21 @@ export default defineConfig({
   // 基础路径 - 根据你的部署位置调整
   base: '/',
 
+  // 开发服务器配置
+  server: {
+    port: 5173,
+    host: true,
+    // 代理配置 - 开发环境将 /api 请求代理到后端服务器
+    proxy: {
+      '/api': {
+        target: 'http://49.235.189.33:9000',
+        changeOrigin: true,
+        // 如果后端没有 /api 前缀，需要重写路径
+        // rewrite: (path) => path.replace(/^\/api/, ''),
+      },
+    },
+  },
+
   build: {
     // 输出目录
     outDir: 'dist',

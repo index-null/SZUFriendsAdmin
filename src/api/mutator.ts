@@ -5,9 +5,11 @@ import axios, { type AxiosInstance, type AxiosRequestConfig } from 'axios'
  * 注意：避免使用 import.meta 以防止 esbuild 警告
  */
 
-// 硬编码 baseURL，或者在运行时从全局变量读取
+// 使用环境变量配置 API 基础路径
+// 开发环境：通过 Vite 代理访问 /api
+// 生产环境：前后端同域，直接访问 /api
 // 如果需要动态配置，可以通过 window.__ENV__ 等方式
-const BASE_URL = 'http://49.235.189.33:9000/api'
+const BASE_URL = '/api'
 const TOKEN_KEY = 'access_token'
 
 // 创建独立的 axios 实例
