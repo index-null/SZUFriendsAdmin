@@ -1,58 +1,51 @@
 import { post } from '../request'
+import type {
+  LoginRequest,
+  LoginResponse,
+  RegisterRequest,
+} from '../generated/.ts.schemas'
 
 /**
  * 认证相关接口
- * 注意：这些是独立维护的正式接口，generated 文件夹的接口仅用作查询参考
+ * 直接使用生成的接口定义，减少手动维护
  */
 
-// 登录请求参数（参考后端生成的 LoginRequest 类型）
-export interface LoginParams {
-  username: string // 后端使用 username 而不是 email
-  password: string
-  wxMpCode?: string // 微信小程序登录凭证（可选）
+// ============ 导出生成的类型，方便外部使用 ============
+export type { LoginRequest, LoginResponse, RegisterRequest }
+
+// ============ 扩展类型（仅当需要额外字段时） ============
+
+/**
+ * 登录响应扩展
+ * 添加前端需要的计算字段
+ */
+export interface LoginResponseExtended extends LoginResponse {
+  permissions?: string[] // 从 permissionTree 提取的权限码列表
+  roles?: string[] // 从权限或其他字段计算得出的角色列表
 }
 
-// 登录响应数据（匹配后端实际返回的字段）
-export interface LoginData {
-  token: string
-  userId: number
-  username: string
-  nickname?: string // 后端实际返回的字段
-  avatar?: string | null // 后端实际返回的字段
-  collegeLeaderId?: number // 管理学院id (0-全部 -1 - 无数据权限 其它对应相应学院id)
-  permissionTree?: any[] // 后端实际返回的字段
-  roles?: string[]
-  permissions?: string[]
-}
-
-// 注册请求参数（参考后端生成的 RegisterRequest 类型）
-export interface RegisterParams {
-  username: string // 用户名（登录账号）
-  password: string // 密码
-  nickname: string // 用户昵称（显示用）
-}
-
-// 注册响应数据
-export interface RegisterData {
-  success: boolean
-  message?: string
-}
+// ============ API 方法 ============
 
 /**
  * 用户登录
  */
-export const login = (params: LoginParams) => {
-  return post<LoginData>('/auth/login', params)
+export const login = (params: LoginRequest) => {
+  return post<LoginResponse>('/auth/login', params)
 }
 
 /**
  * 用户注册
  */
-export const register = (params: RegisterParams) => {
-  return post<RegisterData>('/auth/register', params)
+export const register = (params: RegisterRequest) => {
+  return post<boolean>('/auth/register', params)
 }
 
-// 注意：logout 不需要调用后端接口，仅在前端清除 Token 即可
+/**
+ * 用户登出
+ */
+export const logout = () => {
+  return post<boolean>('/auth/logout')
+}
 
 /**
  * 刷新 Token（如果后端提供此接口）

@@ -1,35 +1,47 @@
 import { get, post, put } from '../request'
 import type { PageParams, PageData } from '../types'
+import type { TbUser } from '../generated/.ts.schemas'
 
 /**
  * 用户相关接口
+ * 基础类型使用生成的 TbUser，自定义扩展类型手动维护
  */
 
-// 用户信息
-export interface UserInfo {
-  id: string
-  name: string
-  email: string
-  avatar?: string
-  role: string
-  phone?: string
-  createdAt?: string
-  updatedAt?: string
+// ============ 导出生成的类型 ============
+export type { TbUser }
+
+// ============ 扩展类型（手动维护） ============
+
+/**
+ * 用户信息扩展（用于前端展示）
+ * 基于 TbUser，去除敏感字段
+ */
+export type UserInfo = Omit<TbUser, 'password'> & {
+  role?: string // 前端展示用的角色名称
 }
 
-// 更新用户信息参数
+/**
+ * 更新用户信息参数
+ */
 export interface UpdateUserParams {
-  name?: string
+  nickname?: string
   avatar?: string
   phone?: string
+  email?: string
+  gender?: number
+  realName?: string
 }
 
-// 修改密码参数
+/**
+ * 修改密码参数
+ */
 export interface ChangePasswordParams {
   oldPassword: string
   newPassword: string
   confirmPassword: string
 }
+
+// ============ API 方法 ============
 
 /**
  * 获取当前用户信息

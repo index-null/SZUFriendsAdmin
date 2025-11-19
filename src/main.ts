@@ -16,14 +16,20 @@ import zhCn from 'element-plus/es/locale/lang/zh-cn'
 
 const app = createApp(App)
 
-app.use(router)
+// 先注册 pinia，确保 store 可用
 app.use(pinia)
+app.use(router)
 app.use(ElementPlus, {
   locale: zhCn,
 })
 
 // 初始化主题
 initTheme()
+
+// 恢复登录状态（在路由准备前恢复，确保路由守卫能正确判断）
+import { useUserStore } from './stores/modules/user'
+const userStore = useUserStore()
+userStore.restoreLoginState()
 
 // 等待路由准备完成后再挂载应用
 router.isReady().then(() => {

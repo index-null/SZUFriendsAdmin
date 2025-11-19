@@ -14,6 +14,7 @@ dist-ssr
 
 # Editor directories and files
 .vscode/*
+.codebuddy
 !.vscode/extensions.json
 .idea
 .DS_Store
@@ -26,3 +27,6 @@ dist-ssr
 # Orval 自动生成的文件（可选，取决于团队协作方式）
 # src/api/generated
 openapi.json
+
+
+
