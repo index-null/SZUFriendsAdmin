@@ -175,6 +175,7 @@ import {
   updateCollege,
   deleteCollege,
   type CollegeEntity,
+  type CollegePagesRequest,
 } from '@/api/modules/college'
 import { useUserStore } from '@/stores/modules/user'
 import CollegeFormDialog from './components/CollegeFormDialog.vue'
@@ -186,11 +187,13 @@ const dialogVisible = ref(false)
 const currentRow = ref<CollegeEntity | null>(null)
 const selectedIds = ref<number[]>([])
 
-const searchForm = reactive({
+const searchForm = reactive<CollegePagesRequest>({
+  current: 1,
+  size: 10,
   collegeCode: '',
   collegeName: '',
   dean: '',
-  status: undefined as number | undefined,
+  status: undefined,
 })
 
 const pagination = reactive({
@@ -215,9 +218,9 @@ const fetchData = async () => {
   loading.value = true
   try {
     const data = await getCollegePages({
+      ...searchForm,
       current: pagination.current,
       size: pagination.size,
-      ...searchForm,
     })
 
     tableData.value = data.records || []

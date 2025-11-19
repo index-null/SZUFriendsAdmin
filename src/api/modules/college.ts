@@ -2,47 +2,48 @@ import { get as getCollegeApi } from '@/api/generated/学院信息控制器/学�
 import type {
   CollegeEntity,
   CollegePagesRequest,
+  PageResultCollegeEntity,
 } from '@/api/generated/.ts.schemas'
 
 const collegeApi = getCollegeApi()
 
 /**
- * 学院管理API
- * 注意：响应拦截器已经处理了数据解包（从 Result 中提取 data）
+ * 学院管理 API
+ * 完全使用生成的接口定义，无需手动维护类型
  */
 
-interface PageResult {
-  records?: CollegeEntity[]
-  total?: number
-  current?: number
-  size?: number
-  pages?: number
-}
+// ============ 导出生成的类型 ============
+export type { CollegeEntity, CollegePagesRequest, PageResultCollegeEntity }
 
-// 扩展的搜索参数接口
-export interface CollegeSearchParams extends CollegePagesRequest {
-  collegeCode?: string
-  collegeName?: string
-  dean?: string
-  status?: number
-}
+// ============ API 方法 ============
 
+/**
+ * 分页查询学院列表
+ * @param params 查询参数（CollegePagesRequest 已包含所有搜索字段）
+ */
 export const getCollegePages = async (
-  params: CollegeSearchParams,
-): Promise<PageResult> => {
-  return (await collegeApi.postCommunityCollegePages(params as any)) as any
+  params: CollegePagesRequest,
+): Promise<PageResultCollegeEntity> => {
+  return (await collegeApi.postCommunityCollegePages(params)) as any
 }
 
-export const createCollege = async (data: CollegeEntity): Promise<any> => {
-  return await collegeApi.postCommunityCollege(data)
+/**
+ * 创建学院
+ */
+export const createCollege = async (data: CollegeEntity): Promise<boolean> => {
+  return (await collegeApi.postCommunityCollege(data)) as any
 }
 
-export const updateCollege = async (data: CollegeEntity): Promise<any> => {
-  return await collegeApi.putCommunityCollege(data)
+/**
+ * 更新学院
+ */
+export const updateCollege = async (data: CollegeEntity): Promise<boolean> => {
+  return (await collegeApi.putCommunityCollege(data)) as any
 }
 
-export const deleteCollege = async (id: number): Promise<any> => {
-  return await collegeApi.deleteCommunityCollegeId(id)
+/**
+ * 删除学院
+ */
+export const deleteCollege = async (id: number): Promise<boolean> => {
+  return (await collegeApi.deleteCommunityCollegeId(id)) as any
 }
-
-export type { CollegeEntity, CollegePagesRequest }
