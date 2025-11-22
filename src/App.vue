@@ -22,6 +22,12 @@ const hasClassPermission = computed(() => {
   if (userStore.isAdmin) return true
   return userStore.userInfo.permissions?.includes('class') || false
 })
+
+// 检查是否有角色管理权限
+const hasRolePermission = computed(() => {
+  if (userStore.isAdmin) return true
+  return userStore.userInfo.permissions?.includes('role:page') || false
+})
 </script>
 
 <template>
@@ -55,6 +61,14 @@ const hasClassPermission = computed(() => {
               :class="{ active: route.name === 'ClassManagement' }"
             >
               班级管理
+            </router-link>
+          </li>
+          <li v-if="hasRolePermission">
+            <router-link
+              to="/role-management"
+              :class="{ active: route.name === 'RoleManagement' }"
+            >
+              角色管理
             </router-link>
           </li>
         </ul>
