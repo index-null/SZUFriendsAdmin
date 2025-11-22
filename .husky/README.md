@@ -1,91 +1,82 @@
 # Husky Git Hooks 配置说明
 
-## 📦 已配置的 Git Hooks
+本项目使用 Husky 来管理 Git Hooks，确保代码质量。
 
-### 1. pre-commit
+## 🎯 配置的 Hooks
 
-**触发时机**: 执行 `git commit` 之前
+### 1. pre-commit（提交前检查）
 
-**功能**:
+**位置**: `.husky/pre-commit`
 
-- 自动对暂存的文件执行 ESLint 检查和修复
-- 自动格式化代码（Prettier）
-- 只处理暂存区（staged）的文件，不影响其他文件
+**执行时机**: 执行 `git commit` 命令时，在生成 commit 之前
 
-**工作流程**:
+**检查内容**:
+
+#### Step 1: Lint-Staged（代码规范检查）
+
+- **ESLint**: 检查并自动修复 JavaScript/TypeScript/Vue 代码风格问题
+- **Prettier**: 格式化代码（统一缩进、换行等）
+- **作用范围**: 仅检查暂存区（staged）的文件
+- **配置位置**: `package.json` 中的 `lint-staged` 字段
+
+#### Step 2: TypeScript 类型检查
+
+- **vue-tsc**: 运行 TypeScript 编译器进行类型检查
+- **命令**: `npm run type-check`（即 `vue-tsc -b --noEmit`）
+- **作用范围**: 检查整个项目的类型安全
+- **速度**: 约 3-10 秒（取决于项目大小）
+
+**重要性**:
+
+- ✅ **阻止类型错误代码被提交**，这是本次修复的核心
+- ✅ 确保提交的代码符合项目规范
+- ✅ 减少 Code Review 的负担
+
+**如何跳过**（不推荐）:
 
 ```bash
-git add .
-git commit -m "feat: add new feature"
-# ↓ 自动执行以下操作
-# 1. 对 *.{js,ts,vue} 文件执行 eslint --fix
-# 2. 对 *.{js,ts,vue} 文件执行 prettier --write
-# 3. 对 *.{json,md,css,scss,html} 文件执行 prettier --write
-# 4. 如果有修改，自动添加到 commit
-# ✅ 提交成功
+git commit --no-verify -m "commit message"
 ```
 
-### 2. commit-msg（可选）
+### 2. commit-msg（提交信息检查）
 
-**触发时机**: 执行 `git commit` 时
+**位置**: `.husky/commit-msg`
 
-**功能**:
+**执行时机**: 执行 `git commit` 命令时，在写入 commit message 之后
 
-- 检查 commit 信息格式（当前已注释）
-- 可启用严格的 commit 信息规范
+**检查内容**:
 
-**标准格式**（如需启用，取消注释）:
+- 目前仅做基础验证，没有强制 commit message 格式
+- 可以取消注释来启用严格的 commit message 规范
+
+**推荐格式** (Conventional Commits):
 
 ```
 type(scope): subject
 
-类型 (type):
-  - feat: 新功能
-  - fix: 修复 bug
-  - docs: 文档更新
-  - style: 代码格式（不影响功能）
-  - refactor: 重构
-  - test: 测试相关
-  - chore: 构建、工具等
-  - perf: 性能优化
-  - ci: CI/CD 配置
-  - build: 构建系统
-  - revert: 回退
-
-示例:
-  ✅ feat(user): add login feature
-  ✅ fix(api): handle error response
-  ✅ docs(readme): update installation guide
-  ❌ add login (缺少类型)
+例如:
+feat(user): add login feature
+fix(api): handle error response
+docs(readme): update installation guide
 ```
 
-## 🚀 使用方式
+**类型说明**:
 
-### 正常提交
-
-```bash
-# 1. 修改代码
-# 2. 添加到暂存区
-git add .
-
-# 3. 提交（自动 lint + format）
-git commit -m "feat(home): add user profile"
-
-# 4. 推送
-git push
-```
-
-### 跳过 Hooks（不推荐）
-
-如果需要跳过 hooks（紧急情况）:
-
-```bash
-git commit --no-verify -m "emergency fix"
-```
+- `feat`: 新功能
+- `fix`: Bug 修复
+- `docs`: 文档更新
+- `style`: 代码格式调整（不影响功能）
+- `refactor`: 重构（既不是新功能也不是 Bug 修复）
+- `test`: 测试相关
+- `chore`: 构建过程或辅助工具的变动
+- `perf`: 性能优化
+- `ci`: CI/CD 配置
+- `build`: 构建系统
+- `revert`: 回退
 
 ## 📝 Lint-Staged 配置
 
-在 `package.json` 中配置：
+**位置**: `package.json` 中的 `lint-staged` 字段
 
 ```json
 {
@@ -96,184 +87,148 @@ git commit --no-verify -m "emergency fix"
 }
 ```
 
-## 🔧 自定义配置
-
-### 修改 pre-commit
-
-编辑 `.husky/pre-commit` 文件：
+## 🔧 可用的 NPM Scripts
 
 ```bash
-#!/usr/bin/env sh
-. "$(dirname -- "$0")/_/husky.sh"
+# 开发服务器
+npm run dev
 
-# 添加额外的检查
-# npm run test          # 运行测试
-# npm run type-check    # 类型检查
+# 类型检查（不生成文件）
+npm run type-check
 
+# 代码检查
+npm run lint          # 检查并自动修复
+npm run lint:check    # 仅检查，不修复
+
+# 代码格式化
+npm run format        # 格式化所有文件
+npm run format:check  # 检查格式，不修改
+
+# 构建
+npm run build         # 类型检查 + 构建生产版本
+
+# API 相关
+npm run download-api  # 下载 OpenAPI 规范
+npm run generate-api  # 生成 API 代码
+npm run api           # 下载 + 生成（一键操作）
+```
+
+## 🚨 为什么之前没有发现类型错误？
+
+### 问题原因
+
+之前的 `.husky/pre-commit` 只包含：
+
+```bash
 npx lint-staged
 ```
 
-### 启用 commit-msg 规范
+这只运行了 ESLint 和 Prettier，**没有运行 TypeScript 类型检查**。
 
-编辑 `.husky/commit-msg`，取消注释检查代码即可。
+### 修复方案
 
-### 添加更多 hooks
-
-创建新 hook:
+现在的 `.husky/pre-commit` 包含：
 
 ```bash
-# 例如: pre-push hook
-echo '#!/usr/bin/env sh
-. "$(dirname -- "$0")/_/husky.sh"
+# 1. Lint-Staged（ESLint + Prettier）
+npx lint-staged || exit 1
 
-npm run test
-npm run build
-' > .husky/pre-push
-
-chmod +x .husky/pre-push
+# 2. TypeScript 类型检查
+npm run type-check || exit 1
 ```
 
-## 🎯 最佳实践
+这样可以确保：
 
-### 1. 小步提交
+- ✅ 代码风格符合规范（ESLint + Prettier）
+- ✅ TypeScript 类型检查通过（vue-tsc）
+- ✅ 如果任何检查失败，commit 会被阻止
 
-```bash
-# ✅ 好的做法：小步提交，单一职责
-git add src/components/UserProfile.vue
-git commit -m "feat(user): add user profile component"
+## 💡 最佳实践
 
-git add src/api/user.ts
-git commit -m "feat(api): add user API"
-
-# ❌ 不好的做法：一次提交太多变更
-git add .
-git commit -m "update project"
-```
-
-### 2. 提交前检查
+### 1. 提交前自检
 
 ```bash
-# 提交前手动检查
+# 检查暂存的文件
+git status
+
+# 运行完整检查（可选）
 npm run lint:check
-npm run format:check
-npm run build
+npm run type-check
+
+# 提交
+git commit -m "your message"
+```
+
+### 2. 如果 pre-commit 检查失败
+
+```bash
+# 查看具体错误信息
+# Husky 会显示详细的错误输出
+
+# 修复问题后重新 add
+git add .
+
+# 重新提交
+git commit -m "your message"
+```
+
+### 3. 处理类型错误
+
+```bash
+# 运行类型检查查看所有错误
+npm run type-check
+
+# 修复错误后重新运行
+npm run type-check
 
 # 确认无误后提交
 git add .
-git commit -m "feat: add new feature"
+git commit -m "fix: resolve type errors"
 ```
 
-### 3. 处理 Hook 失败
+## 🔍 故障排除
 
-如果 pre-commit hook 失败：
+### 问题 1: Husky hooks 不执行
 
 ```bash
-# 1. 查看错误信息
-# 2. 修复问题
-# 3. 重新添加和提交
-git add .
-git commit -m "fix: resolve lint errors"
+# 重新安装 husky
+npm run prepare
 
-# 或手动运行检查
-npm run lint
-npm run format
+# 确保 hooks 有执行权限
+chmod +x .husky/pre-commit
+chmod +x .husky/commit-msg
 ```
 
-## 🔍 故障排查
-
-### Hook 不执行？
-
-1. 检查 `.husky` 目录权限
-
-   ```bash
-   chmod +x .husky/pre-commit
-   chmod +x .husky/commit-msg
-   ```
-
-2. 确认 husky 已安装
-
-   ```bash
-   npm install
-   ```
-
-3. 重新初始化
-   ```bash
-   rm -rf .husky
-   npx husky init
-   # 然后重新配置 hooks
-   ```
-
-### Lint-staged 失败？
-
-1. 检查暂存区文件
-
-   ```bash
-   git status
-   ```
-
-2. 手动运行 lint-staged
-
-   ```bash
-   npx lint-staged
-   ```
-
-3. 查看详细错误
-   ```bash
-   npx lint-staged --verbose
-   ```
-
-### 如何临时禁用？
+### 问题 2: 类型检查太慢
 
 ```bash
-# 方法 1: 使用 --no-verify
-git commit --no-verify -m "message"
-
-# 方法 2: 临时移除 hooks
-mv .husky/pre-commit .husky/pre-commit.bak
-
-# 恢复
-mv .husky/pre-commit.bak .husky/pre-commit
+# 如果类型检查太慢，可以考虑：
+# 1. 升级硬件（SSD、更多内存）
+# 2. 使用增量编译（已配置：vue-tsc -b）
+# 3. 减少检查的文件范围（不推荐）
 ```
 
-## 📊 配置效果
-
-### 提交前
-
-```
-src/
-├── components/
-│   └── UserProfile.vue  (未格式化，有 lint 错误)
-└── api/
-    └── user.ts          (未格式化)
-```
-
-### 提交后
+### 问题 3: 紧急情况需要跳过检查
 
 ```bash
-git add .
-git commit -m "feat: add user profile"
-
-# ✨ 自动执行:
-# ✅ ESLint 修复代码问题
-# ✅ Prettier 格式化代码
-# ✅ 提交格式化后的代码
+# 仅在紧急情况使用，事后必须修复问题
+git commit --no-verify -m "emergency fix"
 ```
 
-### 团队协作优势
-
-- ✅ 统一代码风格
-- ✅ 减少 code review 时间
-- ✅ 避免格式化相关的冲突
-- ✅ 保证代码质量
-
-## 🔗 相关资源
+## 📚 相关文档
 
 - [Husky 官方文档](https://typicode.github.io/husky/)
-- [Lint-staged 文档](https://github.com/okonet/lint-staged)
+- [Lint-Staged 文档](https://github.com/okonet/lint-staged)
 - [Conventional Commits](https://www.conventionalcommits.org/)
+- [TypeScript Compiler Options](https://www.typescriptlang.org/tsconfig)
 
----
+## 🎯 总结
 
-**配置最后更新**: 2025-11-17  
-**Husky 版本**: 9.1.7  
-**Lint-staged 版本**: 16.2.6
+通过配置 Husky Git Hooks，我们实现了：
+
+1. ✅ **代码质量保证**: 阻止不符合规范的代码被提交
+2. ✅ **类型安全**: 阻止类型错误的代码被提交（本次新增）
+3. ✅ **团队协作**: 统一的代码风格和提交规范
+4. ✅ **CI/CD 优化**: 减少 CI 失败的概率
+
+记住：**好的工具能帮助我们写出更好的代码！** 🚀
