@@ -17,3 +17,11 @@ export default pinia
 export { useUserStore } from './modules/user'
 export { useAppStore } from './modules/app'
 export { useCounterStore } from './modules/counter'
+
+// 导出 composables
+export {
+  usePermission,
+  useAuth,
+  useNotificationWithUser,
+  useThemeWithNotification,
+} from './composables'

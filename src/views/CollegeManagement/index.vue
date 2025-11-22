@@ -177,10 +177,10 @@ import {
   type CollegeEntity,
   type CollegePagesRequest,
 } from '@/api/modules/college'
-import { useUserStore } from '@/stores/modules/user'
+import { usePermission } from '@/stores'
 import CollegeFormDialog from './components/CollegeFormDialog.vue'
 
-const userStore = useUserStore()
+const { hasPermission } = usePermission()
 
 const loading = ref(false)
 const dialogVisible = ref(false)
@@ -203,11 +203,6 @@ const pagination = reactive({
 })
 
 const tableData = ref<CollegeEntity[]>([])
-
-const hasPermission = (code: string): boolean => {
-  const permissions = userStore.userInfo.permissions || []
-  return permissions.includes(code) || userStore.isAdmin
-}
 
 const formatDate = (date?: string) => {
   if (!date) return '-'

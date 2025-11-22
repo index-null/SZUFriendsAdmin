@@ -187,11 +187,11 @@ import {
   type CreateRoleRequest,
   type UpdateRoleRequest,
 } from '@/api/modules/role'
-import { useUserStore } from '@/stores/modules/user'
+import { usePermission } from '@/stores'
 import RoleFormDialog from './components/RoleFormDialog.vue'
 import RolePermissionDialog from './components/RolePermissionDialog.vue'
 
-const userStore = useUserStore()
+const { hasPermission } = usePermission()
 
 const loading = ref(false)
 const formDialogVisible = ref(false)
@@ -214,11 +214,6 @@ const pagination = reactive({
 })
 
 const tableData = ref<RoleResponse[]>([])
-
-const hasPermission = (code: string): boolean => {
-  const permissions = userStore.userInfo.permissions || []
-  return permissions.includes(code) || userStore.isAdmin
-}
 
 const formatDate = (date?: string) => {
   if (!date) return '-'

@@ -1,39 +1,27 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { useRoute } from 'vue-router'
-import { useUserStore } from '@/stores/modules/user'
+import { usePermission } from '@/stores'
 import ThemeToggle from './components/ThemeToggle.vue'
 import SzuLogo from './components/SzuLogo.vue'
 
 const route = useRoute()
-const userStore = useUserStore()
+const { hasPermission } = usePermission()
 
 // 判断是否显示导航栏（登录/注册页面不显示）
 const showNavbar = computed(() => !route.meta.hideNavbar)
 
 // 检查是否有学院管理权限
-const hasCollegePermission = computed(() => {
-  if (userStore.isAdmin) return true
-  return userStore.userInfo.permissions?.includes('college:page') || false
-})
+const hasCollegePermission = computed(() => hasPermission('college:page'))
 
 // 检查是否有班级管理权限
-const hasClassPermission = computed(() => {
-  if (userStore.isAdmin) return true
-  return userStore.userInfo.permissions?.includes('class') || false
-})
+const hasClassPermission = computed(() => hasPermission('class'))
 
 // 检查是否有角色管理权限
-const hasRolePermission = computed(() => {
-  if (userStore.isAdmin) return true
-  return userStore.userInfo.permissions?.includes('role:page') || false
-})
+const hasRolePermission = computed(() => hasPermission('role:page'))
 
 // 检查是否有权限管理权限
-const hasPermissionPermission = computed(() => {
-  if (userStore.isAdmin) return true
-  return userStore.userInfo.permissions?.includes('permission:page') || false
-})
+const hasPermissionPermission = computed(() => hasPermission('permission:page'))
 </script>
 
 <template>

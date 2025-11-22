@@ -207,7 +207,7 @@ import {
   Delete,
   CirclePlus,
 } from '@element-plus/icons-vue'
-import { useUserStore } from '@/stores'
+import { usePermission } from '@/stores'
 import PermissionFormDialog from './components/PermissionFormDialog.vue'
 import type {
   PermissionQueryRequest,
@@ -222,7 +222,7 @@ import {
   deletePermission,
 } from '@/api/modules/permission'
 
-const userStore = useUserStore()
+const { hasPermission } = usePermission()
 
 const loading = ref(false)
 const tableRef = ref<InstanceType<typeof ElTable>>()
@@ -240,12 +240,6 @@ const searchForm = ref<PermissionQueryRequest>({
 const formDialogVisible = ref(false)
 const currentPermission = ref<PermissionTreeNodeResponse | null>(null)
 const selectedParentId = ref(0)
-
-// 权限检查函数
-const hasPermission = (permission: string) => {
-  if (userStore.isAdmin) return true
-  return userStore.userInfo.permissions?.includes(permission) || false
-}
 
 // 获取权限类型标签颜色
 const getPermissionTypeTag = (type?: number) => {
