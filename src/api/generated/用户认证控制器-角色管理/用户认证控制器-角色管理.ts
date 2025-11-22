@@ -135,23 +135,6 @@ const postAuthRolePermissionGrant = (
       );
     }
   /**
- * 给角色取消授权
-移除角色的指定权限
-给角色取消授权
-移除角色的指定权限
- * @summary 角色取消授权
- */
-const postAuthRolePermissionRevoke = (
-    grantPermissionsRequest: GrantPermissionsRequest,
- ) => {
-      return customInstance<ResultBoolean>(
-      {url: `/auth/role/permission/revoke`, method: 'POST',
-      headers: {'Content-Type': 'application/json', },
-      data: grantPermissionsRequest
-    },
-      );
-    }
-  /**
  * 查询角色权限树
 获取角色拥有的所有权限，以树形结构返回
 查询角色权限树
@@ -166,7 +149,7 @@ const getAuthRoleRoleIdPermissions = (
     },
       );
     }
-  return {postAuthRole,putAuthRole,deleteAuthRoleRoleId,getAuthRoleRoleId,postAuthRoleQuery,getAuthRoleList,postAuthRolePermissionGrant,postAuthRolePermissionRevoke,getAuthRoleRoleIdPermissions}};
+  return {postAuthRole,putAuthRole,deleteAuthRoleRoleId,getAuthRoleRoleId,postAuthRoleQuery,getAuthRoleList,postAuthRolePermissionGrant,getAuthRoleRoleIdPermissions}};
 export type PostAuthRoleResult = NonNullable<Awaited<ReturnType<ReturnType<typeof get>['postAuthRole']>>>
 export type PutAuthRoleResult = NonNullable<Awaited<ReturnType<ReturnType<typeof get>['putAuthRole']>>>
 export type DeleteAuthRoleRoleIdResult = NonNullable<Awaited<ReturnType<ReturnType<typeof get>['deleteAuthRoleRoleId']>>>
@@ -174,5 +157,4 @@ export type GetAuthRoleRoleIdResult = NonNullable<Awaited<ReturnType<ReturnType<
 export type PostAuthRoleQueryResult = NonNullable<Awaited<ReturnType<ReturnType<typeof get>['postAuthRoleQuery']>>>
 export type GetAuthRoleListResult = NonNullable<Awaited<ReturnType<ReturnType<typeof get>['getAuthRoleList']>>>
 export type PostAuthRolePermissionGrantResult = NonNullable<Awaited<ReturnType<ReturnType<typeof get>['postAuthRolePermissionGrant']>>>
-export type PostAuthRolePermissionRevokeResult = NonNullable<Awaited<ReturnType<ReturnType<typeof get>['postAuthRolePermissionRevoke']>>>
 export type GetAuthRoleRoleIdPermissionsResult = NonNullable<Awaited<ReturnType<ReturnType<typeof get>['getAuthRoleRoleIdPermissions']>>>

@@ -1402,6 +1402,8 @@ export interface PermissionTreeNodeResponse {
   description?: string;
   /** 排序字段 */
   sortOrder?: number;
+  /** 角色是否拥有该权限 */
+  hasPermission?: boolean;
   /** 子权限列表
 使用默认初始化避免序列化时出现空指针 */
   children?: PermissionTreeNodeResponse[];
@@ -1572,6 +1574,8 @@ export interface RoleResponse {
   sortOrder?: number;
   /** 状态（0-禁用，1-启用） */
   status?: number;
+  /** 用户是否绑定这个角色 */
+  isBind?: boolean;
   /** 创建时间 */
   createTime?: string;
   /** 更新时间 */
@@ -1680,6 +1684,8 @@ export interface RemoveRolesRequest {
 }
 
 export interface UpdateUserRolesRequest {
+  /** 用户ID */
+  userId: number;
   /** 角色ID列表（会覆盖用户现有的所有角色）
 角色ID列表 */
   roleIds: number[];

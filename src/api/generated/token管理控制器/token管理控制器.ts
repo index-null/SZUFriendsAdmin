@@ -15,6 +15,9 @@ import { customInstance } from '../../mutator';
 
   export const getToken = () => {
 /**
+ * 获取当前用户的设备列表
+获取当前用户的设备列表
+[token:get:devices] 获取当前用户的设备列表
  * @summary 获取当前用户的设备列表
  */
 const getAuthTokenDevices = (
@@ -26,6 +29,9 @@ const getAuthTokenDevices = (
       );
     }
   /**
+ * 踢出指定设备
+踢出指定设备
+[token:devices:kick] 踢出指定设备
  * @summary 踢出指定设备
  */
 const deleteAuthTokenDevicesDeviceId = (
@@ -37,7 +43,10 @@ const deleteAuthTokenDevicesDeviceId = (
       );
     }
   /**
- * @summary 踢出其他所有设备（保留当前设备）
+ * 踢出其他所有设备（保留当前设备）
+踢出其他所有设备
+[token:devices:kick-others] 踢出其他所有设备，保留当前设备
+ * @summary 踢出其他所有设备
  */
 const deleteAuthTokenDevicesOthers = (
     
@@ -48,7 +57,10 @@ const deleteAuthTokenDevicesOthers = (
       );
     }
   /**
- * @summary 强制下线指定用户（管理员功能）
+ * 强制下线指定用户（管理员功能）
+强制下线指定用户
+[token:force:logout] 管理员强制下线指定用户
+ * @summary 强制下线指定用户
  */
 const postAuthTokenForceLogoutUserId = (
     userId: number,
