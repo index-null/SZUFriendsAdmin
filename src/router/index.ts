@@ -8,6 +8,8 @@ const Home = () => import('../views/Home.vue')
 const CollegeManagement = () => import('../views/CollegeManagement/index.vue')
 const ClassManagement = () => import('../views/ClassManagement/index.vue')
 const RoleManagement = () => import('../views/RoleManagement/index.vue')
+const PermissionManagement = () =>
+  import('../views/PermissionManagement/index.vue')
 const NotFound = () => import('../views/NotFound.vue')
 
 /**
@@ -90,6 +92,18 @@ const routes: RouteRecordRaw[] = [
       title: '角色管理',
       requiresAuth: true,
       permission: 'role:page',
+      showInMenu: true,
+    },
+  },
+  // 权限管理
+  {
+    path: '/permission-management',
+    name: 'PermissionManagement',
+    component: PermissionManagement,
+    meta: {
+      title: '权限管理',
+      requiresAuth: true,
+      permission: 'permission:page',
       showInMenu: true,
     },
   },
