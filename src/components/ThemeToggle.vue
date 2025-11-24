@@ -1,9 +1,9 @@
 <template>
   <el-button
-    class="theme-toggle"
+    :class="['theme-toggle', { 'navbar-mode': navbarMode }]"
     :icon="isDark ? Moon : Sunny"
     circle
-    size="large"
+    :size="navbarMode ? 'default' : 'large'"
     @click="handleToggle"
   />
 </template>
@@ -11,6 +11,14 @@
 <script setup lang="ts">
 import { Sunny, Moon } from '@element-plus/icons-vue'
 import { isDark, toggleDark } from '@/element-plus'
+
+interface Props {
+  navbarMode?: boolean // 是否为导航栏模式
+}
+
+withDefaults(defineProps<Props>(), {
+  navbarMode: false,
+})
 
 const handleToggle = () => {
   toggleDark()
@@ -40,6 +48,28 @@ const handleToggle = () => {
   aspect-ratio: 1 / 1;
 }
 
+/* 导航栏模式样式 */
+.theme-toggle.navbar-mode {
+  position: static;
+  bottom: auto;
+  right: auto;
+  width: 32px !important;
+  height: 32px !important;
+  min-width: 32px !important;
+  min-height: 32px !important;
+  box-shadow: none;
+  background-color: transparent;
+  border-color: var(--border-color, #e5e7eb);
+}
+
+.theme-toggle.navbar-mode:hover {
+  background-color: var(--hover-bg, rgba(153, 0, 51, 0.05));
+  border-color: var(--brand-primary, #990033);
+  color: var(--brand-primary, #990033);
+  transform: scale(1.1);
+  box-shadow: none;
+}
+
 .theme-toggle:hover {
   transform: scale(1.1) rotate(15deg);
   box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
@@ -52,6 +82,14 @@ html.dark .theme-toggle {
 html.dark .theme-toggle:hover {
   box-shadow: 0 6px 16px rgba(0, 0, 0, 0.5);
   transform: scale(1.1) rotate(-15deg);
+}
+
+html.dark .theme-toggle.navbar-mode {
+  box-shadow: none;
+}
+
+html.dark .theme-toggle.navbar-mode:hover {
+  box-shadow: none;
 }
 
 /* 确保图标居中 */
