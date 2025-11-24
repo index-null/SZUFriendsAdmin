@@ -2057,6 +2057,132 @@ export interface ResultListDeviceInfo {
   timestamp?: number;
 }
 
+export interface UserPageVo {
+  /** 用户ID */
+  id?: number;
+  /** 用户名（唯一） */
+  username?: string;
+  /** 微信小程序OpenID */
+  wxMpCode?: string;
+  /** 头像URL */
+  avatar?: string;
+  /** 用户类型（1-学生，2-教师，3-校友） */
+  userType?: number;
+  /** 用户角色列表 */
+  roles?: RoleResponse[];
+}
+
+export interface PageResultUserPageVo {
+  /** 数据列表 */
+  records?: UserPageVo[];
+  /** 总记录数 */
+  total?: number;
+  /** 当前页码 */
+  current?: number;
+  /** 每页大小 */
+  size?: number;
+  /** 总页数 */
+  pages?: number;
+}
+
+export interface ResultPageResultUserPageVo {
+  /** 响应状态码 */
+  code?: number;
+  /** 响应消息 */
+  message?: string;
+  /** 响应数据 */
+  data?: PageResultUserPageVo;
+  /** 时间戳 */
+  timestamp?: number;
+}
+
+export interface UserPagesRequest {
+  /** 当前页码 */
+  current?: number;
+  /** 每页大小 */
+  size?: number;
+  /** 用户名（唯一） */
+  username?: string;
+}
+
+export interface UserEntity {
+  /** 主键ID */
+  id?: number;
+  /** 创建时间 */
+  createTime?: string;
+  /** 更新时间 */
+  updateTime?: string;
+  /** 用户名（唯一） */
+  username?: string;
+  /** 密码（加密后） */
+  password?: string;
+  /** 微信小程序OpenID */
+  wxMpCode?: string;
+  /** 昵称 */
+  nickname?: string;
+  /** 头像URL */
+  avatar?: string;
+  /** 邮箱 */
+  email?: string;
+  /** 手机号 */
+  phone?: string;
+  /** 性别（0-未知，1-男，2-女） */
+  gender?: number;
+  /** 状态（0-禁用，1-启用） */
+  status?: number;
+  /** 真实姓名 */
+  realName?: string;
+  /** 学号/工号 */
+  studentId?: string;
+  /** 用户类型（1-学生，2-教师，3-校友） */
+  userType?: number;
+  /** 入学年份 */
+  admissionYear?: number;
+  /** 毕业年份 */
+  graduationYear?: number;
+  /** 专业 */
+  major?: string;
+  /** 当前工作单位 */
+  companyName?: string;
+  /** 职位 */
+  jobTitle?: string;
+  /** 所在行业 */
+  industry?: string;
+  /** 省份 */
+  province?: string;
+  /** 城市 */
+  city?: string;
+  /** 区/县 */
+  district?: string;
+  /** 详细地址 */
+  address?: string;
+  /** 经度 */
+  longitude?: number;
+  /** 纬度 */
+  latitude?: number;
+  /** 个人简介/一句话介绍 */
+  bio?: string;
+  /** 生日 */
+  birthday?: string;
+  /** QQ号 */
+  qq?: string;
+  /** 微信号 */
+  wechat?: string;
+  /** 管理学院id (0-全部 -1 - 无数据权限 其它对应相应学院id) */
+  collegeLeaderId?: number;
+}
+
+export interface ResultUserEntity {
+  /** 响应状态码 */
+  code?: number;
+  /** 响应消息 */
+  message?: string;
+  /** 响应数据 */
+  data?: UserEntity;
+  /** 时间戳 */
+  timestamp?: number;
+}
+
 export type PostCommunityPostParams = {
 /**
  * 帖子标题
