@@ -178,7 +178,7 @@
                 <el-button
                   size="small"
                   class="expand-btn"
-                  @click="expandAll = !expandAll"
+                  @click="toggleExpandAll"
                 >
                   {{ expandAll ? '收起全部' : '展开全部' }}
                 </el-button>
@@ -191,9 +191,10 @@
               "
             >
               <el-tree
+                ref="treeRef"
                 :data="userStore.userInfo.permissionTree"
                 :props="treeProps"
-                :default-expand-all="expandAll"
+                :default-expanded-keys="defaultExpandedKeys"
                 node-key="id"
                 highlight-current
               >
@@ -284,10 +285,11 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { useUserStore } from '@/stores/modules/user'
 import { ElMessage, ElMessageBox } from 'element-plus'
+import type { ElTree } from 'element-plus'
 import {
   User,
   UserFilled,
@@ -308,12 +310,38 @@ const userStore = useUserStore()
 
 const logoutLoading = ref(false)
 const expandAll = ref(false)
+const treeRef = ref<InstanceType<typeof ElTree>>()
 
 // 树形控件配置
 const treeProps = {
   children: 'children',
   label: 'permissionName',
 }
+
+// 获取所有节点的 ID
+const getAllNodeIds = (nodes: any[]): string[] => {
+  const ids: string[] = []
+  const traverse = (nodeList: any[]) => {
+    nodeList.forEach((node) => {
+      if (node.id) {
+        ids.push(String(node.id))
+      }
+      if (node.children && node.children.length > 0) {
+        traverse(node.children)
+      }
+    })
+  }
+  traverse(nodes)
+  return ids
+}
+
+// 计算默认展开的节点
+const defaultExpandedKeys = computed(() => {
+  if (!expandAll.value || !userStore.userInfo.permissionTree) {
+    return []
+  }
+  return getAllNodeIds(userStore.userInfo.permissionTree)
+})
 
 // 退出登录
 const handleLogout = async () => {
@@ -393,6 +421,27 @@ const copyUserInfo = async () => {
 // 刷新用户信息
 const refreshUserInfo = () => {
   ElMessage.info('当前用户信息已是最新')
+}
+
+// 切换展开/收起全部
+const toggleExpandAll = () => {
+  expandAll.value = !expandAll.value
+
+  if (!treeRef.value) return
+
+  if (expandAll.value) {
+    // 展开所有节点
+    const allNodeIds = getAllNodeIds(userStore.userInfo.permissionTree || [])
+    allNodeIds.forEach((id) => {
+      treeRef.value?.store.nodesMap[id]?.expand()
+    })
+  } else {
+    // 收起所有节点
+    const allNodeIds = getAllNodeIds(userStore.userInfo.permissionTree || [])
+    allNodeIds.forEach((id) => {
+      treeRef.value?.store.nodesMap[id]?.collapse()
+    })
+  }
 }
 </script>
 
