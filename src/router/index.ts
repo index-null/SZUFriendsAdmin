@@ -7,6 +7,7 @@ const Register = () => import('../views/Register.vue')
 const Home = () => import('../views/Home.vue')
 const CollegeManagement = () => import('../views/CollegeManagement/index.vue')
 const ClassManagement = () => import('../views/ClassManagement/index.vue')
+const UserManagement = () => import('../views/UserManagement/index.vue')
 const RoleManagement = () => import('../views/RoleManagement/index.vue')
 const PermissionManagement = () =>
   import('../views/PermissionManagement/index.vue')
@@ -80,6 +81,18 @@ const routes: RouteRecordRaw[] = [
       title: '班级管理',
       requiresAuth: true,
       permission: 'class', // 需要 class 权限
+      showInMenu: true,
+    },
+  },
+  // 用户管理
+  {
+    path: '/user-management',
+    name: 'UserManagement',
+    component: UserManagement,
+    meta: {
+      title: '用户管理',
+      requiresAuth: true,
+      permission: 'user:page',
       showInMenu: true,
     },
   },

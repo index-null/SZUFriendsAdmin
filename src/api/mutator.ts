@@ -49,16 +49,25 @@ service.interceptors.response.use(
 )
 
 /**
- * Orval 专用的自定义实例
- * Orval 生成的代码会调用这个函数
+ * 类型辅助：自动解包 Result 包装类型
+ * 例如：UnwrapResult<ResultPageResultUserPageVo> = PageResultUserPageVo
+ *      UnwrapResult<ResultListRoleResponse> = RoleResponse[]
  */
-export const customInstance = <T>(config: AxiosRequestConfig): Promise<T> => {
+export type UnwrapResult<T> = T extends { data?: infer D } ? D : T
+
+/**
+ * Orval 专用的自定义实例
+ * 会自动解包响应中的 data 字段，并修正类型
+ */
+export const customInstance = <T>(
+  config: AxiosRequestConfig,
+): Promise<UnwrapResult<T>> => {
   const source = axios.CancelToken.source()
 
   const promise = service({
     ...config,
     cancelToken: source.token,
-  }).then((data) => data as T)
+  }).then((data) => data as UnwrapResult<T>)
 
   // @ts-ignore: 为 promise 添加 cancel 方法，用于取消请求
   promise.cancel = () => {

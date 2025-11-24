@@ -2,7 +2,7 @@
   <el-header height="60px" class="app-header">
     <div class="header-left">
       <!-- 折叠按钮 -->
-      <el-icon class="collapse-btn" @click="emit('toggle-sidebar')">
+      <el-icon :size="38" class="collapse-btn" @click="emit('toggle-sidebar')">
         <Expand v-if="isCollapsed" />
         <Fold v-else />
       </el-icon>
@@ -175,7 +175,6 @@ html.dark .app-header {
 }
 
 .collapse-btn {
-  font-size: 20px;
   cursor: pointer;
   color: var(--text-primary);
   transition: all 0.3s;
@@ -186,6 +185,7 @@ html.dark .app-header {
 .collapse-btn:hover {
   background-color: var(--hover-bg);
   color: var(--brand-primary);
+  transform: scale(1.1);
 }
 
 /* 面包屑样式 */
