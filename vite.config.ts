@@ -4,10 +4,16 @@ import path from 'path'
 import AutoImport from 'unplugin-auto-import/vite'
 import Components from 'unplugin-vue-components/vite'
 import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
+import VueInspector from 'vite-plugin-vue-inspector'
 
 export default defineConfig({
   plugins: [
     vue(),
+    VueInspector({
+      toggleButtonVisibility: 'always', // 显示切换按钮
+      toggleComboKey: 'meta', // Command 键 + Click 触发跳转（macOS）
+      // 不设置 launchEditor，完全依赖 LAUNCH_EDITOR 环境变量
+    }),
     Components({
       resolvers: [ElementPlusResolver()],
     }),
