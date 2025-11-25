@@ -6,6 +6,7 @@
  */
 import type {
   PostCommunityPostParams,
+  PostCommunityUploadBody,
   ResultLong,
   ResultString
 } from '../.ts.schemas';
@@ -38,6 +39,24 @@ const getCommunityTest = (
     },
       );
     }
-  return {postCommunityPost,getCommunityTest}};
+  /**
+ * @summary 测试上传接口
+ */
+const postCommunityUpload = (
+    postCommunityUploadBody: PostCommunityUploadBody,
+ ) => {const formData = new FormData();
+if(postCommunityUploadBody.file !== undefined) {
+ formData.append(`file`, postCommunityUploadBody.file)
+ }
+
+      return customInstance<ResultString>(
+      {url: `/community/upload`, method: 'POST',
+      headers: {'Content-Type': 'multipart/form-data', },
+       data: formData
+    },
+      );
+    }
+  return {postCommunityPost,getCommunityTest,postCommunityUpload}};
 export type PostCommunityPostResult = NonNullable<Awaited<ReturnType<ReturnType<typeof get>['postCommunityPost']>>>
 export type GetCommunityTestResult = NonNullable<Awaited<ReturnType<ReturnType<typeof get>['getCommunityTest']>>>
+export type PostCommunityUploadResult = NonNullable<Awaited<ReturnType<ReturnType<typeof get>['postCommunityUpload']>>>

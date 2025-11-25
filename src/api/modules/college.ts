@@ -24,26 +24,26 @@ export type { CollegeEntity, CollegePagesRequest, PageResultCollegeEntity }
 export const getCollegePages = async (
   params: CollegePagesRequest,
 ): Promise<PageResultCollegeEntity> => {
-  return (await collegeApi.postCommunityCollegePages(params)) as any
+  return (await collegeApi.postManagerCollegePages(params)) as any
 }
 
 /**
  * 创建学院
  */
 export const createCollege = async (data: CollegeEntity): Promise<boolean> => {
-  return (await collegeApi.postCommunityCollege(data)) as any
+  return (await collegeApi.postManagerCollege(data)) as any
 }
 
 /**
  * 更新学院
  */
 export const updateCollege = async (data: CollegeEntity): Promise<boolean> => {
-  return (await collegeApi.putCommunityCollege(data)) as any
+  return (await collegeApi.putManagerCollege(data)) as any
 }
 
 /**
  * 删除学院
  */
 export const deleteCollege = async (id: number): Promise<boolean> => {
-  return (await collegeApi.deleteCommunityCollegeId(id)) as any
+  return (await collegeApi.deleteManagerCollegeId(id)) as any
 }

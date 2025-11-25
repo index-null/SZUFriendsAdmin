@@ -5,7 +5,7 @@
  * OpenAPI spec version: 1.0.0
  */
 import type {
-  PostCommunityAlumniBatchParams,
+  PostManagerAlumniBatchParams,
   ResultListString
 } from '../.ts.schemas';
 
@@ -15,18 +15,16 @@ import { customInstance } from '../../mutator';
 
   export const get = () => {
 /**
- * 注意 是上传excel
-返回响应里 若data可能存在错误信息 ，若有错误会在这里提示
  * @summary 批量上传校友信息
  */
-const postCommunityAlumniBatch = (
-    params?: PostCommunityAlumniBatchParams,
+const postManagerAlumniBatch = (
+    params?: PostManagerAlumniBatchParams,
  ) => {
       return customInstance<ResultListString>(
-      {url: `/community/alumni/batch`, method: 'POST',
+      {url: `/manager/alumni/batch`, method: 'POST',
         params
     },
       );
     }
-  return {postCommunityAlumniBatch}};
-export type PostCommunityAlumniBatchResult = NonNullable<Awaited<ReturnType<ReturnType<typeof get>['postCommunityAlumniBatch']>>>
+  return {postManagerAlumniBatch}};
+export type PostManagerAlumniBatchResult = NonNullable<Awaited<ReturnType<ReturnType<typeof get>['postManagerAlumniBatch']>>>

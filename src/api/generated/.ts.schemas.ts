@@ -2183,6 +2183,348 @@ export interface ResultUserEntity {
   timestamp?: number;
 }
 
+export interface OperationLogEntity {
+  /** 主键ID */
+  id?: number;
+  /** 创建时间 */
+  createTime?: string;
+  /** 更新时间 */
+  updateTime?: string;
+  /** 功能模块（如：用户管理、活动管理、权限管理） */
+  module?: string;
+  /** 操作类型（如：新增、删除、修改、导出、登录、审核） */
+  action?: string;
+  /** 操作描述（支持SpEL表达式） */
+  description?: string;
+  /** 操作人ID（0表示系统/匿名） */
+  operatorId?: number;
+  /** 操作人姓名/账号 */
+  operatorName?: string;
+  /** 操作IP地址 */
+  operatorIp?: string;
+  /** 操作地点（通过IP解析） */
+  operatorLocation?: string;
+  /** 浏览器/设备信息（User-Agent） */
+  userAgent?: string;
+  /** 设备类型（WEB/MOBILE/TABLET） */
+  deviceType?: string;
+  /** 设备名称（如：Chrome浏览器） */
+  deviceName?: string;
+  /** 请求URL */
+  requestUrl?: string;
+  /** 请求方式（POST/PUT/DELETE/GET） */
+  requestMethod?: string;
+  /** 请求参数（JSON格式，注意敏感信息脱敏） */
+  requestParams?: string;
+  /** 响应结果（JSON格式，仅记录关键信息或异常信息） */
+  responseResult?: string;
+  /** 操作状态（1-成功，0-失败） */
+  status?: number;
+  /** 错误信息（仅失败时记录） */
+  errorMsg?: string;
+  /** 耗时（毫秒） */
+  costTime?: number;
+}
+
+export interface PageResultOperationLogEntity {
+  /** 数据列表 */
+  records?: OperationLogEntity[];
+  /** 总记录数 */
+  total?: number;
+  /** 当前页码 */
+  current?: number;
+  /** 每页大小 */
+  size?: number;
+  /** 总页数 */
+  pages?: number;
+}
+
+export interface ResultPageResultOperationLogEntity {
+  /** 响应状态码 */
+  code?: number;
+  /** 响应消息 */
+  message?: string;
+  /** 响应数据 */
+  data?: PageResultOperationLogEntity;
+  /** 时间戳 */
+  timestamp?: number;
+}
+
+export interface OperationLogQueryRequest {
+  /** 当前页码（从1开始） */
+  current?: number;
+  /** 每页大小 */
+  size?: number;
+  /** 功能模块（模糊查询） */
+  module?: string;
+  /** 操作类型（模糊查询） */
+  action?: string;
+  /** 操作人姓名/账号（模糊查询） */
+  operatorName?: string;
+  /** 操作人ID */
+  operatorId?: number;
+  /** 操作状态（1-成功，0-失败） */
+  status?: number;
+  /** 开始时间（操作时间范围查询） */
+  startTime?: string;
+  /** 结束时间（操作时间范围查询） */
+  endTime?: string;
+}
+
+export interface ResultOperationLogEntity {
+  /** 响应状态码 */
+  code?: number;
+  /** 响应消息 */
+  message?: string;
+  /** 操作日志实体类
+记录系统所有危险操作，供管理员审计查看 */
+  data?: OperationLogEntity;
+  /** 时间戳 */
+  timestamp?: number;
+}
+
+export interface DictEntity {
+  /** 主键ID */
+  id?: number;
+  /** 创建时间 */
+  createTime?: string;
+  /** 更新时间 */
+  updateTime?: string;
+  /** 字典类型 对应数据库字段 */
+  dictType?: string;
+  /** 字典名称描述 */
+  description?: string;
+  /** 备注信息 */
+  remarks?: string;
+}
+
+export interface ResultDictEntity {
+  /** 响应状态码 */
+  code?: number;
+  /** 响应消息 */
+  message?: string;
+  /** 响应数据 */
+  data?: DictEntity;
+  /** 时间戳 */
+  timestamp?: number;
+}
+
+export interface PageResultDictEntity {
+  /** 数据列表 */
+  records?: DictEntity[];
+  /** 总记录数 */
+  total?: number;
+  /** 当前页码 */
+  current?: number;
+  /** 每页大小 */
+  size?: number;
+  /** 总页数 */
+  pages?: number;
+}
+
+export interface ResultPageResultDictEntity {
+  /** 响应状态码 */
+  code?: number;
+  /** 响应消息 */
+  message?: string;
+  /** 响应数据 */
+  data?: PageResultDictEntity;
+  /** 时间戳 */
+  timestamp?: number;
+}
+
+export interface DictPagesRequest {
+  /** 当前页码 */
+  current?: number;
+  /** 每页大小 */
+  size?: number;
+  /** 查询条件 可根据字典名称描述 字典类型 来查询 */
+  query?: string;
+}
+
+/**
+ * 响应数据
+ */
+export type ResultData = { [key: string]: unknown };
+
+export interface Result {
+  /** 响应状态码 */
+  code?: number;
+  /** 响应消息 */
+  message?: string;
+  /** 响应数据 */
+  data?: ResultData;
+  /** 时间戳 */
+  timestamp?: number;
+  /** 判断是否成功 */
+  success?: boolean;
+}
+
+export interface DictItemEntity {
+  /** 主键ID */
+  id?: number;
+  /** 创建时间 */
+  createTime?: string;
+  /** 更新时间 */
+  updateTime?: string;
+  /** 字典ID */
+  dictId?: number;
+  /** 字典项值 */
+  itemValue?: string;
+  /** 字典项名称 */
+  label?: string;
+  /** 字典类型 */
+  dictType?: string;
+  /** 字典项描述 */
+  description?: string;
+  /** 排序（升序） */
+  sortOrder?: number;
+}
+
+export interface PageResultDictItemEntity {
+  /** 数据列表 */
+  records?: DictItemEntity[];
+  /** 总记录数 */
+  total?: number;
+  /** 当前页码 */
+  current?: number;
+  /** 每页大小 */
+  size?: number;
+  /** 总页数 */
+  pages?: number;
+}
+
+export interface ResultPageResultDictItemEntity {
+  /** 响应状态码 */
+  code?: number;
+  /** 响应消息 */
+  message?: string;
+  /** 响应数据 */
+  data?: PageResultDictItemEntity;
+  /** 时间戳 */
+  timestamp?: number;
+}
+
+export interface DictItemPagesRequest {
+  /** 当前页码 */
+  current?: number;
+  /** 每页大小 */
+  size?: number;
+  /** 字典项id */
+  dictId?: number;
+}
+
+export interface ResultDictItemEntity {
+  /** 响应状态码 */
+  code?: number;
+  /** 响应消息 */
+  message?: string;
+  /** Created by IntelliJ IDEA.
+&#064;Author : Zys
+&#064;create 2025/11/25 12:10 */
+  data?: DictItemEntity;
+  /** 时间戳 */
+  timestamp?: number;
+}
+
+export interface ResultListDictItemEntity {
+  /** 响应状态码 */
+  code?: number;
+  /** 响应消息 */
+  message?: string;
+  /** 响应数据 */
+  data?: DictItemEntity[];
+  /** 时间戳 */
+  timestamp?: number;
+}
+
+export interface CreateDictRequest {
+  /** 字典类型 对应数据库字段 */
+  dictType: string;
+  /** 字典名称描述 */
+  description: string;
+  /** 备注信息 */
+  remarks?: string;
+}
+
+export interface UpdateDictRequest {
+  /** 主键ID */
+  id: number;
+  /** 字典名称描述 */
+  description?: string;
+  /** 备注信息 */
+  remarks?: string;
+}
+
+export interface CreateDictItemRequest {
+  /** 字典ID */
+  dictId: number;
+  /** 字典项值 */
+  itemValue: string;
+  /** 字典项名称 */
+  label: string;
+  /** 字典类型 */
+  dictType: string;
+  /** 字典项描述 */
+  description?: string;
+  /** 排序（升序） */
+  sortOrder?: number;
+}
+
+export interface UpdateDictItemRequest {
+  /** 主键ID */
+  id: number;
+  /** 字典项值 */
+  itemValue: string;
+  /** 字典项名称 */
+  label: string;
+  /** 字典项描述 */
+  description?: string;
+  /** 排序（升序） */
+  sortOrder?: number;
+}
+
+export interface OperationLogResponse {
+  /** 主键ID */
+  id?: number;
+  /** 功能模块（如：用户管理、活动管理、权限管理） */
+  module?: string;
+  /** 操作类型（如：新增、删除、修改、导出、登录、审核） */
+  action?: string;
+  /** 操作描述（支持SpEL表达式） */
+  description?: string;
+  /** 操作人ID（0表示系统/匿名） */
+  operatorId?: number;
+  /** 操作人姓名/账号 */
+  operatorName?: string;
+  /** 操作时间 */
+  createTime?: string;
+}
+
+export interface PageResultOperationLogResponse {
+  /** 数据列表 */
+  records?: OperationLogResponse[];
+  /** 总记录数 */
+  total?: number;
+  /** 当前页码 */
+  current?: number;
+  /** 每页大小 */
+  size?: number;
+  /** 总页数 */
+  pages?: number;
+}
+
+export interface ResultPageResultOperationLogResponse {
+  /** 响应状态码 */
+  code?: number;
+  /** 响应消息 */
+  message?: string;
+  /** 响应数据 */
+  data?: PageResultOperationLogResponse;
+  /** 时间戳 */
+  timestamp?: number;
+}
+
 export type PostCommunityPostParams = {
 /**
  * 帖子标题
@@ -2194,51 +2536,43 @@ title: string;
 content: string;
 };
 
-/**
- * 新增的班级
- */
-export type PostCommunityClassBody = {
-  /** 主键ID */
-  id?: number;
-  /** 创建时间 */
-  createTime?: string;
-  /** 更新时间 */
-  updateTime?: string;
-  /** 所属学院ID */
-  collegeId?: number;
-  /** 班级编码（唯一） */
-  classCode?: string;
-  /** 班级名称 */
-  className?: string;
-  /** 年级（如：2020） */
-  grade?: number;
-  /** 专业 */
-  major?: string;
-  /** 班级类型（1-本科，2-硕士，3-博士） */
-  classType?: number;
-  /** 成员数量 */
-  memberCount?: number;
-  /** 班级简介 */
-  description?: string;
-  /** 班级封面图 */
-  coverImage?: string;
-  /** 班级公告 */
-  notice?: string;
-  /** 状态（0-禁用，1-启用） */
-  status?: number;
+export type PostCommunityUploadBody = {
+  /** 上传的文件 */
+  file?: Blob;
 };
 
-export type PostCommunityAlumniBatchParams = {
+export type PostManagerAlumniBatchParams = {
 /**
  * 行号
  */
 lineNumber?: number;
+/**
+ * 姓名
+ */
 name?: string;
+/**
+ * 学号
+ */
 number?: string;
+/**
+ * 身份
+ */
 identity?: number;
+/**
+ * 年份
+ */
 enrollmentYear?: number;
+/**
+ * 学院
+ */
 collegeName?: string;
+/**
+ * 专业
+ */
 major?: string;
+/**
+ * 班级
+ */
 className?: string;
 };
 

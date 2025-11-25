@@ -20,11 +20,11 @@ import { customInstance } from '../../mutator';
 /**
  * @summary 获取学院分页
  */
-const postCommunityCollegePages = (
+const postManagerCollegePages = (
     collegePagesRequest: CollegePagesRequest,
  ) => {
       return customInstance<ResultPageResultCollegeEntity>(
-      {url: `/community/college/pages`, method: 'POST',
+      {url: `/manager/college/pages`, method: 'POST',
       headers: {'Content-Type': 'application/json', },
       data: collegePagesRequest
     },
@@ -33,11 +33,11 @@ const postCommunityCollegePages = (
   /**
  * @summary 添加学院
  */
-const postCommunityCollege = (
+const postManagerCollege = (
     collegeEntity: CollegeEntity,
  ) => {
       return customInstance<ResultBoolean>(
-      {url: `/community/college`, method: 'POST',
+      {url: `/manager/college`, method: 'POST',
       headers: {'Content-Type': 'application/json', },
       data: collegeEntity
     },
@@ -46,11 +46,11 @@ const postCommunityCollege = (
   /**
  * @summary 更新学院
  */
-const putCommunityCollege = (
+const putManagerCollege = (
     collegeEntity: CollegeEntity,
  ) => {
       return customInstance<ResultBoolean>(
-      {url: `/community/college`, method: 'PUT',
+      {url: `/manager/college`, method: 'PUT',
       headers: {'Content-Type': 'application/json', },
       data: collegeEntity
     },
@@ -59,28 +59,28 @@ const putCommunityCollege = (
   /**
  * @summary 删除学院
  */
-const deleteCommunityCollegeId = (
+const deleteManagerCollegeId = (
     id: number,
  ) => {
       return customInstance<ResultBoolean>(
-      {url: `/community/college/${id}`, method: 'DELETE'
+      {url: `/manager/college/${id}`, method: 'DELETE'
     },
       );
     }
   /**
  * @summary getCollegeDict
  */
-const getCommunityCollegeDict = (
+const getManagerCollegeDict = (
     
  ) => {
       return customInstance<ResultCollegeDictResponse>(
-      {url: `/community/college/dict`, method: 'GET'
+      {url: `/manager/college/dict`, method: 'GET'
     },
       );
     }
-  return {postCommunityCollegePages,postCommunityCollege,putCommunityCollege,deleteCommunityCollegeId,getCommunityCollegeDict}};
-export type PostCommunityCollegePagesResult = NonNullable<Awaited<ReturnType<ReturnType<typeof get>['postCommunityCollegePages']>>>
-export type PostCommunityCollegeResult = NonNullable<Awaited<ReturnType<ReturnType<typeof get>['postCommunityCollege']>>>
-export type PutCommunityCollegeResult = NonNullable<Awaited<ReturnType<ReturnType<typeof get>['putCommunityCollege']>>>
-export type DeleteCommunityCollegeIdResult = NonNullable<Awaited<ReturnType<ReturnType<typeof get>['deleteCommunityCollegeId']>>>
-export type GetCommunityCollegeDictResult = NonNullable<Awaited<ReturnType<ReturnType<typeof get>['getCommunityCollegeDict']>>>
+  return {postManagerCollegePages,postManagerCollege,putManagerCollege,deleteManagerCollegeId,getManagerCollegeDict}};
+export type PostManagerCollegePagesResult = NonNullable<Awaited<ReturnType<ReturnType<typeof get>['postManagerCollegePages']>>>
+export type PostManagerCollegeResult = NonNullable<Awaited<ReturnType<ReturnType<typeof get>['postManagerCollege']>>>
+export type PutManagerCollegeResult = NonNullable<Awaited<ReturnType<ReturnType<typeof get>['putManagerCollege']>>>
+export type DeleteManagerCollegeIdResult = NonNullable<Awaited<ReturnType<ReturnType<typeof get>['deleteManagerCollegeId']>>>
+export type GetManagerCollegeDictResult = NonNullable<Awaited<ReturnType<ReturnType<typeof get>['getManagerCollegeDict']>>>

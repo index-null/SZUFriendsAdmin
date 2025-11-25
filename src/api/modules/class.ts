@@ -2,7 +2,6 @@ import { get as getClassApi } from '@/api/generated/班级相关信息-班级控
 import type {
   ClassEntity,
   ClassPagesRequest,
-  PostCommunityClassBody,
   PageResultClassEntity,
 } from '@/api/generated/.ts.schemas'
 
@@ -16,22 +15,20 @@ const classApi = getClassApi()
 export const getClassPages = async (
   params: ClassPagesRequest,
 ): Promise<PageResultClassEntity> => {
-  return (await classApi.postCommunityClassPages(params)) as any
+  return (await classApi.postManagerClassPages(params)) as any
 }
 
-export const createClass = async (
-  data: PostCommunityClassBody,
-): Promise<any> => {
-  return await classApi.postCommunityClass(data)
+export const createClass = async (data: ClassEntity): Promise<any> => {
+  return await classApi.postManagerClass(data)
 }
 
 export const updateClass = async (data: ClassEntity): Promise<any> => {
-  return await classApi.putCommunityClass(data)
+  return await classApi.putManagerClass(data)
 }
 
 export const deleteClass = async (id: number): Promise<any> => {
-  return await classApi.deleteCommunityClassId(id)
+  return await classApi.deleteManagerClassId(id)
 }
 
 // 直接导出后端类型，不做冗余扩展
-export type { ClassEntity, ClassPagesRequest, PostCommunityClassBody }
+export type { ClassEntity, ClassPagesRequest }

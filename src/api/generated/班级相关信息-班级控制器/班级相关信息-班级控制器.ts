@@ -7,7 +7,6 @@
 import type {
   ClassEntity,
   ClassPagesRequest,
-  PostCommunityClassBody,
   ResultBoolean,
   ResultPageResultClassEntity
 } from '../.ts.schemas';
@@ -18,57 +17,57 @@ import { customInstance } from '../../mutator';
 
   export const get = () => {
 /**
- * @summary 添加班级
- */
-const postCommunityClass = (
-    postCommunityClassBody: PostCommunityClassBody,
- ) => {
-      return customInstance<ResultBoolean>(
-      {url: `/community/class`, method: 'POST',
-      headers: {'Content-Type': 'application/json', },
-      data: postCommunityClassBody
-    },
-      );
-    }
-  /**
- * @summary 更新班级
- */
-const putCommunityClass = (
-    classEntity: ClassEntity,
- ) => {
-      return customInstance<ResultBoolean>(
-      {url: `/community/class`, method: 'PUT',
-      headers: {'Content-Type': 'application/json', },
-      data: classEntity
-    },
-      );
-    }
-  /**
  * @summary 获取班级分页 通过管理员id进行数据范围筛选
  */
-const postCommunityClassPages = (
+const postManagerClassPages = (
     classPagesRequest: ClassPagesRequest,
  ) => {
       return customInstance<ResultPageResultClassEntity>(
-      {url: `/community/class/pages`, method: 'POST',
+      {url: `/manager/class/pages`, method: 'POST',
       headers: {'Content-Type': 'application/json', },
       data: classPagesRequest
     },
       );
     }
   /**
- * @summary 删除班级
+ * @summary 添加班级
  */
-const deleteCommunityClassId = (
-    id: number,
+const postManagerClass = (
+    classEntity: ClassEntity,
  ) => {
       return customInstance<ResultBoolean>(
-      {url: `/community/class/${id}`, method: 'DELETE'
+      {url: `/manager/class`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: classEntity
     },
       );
     }
-  return {postCommunityClass,putCommunityClass,postCommunityClassPages,deleteCommunityClassId}};
-export type PostCommunityClassResult = NonNullable<Awaited<ReturnType<ReturnType<typeof get>['postCommunityClass']>>>
-export type PutCommunityClassResult = NonNullable<Awaited<ReturnType<ReturnType<typeof get>['putCommunityClass']>>>
-export type PostCommunityClassPagesResult = NonNullable<Awaited<ReturnType<ReturnType<typeof get>['postCommunityClassPages']>>>
-export type DeleteCommunityClassIdResult = NonNullable<Awaited<ReturnType<ReturnType<typeof get>['deleteCommunityClassId']>>>
+  /**
+ * @summary 更新班级
+ */
+const putManagerClass = (
+    classEntity: ClassEntity,
+ ) => {
+      return customInstance<ResultBoolean>(
+      {url: `/manager/class`, method: 'PUT',
+      headers: {'Content-Type': 'application/json', },
+      data: classEntity
+    },
+      );
+    }
+  /**
+ * @summary 删除班级
+ */
+const deleteManagerClassId = (
+    id: number,
+ ) => {
+      return customInstance<ResultBoolean>(
+      {url: `/manager/class/${id}`, method: 'DELETE'
+    },
+      );
+    }
+  return {postManagerClassPages,postManagerClass,putManagerClass,deleteManagerClassId}};
+export type PostManagerClassPagesResult = NonNullable<Awaited<ReturnType<ReturnType<typeof get>['postManagerClassPages']>>>
+export type PostManagerClassResult = NonNullable<Awaited<ReturnType<ReturnType<typeof get>['postManagerClass']>>>
+export type PutManagerClassResult = NonNullable<Awaited<ReturnType<ReturnType<typeof get>['putManagerClass']>>>
+export type DeleteManagerClassIdResult = NonNullable<Awaited<ReturnType<ReturnType<typeof get>['deleteManagerClassId']>>>
