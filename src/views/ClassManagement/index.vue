@@ -13,14 +13,13 @@
               />
             </el-form-item>
           </el-col>
-          <el-col :span="6">
+          <el-col v-if="collegeLeaderId === 0" :span="6">
             <el-form-item label="学院">
               <el-select
                 v-model="searchForm.collegeId"
                 placeholder="全部"
                 clearable
                 style="width: 100%"
-                :disabled="collegeLeaderId > 0 && !isAdmin"
               >
                 <el-option
                   v-for="college in collegeList"
@@ -302,16 +301,22 @@ const fetchCollegeList = async () => {
 const fetchData = async () => {
   loading.value = true
   try {
-    // 构建查询参数 - 先展开 searchForm，然后设置 collegeId
+    // 构建查询参数
     const params: ClassPagesRequest = {
       current: pagination.current,
       size: pagination.size,
       ...searchForm,
     }
 
-    // 始终传入 collegeId (从 userInfo 中获取的 collegeLeaderId)
-    if (collegeLeaderId.value !== undefined && collegeLeaderId.value !== null) {
+    // 权限控制：
+    // 1. 超管(collegeLeaderId=0): 可以选择学院筛选，未选择时传0表示查看全部
+    // 2. 学院管理员(collegeLeaderId>0): 只能查看自己学院，强制使用 collegeLeaderId
+    if (collegeLeaderId.value > 0) {
+      // 非超管：强制使用自己的学院ID
       params.collegeId = collegeLeaderId.value
+    } else if (collegeLeaderId.value === 0) {
+      // 超管：使用用户选择的学院ID，未选择时传0表示全部
+      params.collegeId = searchForm.collegeId ?? 0
     }
 
     const data = await getClassPages(params)
