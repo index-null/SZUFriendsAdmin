@@ -64,11 +64,25 @@
         @selection-change="handleSelectionChange"
       >
         <el-table-column type="selection" width="55" />
-        <el-table-column prop="id" label="ID" width="80" />
+        <el-table-column
+          type="index"
+          label="序号"
+          width="80"
+          :index="
+            (index: number) =>
+              (pagination.current - 1) * pagination.size + index + 1
+          "
+        />
         <el-table-column
           prop="collegeName"
           label="学院名称"
           min-width="150"
+          show-overflow-tooltip
+        />
+        <el-table-column
+          prop="adminAccount"
+          label="学院管理员"
+          min-width="120"
           show-overflow-tooltip
         />
         <el-table-column prop="contactPhone" label="联系电话" min-width="120" />
@@ -92,11 +106,6 @@
             >
               {{ row.status === 1 ? '启用' : '禁用' }}
             </el-tag>
-          </template>
-        </el-table-column>
-        <el-table-column prop="createTime" label="创建时间" min-width="160">
-          <template #default="{ row }">
-            {{ formatDate(row.createTime) }}
           </template>
         </el-table-column>
         <el-table-column label="操作" width="180" fixed="right">
@@ -181,11 +190,6 @@ const pagination = reactive({
 })
 
 const tableData = ref<CollegeEntity[]>([])
-
-const formatDate = (date?: string) => {
-  if (!date) return '-'
-  return new Date(date).toLocaleString('zh-CN')
-}
 
 const fetchData = async () => {
   loading.value = true

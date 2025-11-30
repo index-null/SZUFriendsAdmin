@@ -1,49 +1,97 @@
 <template>
   <div class="class-management">
     <el-card shadow="never" class="search-card">
-      <el-form :model="searchForm" :inline="true" label-width="80px">
-        <el-form-item label="班级名称">
-          <el-input
-            v-model="searchForm.className"
-            placeholder="请输入班级名称"
-            clearable
-            style="width: 200px"
-            @keyup.enter="handleSearch"
-          />
-        </el-form-item>
-        <el-form-item label="学院">
-          <el-select
-            v-model="searchForm.collegeId"
-            placeholder="全部"
-            clearable
-            style="width: 200px"
-            :disabled="collegeLeaderId > 0 && !isAdmin"
-          >
-            <el-option
-              v-for="college in collegeList"
-              :key="college.id"
-              :label="college.collegeName"
-              :value="college.id"
-            />
-          </el-select>
-        </el-form-item>
-        <el-form-item label="状态">
-          <el-select
-            v-model="searchForm.status"
-            placeholder="全部"
-            clearable
-            style="width: 120px"
-          >
-            <el-option label="启用" :value="1" />
-            <el-option label="禁用" :value="0" />
-          </el-select>
-        </el-form-item>
-        <el-form-item>
-          <el-button type="primary" :icon="Search" @click="handleSearch">
-            搜索
-          </el-button>
-          <el-button :icon="Refresh" @click="handleReset">重置</el-button>
-        </el-form-item>
+      <el-form :model="searchForm" label-width="80px">
+        <el-row :gutter="20">
+          <el-col :span="6">
+            <el-form-item label="班级名称">
+              <el-input
+                v-model="searchForm.className"
+                placeholder="请输入班级名称"
+                clearable
+                @keyup.enter="handleSearch"
+              />
+            </el-form-item>
+          </el-col>
+          <el-col :span="6">
+            <el-form-item label="学院">
+              <el-select
+                v-model="searchForm.collegeId"
+                placeholder="全部"
+                clearable
+                style="width: 100%"
+                :disabled="collegeLeaderId > 0 && !isAdmin"
+              >
+                <el-option
+                  v-for="college in collegeList"
+                  :key="college.id"
+                  :label="college.collegeName"
+                  :value="college.id"
+                />
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="6">
+            <el-form-item label="专业">
+              <el-input
+                v-model="searchForm.major"
+                placeholder="请输入专业"
+                clearable
+                @keyup.enter="handleSearch"
+              />
+            </el-form-item>
+          </el-col>
+          <el-col :span="6">
+            <el-form-item label="班级类型">
+              <el-select
+                v-model="searchForm.classType"
+                placeholder="全部"
+                clearable
+                style="width: 100%"
+              >
+                <el-option label="本科" :value="1" />
+                <el-option label="硕士" :value="2" />
+                <el-option label="博士" :value="3" />
+              </el-select>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row :gutter="20">
+          <el-col :span="6">
+            <el-form-item label="年级">
+              <el-input-number
+                v-model="searchForm.grade"
+                placeholder="年级"
+                :min="2000"
+                :max="2100"
+                :controls="false"
+                style="width: 100%"
+                @keyup.enter="handleSearch"
+              />
+            </el-form-item>
+          </el-col>
+          <el-col :span="6">
+            <el-form-item label="状态">
+              <el-select
+                v-model="searchForm.status"
+                placeholder="全部"
+                clearable
+                style="width: 100%"
+              >
+                <el-option label="启用" :value="1" />
+                <el-option label="禁用" :value="0" />
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label-width="0" class="search-buttons">
+              <el-button type="primary" :icon="Search" @click="handleSearch">
+                搜索
+              </el-button>
+              <el-button :icon="Refresh" @click="handleReset">重置</el-button>
+            </el-form-item>
+          </el-col>
+        </el-row>
       </el-form>
     </el-card>
 
@@ -80,14 +128,21 @@
         @selection-change="handleSelectionChange"
       >
         <el-table-column type="selection" width="55" />
-        <el-table-column prop="id" label="ID" width="80" />
-        <el-table-column prop="className" label="班级名称" min-width="150" />
+        <el-table-column
+          type="index"
+          label="序号"
+          width="80"
+          :index="
+            (index: number) =>
+              (pagination.current - 1) * pagination.size + index + 1
+          "
+        />
         <el-table-column label="所属学院" min-width="150">
           <template #default="{ row }">
             {{ getCollegeName(row.collegeId) }}
           </template>
         </el-table-column>
-        <el-table-column prop="grade" label="年级" width="80" align="center" />
+        <el-table-column prop="className" label="班级名称" min-width="150" />
         <el-table-column prop="major" label="专业" min-width="120" />
         <el-table-column
           prop="classType"
@@ -99,6 +154,7 @@
             {{ getClassTypeText(row.classType) }}
           </template>
         </el-table-column>
+        <el-table-column prop="grade" label="年级" width="80" align="center" />
         <el-table-column
           prop="memberCount"
           label="成员数量"
@@ -113,11 +169,6 @@
             >
               {{ row.status === 1 ? '启用' : '禁用' }}
             </el-tag>
-          </template>
-        </el-table-column>
-        <el-table-column prop="createTime" label="创建时间" min-width="160">
-          <template #default="{ row }">
-            {{ formatDate(row.createTime) }}
           </template>
         </el-table-column>
         <el-table-column label="操作" width="180" fixed="right">
@@ -215,11 +266,6 @@ const pagination = reactive({
 
 const tableData = ref<ClassEntity[]>([])
 
-const formatDate = (date?: string) => {
-  if (!date) return '-'
-  return new Date(date).toLocaleString('zh-CN')
-}
-
 const getClassTypeText = (classType?: number) => {
   switch (classType) {
     case 1:
@@ -286,6 +332,7 @@ const handleSearch = () => {
 
 const handleReset = () => {
   searchForm.className = ''
+  searchForm.major = ''
   searchForm.status = undefined
   searchForm.grade = undefined
   searchForm.classType = undefined
@@ -436,6 +483,24 @@ onMounted(() => {
 
 :deep(.el-form-item) {
   margin-bottom: 0;
+}
+
+.search-card .el-row {
+  margin-bottom: 18px;
+}
+
+.search-card .el-row:last-child {
+  margin-bottom: 0;
+}
+
+.search-buttons {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.search-buttons :deep(.el-form-item__content) {
+  justify-content: flex-end;
 }
 
 @media (max-width: 768px) {

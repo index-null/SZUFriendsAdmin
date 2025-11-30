@@ -25,6 +25,20 @@
           </el-form-item>
         </el-col>
         <el-col :span="12">
+          <el-form-item label="管理员账号" prop="adminAccount">
+            <el-input
+              v-model="formData.adminAccount"
+              placeholder="请输入管理员账号"
+              maxlength="50"
+              show-word-limit
+              :disabled="isEdit"
+            />
+          </el-form-item>
+        </el-col>
+      </el-row>
+
+      <el-row :gutter="20">
+        <el-col :span="12">
           <el-form-item label="联系电话" prop="contactPhone">
             <el-input
               v-model="formData.contactPhone"
@@ -34,9 +48,6 @@
             />
           </el-form-item>
         </el-col>
-      </el-row>
-
-      <el-row :gutter="20">
         <el-col :span="12">
           <el-form-item label="联系邮箱" prop="email">
             <el-input
@@ -47,6 +58,9 @@
             />
           </el-form-item>
         </el-col>
+      </el-row>
+
+      <el-row :gutter="20">
         <el-col :span="12">
           <el-form-item label="排序顺序" prop="sortOrder">
             <el-input-number
@@ -56,6 +70,14 @@
               controls-position="right"
               style="width: 100%"
             />
+          </el-form-item>
+        </el-col>
+        <el-col :span="12">
+          <el-form-item label="状态" prop="status">
+            <el-radio-group v-model="formData.status">
+              <el-radio :label="1">启用</el-radio>
+              <el-radio :label="0">禁用</el-radio>
+            </el-radio-group>
           </el-form-item>
         </el-col>
       </el-row>
@@ -86,17 +108,6 @@
               maxlength="500"
               show-word-limit
             />
-          </el-form-item>
-        </el-col>
-      </el-row>
-
-      <el-row :gutter="20">
-        <el-col :span="12">
-          <el-form-item label="状态" prop="status">
-            <el-radio-group v-model="formData.status">
-              <el-radio :label="1">启用</el-radio>
-              <el-radio :label="0">禁用</el-radio>
-            </el-radio-group>
           </el-form-item>
         </el-col>
       </el-row>
@@ -138,6 +149,7 @@ const submitLoading = ref(false)
 
 const defaultFormData: CollegeEntity = {
   collegeName: '',
+  adminAccount: '',
   contactPhone: '',
   email: '',
   address: '',
@@ -160,10 +172,12 @@ const rules: FormRules = {
     { required: true, message: '请输入学院名称', trigger: 'blur' },
     { min: 2, max: 100, message: '长度在 2 到 100 个字符', trigger: 'blur' },
   ],
-  contactPhone: [
+  adminAccount: [
+    { required: true, message: '请输入管理员账号', trigger: 'blur' },
+    { min: 4, max: 50, message: '长度在 4 到 50 个字符', trigger: 'blur' },
     {
-      pattern: /^1[3-9]\d{9}$/,
-      message: '请输入正确的手机号码',
+      pattern: /^[a-zA-Z0-9_]+$/,
+      message: '管理员账号只能包含字母、数字和下划线',
       trigger: 'blur',
     },
   ],

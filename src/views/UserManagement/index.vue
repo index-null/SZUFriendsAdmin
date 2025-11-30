@@ -106,87 +106,11 @@
       />
     </el-card>
 
-    <!-- 用户详情对话框 -->
-    <el-dialog
-      v-model="detailDialogVisible"
-      title="用户详情"
-      width="600px"
-      :close-on-click-modal="false"
-    >
-      <el-descriptions v-if="currentUser" :column="2" border>
-        <el-descriptions-item label="用户ID">{{
-          currentUser.id
-        }}</el-descriptions-item>
-        <el-descriptions-item label="用户名">{{
-          currentUser.username
-        }}</el-descriptions-item>
-        <el-descriptions-item label="昵称">{{
-          currentUser.nickname || '-'
-        }}</el-descriptions-item>
-        <el-descriptions-item label="真实姓名">{{
-          currentUser.realName || '-'
-        }}</el-descriptions-item>
-        <el-descriptions-item label="学号/工号">{{
-          currentUser.studentId || '-'
-        }}</el-descriptions-item>
-        <el-descriptions-item label="用户类型">
-          <el-tag :type="getUserTypeTag(currentUser.userType)">
-            {{ getUserTypeText(currentUser.userType) }}
-          </el-tag>
-        </el-descriptions-item>
-        <el-descriptions-item label="邮箱">{{
-          currentUser.email || '-'
-        }}</el-descriptions-item>
-        <el-descriptions-item label="手机号">{{
-          currentUser.phone || '-'
-        }}</el-descriptions-item>
-        <el-descriptions-item label="性别">{{
-          getGenderText(currentUser.gender)
-        }}</el-descriptions-item>
-        <el-descriptions-item label="状态">
-          <el-tag :type="currentUser.status === 1 ? 'success' : 'danger'">
-            {{ currentUser.status === 1 ? '启用' : '禁用' }}
-          </el-tag>
-        </el-descriptions-item>
-        <el-descriptions-item label="专业" :span="2">{{
-          currentUser.major || '-'
-        }}</el-descriptions-item>
-        <el-descriptions-item label="入学年份">{{
-          currentUser.admissionYear || '-'
-        }}</el-descriptions-item>
-        <el-descriptions-item label="毕业年份">{{
-          currentUser.graduationYear || '-'
-        }}</el-descriptions-item>
-        <el-descriptions-item label="工作单位" :span="2">{{
-          currentUser.companyName || '-'
-        }}</el-descriptions-item>
-        <el-descriptions-item label="职位">{{
-          currentUser.jobTitle || '-'
-        }}</el-descriptions-item>
-        <el-descriptions-item label="行业">{{
-          currentUser.industry || '-'
-        }}</el-descriptions-item>
-        <el-descriptions-item label="所在地" :span="2">
-          {{
-            [currentUser.province, currentUser.city, currentUser.district]
-              .filter(Boolean)
-              .join(' ') || '-'
-          }}
-        </el-descriptions-item>
-        <el-descriptions-item label="个人简介" :span="2">{{
-          currentUser.bio || '-'
-        }}</el-descriptions-item>
-        <el-descriptions-item label="创建时间" :span="2">{{
-          formatDateTime(currentUser.createTime)
-        }}</el-descriptions-item>
-        <el-descriptions-item label="更新时间" :span="2">{{
-          formatDateTime(currentUser.updateTime)
-        }}</el-descriptions-item>
-      </el-descriptions>
-      <template #footer>
-        <el-button @click="detailDialogVisible = false">关闭</el-button>
-      </template>
-    </el-dialog>
+    <!-- 用户详情抽屉 -->
+    <UserDetailDrawer
+      v-model:visible="detailDrawerVisible"
+      :user-detail="currentUser"
+    />
 
     <!-- 分配角色对话框 -->
     <el-dialog
@@ -236,6 +160,7 @@ import {
 import { usePermission } from '@/stores'
 import { get as getUserApi } from '@/api/generated/用户管理/用户管理'
 import { get as getRoleApi } from '@/api/generated/用户认证控制器-角色管理/用户认证控制器-角色管理'
+import UserDetailDrawer from './components/UserDetailDrawer.vue'
 import type {
   UserPageVo,
   UserEntity,
@@ -266,7 +191,7 @@ const tableData = ref<UserPageVo[]>([])
 const loading = ref(false)
 
 // 用户详情
-const detailDialogVisible = ref(false)
+const detailDrawerVisible = ref(false)
 const currentUser = ref<UserEntity | null>(null)
 
 // 角色分配
@@ -313,7 +238,9 @@ const fetchAllRoles = async () => {
   try {
     const response = await roleApi.getAuthRoleList()
     if (response && Array.isArray(response)) {
-      allRoles.value = response
+      allRoles.value = response.sort(
+        (a, b) => (a.sortOrder ?? 0) - (b.sortOrder ?? 0),
+      )
     }
   } catch (error) {
     console.error('获取角色列表失败:', error)
@@ -353,7 +280,7 @@ const handleView = async (row: UserPageVo) => {
     const response = await userApi.getAuthUserUserId(row.id)
     if (response) {
       currentUser.value = response
-      detailDialogVisible.value = true
+      detailDrawerVisible.value = true
     } else {
       ElMessage.error('获取用户详情失败')
     }
@@ -449,22 +376,6 @@ const getUserTypeTag = (type?: number) => {
   return type ? map[type] || 'info' : 'info'
 }
 
-// 性别映射
-const getGenderText = (gender?: number) => {
-  const map: Record<number, string> = {
-    0: '未知',
-    1: '男',
-    2: '女',
-  }
-  return gender !== undefined ? map[gender] || '未知' : '未知'
-}
-
-// 格式化时间
-const formatDateTime = (dateTime?: string) => {
-  if (!dateTime) return '-'
-  return new Date(dateTime).toLocaleString('zh-CN')
-}
-
 // 初始化
 onMounted(() => {
   if (hasPermission('user:page')) {
@@ -497,10 +408,5 @@ onMounted(() => {
   margin-top: 20px;
   display: flex;
   justify-content: flex-end;
-}
-
-:deep(.el-descriptions__label) {
-  font-weight: 600;
-  width: 120px;
 }
 </style>

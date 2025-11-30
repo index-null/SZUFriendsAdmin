@@ -1,54 +1,66 @@
 <template>
   <div class="permission-management">
     <el-card shadow="never" class="search-card">
-      <el-form :model="searchForm" :inline="true" label-width="80px">
-        <el-form-item label="权限编码">
-          <el-input
-            v-model="searchForm.permissionCode"
-            placeholder="请输入权限编码"
-            clearable
-            style="width: 200px"
-            @keyup.enter="handleSearch"
-          />
-        </el-form-item>
-        <el-form-item label="权限名称">
-          <el-input
-            v-model="searchForm.permissionName"
-            placeholder="请输入权限名称"
-            clearable
-            style="width: 200px"
-            @keyup.enter="handleSearch"
-          />
-        </el-form-item>
-        <el-form-item label="权限类型">
-          <el-select
-            v-model="searchForm.permissionType"
-            placeholder="全部"
-            clearable
-            style="width: 120px"
-          >
-            <el-option label="菜单" :value="1" />
-            <el-option label="按钮" :value="2" />
-            <el-option label="接口" :value="3" />
-          </el-select>
-        </el-form-item>
-        <el-form-item label="状态">
-          <el-select
-            v-model="searchForm.status"
-            placeholder="全部"
-            clearable
-            style="width: 120px"
-          >
-            <el-option label="启用" :value="1" />
-            <el-option label="禁用" :value="0" />
-          </el-select>
-        </el-form-item>
-        <el-form-item>
-          <el-button type="primary" :icon="Search" @click="handleSearch">
-            搜索
-          </el-button>
-          <el-button :icon="Refresh" @click="handleReset">重置</el-button>
-        </el-form-item>
+      <el-form :model="searchForm" label-width="80px">
+        <el-row :gutter="20">
+          <el-col :span="6">
+            <el-form-item label="权限编码">
+              <el-input
+                v-model="searchForm.permissionCode"
+                placeholder="请输入权限编码"
+                clearable
+                @keyup.enter="handleSearch"
+              />
+            </el-form-item>
+          </el-col>
+          <el-col :span="6">
+            <el-form-item label="权限名称">
+              <el-input
+                v-model="searchForm.permissionName"
+                placeholder="请输入权限名称"
+                clearable
+                @keyup.enter="handleSearch"
+              />
+            </el-form-item>
+          </el-col>
+          <el-col :span="6">
+            <el-form-item label="权限类型">
+              <el-select
+                v-model="searchForm.permissionType"
+                placeholder="全部"
+                clearable
+                style="width: 100%"
+              >
+                <el-option label="菜单" :value="1" />
+                <el-option label="按钮" :value="2" />
+                <el-option label="接口" :value="3" />
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="6">
+            <el-form-item label="状态">
+              <el-select
+                v-model="searchForm.status"
+                placeholder="全部"
+                clearable
+                style="width: 100%"
+              >
+                <el-option label="启用" :value="1" />
+                <el-option label="禁用" :value="0" />
+              </el-select>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row :gutter="20">
+          <el-col :span="24">
+            <el-form-item label-width="0" class="search-buttons">
+              <el-button type="primary" :icon="Search" @click="handleSearch">
+                搜索
+              </el-button>
+              <el-button :icon="Refresh" @click="handleReset">重置</el-button>
+            </el-form-item>
+          </el-col>
+        </el-row>
       </el-form>
     </el-card>
 
@@ -494,6 +506,24 @@ onMounted(() => {
 
 .search-card {
   margin-bottom: 20px;
+}
+
+.search-card .el-row {
+  margin-bottom: 18px;
+}
+
+.search-card .el-row:last-child {
+  margin-bottom: 0;
+}
+
+.search-buttons {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.search-buttons :deep(.el-form-item__content) {
+  justify-content: flex-end;
 }
 
 .table-card {
