@@ -49,9 +49,12 @@
                 clearable
                 style="width: 100%"
               >
-                <el-option label="本科" :value="1" />
-                <el-option label="硕士" :value="2" />
-                <el-option label="博士" :value="3" />
+                <el-option
+                  v-for="item in allDictOptions[DICT_TYPE.CLASS_TYPE]"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value"
+                />
               </el-select>
             </el-form-item>
           </el-col>
@@ -78,8 +81,12 @@
                 clearable
                 style="width: 100%"
               >
-                <el-option label="启用" :value="1" />
-                <el-option label="禁用" :value="0" />
+                <el-option
+                  v-for="item in allDictOptions[DICT_TYPE.STATUS]"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value"
+                />
               </el-select>
             </el-form-item>
           </el-col>
@@ -151,7 +158,7 @@
           align="center"
         >
           <template #default="{ row }">
-            {{ getClassTypeText(row.classType) }}
+            {{ getLabel(DICT_TYPE.CLASS_TYPE, row.classType) }}
           </template>
         </el-table-column>
         <el-table-column prop="grade" label="年级" width="80" align="center" />
@@ -167,7 +174,7 @@
               :type="row.status === 1 ? 'success' : 'danger'"
               size="small"
             >
-              {{ row.status === 1 ? '启用' : '禁用' }}
+              {{ getLabel(DICT_TYPE.STATUS, row.status) }}
             </el-tag>
           </template>
         </el-table-column>
@@ -234,11 +241,22 @@ import {
 } from '@/api/modules/class'
 import { getCollegePages, type CollegeEntity } from '@/api/modules/college'
 import { useUserStore } from '@/stores/modules/user'
-import { usePermission } from '@/stores'
+import { usePermission, useDicts } from '@/stores'
+import { DICT_TYPE } from '@/utils/dict'
+import { useCollegeMap } from '@/composables/useCollegeMap'
 import ClassFormDialog from './components/ClassFormDialog.vue'
 
 const userStore = useUserStore()
 const { hasPermission } = usePermission()
+
+// 使用字典
+const { allDictOptions, getLabel } = useDicts([
+  DICT_TYPE.CLASS_TYPE,
+  DICT_TYPE.STATUS,
+])
+
+// 使用学院映射
+const { getCollegeName } = useCollegeMap()
 
 const loading = ref(false)
 const dialogVisible = ref(false)
@@ -266,26 +284,7 @@ const pagination = reactive({
 
 const tableData = ref<ClassEntity[]>([])
 
-const getClassTypeText = (classType?: number) => {
-  switch (classType) {
-    case 1:
-      return '本科'
-    case 2:
-      return '硕士'
-    case 3:
-      return '博士'
-    default:
-      return '-'
-  }
-}
-
-const getCollegeName = (collegeId?: number) => {
-  if (!collegeId) return '-'
-  const college = collegeList.value.find((c) => c.id === collegeId)
-  return college?.collegeName || `学院ID: ${collegeId}`
-}
-
-// 获取学院列表
+// 获取学院列表（保留用于下拉选择）
 const fetchCollegeList = async () => {
   try {
     const data = await getCollegePages({

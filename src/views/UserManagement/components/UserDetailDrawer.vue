@@ -22,7 +22,7 @@
             <div class="username">{{ userDetail.username }}</div>
             <div class="tags">
               <el-tag :type="getUserTypeTag(userDetail.userType)" size="small">
-                {{ getUserTypeText(userDetail.userType) }}
+                {{ getUserTypeLabel(userDetail.userType) }}
               </el-tag>
               <el-tag
                 :type="userDetail.status === 1 ? 'success' : 'danger'"
@@ -65,7 +65,7 @@
             {{ userDetail.phone || '-' }}
           </el-descriptions-item>
           <el-descriptions-item label="性别">
-            {{ getGenderText(userDetail.gender) }}
+            {{ getGenderLabel(userDetail.gender) }}
           </el-descriptions-item>
         </el-descriptions>
       </el-card>
@@ -155,6 +155,8 @@
 import { computed } from 'vue'
 import { User } from '@element-plus/icons-vue'
 import type { UserEntity } from '@/api/generated/.ts.schemas'
+import { useDict } from '@/stores'
+import { DICT_TYPE } from '@/utils/dict'
 
 interface Props {
   visible: boolean
@@ -173,33 +175,21 @@ const drawerVisible = computed({
   set: (val) => emit('update:visible', val),
 })
 
-// 用户类型映射
-const getUserTypeText = (type?: number) => {
-  const map: Record<number, string> = {
-    1: '学生',
-    2: '教师',
-    3: '校友',
-  }
-  return type ? map[type] || '未知' : '未知'
-}
+// 使用字典
+const { getLabel: getUserTypeLabel } = useDict(DICT_TYPE.USER_TYPE)
+const { getLabel: getGenderLabel } = useDict(DICT_TYPE.GENDER)
 
-const getUserTypeTag = (type?: number): 'success' | 'warning' | 'info' => {
+// 用户类型标签颜色映射
+const getUserTypeTag = (
+  type: number | undefined,
+): 'success' | 'warning' | 'info' => {
+  if (type === undefined) return 'info'
   const map: Record<number, 'success' | 'warning' | 'info'> = {
     1: 'success',
     2: 'warning',
     3: 'info',
   }
-  return type ? map[type] || 'info' : 'info'
-}
-
-// 性别映射
-const getGenderText = (gender?: number) => {
-  const map: Record<number, string> = {
-    0: '未知',
-    1: '男',
-    2: '女',
-  }
-  return gender !== undefined ? map[gender] || '未知' : '未知'
+  return map[type] || 'info'
 }
 
 // 格式化时间

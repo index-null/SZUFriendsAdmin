@@ -78,6 +78,14 @@
             <el-icon><Key /></el-icon>
             <template #title>权限管理</template>
           </el-menu-item>
+
+          <el-menu-item
+            v-if="hasPermission('dict:page')"
+            index="/dict-management"
+          >
+            <el-icon><Notebook /></el-icon>
+            <template #title>字典管理</template>
+          </el-menu-item>
         </el-menu>
       </el-scrollbar>
 
@@ -103,6 +111,7 @@ import {
   UserFilled,
   Management,
   Key,
+  Notebook,
   DArrowLeft,
   DArrowRight,
 } from '@element-plus/icons-vue'

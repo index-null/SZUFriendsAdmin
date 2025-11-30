@@ -61,9 +61,12 @@
           placeholder="请选择班级类型"
           style="width: 100%"
         >
-          <el-option label="本科" :value="1" />
-          <el-option label="硕士" :value="2" />
-          <el-option label="博士" :value="3" />
+          <el-option
+            v-for="item in classTypeOptions"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+          />
         </el-select>
       </el-form-item>
 
@@ -126,8 +129,13 @@
 <script setup lang="ts">
 import { ref, reactive, watch } from 'vue'
 import { ElMessage, type FormInstance, type FormRules } from 'element-plus'
+import { useDict } from '@/stores'
+import { DICT_TYPE } from '@/utils/dict'
 import type { ClassEntity } from '@/api/modules/class'
 import type { CollegeEntity } from '@/api/modules/college'
+
+// 使用字典
+const { dictOptions: classTypeOptions } = useDict(DICT_TYPE.CLASS_TYPE)
 
 interface Props {
   visible: boolean

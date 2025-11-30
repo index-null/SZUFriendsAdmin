@@ -41,21 +41,15 @@
         <el-table-column label="用户类型" width="100" align="center">
           <template #default="{ row }">
             <el-tag :type="getUserTypeTag(row.userType)">
-              {{ getUserTypeText(row.userType) }}
+              {{ getUserTypeLabel(row.userType) }}
             </el-tag>
           </template>
         </el-table-column>
         <el-table-column label="管理学院" width="150" align="center">
           <template #default="{ row }">
-            <el-tag v-if="row.collegeLeaderId === 0" type="success"
-              >全部学院</el-tag
-            >
-            <el-tag v-else-if="row.collegeLeaderId === -1" type="danger"
-              >无权限</el-tag
-            >
-            <el-tag v-else type="info"
-              >学院ID: {{ row.collegeLeaderId }}</el-tag
-            >
+            <el-tag :type="getCollegeTag(row.collegeLeaderId)">
+              {{ getCollegeName(row.collegeLeaderId) }}
+            </el-tag>
           </template>
         </el-table-column>
         <el-table-column label="角色" min-width="200">
@@ -138,7 +132,11 @@
         }}</el-descriptions-item>
         <el-descriptions-item label="用户类型">
           <el-tag :type="getUserTypeTag(currentAdmin.userType)">
-            {{ getUserTypeText(currentAdmin.userType) }}
+            {{
+              currentAdmin.userType !== undefined
+                ? getUserTypeLabel(currentAdmin.userType)
+                : '未知'
+            }}
           </el-tag>
         </el-descriptions-item>
         <el-descriptions-item label="邮箱">{{
@@ -153,15 +151,9 @@
           </el-tag>
         </el-descriptions-item>
         <el-descriptions-item label="管理学院">
-          <el-tag v-if="currentAdmin.collegeLeaderId === 0" type="success"
-            >全部学院</el-tag
-          >
-          <el-tag v-else-if="currentAdmin.collegeLeaderId === -1" type="danger"
-            >无权限</el-tag
-          >
-          <el-tag v-else type="info"
-            >学院ID: {{ currentAdmin.collegeLeaderId }}</el-tag
-          >
+          <el-tag :type="getCollegeTag(currentAdmin.collegeLeaderId)">
+            {{ getCollegeName(currentAdmin.collegeLeaderId) }}
+          </el-tag>
         </el-descriptions-item>
         <el-descriptions-item label="个人简介" :span="2">{{
           currentAdmin.bio || '-'
@@ -245,7 +237,9 @@ import {
   Lock,
   User,
 } from '@element-plus/icons-vue'
-import { usePermission } from '@/stores'
+import { usePermission, useDict } from '@/stores'
+import { DICT_TYPE } from '@/utils/dict'
+import { useCollegeMap } from '@/composables/useCollegeMap'
 import {
   getAdminUserPages,
   getAdminUserById,
@@ -257,6 +251,12 @@ import {
 } from '@/api/modules/admin'
 
 const { hasPermission } = usePermission()
+
+// 使用字典
+const { getLabel: getUserTypeLabel } = useDict(DICT_TYPE.USER_TYPE)
+
+// 使用学院映射
+const { getCollegeName } = useCollegeMap()
 
 // 搜索表单
 const searchForm = reactive({
@@ -455,18 +455,7 @@ const handleResetPassword = async (row: AdminUserPageResponse) => {
   }
 }
 
-// 用户类型映射
-const getUserTypeText = (type?: number) => {
-  const map: Record<number, string> = {
-    1: '学生',
-    2: '教师',
-    3: '校友',
-    4: '游客',
-    5: '管理员',
-  }
-  return type ? map[type] || '未知' : '未知'
-}
-
+// 用户类型标签颜色映射
 const getUserTypeTag = (type?: number) => {
   const map: Record<number, 'success' | 'warning' | 'info' | 'danger'> = {
     1: 'success',
@@ -476,6 +465,13 @@ const getUserTypeTag = (type?: number) => {
     5: 'danger',
   }
   return type ? map[type] || 'info' : 'info'
+}
+
+// 学院标签颜色映射
+const getCollegeTag = (collegeId?: number) => {
+  if (collegeId === 0) return 'success'
+  if (collegeId === -1) return 'danger'
+  return 'info'
 }
 
 // 初始化

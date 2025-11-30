@@ -1,69 +1,5 @@
 <template>
   <div class="permission-management">
-    <el-card shadow="never" class="search-card">
-      <el-form :model="searchForm" label-width="80px">
-        <el-row :gutter="20">
-          <el-col :span="6">
-            <el-form-item label="权限编码">
-              <el-input
-                v-model="searchForm.permissionCode"
-                placeholder="请输入权限编码"
-                clearable
-                @keyup.enter="handleSearch"
-              />
-            </el-form-item>
-          </el-col>
-          <el-col :span="6">
-            <el-form-item label="权限名称">
-              <el-input
-                v-model="searchForm.permissionName"
-                placeholder="请输入权限名称"
-                clearable
-                @keyup.enter="handleSearch"
-              />
-            </el-form-item>
-          </el-col>
-          <el-col :span="6">
-            <el-form-item label="权限类型">
-              <el-select
-                v-model="searchForm.permissionType"
-                placeholder="全部"
-                clearable
-                style="width: 100%"
-              >
-                <el-option label="菜单" :value="1" />
-                <el-option label="按钮" :value="2" />
-                <el-option label="接口" :value="3" />
-              </el-select>
-            </el-form-item>
-          </el-col>
-          <el-col :span="6">
-            <el-form-item label="状态">
-              <el-select
-                v-model="searchForm.status"
-                placeholder="全部"
-                clearable
-                style="width: 100%"
-              >
-                <el-option label="启用" :value="1" />
-                <el-option label="禁用" :value="0" />
-              </el-select>
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row :gutter="20">
-          <el-col :span="24">
-            <el-form-item label-width="0" class="search-buttons">
-              <el-button type="primary" :icon="Search" @click="handleSearch">
-                搜索
-              </el-button>
-              <el-button :icon="Refresh" @click="handleReset">重置</el-button>
-            </el-form-item>
-          </el-col>
-        </el-row>
-      </el-form>
-    </el-card>
-
     <el-card shadow="never" class="table-card">
       <template #header>
         <div class="card-header">
@@ -110,7 +46,7 @@
               :type="getPermissionTypeTag(row.permissionType)"
               size="small"
             >
-              {{ getPermissionTypeText(row.permissionType) }}
+              {{ getLabel(DICT_TYPE.PERMISSION_TYPE, row.permissionType) }}
             </el-tag>
           </template>
         </el-table-column>
@@ -143,16 +79,6 @@
           width="80"
           align="center"
         />
-        <el-table-column prop="status" label="状态" width="80" align="center">
-          <template #default="{ row }">
-            <el-tag
-              :type="row.status === 1 ? 'success' : 'danger'"
-              size="small"
-            >
-              {{ row.status === 1 ? '启用' : '禁用' }}
-            </el-tag>
-          </template>
-        </el-table-column>
         <el-table-column
           prop="createTime"
           label="创建时间"
@@ -211,18 +137,11 @@
 import { ref, onMounted } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import type { ElTable } from 'element-plus'
-import {
-  Search,
-  Refresh,
-  Plus,
-  Edit,
-  Delete,
-  CirclePlus,
-} from '@element-plus/icons-vue'
-import { usePermission } from '@/stores'
+import { Plus, Edit, Delete, CirclePlus } from '@element-plus/icons-vue'
+import { usePermission, useDicts } from '@/stores'
+import { DICT_TYPE } from '@/utils/dict'
 import PermissionFormDialog from './components/PermissionFormDialog.vue'
 import type {
-  PermissionQueryRequest,
   PermissionTreeNodeResponse,
   CreatePermissionRequest,
   UpdatePermissionRequest,
@@ -236,18 +155,17 @@ import {
 
 const { hasPermission } = usePermission()
 
+// 使用字典
+const { getLabel } = useDicts([
+  DICT_TYPE.PERMISSION_TYPE,
+  DICT_TYPE.HTTP_METHOD,
+])
+
 const loading = ref(false)
 const tableRef = ref<InstanceType<typeof ElTable>>()
 const tableData = ref<PermissionTreeNodeResponse[]>([])
 const permissionTree = ref<PermissionTreeNodeResponse[]>([])
 const isExpanded = ref(false)
-
-const searchForm = ref<PermissionQueryRequest>({
-  permissionCode: '',
-  permissionName: '',
-  permissionType: undefined,
-  status: undefined,
-})
 
 const formDialogVisible = ref(false)
 const currentPermission = ref<PermissionTreeNodeResponse | null>(null)
@@ -264,20 +182,6 @@ const getPermissionTypeTag = (type?: number) => {
       return 'warning'
     default:
       return 'info'
-  }
-}
-
-// 获取权限类型文本
-const getPermissionTypeText = (type?: number) => {
-  switch (type) {
-    case 1:
-      return '菜单'
-    case 2:
-      return '按钮'
-    case 3:
-      return '接口'
-    default:
-      return '未知'
   }
 }
 
@@ -342,79 +246,13 @@ const fetchData = async () => {
   try {
     const data = await getPermissionTree()
     permissionTree.value = data
-
-    // 应用搜索过滤
-    let filteredData = data
-    if (
-      searchForm.value.permissionCode ||
-      searchForm.value.permissionName ||
-      searchForm.value.permissionType !== undefined ||
-      searchForm.value.status !== undefined
-    ) {
-      filteredData = filterTree(data, searchForm.value)
-    }
-
-    tableData.value = convertTreeToTableData(filteredData)
+    tableData.value = convertTreeToTableData(data)
   } catch (error) {
     ElMessage.error('获取权限数据失败')
     tableData.value = []
   } finally {
     loading.value = false
   }
-}
-
-// 树形数据过滤
-const filterTree = (
-  nodes: PermissionTreeNodeResponse[],
-  filters: PermissionQueryRequest,
-): PermissionTreeNodeResponse[] => {
-  const results: PermissionTreeNodeResponse[] = []
-
-  for (const node of nodes) {
-    const matchCode =
-      !filters.permissionCode ||
-      node.permissionCode?.includes(filters.permissionCode)
-    const matchName =
-      !filters.permissionName ||
-      node.permissionName?.includes(filters.permissionName)
-    const matchType =
-      filters.permissionType === undefined ||
-      node.permissionType === filters.permissionType
-    const matchStatus =
-      filters.status === undefined ||
-      (node.hasPermission ? 1 : 0) === filters.status
-
-    const childrenMatches = node.children
-      ? filterTree(node.children, filters)
-      : []
-
-    const nodeMatches = matchCode && matchName && matchType && matchStatus
-
-    if (nodeMatches || childrenMatches.length > 0) {
-      results.push({
-        ...node,
-        children: childrenMatches.length > 0 ? childrenMatches : node.children,
-      })
-    }
-  }
-
-  return results
-}
-
-// 搜索
-const handleSearch = () => {
-  fetchData()
-}
-
-// 重置
-const handleReset = () => {
-  searchForm.value = {
-    permissionCode: '',
-    permissionName: '',
-    permissionType: undefined,
-    status: undefined,
-  }
-  fetchData()
 }
 
 // 新增权限
@@ -502,28 +340,6 @@ onMounted(() => {
 <style scoped>
 .permission-management {
   padding: 20px;
-}
-
-.search-card {
-  margin-bottom: 20px;
-}
-
-.search-card .el-row {
-  margin-bottom: 18px;
-}
-
-.search-card .el-row:last-child {
-  margin-bottom: 0;
-}
-
-.search-buttons {
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-}
-
-.search-buttons :deep(.el-form-item__content) {
-  justify-content: flex-end;
 }
 
 .table-card {

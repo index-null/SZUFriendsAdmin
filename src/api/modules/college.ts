@@ -3,6 +3,7 @@ import type {
   CollegeEntity,
   CollegePagesRequest,
   PageResultCollegeEntity,
+  CollegeDictResponse,
 } from '@/api/generated/.ts.schemas'
 
 const collegeApi = getCollegeApi()
@@ -13,7 +14,12 @@ const collegeApi = getCollegeApi()
  */
 
 // ============ 导出生成的类型 ============
-export type { CollegeEntity, CollegePagesRequest, PageResultCollegeEntity }
+export type {
+  CollegeEntity,
+  CollegePagesRequest,
+  PageResultCollegeEntity,
+  CollegeDictResponse,
+}
 
 // ============ API 方法 ============
 
@@ -25,6 +31,16 @@ export const getCollegePages = async (
   params: CollegePagesRequest,
 ): Promise<PageResultCollegeEntity> => {
   return (await collegeApi.postManagerCollegePages(params)) as any
+}
+
+/**
+ * 获取学院字典（ID -> 名称映射）
+ */
+export const getCollegeDict = async (): Promise<Record<string, string>> => {
+  const response = (await collegeApi.getManagerCollegeDict()) as any
+  // API 返回格式: { data: { collegeDict: {...} } }
+  // 但 orval 生成的接口可能已经解包，所以尝试两种路径
+  return response?.collegeDict || {}
 }
 
 /**

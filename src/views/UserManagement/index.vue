@@ -41,7 +41,7 @@
         <el-table-column label="用户类型" width="100" align="center">
           <template #default="{ row }">
             <el-tag :type="getUserTypeTag(row.userType)">
-              {{ getUserTypeText(row.userType) }}
+              {{ getUserTypeLabel(row.userType) }}
             </el-tag>
           </template>
         </el-table-column>
@@ -157,7 +157,8 @@ import {
   Lock,
   User,
 } from '@element-plus/icons-vue'
-import { usePermission } from '@/stores'
+import { usePermission, useDict } from '@/stores'
+import { DICT_TYPE } from '@/utils/dict'
 import { get as getUserApi } from '@/api/generated/用户管理/用户管理'
 import { get as getRoleApi } from '@/api/generated/用户认证控制器-角色管理/用户认证控制器-角色管理'
 import UserDetailDrawer from './components/UserDetailDrawer.vue'
@@ -169,6 +170,9 @@ import type {
 } from '@/api/generated/.ts.schemas'
 
 const { hasPermission } = usePermission()
+
+// 使用字典
+const { getLabel: getUserTypeLabel } = useDict(DICT_TYPE.USER_TYPE)
 
 // API 实例
 const userApi = getUserApi()
@@ -357,21 +361,14 @@ const handleResetPassword = async (row: UserPageVo) => {
   }
 }
 
-// 用户类型映射
-const getUserTypeText = (type?: number) => {
-  const map: Record<number, string> = {
-    1: '学生',
-    2: '教师',
-    3: '校友',
-  }
-  return type ? map[type] || '未知' : '未知'
-}
-
+// 用户类型标签颜色映射
 const getUserTypeTag = (type?: number) => {
-  const map: Record<number, 'success' | 'warning' | 'info'> = {
+  const map: Record<number, 'success' | 'warning' | 'info' | 'danger'> = {
     1: 'success',
     2: 'warning',
     3: 'info',
+    4: 'info',
+    5: 'danger',
   }
   return type ? map[type] || 'info' : 'info'
 }

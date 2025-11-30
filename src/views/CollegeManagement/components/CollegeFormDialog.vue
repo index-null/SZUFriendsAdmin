@@ -75,8 +75,13 @@
         <el-col :span="12">
           <el-form-item label="状态" prop="status">
             <el-radio-group v-model="formData.status">
-              <el-radio :label="1">启用</el-radio>
-              <el-radio :label="0">禁用</el-radio>
+              <el-radio
+                v-for="item in statusOptions"
+                :key="item.value"
+                :label="Number(item.value)"
+              >
+                {{ item.label }}
+              </el-radio>
             </el-radio-group>
           </el-form-item>
         </el-col>
@@ -126,6 +131,10 @@
 import { ref, computed, watch } from 'vue'
 import { ElMessage, type FormInstance, type FormRules } from 'element-plus'
 import type { CollegeEntity } from '@/api/modules/college'
+import { useDict } from '@/stores/composables/useDict'
+import { DICT_TYPE } from '@/utils/dict'
+
+const { dictOptions: statusOptions } = useDict(DICT_TYPE.STATUS)
 
 interface Props {
   visible: boolean

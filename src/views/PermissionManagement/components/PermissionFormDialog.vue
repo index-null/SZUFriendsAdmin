@@ -41,9 +41,12 @@
           placeholder="请选择权限类型"
           style="width: 100%"
         >
-          <el-option label="菜单" :value="1" />
-          <el-option label="按钮" :value="2" />
-          <el-option label="接口" :value="3" />
+          <el-option
+            v-for="item in allDictOptions[DICT_TYPE.PERMISSION_TYPE]"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+          />
         </el-select>
       </el-form-item>
 
@@ -61,11 +64,12 @@
           clearable
           style="width: 100%"
         >
-          <el-option label="GET" value="GET" />
-          <el-option label="POST" value="POST" />
-          <el-option label="PUT" value="PUT" />
-          <el-option label="DELETE" value="DELETE" />
-          <el-option label="PATCH" value="PATCH" />
+          <el-option
+            v-for="item in allDictOptions[DICT_TYPE.HTTP_METHOD]"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+          />
         </el-select>
       </el-form-item>
 
@@ -107,11 +111,19 @@
 <script setup lang="ts">
 import { ref, computed, watch } from 'vue'
 import { ElMessage, type FormInstance, type FormRules } from 'element-plus'
+import { useDicts } from '@/stores'
+import { DICT_TYPE } from '@/utils/dict'
 import type {
   CreatePermissionRequest,
   UpdatePermissionRequest,
   PermissionTreeNodeResponse,
 } from '@/api/modules/permission'
+
+// 使用字典
+const { allDictOptions } = useDicts([
+  DICT_TYPE.PERMISSION_TYPE,
+  DICT_TYPE.HTTP_METHOD,
+])
 
 interface Props {
   visible: boolean

@@ -12,6 +12,7 @@ const AdminManagement = () => import('../views/AdminManagement/index.vue')
 const RoleManagement = () => import('../views/RoleManagement/index.vue')
 const PermissionManagement = () =>
   import('../views/PermissionManagement/index.vue')
+const DictManagement = () => import('../views/DictManagement/index.vue')
 const NotFound = () => import('../views/NotFound.vue')
 
 /**
@@ -130,6 +131,18 @@ const routes: RouteRecordRaw[] = [
       title: '权限管理',
       requiresAuth: true,
       permission: 'permission:page',
+      showInMenu: true,
+    },
+  },
+  // 字典管理
+  {
+    path: '/dict-management',
+    name: 'DictManagement',
+    component: DictManagement,
+    meta: {
+      title: '字典管理',
+      requiresAuth: true,
+      permission: 'dict:page',
       showInMenu: true,
     },
   },

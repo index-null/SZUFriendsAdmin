@@ -3,13 +3,23 @@ import { createPersistPlugin } from './plugins'
 
 const pinia = createPinia()
 
-// 添加持久化插件，持久化 user store
-pinia.use(
-  createPersistPlugin({
-    key: 'app-store',
-    storage: localStorage,
-  }),
-)
+// 添加持久化插件，仅持久化 user 和 app store
+pinia.use((context) => {
+  const { store } = context
+
+  // 只对 user 和 app store 启用持久化
+  if (store.$id === 'user') {
+    createPersistPlugin({
+      key: 'user-store',
+      storage: localStorage,
+    })(context)
+  } else if (store.$id === 'app') {
+    createPersistPlugin({
+      key: 'app-store',
+      storage: localStorage,
+    })(context)
+  }
+})
 
 export default pinia
 
@@ -17,6 +27,7 @@ export default pinia
 export { useUserStore } from './modules/user'
 export { useAppStore } from './modules/app'
 export { useCounterStore } from './modules/counter'
+export { useDictStore } from './modules/dict'
 
 // 导出 composables
 export {
@@ -25,3 +36,4 @@ export {
   useNotificationWithUser,
   useThemeWithNotification,
 } from './composables'
+export { useDict, useDicts } from './composables/useDict'

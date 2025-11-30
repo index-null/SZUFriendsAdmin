@@ -27,8 +27,12 @@
             clearable
             style="width: 120px"
           >
-            <el-option label="启用" :value="1" />
-            <el-option label="禁用" :value="0" />
+            <el-option
+              v-for="item in statusOptions"
+              :key="item.value"
+              :label="item.label"
+              :value="Number(item.value)"
+            />
           </el-select>
         </el-form-item>
         <el-form-item>
@@ -94,7 +98,7 @@
               :type="row.status === 1 ? 'success' : 'danger'"
               size="small"
             >
-              {{ row.status === 1 ? '启用' : '禁用' }}
+              {{ getLabel(row.status) }}
             </el-tag>
           </template>
         </el-table-column>
@@ -188,10 +192,13 @@ import {
   type UpdateRoleRequest,
 } from '@/api/modules/role'
 import { usePermission } from '@/stores'
+import { useDict } from '@/stores/composables/useDict'
+import { DICT_TYPE } from '@/utils/dict'
 import RoleFormDialog from './components/RoleFormDialog.vue'
 import RolePermissionDialog from './components/RolePermissionDialog.vue'
 
 const { hasPermission } = usePermission()
+const { getLabel, dictOptions: statusOptions } = useDict(DICT_TYPE.STATUS)
 
 const loading = ref(false)
 const formDialogVisible = ref(false)
