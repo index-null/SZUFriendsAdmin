@@ -55,22 +55,21 @@ export const useNotificationWithUser = () => {
 
 /**
  * 组合应用状态和主题
+ * 注意：主题管理已迁移到 @/element-plus 中的 useDark
+ * 此函数仅提供通知功能的包装
  */
 export const useThemeWithNotification = () => {
   const appStore = useAppStore()
 
-  const switchTheme = (theme: 'light' | 'dark') => {
-    appStore.setTheme(theme)
+  const switchTheme = (isDark: boolean) => {
     appStore.addNotification(
-      `主题已切换为${theme === 'light' ? '浅色' : '深色'}`,
+      `主题已切换为${isDark ? '深色' : '浅色'}`,
       'info',
       2000,
     )
   }
 
   return {
-    theme: computed(() => appStore.theme),
-    isDarkMode: computed(() => appStore.isDarkMode),
     switchTheme,
   }
 }

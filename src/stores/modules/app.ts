@@ -1,11 +1,8 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
 
-type Theme = 'light' | 'dark'
-
 export const useAppStore = defineStore('app', () => {
   // State
-  const theme = ref<Theme>('light')
   const sidebarCollapsed = ref(false)
   const notifications = ref<
     Array<{
@@ -17,20 +14,9 @@ export const useAppStore = defineStore('app', () => {
   >([])
 
   // Computed
-  const isDarkMode = computed(() => theme.value === 'dark')
   const notificationCount = computed(() => notifications.value.length)
 
   // Actions
-  const toggleTheme = () => {
-    theme.value = theme.value === 'light' ? 'dark' : 'light'
-    localStorage.setItem('app-theme', theme.value)
-  }
-
-  const setTheme = (newTheme: Theme) => {
-    theme.value = newTheme
-    localStorage.setItem('app-theme', newTheme)
-  }
-
   const toggleSidebar = () => {
     sidebarCollapsed.value = !sidebarCollapsed.value
   }
@@ -68,29 +54,16 @@ export const useAppStore = defineStore('app', () => {
     notifications.value = []
   }
 
-  // 初始化主题
-  const initTheme = () => {
-    const savedTheme = localStorage.getItem('app-theme') as Theme | null
-    if (savedTheme) {
-      theme.value = savedTheme
-    }
-  }
-
   return {
     // State
-    theme,
     sidebarCollapsed,
     notifications,
     // Computed
-    isDarkMode,
     notificationCount,
     // Actions
-    toggleTheme,
-    setTheme,
     toggleSidebar,
     addNotification,
     removeNotification,
     clearNotifications,
-    initTheme,
   }
 })
