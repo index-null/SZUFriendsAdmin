@@ -1,5 +1,5 @@
 <template>
-  <div class="user-management">
+  <div class="admin-management">
     <el-card class="search-card">
       <el-form :inline="true" :model="searchForm" class="search-form">
         <el-form-item label="用户名">
@@ -45,6 +45,19 @@
             </el-tag>
           </template>
         </el-table-column>
+        <el-table-column label="管理学院" width="150" align="center">
+          <template #default="{ row }">
+            <el-tag v-if="row.collegeLeaderId === 0" type="success"
+              >全部学院</el-tag
+            >
+            <el-tag v-else-if="row.collegeLeaderId === -1" type="danger"
+              >无权限</el-tag
+            >
+            <el-tag v-else type="info"
+              >学院ID: {{ row.collegeLeaderId }}</el-tag
+            >
+          </template>
+        </el-table-column>
         <el-table-column label="角色" min-width="200">
           <template #default="{ row }">
             <el-tag
@@ -64,7 +77,7 @@
         <el-table-column label="操作" width="260" align="center" fixed="right">
           <template #default="{ row }">
             <el-button
-              v-if="hasPermission('user:view')"
+              v-if="hasPermission('admin-user:details')"
               type="primary"
               size="small"
               :icon="View"
@@ -73,16 +86,16 @@
               >查看</el-button
             >
             <el-button
-              v-if="hasPermission('user:assign-role')"
+              v-if="hasPermission('admin-user:update')"
               type="warning"
               size="small"
-              :icon="Setting"
+              :icon="Edit"
               link
-              @click="handleAssignRole(row)"
-              >分配角色</el-button
+              @click="handleEdit(row)"
+              >编辑</el-button
             >
             <el-button
-              v-if="hasPermission('user:reset-password')"
+              v-if="hasPermission('admin-user:reset-password')"
               type="danger"
               size="small"
               :icon="Lock"
@@ -106,81 +119,58 @@
       />
     </el-card>
 
-    <!-- 用户详情对话框 -->
+    <!-- 管理员详情对话框 -->
     <el-dialog
       v-model="detailDialogVisible"
-      title="用户详情"
+      title="管理员详情"
       width="600px"
       :close-on-click-modal="false"
     >
-      <el-descriptions v-if="currentUser" :column="2" border>
+      <el-descriptions v-if="currentAdmin" :column="2" border>
         <el-descriptions-item label="用户ID">{{
-          currentUser.id
-        }}</el-descriptions-item>
-        <el-descriptions-item label="用户名">{{
-          currentUser.username
+          currentAdmin.username
         }}</el-descriptions-item>
         <el-descriptions-item label="昵称">{{
-          currentUser.nickname || '-'
+          currentAdmin.nickname || '-'
         }}</el-descriptions-item>
         <el-descriptions-item label="真实姓名">{{
-          currentUser.realName || '-'
-        }}</el-descriptions-item>
-        <el-descriptions-item label="学号/工号">{{
-          currentUser.studentId || '-'
+          currentAdmin.realName || '-'
         }}</el-descriptions-item>
         <el-descriptions-item label="用户类型">
-          <el-tag :type="getUserTypeTag(currentUser.userType)">
-            {{ getUserTypeText(currentUser.userType) }}
+          <el-tag :type="getUserTypeTag(currentAdmin.userType)">
+            {{ getUserTypeText(currentAdmin.userType) }}
           </el-tag>
         </el-descriptions-item>
         <el-descriptions-item label="邮箱">{{
-          currentUser.email || '-'
+          currentAdmin.email || '-'
         }}</el-descriptions-item>
         <el-descriptions-item label="手机号">{{
-          currentUser.phone || '-'
-        }}</el-descriptions-item>
-        <el-descriptions-item label="性别">{{
-          getGenderText(currentUser.gender)
+          currentAdmin.phone || '-'
         }}</el-descriptions-item>
         <el-descriptions-item label="状态">
-          <el-tag :type="currentUser.status === 1 ? 'success' : 'danger'">
-            {{ currentUser.status === 1 ? '启用' : '禁用' }}
+          <el-tag :type="currentAdmin.status === 1 ? 'success' : 'danger'">
+            {{ currentAdmin.status === 1 ? '启用' : '禁用' }}
           </el-tag>
         </el-descriptions-item>
-        <el-descriptions-item label="专业" :span="2">{{
-          currentUser.major || '-'
-        }}</el-descriptions-item>
-        <el-descriptions-item label="入学年份">{{
-          currentUser.admissionYear || '-'
-        }}</el-descriptions-item>
-        <el-descriptions-item label="毕业年份">{{
-          currentUser.graduationYear || '-'
-        }}</el-descriptions-item>
-        <el-descriptions-item label="工作单位" :span="2">{{
-          currentUser.companyName || '-'
-        }}</el-descriptions-item>
-        <el-descriptions-item label="职位">{{
-          currentUser.jobTitle || '-'
-        }}</el-descriptions-item>
-        <el-descriptions-item label="行业">{{
-          currentUser.industry || '-'
-        }}</el-descriptions-item>
-        <el-descriptions-item label="所在地" :span="2">
-          {{
-            [currentUser.province, currentUser.city, currentUser.district]
-              .filter(Boolean)
-              .join(' ') || '-'
-          }}
+        <el-descriptions-item label="管理学院">
+          <el-tag v-if="currentAdmin.collegeLeaderId === 0" type="success"
+            >全部学院</el-tag
+          >
+          <el-tag v-else-if="currentAdmin.collegeLeaderId === -1" type="danger"
+            >无权限</el-tag
+          >
+          <el-tag v-else type="info"
+            >学院ID: {{ currentAdmin.collegeLeaderId }}</el-tag
+          >
         </el-descriptions-item>
         <el-descriptions-item label="个人简介" :span="2">{{
-          currentUser.bio || '-'
+          currentAdmin.bio || '-'
         }}</el-descriptions-item>
-        <el-descriptions-item label="创建时间" :span="2">{{
-          formatDateTime(currentUser.createTime)
+        <el-descriptions-item label="QQ号">{{
+          currentAdmin.qq || '-'
         }}</el-descriptions-item>
-        <el-descriptions-item label="更新时间" :span="2">{{
-          formatDateTime(currentUser.updateTime)
+        <el-descriptions-item label="微信号">{{
+          currentAdmin.wechat || '-'
         }}</el-descriptions-item>
       </el-descriptions>
       <template #footer>
@@ -188,33 +178,55 @@
       </template>
     </el-dialog>
 
-    <!-- 分配角色对话框 -->
+    <!-- 编辑管理员对话框 -->
     <el-dialog
-      v-model="roleDialogVisible"
-      title="分配角色"
-      width="500px"
+      v-model="editDialogVisible"
+      title="编辑管理员"
+      width="600px"
       :close-on-click-modal="false"
     >
-      <el-form :model="roleForm" label-width="80px">
-        <el-form-item label="用户名">
-          <el-text>{{ roleForm.username }}</el-text>
+      <el-form
+        ref="editFormRef"
+        :model="editForm"
+        :rules="editFormRules"
+        label-width="100px"
+      >
+        <el-form-item label="昵称" prop="nickname">
+          <el-input v-model="editForm.nickname" placeholder="请输入昵称" />
         </el-form-item>
-        <el-form-item label="选择角色">
-          <el-checkbox-group v-model="roleForm.roleIds">
-            <el-checkbox
-              v-for="role in allRoles"
-              :key="role.id"
-              :label="role.id"
-              :value="role.id"
-            >
-              {{ role.roleName }}
-            </el-checkbox>
-          </el-checkbox-group>
+        <el-form-item label="真实姓名" prop="realName">
+          <el-input v-model="editForm.realName" placeholder="请输入真实姓名" />
+        </el-form-item>
+        <el-form-item label="邮箱" prop="email">
+          <el-input v-model="editForm.email" placeholder="请输入邮箱" />
+        </el-form-item>
+        <el-form-item label="手机号" prop="phone">
+          <el-input v-model="editForm.phone" placeholder="请输入手机号" />
+        </el-form-item>
+        <el-form-item label="状态" prop="status">
+          <el-radio-group v-model="editForm.status">
+            <el-radio :value="1">启用</el-radio>
+            <el-radio :value="0">禁用</el-radio>
+          </el-radio-group>
+        </el-form-item>
+        <el-form-item label="个人简介" prop="bio">
+          <el-input
+            v-model="editForm.bio"
+            type="textarea"
+            :rows="3"
+            placeholder="请输入个人简介"
+          />
+        </el-form-item>
+        <el-form-item label="QQ号" prop="qq">
+          <el-input v-model="editForm.qq" placeholder="请输入QQ号" />
+        </el-form-item>
+        <el-form-item label="微信号" prop="wechat">
+          <el-input v-model="editForm.wechat" placeholder="请输入微信号" />
         </el-form-item>
       </el-form>
       <template #footer>
-        <el-button @click="roleDialogVisible = false">取消</el-button>
-        <el-button type="primary" :loading="submitting" @click="handleSaveRoles"
+        <el-button @click="editDialogVisible = false">取消</el-button>
+        <el-button type="primary" :loading="submitting" @click="handleSaveEdit"
           >确定</el-button
         >
       </template>
@@ -224,30 +236,27 @@
 
 <script setup lang="ts">
 import { ref, reactive, onMounted } from 'vue'
-import { ElMessage, ElMessageBox } from 'element-plus'
+import { ElMessage, ElMessageBox, type FormInstance } from 'element-plus'
 import {
   Search,
   RefreshRight,
   View,
-  Setting,
+  Edit,
   Lock,
   User,
 } from '@element-plus/icons-vue'
 import { usePermission } from '@/stores'
-import { get as getUserApi } from '@/api/generated/用户管理/用户管理'
-import { get as getRoleApi } from '@/api/generated/用户认证控制器-角色管理/用户认证控制器-角色管理'
-import type {
-  UserPageVo,
-  UserEntity,
-  RoleResponse,
-  UpdateUserRolesRequest,
-} from '@/api/generated/.ts.schemas'
+import {
+  getAdminUserPages,
+  getAdminUserById,
+  updateAdminUser,
+  resetAdminUserPassword,
+  type AdminUserPageResponse,
+  type AdminUserDetailsResponse,
+  type AdminUserUpdateRequest,
+} from '@/api/modules/admin'
 
 const { hasPermission } = usePermission()
-
-// API 实例
-const userApi = getUserApi()
-const roleApi = getRoleApi()
 
 // 搜索表单
 const searchForm = reactive({
@@ -262,28 +271,52 @@ const pagination = reactive({
 })
 
 // 表格数据
-const tableData = ref<UserPageVo[]>([])
+const tableData = ref<AdminUserPageResponse[]>([])
 const loading = ref(false)
 
-// 用户详情
+// 管理员详情
 const detailDialogVisible = ref(false)
-const currentUser = ref<UserEntity | null>(null)
+const currentAdmin = ref<AdminUserDetailsResponse | null>(null)
 
-// 角色分配
-const roleDialogVisible = ref(false)
-const roleForm = reactive({
-  userId: 0,
-  username: '',
-  roleIds: [] as number[],
+// 编辑管理员
+const editDialogVisible = ref(false)
+const editFormRef = ref<FormInstance>()
+const editForm = reactive<AdminUserUpdateRequest>({
+  id: 0,
+  nickname: '',
+  realName: '',
+  email: '',
+  phone: '',
+  status: 1,
+  bio: '',
+  qq: '',
+  wechat: '',
 })
-const allRoles = ref<RoleResponse[]>([])
+
+const editFormRules = {
+  email: [
+    {
+      type: 'email',
+      message: '请输入正确的邮箱格式',
+      trigger: 'blur',
+    },
+  ],
+  phone: [
+    {
+      pattern: /^1[3-9]\d{9}$/,
+      message: '请输入正确的手机号格式',
+      trigger: 'blur',
+    },
+  ],
+}
+
 const submitting = ref(false)
 
-// 获取用户列表
-const fetchUserList = async () => {
+// 获取管理员列表
+const fetchAdminList = async () => {
   loading.value = true
   try {
-    const response = await userApi.postAuthUserPages({
+    const response = await getAdminUserPages({
       current: pagination.current,
       size: pagination.size,
       username: searchForm.username || undefined,
@@ -299,8 +332,8 @@ const fetchUserList = async () => {
       pagination.total = 0
     }
   } catch (error) {
-    console.error('获取用户列表失败:', error)
-    ElMessage.error('获取用户列表失败')
+    console.error('获取管理员列表失败:', error)
+    ElMessage.error('获取管理员列表失败')
     tableData.value = []
     pagination.total = 0
   } finally {
@@ -308,110 +341,102 @@ const fetchUserList = async () => {
   }
 }
 
-// 获取所有角色
-const fetchAllRoles = async () => {
-  try {
-    const response = await roleApi.getAuthRoleList()
-    if (response && Array.isArray(response)) {
-      allRoles.value = response
-    }
-  } catch (error) {
-    console.error('获取角色列表失败:', error)
-  }
-}
-
 // 搜索
 const handleSearch = () => {
   pagination.current = 1
-  fetchUserList()
+  fetchAdminList()
 }
 
 // 重置
 const handleReset = () => {
   searchForm.username = ''
   pagination.current = 1
-  fetchUserList()
+  fetchAdminList()
 }
 
 // 分页变化
 const handleSizeChange = (size: number) => {
   pagination.size = size
   pagination.current = 1
-  fetchUserList()
+  fetchAdminList()
 }
 
 const handleCurrentChange = (page: number) => {
   pagination.current = page
-  fetchUserList()
+  fetchAdminList()
 }
 
-// 查看用户详情
-const handleView = async (row: UserPageVo) => {
+// 查看管理员详情
+const handleView = async (row: AdminUserPageResponse) => {
   if (!row.id) return
   try {
-    // UnwrapResult 自动解包: ResultUserEntity -> UserEntity
-    const response = await userApi.getAuthUserUserId(row.id)
+    const response = await getAdminUserById(row.id)
     if (response) {
-      currentUser.value = response
+      currentAdmin.value = response
       detailDialogVisible.value = true
     } else {
-      ElMessage.error('获取用户详情失败')
+      ElMessage.error('获取管理员详情失败')
     }
   } catch (error) {
-    console.error('获取用户详情失败:', error)
-    ElMessage.error('获取用户详情失败')
+    console.error('获取管理员详情失败:', error)
+    ElMessage.error('获取管理员详情失败')
   }
 }
 
-// 分配角色
-const handleAssignRole = async (row: UserPageVo) => {
+// 编辑管理员
+const handleEdit = async (row: AdminUserPageResponse) => {
   if (!row.id) return
   try {
-    // UnwrapResult 自动解包: ResultListRoleResponse -> RoleResponse[]
-    const response = await userApi.getAuthUserUserIdRoles(row.id)
-    if (response && Array.isArray(response)) {
-      roleForm.userId = row.id
-      roleForm.username = row.username || ''
-      roleForm.roleIds = response
-        .map((role) => role.id)
-        .filter((id): id is number => id !== undefined)
-      roleDialogVisible.value = true
+    const response = await getAdminUserById(row.id)
+    if (response) {
+      const admin = response
+      editForm.id = row.id
+      editForm.nickname = admin.nickname || ''
+      editForm.realName = admin.realName || ''
+      editForm.email = admin.email || ''
+      editForm.phone = admin.phone || ''
+      editForm.status = admin.status || 1
+      editForm.bio = admin.bio || ''
+      editForm.qq = admin.qq || ''
+      editForm.wechat = admin.wechat || ''
+      editDialogVisible.value = true
     } else {
-      ElMessage.error('获取用户角色失败')
+      ElMessage.error('获取管理员详情失败')
     }
   } catch (error) {
-    console.error('获取用户角色失败:', error)
-    ElMessage.error('获取用户角色失败')
+    console.error('获取管理员详情失败:', error)
+    ElMessage.error('获取管理员详情失败')
   }
 }
 
-// 保存角色
-const handleSaveRoles = async () => {
-  submitting.value = true
-  try {
-    const request: UpdateUserRolesRequest = {
-      userId: roleForm.userId,
-      roleIds: roleForm.roleIds,
+// 保存编辑
+const handleSaveEdit = async () => {
+  if (!editFormRef.value) return
+
+  await editFormRef.value.validate(async (valid) => {
+    if (!valid) return
+
+    submitting.value = true
+    try {
+      await updateAdminUser(editForm)
+      ElMessage.success('更新管理员信息成功')
+      editDialogVisible.value = false
+      fetchAdminList()
+    } catch (error) {
+      console.error('更新管理员信息失败:', error)
+      ElMessage.error('更新管理员信息失败')
+    } finally {
+      submitting.value = false
     }
-    await userApi.putAuthUserUpdateRoles(request)
-    // 更新成功
-    ElMessage.success('角色分配成功')
-    roleDialogVisible.value = false
-    fetchUserList()
-  } catch (error) {
-    console.error('角色分配失败:', error)
-    ElMessage.error('角色分配失败')
-  } finally {
-    submitting.value = false
-  }
+  })
 }
 
 // 重置密码
-const handleResetPassword = async (row: UserPageVo) => {
+const handleResetPassword = async (row: AdminUserPageResponse) => {
   if (!row.id) return
   try {
     await ElMessageBox.confirm(
-      `确定要重置用户 "${row.username}" 的密码吗？密码将被重置为默认密码。`,
+      `确定要重置管理员 "${row.username}" 的密码吗？密码将被重置为默认密码。`,
       '重置密码',
       {
         confirmButtonText: '确定',
@@ -420,7 +445,7 @@ const handleResetPassword = async (row: UserPageVo) => {
       },
     )
 
-    await userApi.putAuthUserUserIdResetPassword(row.id)
+    await resetAdminUserPassword(row.id)
     ElMessage.success('密码重置成功')
   } catch (error) {
     if (error !== 'cancel') {
@@ -436,48 +461,35 @@ const getUserTypeText = (type?: number) => {
     1: '学生',
     2: '教师',
     3: '校友',
+    4: '游客',
+    5: '管理员',
   }
   return type ? map[type] || '未知' : '未知'
 }
 
 const getUserTypeTag = (type?: number) => {
-  const map: Record<number, 'success' | 'warning' | 'info'> = {
+  const map: Record<number, 'success' | 'warning' | 'info' | 'danger'> = {
     1: 'success',
     2: 'warning',
     3: 'info',
+    4: 'info',
+    5: 'danger',
   }
   return type ? map[type] || 'info' : 'info'
 }
 
-// 性别映射
-const getGenderText = (gender?: number) => {
-  const map: Record<number, string> = {
-    0: '未知',
-    1: '男',
-    2: '女',
-  }
-  return gender !== undefined ? map[gender] || '未知' : '未知'
-}
-
-// 格式化时间
-const formatDateTime = (dateTime?: string) => {
-  if (!dateTime) return '-'
-  return new Date(dateTime).toLocaleString('zh-CN')
-}
-
 // 初始化
 onMounted(() => {
-  if (hasPermission('user:page')) {
-    fetchUserList()
-    fetchAllRoles()
+  if (hasPermission('admin-user:page')) {
+    fetchAdminList()
   } else {
-    ElMessage.warning('您没有权限访问用户管理')
+    ElMessage.warning('您没有权限访问管理员管理')
   }
 })
 </script>
 
 <style scoped>
-.user-management {
+.admin-management {
   padding: 20px;
 }
 

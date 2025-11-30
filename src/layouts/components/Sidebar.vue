@@ -56,6 +56,14 @@
           </el-menu-item>
 
           <el-menu-item
+            v-if="hasPermission('admin-user:page')"
+            index="/admin-management"
+          >
+            <el-icon><UserFilled /></el-icon>
+            <template #title>管理员管理</template>
+          </el-menu-item>
+
+          <el-menu-item
             v-if="hasPermission('role:page')"
             index="/role-management"
           >
@@ -92,6 +100,7 @@ import {
   School,
   Grid,
   User,
+  UserFilled,
   Management,
   Key,
   DArrowLeft,

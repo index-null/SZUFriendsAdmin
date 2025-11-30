@@ -6,22 +6,17 @@ import axios, {
 import { ElMessage } from 'element-plus'
 
 /**
- * 创建一个简化的 Axios 实例供 Orval 使用
- * 注意：避免使用 import.meta 以防止 esbuild 警告
+ * 创建一个 Axios 实例供 Orval 使用
  */
 
-// 使用环境变量配置 API 基础路径
-// 开发环境：通过 Vite 代理访问 /api
-// 生产环境：前后端同域，直接访问 /api
-// 如果需要动态配置，可以通过 window.__ENV__ 等方式
 const BASE_URL = '/api'
 const TOKEN_KEY = 'access_token'
 
 /**
  * 跳转到登录页
- * 使用动态导入 router 避免循环依赖
+ * 使用 window.location.href 避免 Orval 编译时解析路由及 .vue 文件
  */
-const redirectToLogin = async () => {
+const redirectToLogin = () => {
   // 清除本地存储的 token
   localStorage.removeItem(TOKEN_KEY)
 
@@ -29,12 +24,9 @@ const redirectToLogin = async () => {
   const currentPath = window.location.pathname
 
   if (currentPath !== '/login') {
-    // 动态导入 router 并等待跳转完成
-    const { default: router } = await import('@/router')
-    await router.push({
-      path: '/login',
-      query: { redirect: currentPath },
-    })
+    // 使用 window.location 跳转，避免依赖 Vue Router
+    const redirectUrl = `/login?redirect=${encodeURIComponent(currentPath)}`
+    window.location.href = redirectUrl
   }
 }
 
@@ -88,9 +80,9 @@ service.interceptors.response.use(
           showClose: true,
         })
 
-        // 延迟跳转，确保用户能看到提示，并等待跳转完成
-        setTimeout(async () => {
-          await redirectToLogin()
+        // 延迟跳转，确保用户能看到提示
+        setTimeout(() => {
+          redirectToLogin()
         }, 1000)
       }
       // 其他 HTTP 错误

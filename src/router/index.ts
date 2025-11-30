@@ -8,6 +8,7 @@ const Home = () => import('../views/Home.vue')
 const CollegeManagement = () => import('../views/CollegeManagement/index.vue')
 const ClassManagement = () => import('../views/ClassManagement/index.vue')
 const UserManagement = () => import('../views/UserManagement/index.vue')
+const AdminManagement = () => import('../views/AdminManagement/index.vue')
 const RoleManagement = () => import('../views/RoleManagement/index.vue')
 const PermissionManagement = () =>
   import('../views/PermissionManagement/index.vue')
@@ -93,6 +94,18 @@ const routes: RouteRecordRaw[] = [
       title: '用户管理',
       requiresAuth: true,
       permission: 'user:page',
+      showInMenu: true,
+    },
+  },
+  // 管理员管理
+  {
+    path: '/admin-management',
+    name: 'AdminManagement',
+    component: AdminManagement,
+    meta: {
+      title: '管理员管理',
+      requiresAuth: true,
+      permission: 'admin-user:page',
       showInMenu: true,
     },
   },

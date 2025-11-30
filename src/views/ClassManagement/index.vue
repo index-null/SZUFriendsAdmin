@@ -82,7 +82,6 @@
         <el-table-column type="selection" width="55" />
         <el-table-column prop="id" label="ID" width="80" />
         <el-table-column prop="className" label="班级名称" min-width="150" />
-        <el-table-column prop="classCode" label="班级编码" min-width="120" />
         <el-table-column label="所属学院" min-width="150">
           <template #default="{ row }">
             {{ getCollegeName(row.collegeId) }}

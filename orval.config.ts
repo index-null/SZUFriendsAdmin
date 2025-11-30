@@ -1,5 +1,6 @@
 // orval.config.ts
 import { defineConfig } from 'orval'
+import path from 'path'
 
 export default defineConfig({
   alumniApi: {
@@ -18,6 +19,10 @@ export default defineConfig({
         mutator: {
           path: './src/api/mutator.ts', // 使用独立的 mutator 文件
           name: 'customInstance',
+          // 配置路径别名，让 Orval 在编译时能正确解析 @/ 等别名
+          alias: {
+            '@': path.resolve(__dirname, './src'),
+          },
         },
       },
     },

@@ -1698,22 +1698,22 @@ export interface CollegeEntity {
   createTime?: string;
   /** 更新时间 */
   updateTime?: string;
-  /** 学院编码（唯一） */
-  collegeCode?: string;
   /** 学院名称 */
   collegeName?: string;
   /** 学院简介 */
   description?: string;
   /** 学院Logo */
   logo?: string;
-  /** 院长姓名 */
-  dean?: string;
   /** 联系电话 */
   contactPhone?: string;
   /** 联系邮箱 */
   email?: string;
   /** 学院地址 */
   address?: string;
+  /** 学院网址 */
+  url?: string;
+  /** 管理员账号 */
+  adminAccount?: string;
   /** 排序顺序 */
   sortOrder?: number;
   /** 状态（0-禁用，1-启用） */
@@ -1749,12 +1749,8 @@ export interface CollegePagesRequest {
   current?: number;
   /** 每页大小 */
   size?: number;
-  /** 学院编码（唯一） */
-  collegeCode?: string;
   /** 学院名称 */
   collegeName?: string;
-  /** 院长姓名 */
-  dean?: string;
   /** 状态（0-禁用，1-启用） */
   status?: number;
 }
@@ -1768,8 +1764,6 @@ export interface ClassEntity {
   updateTime?: string;
   /** 所属学院ID */
   collegeId?: number;
-  /** 班级编码（唯一） */
-  classCode?: string;
   /** 班级名称 */
   className?: string;
   /** 年级（如：2020） */
@@ -1827,6 +1821,8 @@ export interface ClassPagesRequest {
   className?: string;
   /** 班级类型（1-本科，2-硕士，3-博士） */
   classType?: number;
+  /** 专业 */
+  major?: string;
   /** 状态（0-禁用，1-启用） */
   status?: number;
 }
@@ -2525,6 +2521,372 @@ export interface ResultPageResultOperationLogResponse {
   timestamp?: number;
 }
 
+export interface CreateCollegeRequest {
+  /** 学院名称 */
+  collegeName?: string;
+  /** 学院简介 */
+  description?: string;
+  /** 学院Logo */
+  logo?: string;
+  /** 联系电话 */
+  contactPhone?: string;
+  /** 联系邮箱 */
+  email?: string;
+  /** 学院地址 */
+  address?: string;
+  /** 学院网址 */
+  url?: string;
+  /** 管理员账号，会自动创建新的账号 */
+  adminAccount?: string;
+  /** 排序顺序 */
+  sortOrder?: number;
+  /** 状态（0-禁用，1-启用） */
+  status?: number;
+}
+
+export interface AdminUserPageResponse {
+  /** 用户ID */
+  id?: number;
+  /** 用户名（唯一） */
+  username?: string;
+  /** 头像URL */
+  avatar?: string;
+  /** 用户类型（1-学生，2-教师，3-校友 4-游客 5-管理员） */
+  userType?: number;
+  /** 用户角色列表 */
+  roles?: RoleResponse[];
+  /** 管理学院的id */
+  collegeLeaderId?: number;
+}
+
+export interface PageResultAdminUserPageResponse {
+  /** 数据列表 */
+  records?: AdminUserPageResponse[];
+  /** 总记录数 */
+  total?: number;
+  /** 当前页码 */
+  current?: number;
+  /** 每页大小 */
+  size?: number;
+  /** 总页数 */
+  pages?: number;
+}
+
+export interface ResultPageResultAdminUserPageResponse {
+  /** 响应状态码 */
+  code?: number;
+  /** 响应消息 */
+  message?: string;
+  /** 响应数据 */
+  data?: PageResultAdminUserPageResponse;
+  /** 时间戳 */
+  timestamp?: number;
+}
+
+export interface AdminUserPagesRequest {
+  /** 当前页码 */
+  current?: number;
+  /** 每页大小 */
+  size?: number;
+  /** 用户名（唯一） */
+  username?: string;
+}
+
+export interface AdminUserDetailsResponse {
+  /** 用户名（唯一） */
+  username?: string;
+  /** 昵称 */
+  nickname?: string;
+  /** 头像URL */
+  avatar?: string;
+  /** 真实姓名 */
+  realName?: string;
+  /** 邮箱 */
+  email?: string;
+  /** 手机号 */
+  phone?: string;
+  /** 状态（0-禁用，1-启用） */
+  status?: number;
+  /** 用户类型（1-学生，2-教师，3-校友 4-游客 5-管理员） */
+  userType?: number;
+  /** 个人简介/一句话介绍 */
+  bio?: string;
+  /** QQ号 */
+  qq?: string;
+  /** 微信号 */
+  wechat?: string;
+  /** 管理学院id (0-全部 -1 - 无数据权限 其它对应相应学院id) */
+  collegeLeaderId?: number;
+}
+
+export interface ResultAdminUserDetailsResponse {
+  /** 响应状态码 */
+  code?: number;
+  /** 响应消息 */
+  message?: string;
+  /** 响应数据 */
+  data?: AdminUserDetailsResponse;
+  /** 时间戳 */
+  timestamp?: number;
+}
+
+export interface AdminUserUpdateRequest {
+  /** 用户ID */
+  id: number;
+  /** 昵称 */
+  nickname?: string;
+  /** 头像URL */
+  avatar?: string;
+  /** 真实姓名 */
+  realName?: string;
+  /** 邮箱 */
+  email?: string;
+  /** 手机号 */
+  phone?: string;
+  /** 状态（0-禁用，1-启用） */
+  status?: number;
+  /** 个人简介/一句话介绍 */
+  bio?: string;
+  /** QQ号 */
+  qq?: string;
+  /** 微信号 */
+  wechat?: string;
+}
+
+/**
+ * 内容块类型：text-文本，image-图片，video-视频
+内容块类型
+ */
+export type ContentBlockType = typeof ContentBlockType[keyof typeof ContentBlockType];
+
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const ContentBlockType = {
+  TEXT: 'TEXT',
+  IMAGE: 'IMAGE',
+  VIDEO: 'VIDEO',
+} as const;
+
+export interface ContentBlock {
+  /** 内容块类型：text-文本，image-图片，video-视频
+内容块类型 */
+  type: ContentBlockType;
+  /** 排序顺序，从1开始 */
+  order?: number;
+  /**
+   * 文本内容（type=text时使用）
+文本内容（仅当type=text时使用）
+   * @maxLength 5000
+   */
+  content?: string;
+  /** 资源URL（type=image/video时使用）
+资源URL（当type=image或video时使用） */
+  url?: string;
+  /** 缩略图URL（type=image时使用）
+缩略图URL（仅当type=image时使用） */
+  thumbnail?: string;
+  /** 宽度（像素） */
+  width?: number;
+  /** 高度（像素） */
+  height?: number;
+  /** 文件大小（字节） */
+  fileSize?: number;
+  /** 视频封面URL（type=video时使用）
+视频封面URL（仅当type=video时使用） */
+  coverUrl?: string;
+  /** 视频时长（秒） */
+  duration?: number;
+}
+
+/**
+ * 帖子类型（1-普通动态，2-班级动态，3-通知公告）
+ */
+export type PostPublishRequestPostType = typeof PostPublishRequestPostType[keyof typeof PostPublishRequestPostType];
+
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const PostPublishRequestPostType = {
+  NORMAL: 'NORMAL',
+  CLASS: 'CLASS',
+  NOTICE: 'NOTICE',
+} as const;
+
+export interface PostPublishRequest {
+  /**
+   * 帖子标题（可选）
+   * @maxLength 100
+   */
+  title: string;
+  /**
+   * 封面图片
+   * @maxLength 500
+   */
+  cover?: string;
+  /**
+   * 内容块数组
+   * @minItems 1
+   * @maxItems 20
+   */
+  contentBlocks: ContentBlock[];
+  /** 所属班级ID */
+  classId?: number;
+  /** 帖子类型（1-普通动态，2-班级动态，3-通知公告） */
+  postType: PostPublishRequestPostType;
+  /** 发帖地点 */
+  location?: string;
+  /** 经度 */
+  longitude?: number;
+  /** 纬度 */
+  latitude?: number;
+}
+
+/**
+ * 帖子类型
+ */
+export type PostResponsePostType = typeof PostResponsePostType[keyof typeof PostResponsePostType];
+
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const PostResponsePostType = {
+  NORMAL: 'NORMAL',
+  CLASS: 'CLASS',
+  NOTICE: 'NOTICE',
+} as const;
+
+export interface PostResponse {
+  /** 帖子ID */
+  postId?: number;
+  /** 用户ID */
+  userId?: number;
+  /** 班级ID */
+  classId?: number;
+  /** 帖子标题 */
+  title?: string;
+  /** 封面 */
+  cover?: string;
+  /** 内容摘要，最多100字符 */
+  contentPreview?: string;
+  /** 图片数量统计 */
+  imageCount?: number;
+  /** 视频数量统计 */
+  videoCount?: number;
+  /** 发帖地点 */
+  location?: string;
+  /** 帖子类型 */
+  postType?: PostResponsePostType;
+  /** 是否置顶（0-否，1-是） */
+  isTop?: number;
+  /** 浏览次数 */
+  viewCount?: number;
+  /** 点赞数 */
+  likeCount?: number;
+  /** 评论数 */
+  commentCount?: number;
+  /** 分享数 */
+  shareCount?: number;
+  /** 当前用户是否已点赞 */
+  isLiked?: boolean;
+  /** 创建时间 */
+  createTime?: string;
+}
+
+export interface PageResultPostResponse {
+  /** 数据列表 */
+  records?: PostResponse[];
+  /** 总记录数 */
+  total?: number;
+  /** 当前页码 */
+  current?: number;
+  /** 每页大小 */
+  size?: number;
+  /** 总页数 */
+  pages?: number;
+}
+
+export interface ResultPageResultPostResponse {
+  /** 响应状态码 */
+  code?: number;
+  /** 响应消息 */
+  message?: string;
+  /** 响应数据 */
+  data?: PageResultPostResponse;
+  /** 时间戳 */
+  timestamp?: number;
+}
+
+export interface PostDetailResponse {
+  /** 帖子ID */
+  postId?: number;
+  /** 用户ID */
+  userId?: number;
+  /** 班级ID */
+  classId?: number;
+  /** 帖子标题 */
+  title?: string;
+  /** 内容块数组 */
+  contentBlocks?: ContentBlock[];
+  /** 发帖地点 */
+  location?: string;
+  /** 经度 */
+  longitude?: number;
+  /** 纬度 */
+  latitude?: number;
+  /** 帖子类型 */
+  postType?: number;
+  /** 是否置顶 */
+  isTop?: boolean;
+  /** 置顶时间 */
+  topTime?: string;
+  /** 浏览次数 */
+  viewCount?: number;
+  /** 点赞数 */
+  likeCount?: number;
+  /** 评论数 */
+  commentCount?: number;
+  /** 分享数 */
+  shareCount?: number;
+  /** 图片数量 */
+  imageCount?: number;
+  /** 视频数量 */
+  videoCount?: number;
+  /** 状态 */
+  status?: number;
+  /** 当前用户是否已点赞 */
+  isLiked?: boolean;
+  /** 是否为帖子作者 */
+  isAuthor?: boolean;
+  /** 是否可编辑 */
+  canEdit?: boolean;
+  /** 是否可删除 */
+  canDelete?: boolean;
+  /** 创建时间 */
+  createTime?: string;
+  /** 更新时间 */
+  updateTime?: string;
+}
+
+export interface ResultPostDetailResponse {
+  /** 响应状态码 */
+  code?: number;
+  /** 响应消息 */
+  message?: string;
+  /** 响应数据 */
+  data?: PostDetailResponse;
+  /** 时间戳 */
+  timestamp?: number;
+}
+
+export interface ResultVoid {
+  /** 响应状态码 */
+  code?: number;
+  /** 响应消息 */
+  message?: string;
+  /** 响应数据 */
+  data?: null;
+  /** 时间戳 */
+  timestamp?: number;
+}
+
 export type PostCommunityPostParams = {
 /**
  * 帖子标题
@@ -2627,5 +2989,69 @@ export type PostAgentChatParams = {
  * 用户消息 用户消息
  */
 message: string;
+};
+
+/**
+ * 排序字段：TIME -时间，HOT-热度，FOLLOW -关注
+TIME :按时间排序（置顶帖子优先）
+HOT :按热度排序（综合点赞数、评论数、分享数）
+FOLLOW :按关注排序（关注用户的帖子优先）
+ */
+export type GetCommunityPostsBodySortBy = typeof GetCommunityPostsBodySortBy[keyof typeof GetCommunityPostsBodySortBy];
+
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const GetCommunityPostsBodySortBy = {
+  TIME: 'TIME',
+  HOT: 'HOT',
+  FOLLOW: 'FOLLOW',
+} as const;
+
+export type GetCommunityPostsBody = {
+  /**
+   * 页码，从1开始
+   * @minimum 1
+   */
+  pageNum?: number;
+  /**
+   * 每页大小，最大100
+   * @minimum 1
+   * @maximum 100
+   */
+  pageSize?: number;
+  /** 排序字段：TIME -时间，HOT-热度，FOLLOW -关注
+TIME :按时间排序（置顶帖子优先）
+HOT :按热度排序（综合点赞数、评论数、分享数）
+FOLLOW :按关注排序（关注用户的帖子优先） */
+  sortBy?: GetCommunityPostsBodySortBy;
+  /** 班级ID筛选 */
+  classId?: number;
+  /** 用户ID筛选（查某人的帖子） */
+  userId?: number;
+  /** 帖子类型筛选 */
+  postType?: number;
+  /** 搜索关键词（标题+内容） */
+  keyword?: string;
+  /** 只看有图片的帖子 */
+  hasImage?: boolean;
+  /** 只看有视频的帖子 */
+  hasVideo?: boolean;
+  /** 当前位置经度（附近帖子） */
+  longitude?: string;
+  /** 当前位置纬度（附近帖子） */
+  latitude?: string;
+  /** 附近范围（千米） */
+  distance?: number;
+};
+
+export type GetCommunityPostsLikedParams = {
+/**
+ * 页码 页码
+ */
+pageNum: number;
+/**
+ * 每页大小 每页大小
+ */
+pageSize: number;
 };
 

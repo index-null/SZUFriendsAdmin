@@ -2,28 +2,10 @@
   <div class="college-management">
     <el-card shadow="never" class="search-card">
       <el-form :model="searchForm" :inline="true" label-width="80px">
-        <el-form-item label="学院编码">
-          <el-input
-            v-model="searchForm.collegeCode"
-            placeholder="请输入学院编码"
-            clearable
-            style="width: 200px"
-            @keyup.enter="handleSearch"
-          />
-        </el-form-item>
         <el-form-item label="学院名称">
           <el-input
             v-model="searchForm.collegeName"
             placeholder="请输入学院名称"
-            clearable
-            style="width: 200px"
-            @keyup.enter="handleSearch"
-          />
-        </el-form-item>
-        <el-form-item label="院长姓名">
-          <el-input
-            v-model="searchForm.dean"
-            placeholder="请输入院长姓名"
             clearable
             style="width: 200px"
             @keyup.enter="handleSearch"
@@ -83,14 +65,12 @@
       >
         <el-table-column type="selection" width="55" />
         <el-table-column prop="id" label="ID" width="80" />
-        <el-table-column prop="collegeCode" label="学院编码" min-width="120" />
         <el-table-column
           prop="collegeName"
           label="学院名称"
           min-width="150"
           show-overflow-tooltip
         />
-        <el-table-column prop="dean" label="院长" min-width="100" />
         <el-table-column prop="contactPhone" label="联系电话" min-width="120" />
         <el-table-column
           prop="email"
@@ -190,9 +170,7 @@ const selectedIds = ref<number[]>([])
 const searchForm = reactive<CollegePagesRequest>({
   current: 1,
   size: 10,
-  collegeCode: '',
   collegeName: '',
-  dean: '',
   status: undefined,
 })
 
@@ -233,9 +211,7 @@ const handleSearch = () => {
 }
 
 const handleReset = () => {
-  searchForm.collegeCode = ''
   searchForm.collegeName = ''
-  searchForm.dean = ''
   searchForm.status = undefined
   handleSearch()
 }

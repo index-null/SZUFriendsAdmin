@@ -15,35 +15,11 @@
     >
       <el-row :gutter="20">
         <el-col :span="12">
-          <el-form-item label="学院编码" prop="collegeCode">
-            <el-input
-              v-model="formData.collegeCode"
-              placeholder="请输入学院编码"
-              :disabled="isEdit"
-              maxlength="50"
-              show-word-limit
-            />
-          </el-form-item>
-        </el-col>
-        <el-col :span="12">
           <el-form-item label="学院名称" prop="collegeName">
             <el-input
               v-model="formData.collegeName"
               placeholder="请输入学院名称"
               maxlength="100"
-              show-word-limit
-            />
-          </el-form-item>
-        </el-col>
-      </el-row>
-
-      <el-row :gutter="20">
-        <el-col :span="12">
-          <el-form-item label="院长姓名" prop="dean">
-            <el-input
-              v-model="formData.dean"
-              placeholder="请输入院长姓名"
-              maxlength="50"
               show-word-limit
             />
           </el-form-item>
@@ -161,9 +137,7 @@ const formRef = ref<FormInstance>()
 const submitLoading = ref(false)
 
 const defaultFormData: CollegeEntity = {
-  collegeCode: '',
   collegeName: '',
-  dean: '',
   contactPhone: '',
   email: '',
   address: '',
@@ -182,15 +156,10 @@ const dialogVisible = computed({
 const isEdit = computed(() => !!props.data?.id)
 
 const rules: FormRules = {
-  collegeCode: [
-    { required: true, message: '请输入学院编码', trigger: 'blur' },
-    { min: 2, max: 50, message: '长度在 2 到 50 个字符', trigger: 'blur' },
-  ],
   collegeName: [
     { required: true, message: '请输入学院名称', trigger: 'blur' },
     { min: 2, max: 100, message: '长度在 2 到 100 个字符', trigger: 'blur' },
   ],
-  dean: [{ max: 50, message: '长度不能超过 50 个字符', trigger: 'blur' }],
   contactPhone: [
     {
       pattern: /^1[3-9]\d{9}$/,

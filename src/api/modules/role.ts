@@ -1,5 +1,5 @@
 import { get as getRoleApi } from '@/api/generated/用户认证控制器-角色管理/用户认证控制器-角色管理'
-import { get as getUserApi } from '@/api/generated/用户认证控制器-用户管理/用户认证控制器-用户管理'
+import { get as getUserApi } from '@/api/generated/用户管理/用户管理.ts'
 import type {
   RoleResponse,
   CreateRoleRequest,

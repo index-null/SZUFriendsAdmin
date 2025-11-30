@@ -7,6 +7,7 @@
 import type {
   CollegeEntity,
   CollegePagesRequest,
+  CreateCollegeRequest,
   ResultBoolean,
   ResultCollegeDictResponse,
   ResultPageResultCollegeEntity
@@ -31,15 +32,16 @@ const postManagerCollegePages = (
       );
     }
   /**
+ * 创建学院对应管理员账号
  * @summary 添加学院
  */
 const postManagerCollege = (
-    collegeEntity: CollegeEntity,
+    createCollegeRequest: CreateCollegeRequest,
  ) => {
       return customInstance<ResultBoolean>(
       {url: `/manager/college`, method: 'POST',
       headers: {'Content-Type': 'application/json', },
-      data: collegeEntity
+      data: createCollegeRequest
     },
       );
     }
@@ -68,7 +70,7 @@ const deleteManagerCollegeId = (
       );
     }
   /**
- * @summary getCollegeDict
+ * @summary 获取学院字典
  */
 const getManagerCollegeDict = (
     

@@ -21,14 +21,6 @@
         />
       </el-form-item>
 
-      <el-form-item label="班级编码" prop="classCode">
-        <el-input
-          v-model="formData.classCode"
-          placeholder="请输入班级编码"
-          clearable
-        />
-      </el-form-item>
-
       <el-form-item label="所属学院" prop="collegeId">
         <el-select
           v-model="formData.collegeId"
@@ -165,7 +157,6 @@ const isEdit = ref(false)
 
 const formData = reactive<ClassEntity>({
   className: '',
-  classCode: '',
   collegeId: 0,
   memberCount: 0,
   status: 1,
@@ -182,10 +173,6 @@ const formRules: FormRules = {
     { required: true, message: '请输入班级名称', trigger: 'blur' },
     { min: 2, max: 50, message: '长度在 2 到 50 个字符', trigger: 'blur' },
   ],
-  classCode: [
-    { required: true, message: '请输入班级编码', trigger: 'blur' },
-    { min: 2, max: 20, message: '长度在 2 到 20 个字符', trigger: 'blur' },
-  ],
   collegeId: [{ required: true, message: '请选择学院', trigger: 'change' }],
   memberCount: [{ required: true, message: '请输入成员数量', trigger: 'blur' }],
   grade: [{ required: true, message: '请输入年级', trigger: 'blur' }],
@@ -198,7 +185,6 @@ const resetForm = () => {
   Object.assign(formData, {
     id: undefined,
     className: '',
-    classCode: '',
     collegeId: props.collegeLeaderId || 0,
     memberCount: 0,
     status: 1,
