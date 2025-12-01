@@ -46,3 +46,32 @@ jobs:
           key: ${{ secrets.SERVER_SSH_KEY }}
           script: |
             sudo systemctl reload caddy
+
+      - name: Send deployment notification email
+        if: always()
+        uses: dawidd6/action-send-mail@v6
+        with:
+          server_address: ${{ secrets.MAIL_SERVER }}
+          server_port: ${{ secrets.MAIL_PORT }}
+          secure: true
+          username: ${{ secrets.MAIL_USERNAME }}
+          password: ${{ secrets.MAIL_PASSWORD }}
+          subject: '部署通知：${{ github.repository }} - ${{ job.status }}'
+          # 主收件人（必填）
+          to: ${{ secrets.MAIL_TO }}
+          # 抄送（可选）- 如果需要抄送其他人，取消下面这行的注释并配置 MAIL_CC Secret
+          # cc: ${{ secrets.MAIL_CC }}
+          # 密送（可选）- 如果需要密送给某些人，取消下面这行的注释并配置 MAIL_BCC Secret
+          # bcc: ${{ secrets.MAIL_BCC }}
+          from: 自动部署 <${{ secrets.MAIL_USERNAME }}>
+          body: |
+            项目：${{ github.repository }}
+            分支：${{ github.ref_name }}
+            提交：${{ github.sha }}
+            提交信息：${{ github.event.head_commit.message }}
+            提交者：${{ github.actor }}
+            部署状态：${{ job.status }}
+            部署时间：${{ github.event.head_commit.timestamp }}
+
+            查看详情：${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+          priority: normal
