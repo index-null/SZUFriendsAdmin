@@ -86,6 +86,14 @@
             <el-icon><Notebook /></el-icon>
             <template #title>字典管理</template>
           </el-menu-item>
+
+          <el-menu-item
+            v-if="hasPermission('operation-log:page')"
+            index="/operation-log-statistics"
+          >
+            <el-icon><DocumentChecked /></el-icon>
+            <template #title>操作日志</template>
+          </el-menu-item>
         </el-menu>
       </el-scrollbar>
 
@@ -112,6 +120,7 @@ import {
   Management,
   Key,
   Notebook,
+  DocumentChecked,
   DArrowLeft,
   DArrowRight,
 } from '@element-plus/icons-vue'

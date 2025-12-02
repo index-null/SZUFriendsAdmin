@@ -21,6 +21,7 @@
     "@element-plus/icons-vue": "^2.3.2",
     "@vueuse/core": "^14.0.0",
     "axios": "^1.13.1",
+    "echarts": "^6.0.0",
     "element-plus": "^2.11.7",
     "lodash": "^4.17.21",
     "orval": "^8.0.0-rc.2",

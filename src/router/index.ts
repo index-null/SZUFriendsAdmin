@@ -13,6 +13,8 @@ const RoleManagement = () => import('../views/RoleManagement/index.vue')
 const PermissionManagement = () =>
   import('../views/PermissionManagement/index.vue')
 const DictManagement = () => import('../views/DictManagement/index.vue')
+const OperationLogStatistics = () =>
+  import('../views/OperationLogStatistics/index.vue')
 const NotFound = () => import('../views/NotFound.vue')
 
 /**
@@ -143,6 +145,18 @@ const routes: RouteRecordRaw[] = [
       title: '字典管理',
       requiresAuth: true,
       permission: 'dict:page',
+      showInMenu: true,
+    },
+  },
+  // 操作日志统计
+  {
+    path: '/operation-log-statistics',
+    name: 'OperationLogStatistics',
+    component: OperationLogStatistics,
+    meta: {
+      title: '操作日志统计',
+      requiresAuth: true,
+      permission: 'operation-log:page',
       showInMenu: true,
     },
   },
