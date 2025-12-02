@@ -187,6 +187,7 @@
             v-model="form.dictType"
             placeholder="请输入字典类型（如：class_type）"
             :disabled="isEdit"
+            @blur="handleDictTypeBlur"
           />
         </el-form-item>
         <el-form-item label="字典名称" prop="description">
@@ -234,6 +235,7 @@
           <el-input
             v-model="itemForm.label"
             placeholder="请输入字典项名称（如：本科）"
+            @blur="handleDictItemLabelBlur"
           />
         </el-form-item>
         <el-form-item label="字典项值" prop="itemValue">
@@ -292,6 +294,8 @@ import {
   createDictItem,
   updateDictItem,
   deleteDictItem,
+  checkDictType,
+  checkDictItem,
   type DictEntity,
   type CreateDictRequest,
   type UpdateDictRequest,
@@ -494,6 +498,19 @@ const handleSubmit = async () => {
 
   try {
     await formRef.value.validate()
+
+    // 提交前再次查重（新增时）
+    if (!isEdit.value) {
+      const dictType = form.dictType?.trim()
+      if (dictType) {
+        const isAvailable = await checkDictType(dictType)
+        if (!isAvailable) {
+          ElMessage.error(`字典类型 "${dictType}" 已存在，无法创建`)
+          return
+        }
+      }
+    }
+
     submitLoading.value = true
 
     if (isEdit.value) {
@@ -532,6 +549,26 @@ const handleSubmit = async () => {
 // 对话框关闭
 const handleDialogClose = () => {
   formRef.value?.resetFields()
+}
+
+// 字典类型失焦查重
+const handleDictTypeBlur = async () => {
+  // 编辑模式不检查
+  if (isEdit.value) return
+
+  const dictType = form.dictType?.trim()
+  if (!dictType) return
+
+  try {
+    const isAvailable = await checkDictType(dictType)
+    if (!isAvailable) {
+      ElMessage.warning(`字典类型 "${dictType}" 已存在，请使用其他类型`)
+      // 清空字段让用户重新输入
+      form.dictType = ''
+    }
+  } catch (error) {
+    console.error('查重失败:', error)
+  }
 }
 
 // 新增字典项
@@ -598,6 +635,22 @@ const handleItemSubmit = async () => {
 
   try {
     await itemFormRef.value.validate()
+
+    // 提交前再次查重（新增时）
+    if (!isItemEdit.value) {
+      const label = itemForm.label?.trim()
+      if (label && currentDict.value?.dictType) {
+        const isAvailable = await checkDictItem({
+          dictType: currentDict.value.dictType,
+          label: label,
+        })
+        if (!isAvailable) {
+          ElMessage.error(`字典项 "${label}" 已存在，无法创建`)
+          return
+        }
+      }
+    }
+
     itemSubmitLoading.value = true
 
     if (isItemEdit.value) {
@@ -647,6 +700,29 @@ const handleItemSubmit = async () => {
 const handleItemDialogClose = () => {
   itemFormRef.value?.resetFields()
   currentDict.value = undefined
+}
+
+// 字典项名称失焦查重
+const handleDictItemLabelBlur = async () => {
+  // 编辑模式不检查
+  if (isItemEdit.value) return
+
+  const label = itemForm.label?.trim()
+  if (!label || !currentDict.value?.dictType) return
+
+  try {
+    const isAvailable = await checkDictItem({
+      dictType: currentDict.value.dictType,
+      label: label,
+    })
+    if (!isAvailable) {
+      ElMessage.warning(`字典项 "${label}" 已存在，请使用其他名称`)
+      // 清空字段让用户重新输入
+      itemForm.label = ''
+    }
+  } catch (error) {
+    console.error('查重失败:', error)
+  }
 }
 
 onMounted(() => {

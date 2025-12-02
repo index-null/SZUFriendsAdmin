@@ -5,9 +5,9 @@
  * OpenAPI spec version: 1.0.0
  */
 import type {
-  GetCommunityPostsBody,
   GetCommunityPostsLikedParams,
   PostPublishRequest,
+  PostQueryRequest,
   ResultLong,
   ResultPageResultPostResponse,
   ResultPostDetailResponse,
@@ -32,58 +32,6 @@ const postCommunityPosts = (
       {url: `/community/posts`, method: 'POST',
       headers: {'Content-Type': 'application/json', },
       data: postPublishRequest
-    },
-      );
-    }
-  /**
- * 分页查询帖子列表
-分页查询帖子列表
-分页查询帖子列表，支持多种筛选和排序
- * @summary 分页查询帖子列表
- */
-const getCommunityPosts = (
-    getCommunityPostsBody: GetCommunityPostsBody,
- ) => {const formData = new FormData();
-if(getCommunityPostsBody.pageNum !== undefined) {
- formData.append(`pageNum`, getCommunityPostsBody.pageNum.toString())
- }
-if(getCommunityPostsBody.pageSize !== undefined) {
- formData.append(`pageSize`, getCommunityPostsBody.pageSize.toString())
- }
-if(getCommunityPostsBody.sortBy !== undefined) {
- formData.append(`sortBy`, getCommunityPostsBody.sortBy)
- }
-if(getCommunityPostsBody.classId !== undefined) {
- formData.append(`classId`, getCommunityPostsBody.classId.toString())
- }
-if(getCommunityPostsBody.userId !== undefined) {
- formData.append(`userId`, getCommunityPostsBody.userId.toString())
- }
-if(getCommunityPostsBody.postType !== undefined) {
- formData.append(`postType`, getCommunityPostsBody.postType.toString())
- }
-if(getCommunityPostsBody.keyword !== undefined) {
- formData.append(`keyword`, getCommunityPostsBody.keyword)
- }
-if(getCommunityPostsBody.hasImage !== undefined) {
- formData.append(`hasImage`, getCommunityPostsBody.hasImage.toString())
- }
-if(getCommunityPostsBody.hasVideo !== undefined) {
- formData.append(`hasVideo`, getCommunityPostsBody.hasVideo.toString())
- }
-if(getCommunityPostsBody.longitude !== undefined) {
- formData.append(`longitude`, getCommunityPostsBody.longitude)
- }
-if(getCommunityPostsBody.latitude !== undefined) {
- formData.append(`latitude`, getCommunityPostsBody.latitude)
- }
-if(getCommunityPostsBody.distance !== undefined) {
- formData.append(`distance`, getCommunityPostsBody.distance.toString())
- }
-
-      return customInstance<ResultPageResultPostResponse>(
-      {url: `/community/posts`, method: 'GET',
-      headers: {'Content-Type': 'multipart/form-data', }
     },
       );
     }
@@ -217,9 +165,24 @@ const postCommunityPostsPostIdShare = (
     },
       );
     }
-  return {postCommunityPosts,getCommunityPosts,getCommunityPostsPostId,putCommunityPostsPostId,deleteCommunityPostsPostId,putCommunityPostsPostIdTop,putCommunityPostsPostIdUntop,postCommunityPostsPostIdLike,deleteCommunityPostsPostIdLike,getCommunityPostsLiked,postCommunityPostsPostIdShare}};
+  /**
+ * 分页查询帖子列表
+分页查询帖子列表
+分页查询帖子列表，支持多种筛选和排序
+ * @summary 分页查询帖子列表
+ */
+const postCommunityPostsPage = (
+    postQueryRequest: PostQueryRequest,
+ ) => {
+      return customInstance<ResultPageResultPostResponse>(
+      {url: `/community/posts/page`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: postQueryRequest
+    },
+      );
+    }
+  return {postCommunityPosts,getCommunityPostsPostId,putCommunityPostsPostId,deleteCommunityPostsPostId,putCommunityPostsPostIdTop,putCommunityPostsPostIdUntop,postCommunityPostsPostIdLike,deleteCommunityPostsPostIdLike,getCommunityPostsLiked,postCommunityPostsPostIdShare,postCommunityPostsPage}};
 export type PostCommunityPostsResult = NonNullable<Awaited<ReturnType<ReturnType<typeof get>['postCommunityPosts']>>>
-export type GetCommunityPostsResult = NonNullable<Awaited<ReturnType<ReturnType<typeof get>['getCommunityPosts']>>>
 export type GetCommunityPostsPostIdResult = NonNullable<Awaited<ReturnType<ReturnType<typeof get>['getCommunityPostsPostId']>>>
 export type PutCommunityPostsPostIdResult = NonNullable<Awaited<ReturnType<ReturnType<typeof get>['putCommunityPostsPostId']>>>
 export type DeleteCommunityPostsPostIdResult = NonNullable<Awaited<ReturnType<ReturnType<typeof get>['deleteCommunityPostsPostId']>>>
@@ -229,3 +192,4 @@ export type PostCommunityPostsPostIdLikeResult = NonNullable<Awaited<ReturnType<
 export type DeleteCommunityPostsPostIdLikeResult = NonNullable<Awaited<ReturnType<ReturnType<typeof get>['deleteCommunityPostsPostIdLike']>>>
 export type GetCommunityPostsLikedResult = NonNullable<Awaited<ReturnType<ReturnType<typeof get>['getCommunityPostsLiked']>>>
 export type PostCommunityPostsPostIdShareResult = NonNullable<Awaited<ReturnType<ReturnType<typeof get>['postCommunityPostsPostIdShare']>>>
+export type PostCommunityPostsPageResult = NonNullable<Awaited<ReturnType<ReturnType<typeof get>['postCommunityPostsPage']>>>

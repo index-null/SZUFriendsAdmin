@@ -2814,6 +2814,32 @@ export interface ResultPageResultPostResponse {
   timestamp?: number;
 }
 
+/**
+ * 帖子类型
+ */
+export type PostDetailResponsePostType = typeof PostDetailResponsePostType[keyof typeof PostDetailResponsePostType];
+
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const PostDetailResponsePostType = {
+  NORMAL: 'NORMAL',
+  CLASS: 'CLASS',
+  NOTICE: 'NOTICE',
+} as const;
+
+/**
+ * 状态
+ */
+export type PostDetailResponseStatus = typeof PostDetailResponseStatus[keyof typeof PostDetailResponseStatus];
+
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const PostDetailResponseStatus = {
+  DELETED: 'DELETED',
+  NORMAL: 'NORMAL',
+  BLOCKED: 'BLOCKED',
+} as const;
+
 export interface PostDetailResponse {
   /** 帖子ID */
   postId?: number;
@@ -2832,7 +2858,7 @@ export interface PostDetailResponse {
   /** 纬度 */
   latitude?: number;
   /** 帖子类型 */
-  postType?: number;
+  postType?: PostDetailResponsePostType;
   /** 是否置顶 */
   isTop?: boolean;
   /** 置顶时间 */
@@ -2850,7 +2876,7 @@ export interface PostDetailResponse {
   /** 视频数量 */
   videoCount?: number;
   /** 状态 */
-  status?: number;
+  status?: PostDetailResponseStatus;
   /** 当前用户是否已点赞 */
   isLiked?: boolean;
   /** 是否为帖子作者 */
@@ -2885,6 +2911,78 @@ export interface ResultVoid {
   data?: null;
   /** 时间戳 */
   timestamp?: number;
+}
+
+/**
+ * 排序字段：TIME -时间，HOT-热度，FOLLOW -关注
+ */
+export type PostQueryRequestSortBy = typeof PostQueryRequestSortBy[keyof typeof PostQueryRequestSortBy];
+
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const PostQueryRequestSortBy = {
+  TIME: 'TIME',
+  HOT: 'HOT',
+  FOLLOW: 'FOLLOW',
+} as const;
+
+export interface PostQueryRequest {
+  /**
+   * 页码，从1开始
+   * @minimum 1
+   */
+  pageNum?: number;
+  /**
+   * 每页大小，最大100
+   * @minimum 1
+   * @maximum 100
+   */
+  pageSize?: number;
+  /** 排序字段：TIME -时间，HOT-热度，FOLLOW -关注 */
+  sortBy?: PostQueryRequestSortBy;
+  /** 班级ID筛选 */
+  classId?: number;
+  /** 用户ID筛选（查某人的帖子） */
+  userId?: number;
+  /** 帖子类型筛选 */
+  postType?: number;
+  /** 搜索关键词（标题+内容） */
+  keyword?: string;
+  /** 只看有图片的帖子 */
+  hasImage?: boolean;
+  /** 只看有视频的帖子 */
+  hasVideo?: boolean;
+  /** 当前位置经度（附近帖子） */
+  longitude?: number;
+  /** 当前位置纬度（附近帖子） */
+  latitude?: number;
+  /** 附近范围（千米） */
+  distance?: number;
+}
+
+export interface CreateCollegeAdminRequest {
+  /** 用户名 */
+  username: string;
+  /** 昵称 */
+  nickname?: string;
+  /** 头像URL */
+  avatar?: string;
+  /** 真实姓名 */
+  realName?: string;
+  /** 邮箱 */
+  email?: string;
+  /** 手机号 */
+  phone?: string;
+  /** 状态（0-禁用，1-启用） */
+  status?: number;
+  /** 个人简介/一句话介绍 */
+  bio?: string;
+  /** QQ号 */
+  qq?: string;
+  /** 微信号 */
+  wechat?: string;
+  /** 学院id */
+  collegeId: number;
 }
 
 export type PostCommunityPostParams = {
@@ -2991,57 +3089,22 @@ export type PostAgentChatParams = {
 message: string;
 };
 
+export type GetManagerDictCheckParams = {
 /**
- * 排序字段：TIME -时间，HOT-热度，FOLLOW -关注
-TIME :按时间排序（置顶帖子优先）
-HOT :按热度排序（综合点赞数、评论数、分享数）
-FOLLOW :按关注排序（关注用户的帖子优先）
+ * 字典类型
  */
-export type GetCommunityPostsBodySortBy = typeof GetCommunityPostsBodySortBy[keyof typeof GetCommunityPostsBodySortBy];
+dictType: string;
+};
 
-
-// eslint-disable-next-line @typescript-eslint/no-redeclare
-export const GetCommunityPostsBodySortBy = {
-  TIME: 'TIME',
-  HOT: 'HOT',
-  FOLLOW: 'FOLLOW',
-} as const;
-
-export type GetCommunityPostsBody = {
-  /**
-   * 页码，从1开始
-   * @minimum 1
-   */
-  pageNum?: number;
-  /**
-   * 每页大小，最大100
-   * @minimum 1
-   * @maximum 100
-   */
-  pageSize?: number;
-  /** 排序字段：TIME -时间，HOT-热度，FOLLOW -关注
-TIME :按时间排序（置顶帖子优先）
-HOT :按热度排序（综合点赞数、评论数、分享数）
-FOLLOW :按关注排序（关注用户的帖子优先） */
-  sortBy?: GetCommunityPostsBodySortBy;
-  /** 班级ID筛选 */
-  classId?: number;
-  /** 用户ID筛选（查某人的帖子） */
-  userId?: number;
-  /** 帖子类型筛选 */
-  postType?: number;
-  /** 搜索关键词（标题+内容） */
-  keyword?: string;
-  /** 只看有图片的帖子 */
-  hasImage?: boolean;
-  /** 只看有视频的帖子 */
-  hasVideo?: boolean;
-  /** 当前位置经度（附近帖子） */
-  longitude?: string;
-  /** 当前位置纬度（附近帖子） */
-  latitude?: string;
-  /** 附近范围（千米） */
-  distance?: number;
+export type GetManagerDictItemCheckParams = {
+/**
+ * 字典类型
+ */
+dictType: string;
+/**
+ * 字典项名称
+ */
+label: string;
 };
 
 export type GetCommunityPostsLikedParams = {

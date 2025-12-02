@@ -57,7 +57,8 @@ service.interceptors.response.use(
       data &&
       (data.code === 0 || data.code === 200 || data.success === true)
     ) {
-      return data.data || data
+      // 使用 !== undefined 而不是 ||，避免 false/0/'' 等 falsy 值被错误处理
+      return data.data !== undefined ? data.data : data
     }
     return data
   },

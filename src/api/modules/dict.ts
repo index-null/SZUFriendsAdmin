@@ -11,6 +11,7 @@ import type {
   CreateDictItemRequest,
   UpdateDictItemRequest,
   PageResultDictItemEntity,
+  GetManagerDictItemCheckParams,
 } from '@/api/generated/.ts.schemas'
 
 const dictApi = getDictApi()
@@ -43,6 +44,15 @@ export const deleteDict = async (id: number): Promise<any> => {
 
 export const getDictDetails = async (id: number): Promise<DictEntity> => {
   return (await dictApi.getManagerDictDetailsId(id)) as any
+}
+
+/**
+ * 检查字典类型是否已存在
+ * @param dictType 字典类型
+ * @returns true: 不存在可用, false: 已存在
+ */
+export const checkDictType = async (dictType: string): Promise<boolean> => {
+  return (await dictApi.getManagerDictCheck({ dictType })) as any
 }
 
 // ==================== 字典项管理 ====================
@@ -79,6 +89,17 @@ export const getDictItemDetails = async (
   id: number,
 ): Promise<DictItemEntity> => {
   return (await dictItemApi.getManagerDictItemDetailsId(id)) as any
+}
+
+/**
+ * 检查字典项是否已存在
+ * @param params 包含 dictType 和 label
+ * @returns true: 不存在可用, false: 已存在
+ */
+export const checkDictItem = async (
+  params: GetManagerDictItemCheckParams,
+): Promise<boolean> => {
+  return (await dictItemApi.getManagerDictItemCheck(params)) as any
 }
 
 // 直接导出后端类型，不做冗余扩展

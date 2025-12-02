@@ -7,6 +7,7 @@
 import type {
   CreateDictItemRequest,
   DictItemPagesRequest,
+  GetManagerDictItemCheckParams,
   ResultBoolean,
   ResultDictItemEntity,
   ResultListDictItemEntity,
@@ -105,10 +106,26 @@ const getManagerDictTypeDictType = (
     },
       );
     }
-  return {postManagerDictItemPage,postManagerDictItem,putManagerDictItem,getManagerDictItemDetailsId,deleteManagerDictItemId,getManagerDictTypeDictType}};
+  /**
+ * 通过dictType 和 label查重字典项
+true 无/false 存在
+通过dictType 和 label查重字典项
+ * @summary 通过dictType 和 label查重字典项
+ */
+const getManagerDictItemCheck = (
+    params: GetManagerDictItemCheckParams,
+ ) => {
+      return customInstance<ResultBoolean>(
+      {url: `/manager/dict/item/check`, method: 'GET',
+        params
+    },
+      );
+    }
+  return {postManagerDictItemPage,postManagerDictItem,putManagerDictItem,getManagerDictItemDetailsId,deleteManagerDictItemId,getManagerDictTypeDictType,getManagerDictItemCheck}};
 export type PostManagerDictItemPageResult = NonNullable<Awaited<ReturnType<ReturnType<typeof get>['postManagerDictItemPage']>>>
 export type PostManagerDictItemResult = NonNullable<Awaited<ReturnType<ReturnType<typeof get>['postManagerDictItem']>>>
 export type PutManagerDictItemResult = NonNullable<Awaited<ReturnType<ReturnType<typeof get>['putManagerDictItem']>>>
 export type GetManagerDictItemDetailsIdResult = NonNullable<Awaited<ReturnType<ReturnType<typeof get>['getManagerDictItemDetailsId']>>>
 export type DeleteManagerDictItemIdResult = NonNullable<Awaited<ReturnType<ReturnType<typeof get>['deleteManagerDictItemId']>>>
 export type GetManagerDictTypeDictTypeResult = NonNullable<Awaited<ReturnType<ReturnType<typeof get>['getManagerDictTypeDictType']>>>
+export type GetManagerDictItemCheckResult = NonNullable<Awaited<ReturnType<ReturnType<typeof get>['getManagerDictItemCheck']>>>

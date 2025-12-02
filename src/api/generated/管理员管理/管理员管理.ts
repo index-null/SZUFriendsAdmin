@@ -7,6 +7,7 @@
 import type {
   AdminUserPagesRequest,
   AdminUserUpdateRequest,
+  CreateCollegeAdminRequest,
   ResultAdminUserDetailsResponse,
   ResultBoolean,
   ResultPageResultAdminUserPageResponse
@@ -77,8 +78,24 @@ const putManagerAdminUser = (
     },
       );
     }
-  return {postManagerAdminUserPage,getManagerAdminUserUserIdDetails,putManagerAdminUserUserIdResetPassword,putManagerAdminUser}};
+  /**
+ * 创建学院管理员
+创建学院管理员
+ * @summary 创建学院管理员
+ */
+const postManagerAdminUserCollege = (
+    createCollegeAdminRequest: CreateCollegeAdminRequest,
+ ) => {
+      return customInstance<ResultBoolean>(
+      {url: `/manager/admin-user/college`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: createCollegeAdminRequest
+    },
+      );
+    }
+  return {postManagerAdminUserPage,getManagerAdminUserUserIdDetails,putManagerAdminUserUserIdResetPassword,putManagerAdminUser,postManagerAdminUserCollege}};
 export type PostManagerAdminUserPageResult = NonNullable<Awaited<ReturnType<ReturnType<typeof get>['postManagerAdminUserPage']>>>
 export type GetManagerAdminUserUserIdDetailsResult = NonNullable<Awaited<ReturnType<ReturnType<typeof get>['getManagerAdminUserUserIdDetails']>>>
 export type PutManagerAdminUserUserIdResetPasswordResult = NonNullable<Awaited<ReturnType<ReturnType<typeof get>['putManagerAdminUserUserIdResetPassword']>>>
 export type PutManagerAdminUserResult = NonNullable<Awaited<ReturnType<ReturnType<typeof get>['putManagerAdminUser']>>>
+export type PostManagerAdminUserCollegeResult = NonNullable<Awaited<ReturnType<ReturnType<typeof get>['postManagerAdminUserCollege']>>>
