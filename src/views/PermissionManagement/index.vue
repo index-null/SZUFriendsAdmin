@@ -50,6 +50,16 @@
             </el-tag>
           </template>
         </el-table-column>
+        <el-table-column label="状态" width="80" align="center">
+          <template #default="{ row }">
+            <el-tag
+              :type="row.status === 1 ? 'success' : 'danger'"
+              size="small"
+            >
+              {{ row.status === 1 ? '启用' : '禁用' }}
+            </el-tag>
+          </template>
+        </el-table-column>
         <el-table-column
           prop="url"
           label="URL/路径"

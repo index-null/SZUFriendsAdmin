@@ -163,7 +163,7 @@ import { get as getUserApi } from '@/api/generated/用户管理/用户管理'
 import { get as getRoleApi } from '@/api/generated/用户认证控制器-角色管理/用户认证控制器-角色管理'
 import UserDetailDrawer from './components/UserDetailDrawer.vue'
 import type {
-  UserPageVo,
+  UserPageResponse,
   UserEntity,
   RoleResponse,
   UpdateUserRolesRequest,
@@ -191,7 +191,7 @@ const pagination = reactive({
 })
 
 // 表格数据
-const tableData = ref<UserPageVo[]>([])
+const tableData = ref<UserPageResponse[]>([])
 const loading = ref(false)
 
 // 用户详情
@@ -277,7 +277,7 @@ const handleCurrentChange = (page: number) => {
 }
 
 // 查看用户详情
-const handleView = async (row: UserPageVo) => {
+const handleView = async (row: UserPageResponse) => {
   if (!row.id) return
   try {
     // UnwrapResult 自动解包: ResultUserEntity -> UserEntity
@@ -295,7 +295,7 @@ const handleView = async (row: UserPageVo) => {
 }
 
 // 分配角色
-const handleAssignRole = async (row: UserPageVo) => {
+const handleAssignRole = async (row: UserPageResponse) => {
   if (!row.id) return
   try {
     // UnwrapResult 自动解包: ResultListRoleResponse -> RoleResponse[]
@@ -338,7 +338,7 @@ const handleSaveRoles = async () => {
 }
 
 // 重置密码
-const handleResetPassword = async (row: UserPageVo) => {
+const handleResetPassword = async (row: UserPageResponse) => {
   if (!row.id) return
   try {
     await ElMessageBox.confirm(

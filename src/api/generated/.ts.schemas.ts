@@ -1404,6 +1404,8 @@ export interface PermissionTreeNodeResponse {
   sortOrder?: number;
   /** 角色是否拥有该权限 */
   hasPermission?: boolean;
+  /** 状态（0-禁用，1-启用） */
+  status?: number;
   /** 子权限列表
 使用默认初始化避免序列化时出现空指针 */
   children?: PermissionTreeNodeResponse[];
@@ -2113,7 +2115,7 @@ export interface UserEntity {
   /** 密码（加密后） */
   password?: string;
   /** 微信小程序OpenID */
-  wxMpCode?: string;
+  wxOpenid?: string;
   /** 昵称 */
   nickname?: string;
   /** 头像URL */
@@ -2983,6 +2985,45 @@ export interface CreateCollegeAdminRequest {
   wechat?: string;
   /** 学院id */
   collegeId: number;
+}
+
+export interface UserPageResponse {
+  /** 用户ID */
+  id?: number;
+  /** 用户名（唯一） */
+  username?: string;
+  /** 微信小程序OpenID */
+  wxMpCode?: string;
+  /** 头像URL */
+  avatar?: string;
+  /** 用户类型（1-学生，2-教师，3-校友） */
+  userType?: number;
+  /** 用户角色列表 */
+  roles?: RoleResponse[];
+}
+
+export interface PageResultUserPageResponse {
+  /** 数据列表 */
+  records?: UserPageResponse[];
+  /** 总记录数 */
+  total?: number;
+  /** 当前页码 */
+  current?: number;
+  /** 每页大小 */
+  size?: number;
+  /** 总页数 */
+  pages?: number;
+}
+
+export interface ResultPageResultUserPageResponse {
+  /** 响应状态码 */
+  code?: number;
+  /** 响应消息 */
+  message?: string;
+  /** 响应数据 */
+  data?: PageResultUserPageResponse;
+  /** 时间戳 */
+  timestamp?: number;
 }
 
 export type PostCommunityPostParams = {

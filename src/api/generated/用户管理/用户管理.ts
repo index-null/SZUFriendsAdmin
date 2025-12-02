@@ -8,7 +8,7 @@ import type {
   ResultBoolean,
   ResultListPermissionTreeNodeResponse,
   ResultListRoleResponse,
-  ResultPageResultUserPageVo,
+  ResultPageResultUserPageResponse,
   ResultUserEntity,
   UpdateUserRolesRequest,
   UserPagesRequest
@@ -74,7 +74,7 @@ const putAuthUserUpdateRoles = (
 const postAuthUserPages = (
     userPagesRequest: UserPagesRequest,
  ) => {
-      return customInstance<ResultPageResultUserPageVo>(
+      return customInstance<ResultPageResultUserPageResponse>(
       {url: `/auth/user/pages`, method: 'POST',
       headers: {'Content-Type': 'application/json', },
       data: userPagesRequest

@@ -254,7 +254,7 @@ watch(
         method: props.data.method,
         description: props.data.description,
         sortOrder: props.data.sortOrder,
-        status: 1, // 权限树节点没有status字段，默认启用
+        status: props.data.status ?? 1, // 使用节点的status，默认启用
       }
     } else if (val) {
       // 新增模式
