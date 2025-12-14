@@ -94,6 +94,14 @@
             <el-icon><DocumentChecked /></el-icon>
             <template #title>操作日志</template>
           </el-menu-item>
+
+          <el-menu-item
+            v-if="hasPermission('auth:page')"
+            index="/authentication-management"
+          >
+            <el-icon><Checked /></el-icon>
+            <template #title>认证管理</template>
+          </el-menu-item>
         </el-menu>
       </el-scrollbar>
 
@@ -121,6 +129,7 @@ import {
   Key,
   Notebook,
   DocumentChecked,
+  Checked,
   DArrowLeft,
   DArrowRight,
 } from '@element-plus/icons-vue'

@@ -15,6 +15,8 @@ const PermissionManagement = () =>
 const DictManagement = () => import('../views/DictManagement/index.vue')
 const OperationLogStatistics = () =>
   import('../views/OperationLogStatistics/index.vue')
+const AuthenticationManagement = () =>
+  import('../views/AuthenticationManagement/index.vue')
 const NotFound = () => import('../views/NotFound.vue')
 
 /**
@@ -157,6 +159,18 @@ const routes: RouteRecordRaw[] = [
       title: '操作日志统计',
       requiresAuth: true,
       permission: 'operation-log:page',
+      showInMenu: true,
+    },
+  },
+  // 认证管理
+  {
+    path: '/authentication-management',
+    name: 'AuthenticationManagement',
+    component: AuthenticationManagement,
+    meta: {
+      title: '认证管理',
+      requiresAuth: true,
+      permission: 'auth:page',
       showInMenu: true,
     },
   },
