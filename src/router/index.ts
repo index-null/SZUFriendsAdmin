@@ -17,6 +17,7 @@ const OperationLogStatistics = () =>
   import('../views/OperationLogStatistics/index.vue')
 const AuthenticationManagement = () =>
   import('../views/AuthenticationManagement/index.vue')
+const Profile = () => import('../views/Profile/index.vue')
 const NotFound = () => import('../views/NotFound.vue')
 
 /**
@@ -172,6 +173,17 @@ const routes: RouteRecordRaw[] = [
       requiresAuth: true,
       permission: 'auth:page',
       showInMenu: true,
+    },
+  },
+  // 个人资料
+  {
+    path: '/profile',
+    name: 'Profile',
+    component: Profile,
+    meta: {
+      title: '个人资料',
+      requiresAuth: true,
+      showInMenu: false, // 不在侧边栏显示
     },
   },
   // 404 路由 - 必须放在最后

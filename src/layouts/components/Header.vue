@@ -124,7 +124,7 @@ const currentRoute = computed(() => {
 const handleCommand = async (command: string) => {
   switch (command) {
     case 'profile':
-      ElMessage.info('个人资料功能开发中...')
+      router.push('/profile')
       break
     case 'settings':
       ElMessage.info('账号设置功能开发中...')
