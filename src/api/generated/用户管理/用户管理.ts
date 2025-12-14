@@ -8,8 +8,8 @@ import type {
   ResultBoolean,
   ResultListPermissionTreeNodeResponse,
   ResultListRoleResponse,
-  ResultPageResultUserPageResponse,
-  ResultUserEntity,
+  ResultPageResultNoAdminUserPageResponse,
+  ResultUserInfoResponse,
   UpdateUserRolesRequest,
   UserPagesRequest
 } from '../.ts.schemas';
@@ -74,7 +74,7 @@ const putAuthUserUpdateRoles = (
 const postAuthUserPages = (
     userPagesRequest: UserPagesRequest,
  ) => {
-      return customInstance<ResultPageResultUserPageResponse>(
+      return customInstance<ResultPageResultNoAdminUserPageResponse>(
       {url: `/auth/user/pages`, method: 'POST',
       headers: {'Content-Type': 'application/json', },
       data: userPagesRequest
@@ -89,29 +89,14 @@ const postAuthUserPages = (
 const getAuthUserUserId = (
     userId: number,
  ) => {
-      return customInstance<ResultUserEntity>(
+      return customInstance<ResultUserInfoResponse>(
       {url: `/auth/user/${userId}`, method: 'GET'
     },
       );
     }
-  /**
- * 重置用户密码
-重置用户密码
-[user:reset-password] 重置用户密码
- * @summary 重置用户密码
- */
-const putAuthUserUserIdResetPassword = (
-    userId: number,
- ) => {
-      return customInstance<ResultBoolean>(
-      {url: `/auth/user/${userId}/resetPassword`, method: 'PUT'
-    },
-      );
-    }
-  return {getAuthUserUserIdRoles,getAuthUserUserIdPermissions,putAuthUserUpdateRoles,postAuthUserPages,getAuthUserUserId,putAuthUserUserIdResetPassword}};
+  return {getAuthUserUserIdRoles,getAuthUserUserIdPermissions,putAuthUserUpdateRoles,postAuthUserPages,getAuthUserUserId}};
 export type GetAuthUserUserIdRolesResult = NonNullable<Awaited<ReturnType<ReturnType<typeof get>['getAuthUserUserIdRoles']>>>
 export type GetAuthUserUserIdPermissionsResult = NonNullable<Awaited<ReturnType<ReturnType<typeof get>['getAuthUserUserIdPermissions']>>>
 export type PutAuthUserUpdateRolesResult = NonNullable<Awaited<ReturnType<ReturnType<typeof get>['putAuthUserUpdateRoles']>>>
 export type PostAuthUserPagesResult = NonNullable<Awaited<ReturnType<ReturnType<typeof get>['postAuthUserPages']>>>
 export type GetAuthUserUserIdResult = NonNullable<Awaited<ReturnType<ReturnType<typeof get>['getAuthUserUserId']>>>
-export type PutAuthUserUserIdResetPasswordResult = NonNullable<Awaited<ReturnType<ReturnType<typeof get>['putAuthUserUserIdResetPassword']>>>

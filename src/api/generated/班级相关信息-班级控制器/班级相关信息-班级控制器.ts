@@ -7,7 +7,9 @@
 import type {
   ClassEntity,
   ClassPagesRequest,
+  ClassQueryRequest,
   ResultBoolean,
+  ResultListClassEntity,
   ResultPageResultClassEntity
 } from '../.ts.schemas';
 
@@ -66,8 +68,21 @@ const deleteManagerClassId = (
     },
       );
     }
-  return {postManagerClassPages,postManagerClass,putManagerClass,deleteManagerClassId}};
+  /**
+ * @summary 根据自由组合的查询条件 获取班级列表
+ */
+const getManagerClassList = (
+    _classQueryRequest: ClassQueryRequest,
+) => {
+      return customInstance<ResultListClassEntity>(
+      {url: `/manager/class/list`, method: 'GET',
+      headers: {'Content-Type': 'application/json', }
+    },
+      );
+    }
+  return {postManagerClassPages,postManagerClass,putManagerClass,deleteManagerClassId,getManagerClassList}};
 export type PostManagerClassPagesResult = NonNullable<Awaited<ReturnType<ReturnType<typeof get>['postManagerClassPages']>>>
 export type PostManagerClassResult = NonNullable<Awaited<ReturnType<ReturnType<typeof get>['postManagerClass']>>>
 export type PutManagerClassResult = NonNullable<Awaited<ReturnType<ReturnType<typeof get>['putManagerClass']>>>
 export type DeleteManagerClassIdResult = NonNullable<Awaited<ReturnType<ReturnType<typeof get>['deleteManagerClassId']>>>
+export type GetManagerClassListResult = NonNullable<Awaited<ReturnType<ReturnType<typeof get>['getManagerClassList']>>>

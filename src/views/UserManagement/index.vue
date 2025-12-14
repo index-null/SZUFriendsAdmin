@@ -2,10 +2,10 @@
   <div class="user-management">
     <el-card class="search-card">
       <el-form :inline="true" :model="searchForm" class="search-form">
-        <el-form-item label="用户名">
+        <el-form-item label="真实姓名">
           <el-input
-            v-model="searchForm.username"
-            placeholder="请输入用户名"
+            v-model="searchForm.realName"
+            placeholder="请输入真实姓名"
             clearable
             @clear="handleSearch"
             @keyup.enter="handleSearch"
@@ -45,23 +45,59 @@
             </el-tag>
           </template>
         </el-table-column>
-        <el-table-column label="角色" min-width="200">
+        <el-table-column label="真实姓名" width="120" align="center">
           <template #default="{ row }">
-            <el-tag
-              v-for="role in row.roles"
-              :key="role.id"
-              type="info"
-              size="small"
-              style="margin-right: 4px"
-            >
-              {{ role.roleName }}
-            </el-tag>
-            <el-text v-if="!row.roles || row.roles.length === 0" type="info"
-              >暂无角色</el-text
-            >
+            {{ row.realName || '-' }}
           </template>
         </el-table-column>
-        <el-table-column label="操作" width="260" align="center" fixed="right">
+        <el-table-column label="性别" width="80" align="center">
+          <template #default="{ row }">
+            {{ getGenderLabel(row.gender) }}
+          </template>
+        </el-table-column>
+        <el-table-column label="联系方式" width="140">
+          <template #default="{ row }">
+            <div v-if="row.phone">{{ row.phone }}</div>
+            <div v-else-if="row.email">{{ row.email }}</div>
+            <div v-else>-</div>
+          </template>
+        </el-table-column>
+        <el-table-column label="校友档案" min-width="300">
+          <template #default="{ row }">
+            <div
+              v-if="row.alumniInfos && row.alumniInfos.length > 0"
+              class="alumni-infos"
+            >
+              <div
+                v-for="alumni in row.alumniInfos"
+                :key="alumni.id"
+                class="alumni-item"
+              >
+                <el-tag
+                  :type="getAlumniTypeTag(alumni.identity)"
+                  size="small"
+                  effect="plain"
+                >
+                  {{ getIdentityLabel(alumni.identity) }}
+                </el-tag>
+                <span class="alumni-text">
+                  {{ alumni.number }} | {{ alumni.major }} |
+                  {{ alumni.className }}
+                </span>
+                <el-tag
+                  v-if="alumni.status === 1"
+                  type="success"
+                  size="small"
+                  effect="plain"
+                >
+                  已认证
+                </el-tag>
+              </div>
+            </div>
+            <el-text v-else type="info">暂无档案</el-text>
+          </template>
+        </el-table-column>
+        <el-table-column label="操作" width="280" align="center" fixed="right">
           <template #default="{ row }">
             <el-button
               v-if="hasPermission('user:view')"
@@ -163,16 +199,30 @@ import { get as getUserApi } from '@/api/generated/用户管理/用户管理'
 import { get as getRoleApi } from '@/api/generated/用户认证控制器-角色管理/用户认证控制器-角色管理'
 import UserDetailDrawer from './components/UserDetailDrawer.vue'
 import type {
-  UserPageResponse,
-  UserEntity,
+  NoAdminUserPageResponse,
+  UserPagesRequest,
+  UserInfoResponse,
   RoleResponse,
   UpdateUserRolesRequest,
+  AlumniPageResponse,
 } from '@/api/generated/.ts.schemas'
+
+// 扩展用户详情类型以支持校友档案
+type UserDetailType = UserInfoResponse & {
+  alumniInfos?: AlumniPageResponse[]
+}
 
 const { hasPermission } = usePermission()
 
 // 使用字典
 const { getLabel: getUserTypeLabel } = useDict(DICT_TYPE.USER_TYPE)
+const { getLabel: getIdentityLabel } = useDict(DICT_TYPE.IDENTITY)
+const { getLabel: getGenderLabel } = useDict(DICT_TYPE.GENDER)
+
+// 获取校友身份类型标签颜色（使用 userType 的颜色映射）
+const getAlumniTypeTag = (identity?: number) => {
+  return getUserTypeTag(identity)
+}
 
 // API 实例
 const userApi = getUserApi()
@@ -180,7 +230,7 @@ const roleApi = getRoleApi()
 
 // 搜索表单
 const searchForm = reactive({
-  username: '',
+  realName: '',
 })
 
 // 分页参数
@@ -191,12 +241,12 @@ const pagination = reactive({
 })
 
 // 表格数据
-const tableData = ref<UserPageResponse[]>([])
+const tableData = ref<NoAdminUserPageResponse[]>([])
 const loading = ref(false)
 
 // 用户详情
 const detailDrawerVisible = ref(false)
-const currentUser = ref<UserEntity | null>(null)
+const currentUser = ref<UserDetailType | null>(null)
 
 // 角色分配
 const roleDialogVisible = ref(false)
@@ -212,11 +262,12 @@ const submitting = ref(false)
 const fetchUserList = async () => {
   loading.value = true
   try {
-    const response = await userApi.postAuthUserPages({
+    const params: UserPagesRequest = {
       current: pagination.current,
       size: pagination.size,
-      username: searchForm.username || undefined,
-    })
+      realName: searchForm.realName || undefined,
+    }
+    const response = await userApi.postAuthUserPages(params)
 
     if (response) {
       tableData.value = response.records || []
@@ -259,7 +310,7 @@ const handleSearch = () => {
 
 // 重置
 const handleReset = () => {
-  searchForm.username = ''
+  searchForm.realName = ''
   pagination.current = 1
   fetchUserList()
 }
@@ -277,13 +328,17 @@ const handleCurrentChange = (page: number) => {
 }
 
 // 查看用户详情
-const handleView = async (row: UserPageResponse) => {
+const handleView = async (row: NoAdminUserPageResponse) => {
   if (!row.id) return
   try {
-    // UnwrapResult 自动解包: ResultUserEntity -> UserEntity
+    // UnwrapResult 自动解包: ResultUserInfoResponse -> UserInfoResponse
     const response = await userApi.getAuthUserUserId(row.id)
     if (response) {
-      currentUser.value = response
+      // 合并 alumniInfos（从列表数据中获取）
+      currentUser.value = {
+        ...response,
+        alumniInfos: row.alumniInfos,
+      }
       detailDrawerVisible.value = true
     } else {
       ElMessage.error('获取用户详情失败')
@@ -295,7 +350,7 @@ const handleView = async (row: UserPageResponse) => {
 }
 
 // 分配角色
-const handleAssignRole = async (row: UserPageResponse) => {
+const handleAssignRole = async (row: NoAdminUserPageResponse) => {
   if (!row.id) return
   try {
     // UnwrapResult 自动解包: ResultListRoleResponse -> RoleResponse[]
@@ -338,7 +393,7 @@ const handleSaveRoles = async () => {
 }
 
 // 重置密码
-const handleResetPassword = async (row: UserPageResponse) => {
+const handleResetPassword = async (row: NoAdminUserPageResponse) => {
   if (!row.id) return
   try {
     await ElMessageBox.confirm(
@@ -351,12 +406,12 @@ const handleResetPassword = async (row: UserPageResponse) => {
       },
     )
 
-    await userApi.putAuthUserUserIdResetPassword(row.id)
-    ElMessage.success('密码重置成功')
+    // TODO: 等待后端提供重置密码接口
+    // await userApi.putAuthUserUserIdResetPassword(row.id)
+    ElMessage.warning('重置密码功能暂未开放，请联系管理员')
   } catch (error) {
     if (error !== 'cancel') {
       console.error('密码重置失败:', error)
-      ElMessage.error('密码重置失败')
     }
   }
 }
@@ -405,5 +460,24 @@ onMounted(() => {
   margin-top: 20px;
   display: flex;
   justify-content: flex-end;
+}
+
+/* 校友档案样式 */
+.alumni-infos {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.alumni-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+}
+
+.alumni-text {
+  color: #606266;
+  flex: 1;
 }
 </style>

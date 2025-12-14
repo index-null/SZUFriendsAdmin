@@ -24,13 +24,6 @@
               <el-tag :type="getUserTypeTag(userDetail.userType)" size="small">
                 {{ getUserTypeLabel(userDetail.userType) }}
               </el-tag>
-              <el-tag
-                :type="userDetail.status === 1 ? 'success' : 'danger'"
-                size="small"
-                style="margin-left: 8px"
-              >
-                {{ userDetail.status === 1 ? '启用' : '禁用' }}
-              </el-tag>
             </div>
           </div>
         </div>
@@ -38,81 +31,123 @@
           <el-descriptions-item label="用户ID">
             {{ userDetail.id }}
           </el-descriptions-item>
-          <el-descriptions-item label="昵称">
-            {{ userDetail.nickname || '-' }}
+          <el-descriptions-item v-if="userDetail.nickname" label="昵称">
+            {{ userDetail.nickname }}
           </el-descriptions-item>
-          <el-descriptions-item label="真实姓名">
-            {{ userDetail.realName || '-' }}
+          <el-descriptions-item v-if="userDetail.realName" label="真实姓名">
+            {{ userDetail.realName }}
           </el-descriptions-item>
-          <el-descriptions-item label="学号/工号">
-            {{ userDetail.studentId || '-' }}
+          <el-descriptions-item
+            v-if="userDetail.gender !== undefined"
+            label="性别"
+          >
+            {{ getGenderLabel(userDetail.gender) }}
+          </el-descriptions-item>
+          <el-descriptions-item v-if="userDetail.birthday" label="生日">
+            {{ userDetail.birthday }}
           </el-descriptions-item>
         </el-descriptions>
       </el-card>
 
       <!-- 联系方式卡片 -->
-      <el-card shadow="never" class="info-card">
+      <el-card
+        v-if="
+          userDetail.email ||
+          userDetail.phone ||
+          userDetail.wechat ||
+          userDetail.qq
+        "
+        shadow="never"
+        class="info-card"
+      >
         <template #header>
           <div class="card-header">
             <span>联系方式</span>
           </div>
         </template>
         <el-descriptions :column="1" border>
-          <el-descriptions-item label="邮箱">
-            {{ userDetail.email || '-' }}
+          <el-descriptions-item v-if="userDetail.email" label="邮箱">
+            {{ userDetail.email }}
           </el-descriptions-item>
-          <el-descriptions-item label="手机号">
-            {{ userDetail.phone || '-' }}
+          <el-descriptions-item v-if="userDetail.phone" label="手机号">
+            {{ userDetail.phone }}
           </el-descriptions-item>
-          <el-descriptions-item label="性别">
-            {{ getGenderLabel(userDetail.gender) }}
+          <el-descriptions-item v-if="userDetail.wechat" label="微信号">
+            {{ userDetail.wechat }}
+          </el-descriptions-item>
+          <el-descriptions-item v-if="userDetail.qq" label="QQ号">
+            {{ userDetail.qq }}
           </el-descriptions-item>
         </el-descriptions>
       </el-card>
 
-      <!-- 教育/职业信息卡片 -->
-      <el-card shadow="never" class="info-card">
+      <!-- 职业信息卡片 -->
+      <el-card
+        v-if="
+          userDetail.companyName || userDetail.jobTitle || userDetail.industry
+        "
+        shadow="never"
+        class="info-card"
+      >
         <template #header>
           <div class="card-header">
-            <span>教育/职业信息</span>
+            <span>职业信息</span>
           </div>
         </template>
         <el-descriptions :column="1" border>
-          <el-descriptions-item label="专业">
-            {{ userDetail.major || '-' }}
+          <el-descriptions-item v-if="userDetail.companyName" label="工作单位">
+            {{ userDetail.companyName }}
           </el-descriptions-item>
-          <el-descriptions-item label="入学年份">
-            {{ userDetail.admissionYear || '-' }}
+          <el-descriptions-item v-if="userDetail.jobTitle" label="职位">
+            {{ userDetail.jobTitle }}
           </el-descriptions-item>
-          <el-descriptions-item label="毕业年份">
-            {{ userDetail.graduationYear || '-' }}
-          </el-descriptions-item>
-          <el-descriptions-item label="工作单位">
-            {{ userDetail.companyName || '-' }}
-          </el-descriptions-item>
-          <el-descriptions-item label="职位">
-            {{ userDetail.jobTitle || '-' }}
-          </el-descriptions-item>
-          <el-descriptions-item label="行业">
-            {{ userDetail.industry || '-' }}
+          <el-descriptions-item v-if="userDetail.industry" label="行业">
+            {{ userDetail.industry }}
           </el-descriptions-item>
         </el-descriptions>
       </el-card>
 
       <!-- 地域信息卡片 -->
-      <el-card shadow="never" class="info-card">
+      <el-card
+        v-if="userDetail.locationResponse && hasLocationInfo"
+        shadow="never"
+        class="info-card"
+      >
         <template #header>
           <div class="card-header">
             <span>地域信息</span>
           </div>
         </template>
         <el-descriptions :column="1" border>
-          <el-descriptions-item label="所在地">
+          <el-descriptions-item
+            v-if="
+              userDetail.locationResponse.province ||
+              userDetail.locationResponse.city ||
+              userDetail.locationResponse.district
+            "
+            label="所在地"
+          >
             {{
-              [userDetail.province, userDetail.city, userDetail.district]
+              [
+                userDetail.locationResponse.province,
+                userDetail.locationResponse.city,
+                userDetail.locationResponse.district,
+              ]
                 .filter(Boolean)
-                .join(' ') || '-'
+                .join(' ')
             }}
+          </el-descriptions-item>
+          <el-descriptions-item
+            v-if="userDetail.locationResponse.company"
+            label="公司"
+          >
+            {{ userDetail.locationResponse.company }}
+          </el-descriptions-item>
+          <el-descriptions-item
+            v-if="userDetail.locationResponse.position"
+            label="职位"
+          >
+            {{ userDetail.locationResponse.position }}
           </el-descriptions-item>
         </el-descriptions>
       </el-card>
@@ -127,21 +162,62 @@
         <div class="bio-content">{{ userDetail.bio }}</div>
       </el-card>
 
-      <!-- 系统信息卡片 -->
-      <el-card shadow="never" class="info-card">
+      <!-- 校友档案卡片 -->
+      <el-card
+        v-if="userDetail.alumniInfos && userDetail.alumniInfos.length > 0"
+        shadow="never"
+        class="info-card"
+      >
         <template #header>
           <div class="card-header">
-            <span>系统信息</span>
+            <span>校友档案</span>
           </div>
         </template>
-        <el-descriptions :column="1" border>
-          <el-descriptions-item label="创建时间">
-            {{ formatDateTime(userDetail.createTime) }}
-          </el-descriptions-item>
-          <el-descriptions-item label="更新时间">
-            {{ formatDateTime(userDetail.updateTime) }}
-          </el-descriptions-item>
-        </el-descriptions>
+        <div
+          v-for="alumni in userDetail.alumniInfos"
+          :key="alumni.id"
+          class="alumni-card"
+        >
+          <el-descriptions :column="2" border>
+            <el-descriptions-item label="姓名">
+              {{ alumni.name }}
+            </el-descriptions-item>
+            <el-descriptions-item label="学号/工号">
+              {{ alumni.number }}
+            </el-descriptions-item>
+            <el-descriptions-item label="身份">
+              <el-tag
+                :type="getAlumniIdentityTag(alumni.identity)"
+                size="small"
+              >
+                {{ getUserTypeLabel(alumni.identity) }}
+              </el-tag>
+            </el-descriptions-item>
+            <el-descriptions-item label="认证状态">
+              <el-tag
+                :type="alumni.status === 1 ? 'success' : 'info'"
+                size="small"
+              >
+                {{ alumni.status === 1 ? '已认证' : '未认证' }}
+              </el-tag>
+            </el-descriptions-item>
+            <el-descriptions-item v-if="alumni.grade" label="入学年份">
+              {{ alumni.grade }}
+            </el-descriptions-item>
+            <el-descriptions-item v-if="alumni.alumniType" label="学历">
+              {{ getAlumniTypeLabel(alumni.alumniType) }}
+            </el-descriptions-item>
+            <el-descriptions-item v-if="alumni.collegeName" label="学院">
+              {{ alumni.collegeName }}
+            </el-descriptions-item>
+            <el-descriptions-item v-if="alumni.className" label="班级">
+              {{ alumni.className }}
+            </el-descriptions-item>
+            <el-descriptions-item v-if="alumni.major" label="专业" :span="2">
+              {{ alumni.major }}
+            </el-descriptions-item>
+          </el-descriptions>
+        </div>
       </el-card>
     </div>
 
@@ -154,13 +230,21 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { User } from '@element-plus/icons-vue'
-import type { UserEntity } from '@/api/generated/.ts.schemas'
+import type {
+  UserInfoResponse,
+  AlumniPageResponse,
+} from '@/api/generated/.ts.schemas'
 import { useDict } from '@/stores'
 import { DICT_TYPE } from '@/utils/dict'
 
+// 扩展类型以支持校友档案
+type UserDetailType = UserInfoResponse & {
+  alumniInfos?: AlumniPageResponse[]
+}
+
 interface Props {
   visible: boolean
-  userDetail: UserEntity | null
+  userDetail: UserDetailType | null
 }
 
 interface Emits {
@@ -175,27 +259,52 @@ const drawerVisible = computed({
   set: (val) => emit('update:visible', val),
 })
 
+// 检查是否有位置信息
+const hasLocationInfo = computed(() => {
+  const location = props.userDetail?.locationResponse
+  if (!location) return false
+  return !!(
+    location.province ||
+    location.city ||
+    location.district ||
+    location.company ||
+    location.position
+  )
+})
+
 // 使用字典
 const { getLabel: getUserTypeLabel } = useDict(DICT_TYPE.USER_TYPE)
 const { getLabel: getGenderLabel } = useDict(DICT_TYPE.GENDER)
 
+// 获取校友身份类型标签颜色（复用 getUserTypeTag）
+const getAlumniIdentityTag = (identity?: number) => {
+  return getUserTypeTag(identity)
+}
+
+// 获取学历标签
+const getAlumniTypeLabel = (type?: number) => {
+  const map: Record<number, string> = {
+    0: '无',
+    1: '本科',
+    2: '硕士',
+    3: '博士',
+  }
+  return type !== undefined ? map[type] || '-' : '-'
+}
+
 // 用户类型标签颜色映射
 const getUserTypeTag = (
   type: number | undefined,
-): 'success' | 'warning' | 'info' => {
+): 'success' | 'warning' | 'info' | 'danger' => {
   if (type === undefined) return 'info'
-  const map: Record<number, 'success' | 'warning' | 'info'> = {
-    1: 'success',
-    2: 'warning',
-    3: 'info',
+  const map: Record<number, 'success' | 'warning' | 'info' | 'danger'> = {
+    1: 'success', // 学生
+    2: 'warning', // 教师
+    3: 'info', // 校友
+    4: 'info', // 游客
+    5: 'danger', // 管理员
   }
   return map[type] || 'info'
-}
-
-// 格式化时间
-const formatDateTime = (dateTime?: string) => {
-  if (!dateTime) return '-'
-  return new Date(dateTime).toLocaleString('zh-CN')
 }
 </script>
 
@@ -253,6 +362,15 @@ const formatDateTime = (dateTime?: string) => {
   color: #606266;
   white-space: pre-wrap;
   word-break: break-word;
+}
+
+/* 校友档案卡片样式 */
+.alumni-card {
+  margin-bottom: 16px;
+}
+
+.alumni-card:last-child {
+  margin-bottom: 0;
 }
 
 .empty-state {

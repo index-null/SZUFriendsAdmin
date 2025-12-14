@@ -60,19 +60,19 @@ export function useLogHelpers() {
   /**
    * 获取状态标签颜色
    */
-  const getStatusTagType = (status?: number) => {
-    // status: 1-成功，0-失败，undefined-未知
-    if (status === 1) return 'success'
-    if (status === 0) return 'danger'
+  const getStatusTagType = (status?: string) => {
+    // status: 'SUCCESS'-成功，'FAILURE'-失败，undefined-未知
+    if (status === 'SUCCESS') return 'success'
+    if (status === 'FAILURE') return 'danger'
     return 'info'
   }
 
   /**
    * 获取状态文本
    */
-  const getStatusText = (status?: number) => {
-    if (status === 1) return '成功'
-    if (status === 0) return '失败'
+  const getStatusText = (status?: string) => {
+    if (status === 'SUCCESS') return '成功'
+    if (status === 'FAILURE') return '失败'
     return '未知'
   }
 

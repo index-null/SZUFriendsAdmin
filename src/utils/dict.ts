@@ -122,6 +122,12 @@ export const DICT_TYPE = {
   GENDER: 'gender',
   /** 状态 */
   STATUS: 'status',
+  /** 校友信息身份 */
+  IDENTITY: 'identity',
+  /** 帖子类型 */
+  POST_TYPE: 'post_type',
+  /** 帖子内容块类型 */
+  CONTENT_blOCK_TYPE: 'content_block_type',
 } as const
 
 /**

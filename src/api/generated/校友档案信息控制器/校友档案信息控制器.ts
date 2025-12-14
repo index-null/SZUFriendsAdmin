@@ -5,8 +5,15 @@
  * OpenAPI spec version: 1.0.0
  */
 import type {
-  PostManagerAlumniBatchParams,
-  ResultListString
+  AlumniPageRequest,
+  BindUserAlumniRequest,
+  CreateAlumniRequest,
+  GetManagerAlumniNameParams,
+  PostManagerAlumniBatchBody,
+  ResultAlumniExcelResponse,
+  ResultBoolean,
+  ResultListAlumniPageResponse,
+  ResultPageResultAlumniPageResponse
 } from '../.ts.schemas';
 
 import { customInstance } from '../../mutator';
@@ -15,16 +22,97 @@ import { customInstance } from '../../mutator';
 
   export const get = () => {
 /**
+ * 目前支持 学生 教师 导入
  * @summary 批量上传校友信息
  */
 const postManagerAlumniBatch = (
-    params?: PostManagerAlumniBatchParams,
- ) => {
-      return customInstance<ResultListString>(
+    postManagerAlumniBatchBody: PostManagerAlumniBatchBody,
+ ) => {const formData = new FormData();
+if(postManagerAlumniBatchBody.file !== undefined) {
+ formData.append(`file`, postManagerAlumniBatchBody.file)
+ }
+
+      return customInstance<ResultAlumniExcelResponse>(
       {url: `/manager/alumni/batch`, method: 'POST',
+      headers: {'Content-Type': 'multipart/form-data', },
+       data: formData
+    },
+      );
+    }
+  /**
+ * 分页查询校友信息
+ * @summary 分页查询校友信息
+ */
+const postManagerAlumniPage = (
+    alumniPageRequest: AlumniPageRequest,
+ ) => {
+      return customInstance<ResultPageResultAlumniPageResponse>(
+      {url: `/manager/alumni/page`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: alumniPageRequest
+    },
+      );
+    }
+  /**
+ * 添加校友信息
+添加校友信息
+ * @summary 添加校友信息
+ */
+const postManagerAlumni = (
+    createAlumniRequest: CreateAlumniRequest,
+ ) => {
+      return customInstance<ResultBoolean>(
+      {url: `/manager/alumni`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: createAlumniRequest
+    },
+      );
+    }
+  /**
+ * @summary 根据姓名查询校友信息
+ */
+const getManagerAlumniName = (
+    params: GetManagerAlumniNameParams,
+ ) => {
+      return customInstance<ResultListAlumniPageResponse>(
+      {url: `/manager/alumni/name`, method: 'GET',
         params
     },
       );
     }
-  return {postManagerAlumniBatch}};
+  /**
+ * @summary 根据id列表查询校友信息
+ */
+const postManagerAlumniList = (
+    postManagerAlumniListBody: number[],
+ ) => {
+      return customInstance<ResultListAlumniPageResponse>(
+      {url: `/manager/alumni/list`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: postManagerAlumniListBody
+    },
+      );
+    }
+  /**
+ * 绑定校友信息
+绑定校友信息
+绑定校友信息 简单实现
+ * @summary 绑定校友信息
+ */
+const postManagerAlumniBindAlumni = (
+    bindUserAlumniRequest: BindUserAlumniRequest,
+ ) => {
+      return customInstance<ResultBoolean>(
+      {url: `/manager/alumni/bind/alumni`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: bindUserAlumniRequest
+    },
+      );
+    }
+  return {postManagerAlumniBatch,postManagerAlumniPage,postManagerAlumni,getManagerAlumniName,postManagerAlumniList,postManagerAlumniBindAlumni}};
 export type PostManagerAlumniBatchResult = NonNullable<Awaited<ReturnType<ReturnType<typeof get>['postManagerAlumniBatch']>>>
+export type PostManagerAlumniPageResult = NonNullable<Awaited<ReturnType<ReturnType<typeof get>['postManagerAlumniPage']>>>
+export type PostManagerAlumniResult = NonNullable<Awaited<ReturnType<ReturnType<typeof get>['postManagerAlumni']>>>
+export type GetManagerAlumniNameResult = NonNullable<Awaited<ReturnType<ReturnType<typeof get>['getManagerAlumniName']>>>
+export type PostManagerAlumniListResult = NonNullable<Awaited<ReturnType<ReturnType<typeof get>['postManagerAlumniList']>>>
+export type PostManagerAlumniBindAlumniResult = NonNullable<Awaited<ReturnType<ReturnType<typeof get>['postManagerAlumniBindAlumni']>>>

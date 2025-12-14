@@ -67,7 +67,7 @@ export function useOperationLog() {
   const updateStatistics = () => {
     const total = tableData.value.length
     const successCount = tableData.value.filter(
-      (log) => log.status === 1,
+      (log) => log.status === 'SUCCESS',
     ).length
     const failedCount = total - successCount
     const totalCostTime = tableData.value.reduce(
