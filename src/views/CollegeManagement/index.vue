@@ -97,6 +97,24 @@
           show-overflow-tooltip
         />
         <el-table-column
+          prop="url"
+          label="学院官网"
+          min-width="200"
+          show-overflow-tooltip
+        >
+          <template #default="{ row }">
+            <a
+              v-if="row.url"
+              :href="row.url"
+              target="_blank"
+              class="college-url"
+            >
+              {{ row.url }}
+            </a>
+            <span v-else class="text-secondary">-</span>
+          </template>
+        </el-table-column>
+        <el-table-column
           prop="sortOrder"
           label="排序"
           width="80"
@@ -387,5 +405,20 @@ onMounted(() => {
   .actions .el-button {
     width: 100%;
   }
+}
+
+.college-url {
+  color: var(--el-color-primary);
+  text-decoration: none;
+  transition: opacity 0.3s;
+}
+
+.college-url:hover {
+  opacity: 0.8;
+  text-decoration: underline;
+}
+
+.text-secondary {
+  color: var(--el-text-color-secondary);
 }
 </style>

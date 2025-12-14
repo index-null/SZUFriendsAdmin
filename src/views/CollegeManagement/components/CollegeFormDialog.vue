@@ -2,7 +2,7 @@
   <el-dialog
     v-model="dialogVisible"
     :title="isEdit ? '编辑学院' : '新增学院'"
-    width="600px"
+    width="800px"
     :close-on-click-modal="false"
     @close="handleClose"
   >
@@ -54,6 +54,19 @@
               v-model="formData.email"
               placeholder="请输入联系邮箱"
               maxlength="100"
+              show-word-limit
+            />
+          </el-form-item>
+        </el-col>
+      </el-row>
+
+      <el-row :gutter="20">
+        <el-col :span="24">
+          <el-form-item label="学院官网" prop="url">
+            <el-input
+              v-model="formData.url"
+              placeholder="请输入学院官网地址，如：https://example.edu.cn"
+              maxlength="200"
               show-word-limit
             />
           </el-form-item>
@@ -161,6 +174,7 @@ const defaultFormData: CollegeEntity = {
   adminAccount: '',
   contactPhone: '',
   email: '',
+  url: '',
   address: '',
   description: '',
   sortOrder: 0,
@@ -191,6 +205,13 @@ const rules: FormRules = {
     },
   ],
   email: [{ type: 'email', message: '请输入正确的邮箱地址', trigger: 'blur' }],
+  url: [
+    {
+      pattern: /^(https?:\/\/)?([\da-z.-]+)\.([a-z.]{2,6})([/\w .-]*)*\/?$/,
+      message: '请输入正确的网址格式',
+      trigger: 'blur',
+    },
+  ],
   sortOrder: [
     { type: 'number', message: '排序顺序必须是数字', trigger: 'blur' },
   ],
