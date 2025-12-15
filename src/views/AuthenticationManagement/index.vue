@@ -152,13 +152,14 @@
             <div class="images-grid">
               <el-image
                 v-for="(img, idx) in request.info"
-                :key="idx"
+                :key="`${request.id}-${idx}`"
                 :src="img"
                 :preview-src-list="request.info"
                 :initial-index="idx"
                 fit="cover"
                 class="auth-image"
-                lazy
+                preview-teleported
+                :z-index="9999"
               >
                 <template #error>
                   <div class="image-error">
