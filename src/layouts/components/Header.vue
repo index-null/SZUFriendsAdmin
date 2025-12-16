@@ -35,11 +35,15 @@
       <!-- 用户下拉菜单 -->
       <el-dropdown trigger="click" @command="handleCommand">
         <div class="user-dropdown-trigger">
-          <el-avatar :size="36" class="user-avatar">
+          <el-avatar
+            :size="36"
+            :src="userStore.userInfo.avatar"
+            class="user-avatar"
+          >
             <el-icon><UserFilled /></el-icon>
           </el-avatar>
           <span class="username">{{
-            userStore.userInfo.username || '用户'
+            userStore.userInfo.nickname || userStore.userInfo.username || '用户'
           }}</span>
           <el-icon class="dropdown-icon"><ArrowDown /></el-icon>
         </div>

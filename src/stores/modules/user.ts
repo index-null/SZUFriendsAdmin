@@ -223,6 +223,16 @@ export const useUserStore = defineStore('user', () => {
     }
   }
 
+  /**
+   * 更新用户信息（用于个人资料修改后同步）
+   */
+  const updateUserInfo = (updates: Partial<LoginResponse>) => {
+    userInfo.value = {
+      ...userInfo.value,
+      ...updates,
+    }
+  }
+
   // ============ 导出 ============
 
   return {
@@ -238,6 +248,7 @@ export const useUserStore = defineStore('user', () => {
 
     // 方法
     setUserInfo,
+    updateUserInfo,
     restoreLoginState,
     login,
     register,

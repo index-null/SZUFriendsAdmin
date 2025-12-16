@@ -413,9 +413,13 @@ import {
 import { getProfile, updateProfile } from '@/api/modules/user'
 import { get as getCommunityApi } from '@/api/generated/社区控制器/社区控制器'
 import type { UpdateProfileRequest } from '@/api/generated/.ts.schemas'
+import { useUserStore } from '@/stores/modules/user'
 
 // 初始化上传 API
 const communityApi = getCommunityApi()
+
+// 用户 Store
+const userStore = useUserStore()
 
 // 加载状态
 const loading = ref(true)
@@ -581,6 +585,11 @@ const handleFileUpload = async (file: File) => {
 
     ElMessage.success('头像更新成功')
 
+    // 同步更新 userStore
+    userStore.updateUserInfo({
+      avatar: uploadedUrl,
+    })
+
     // 重新加载资料
     await loadProfile()
   } catch (error) {
@@ -657,6 +666,12 @@ const saveProfile = async () => {
     await updateProfile(submitData)
 
     ElMessage.success('保存成功')
+
+    // 同步更新 userStore 中的关键信息
+    userStore.updateUserInfo({
+      nickname: submitData.nickname,
+      avatar: submitData.avatar,
+    })
 
     // 关闭所有编辑模式
     Object.keys(editMode).forEach((key) => {

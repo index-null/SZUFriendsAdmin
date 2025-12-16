@@ -51,7 +51,7 @@ export default defineConfig({
     sourcemap: false,
 
     // chunk 文件大小警告限制
-    chunkSizeWarningLimit: 1000,
+    chunkSizeWarningLimit: 2000,
 
     rollupOptions: {
       output: {
