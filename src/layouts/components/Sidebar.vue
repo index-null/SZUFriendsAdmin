@@ -29,79 +29,118 @@
           router
           class="sidebar-menu"
         >
+          <!-- 首页 -->
           <el-menu-item index="/home">
             <el-icon><HomeFilled /></el-icon>
             <template #title>首页</template>
           </el-menu-item>
 
-          <el-menu-item
-            v-if="hasPermission('college:page')"
-            index="/college-management"
+          <!-- 信息管理 -->
+          <el-sub-menu
+            v-if="
+              hasPermission('college:page') ||
+              hasPermission('class') ||
+              hasPermission('user:page')
+            "
+            index="data-management"
           >
-            <el-icon><School /></el-icon>
-            <template #title>学院管理</template>
-          </el-menu-item>
+            <template #title>
+              <el-icon><DataAnalysis /></el-icon>
+              <span>信息管理</span>
+            </template>
+            <el-menu-item
+              v-if="hasPermission('college:page')"
+              index="/college-management"
+            >
+              <el-icon><School /></el-icon>
+              <template #title>学院管理</template>
+            </el-menu-item>
+            <el-menu-item
+              v-if="hasPermission('class')"
+              index="/class-management"
+            >
+              <el-icon><Grid /></el-icon>
+              <template #title>班级管理</template>
+            </el-menu-item>
+            <el-menu-item
+              v-if="hasPermission('user:page')"
+              index="/user-management"
+            >
+              <el-icon><User /></el-icon>
+              <template #title>用户管理</template>
+            </el-menu-item>
+          </el-sub-menu>
 
-          <el-menu-item v-if="hasPermission('class')" index="/class-management">
-            <el-icon><Grid /></el-icon>
-            <template #title>班级管理</template>
-          </el-menu-item>
-
-          <el-menu-item
-            v-if="hasPermission('user:page')"
-            index="/user-management"
+          <!-- 系统管理 -->
+          <el-sub-menu
+            v-if="
+              hasPermission('admin-user:page') ||
+              hasPermission('role:page') ||
+              hasPermission('permission:page') ||
+              hasPermission('dict:page')
+            "
+            index="system-management"
           >
-            <el-icon><User /></el-icon>
-            <template #title>用户管理</template>
-          </el-menu-item>
+            <template #title>
+              <el-icon><Setting /></el-icon>
+              <span>系统管理</span>
+            </template>
+            <el-menu-item
+              v-if="hasPermission('admin-user:page')"
+              index="/admin-management"
+            >
+              <el-icon><UserFilled /></el-icon>
+              <template #title>管理员管理</template>
+            </el-menu-item>
+            <el-menu-item
+              v-if="hasPermission('role:page')"
+              index="/role-management"
+            >
+              <el-icon><Management /></el-icon>
+              <template #title>角色管理</template>
+            </el-menu-item>
+            <el-menu-item
+              v-if="hasPermission('permission:page')"
+              index="/permission-management"
+            >
+              <el-icon><Key /></el-icon>
+              <template #title>权限管理</template>
+            </el-menu-item>
+            <el-menu-item
+              v-if="hasPermission('dict:page')"
+              index="/dict-management"
+            >
+              <el-icon><Notebook /></el-icon>
+              <template #title>字典管理</template>
+            </el-menu-item>
+          </el-sub-menu>
 
-          <el-menu-item
-            v-if="hasPermission('admin-user:page')"
-            index="/admin-management"
+          <!-- 审核管理 -->
+          <el-sub-menu
+            v-if="
+              hasPermission('auth:page') || hasPermission('operation-log:page')
+            "
+            index="audit-management"
           >
-            <el-icon><UserFilled /></el-icon>
-            <template #title>管理员管理</template>
-          </el-menu-item>
-
-          <el-menu-item
-            v-if="hasPermission('role:page')"
-            index="/role-management"
-          >
-            <el-icon><Management /></el-icon>
-            <template #title>角色管理</template>
-          </el-menu-item>
-
-          <el-menu-item
-            v-if="hasPermission('permission:page')"
-            index="/permission-management"
-          >
-            <el-icon><Key /></el-icon>
-            <template #title>权限管理</template>
-          </el-menu-item>
-
-          <el-menu-item
-            v-if="hasPermission('dict:page')"
-            index="/dict-management"
-          >
-            <el-icon><Notebook /></el-icon>
-            <template #title>字典管理</template>
-          </el-menu-item>
-
-          <el-menu-item
-            v-if="hasPermission('operation-log:page')"
-            index="/operation-log-statistics"
-          >
-            <el-icon><DocumentChecked /></el-icon>
-            <template #title>操作日志</template>
-          </el-menu-item>
-
-          <el-menu-item
-            v-if="hasPermission('auth:page')"
-            index="/authentication-management"
-          >
-            <el-icon><Checked /></el-icon>
-            <template #title>认证管理</template>
-          </el-menu-item>
+            <template #title>
+              <el-icon><Monitor /></el-icon>
+              <span>审核管理</span>
+            </template>
+            <el-menu-item
+              v-if="hasPermission('auth:page')"
+              index="/authentication-management"
+            >
+              <el-icon><Checked /></el-icon>
+              <template #title>认证管理</template>
+            </el-menu-item>
+            <el-menu-item
+              v-if="hasPermission('operation-log:page')"
+              index="/operation-log-statistics"
+            >
+              <el-icon><DocumentChecked /></el-icon>
+              <template #title>操作日志</template>
+            </el-menu-item>
+          </el-sub-menu>
         </el-menu>
       </el-scrollbar>
 
@@ -132,6 +171,9 @@ import {
   Checked,
   DArrowLeft,
   DArrowRight,
+  DataAnalysis,
+  Setting,
+  Monitor,
 } from '@element-plus/icons-vue'
 import { usePermission } from '@/stores'
 
@@ -280,6 +322,37 @@ html.dark .logo-sub {
 
 .sidebar-menu :deep(.el-icon) {
   font-size: 18px;
+}
+
+/* 子菜单标题样式 */
+.sidebar-menu :deep(.el-sub-menu__title) {
+  height: 48px;
+  line-height: 48px;
+  margin: 4px 8px;
+  border-radius: 8px;
+  transition: all 0.3s;
+}
+
+.sidebar-menu :deep(.el-sub-menu__title:hover) {
+  background-color: var(--menu-hover-bg);
+}
+
+/* 子菜单内容区域 */
+.sidebar-menu :deep(.el-sub-menu .el-menu) {
+  background-color: transparent;
+}
+
+.sidebar-menu :deep(.el-sub-menu .el-menu-item) {
+  height: 44px;
+  line-height: 44px;
+  padding-left: 56px !important;
+  font-size: 14px;
+}
+
+/* 展开的子菜单高亮 */
+.sidebar-menu :deep(.el-sub-menu.is-opened > .el-sub-menu__title) {
+  color: var(--brand-primary);
+  font-weight: 600;
 }
 
 /* 折叠状态下的菜单 */
