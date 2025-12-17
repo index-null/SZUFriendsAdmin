@@ -95,11 +95,9 @@
         >
           <div class="card-header">
             <div class="user-basic-info">
-              <div class="user-avatar">
-                <el-avatar :size="48">
-                  <el-icon><User /></el-icon>
-                </el-avatar>
-              </div>
+              <el-avatar :size="40" class="user-avatar">
+                <el-icon><User /></el-icon>
+              </el-avatar>
               <div class="user-details">
                 <div class="user-name">{{ request.realName }}</div>
                 <div class="user-meta">
@@ -110,6 +108,9 @@
                     {{ getIdentityLabel(request.identity) }}
                   </el-tag>
                   <span class="user-phone">{{ request.phone }}</span>
+                  <span class="user-gender">{{
+                    getGenderLabel(request.gender)
+                  }}</span>
                 </div>
               </div>
             </div>
@@ -118,22 +119,14 @@
             </el-tag>
           </div>
 
-          <el-divider />
-
           <div class="card-content">
-            <div class="info-row">
-              <span class="info-label">性别</span>
-              <span class="info-value">{{
-                getGenderLabel(request.gender)
-              }}</span>
-            </div>
-            <div class="info-row">
-              <span class="info-label">用户ID</span>
-              <span class="info-value">{{ request.userId }}</span>
-            </div>
             <div v-if="request.reviewedTime" class="info-row">
               <span class="info-label">审核时间</span>
               <span class="info-value">{{ request.reviewedTime }}</span>
+            </div>
+            <div v-if="request.reviewerId" class="info-row">
+              <span class="info-label">审核员</span>
+              <span class="info-value">{{ request.reviewerId }}</span>
             </div>
             <div v-if="request.rejectReason" class="info-row full-width">
               <span class="info-label">拒绝原因</span>
@@ -148,7 +141,6 @@
             v-if="request.info && request.info.length > 0"
             class="card-images"
           >
-            <div class="images-label">认证材料</div>
             <div class="images-grid">
               <el-image
                 v-for="(img, idx) in request.info"
@@ -186,14 +178,6 @@
               size="small"
               @click="handleReject(request)"
               >拒绝</el-button
-            >
-            <el-button
-              type="info"
-              :icon="View"
-              size="small"
-              plain
-              @click="handleViewDetail(request)"
-              >详情</el-button
             >
           </div>
         </el-card>
@@ -245,75 +229,6 @@
         >
       </template>
     </el-dialog>
-
-    <!-- 详情对话框 -->
-    <el-dialog v-model="detailDialogVisible" title="认证申请详情" width="600px">
-      <el-descriptions v-if="currentRequest" :column="2" border>
-        <el-descriptions-item label="申请ID">
-          {{ currentRequest.id }}
-        </el-descriptions-item>
-        <el-descriptions-item label="用户ID">
-          {{ currentRequest.userId }}
-        </el-descriptions-item>
-        <el-descriptions-item label="真实姓名">
-          {{ currentRequest.realName }}
-        </el-descriptions-item>
-        <el-descriptions-item label="性别">
-          {{ getGenderLabel(currentRequest.gender) }}
-        </el-descriptions-item>
-        <el-descriptions-item label="手机号">
-          {{ currentRequest.phone }}
-        </el-descriptions-item>
-        <el-descriptions-item label="认证身份">
-          <el-tag :type="getIdentityTagType(currentRequest.identity)">
-            {{ getIdentityLabel(currentRequest.identity) }}
-          </el-tag>
-        </el-descriptions-item>
-        <el-descriptions-item label="状态" :span="2">
-          <el-tag :type="getStatusTagType(currentRequest.status)">
-            {{ getStatusLabel(currentRequest.status) }}
-          </el-tag>
-        </el-descriptions-item>
-        <el-descriptions-item
-          v-if="currentRequest.reviewedTime"
-          label="审核时间"
-          :span="2"
-        >
-          {{ currentRequest.reviewedTime }}
-        </el-descriptions-item>
-        <el-descriptions-item
-          v-if="currentRequest.reviewerId"
-          label="审核管理员"
-          :span="2"
-        >
-          {{ currentRequest.reviewerId }}
-        </el-descriptions-item>
-        <el-descriptions-item
-          v-if="currentRequest.rejectReason"
-          label="拒绝原因"
-          :span="2"
-        >
-          {{ currentRequest.rejectReason }}
-        </el-descriptions-item>
-        <el-descriptions-item
-          v-if="currentRequest.info && currentRequest.info.length > 0"
-          label="认证材料"
-          :span="2"
-        >
-          <div class="detail-images">
-            <el-image
-              v-for="(img, idx) in currentRequest.info"
-              :key="idx"
-              :src="img"
-              :preview-src-list="currentRequest.info"
-              :initial-index="idx"
-              fit="cover"
-              style="width: 100px; height: 100px; margin-right: 8px"
-            />
-          </div>
-        </el-descriptions-item>
-      </el-descriptions>
-    </el-dialog>
   </div>
 </template>
 
@@ -328,7 +243,6 @@ import {
   RefreshRight,
   Select,
   CloseBold,
-  View,
   Picture,
 } from '@element-plus/icons-vue'
 import { useDict } from '@/stores'
@@ -390,10 +304,6 @@ const rejectFormRules = {
   ],
 }
 const submitting = ref(false)
-
-// 详情对话框
-const detailDialogVisible = ref(false)
-const currentRequest = ref<AuthRequestPageResponse | null>(null)
 
 // 获取认证申请列表
 const fetchAuthRequests = async () => {
@@ -518,12 +428,6 @@ const handleConfirmReject = async () => {
   }
 }
 
-// 查看详情
-const handleViewDetail = (request: AuthRequestPageResponse) => {
-  currentRequest.value = request
-  detailDialogVisible.value = true
-}
-
 // 获取身份标签类型
 const getIdentityTagType = (identity?: number) => {
   const map: Record<number, 'success' | 'warning' | 'info'> = {
@@ -560,362 +464,364 @@ onMounted(() => {
 })
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+// 变量定义
+$primary-padding: 16px;
+$card-gap: 12px;
+$border-radius: 8px;
+$transition-duration: 0.3s;
+
+// 颜色定义
+$pending-color: #f39c12;
+$approved-color: #27ae60;
+$rejected-color: #e74c3c;
+$total-color: #3498db;
+
+$bg-light: #f5f7fa;
+$bg-dark: #141414;
+$card-bg-light: #ffffff;
+$card-bg-dark: #1a1a1a;
+
+// 主容器
 .auth-management {
-  padding: 20px;
-  background: #f5f7fa;
+  padding: $primary-padding;
+  background: $bg-light;
   min-height: 100vh;
+
+  html.dark & {
+    background: $bg-dark;
+  }
 }
 
-html.dark .auth-management {
-  background: #141414;
-}
-
-/* 统计卡片 */
+// 统计卡片区域
 .stats-cards {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  gap: 20px;
-  margin-bottom: 20px;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: $card-gap;
+  margin-bottom: $card-gap;
+
+  .stat-card {
+    border-radius: $border-radius;
+    border: none;
+    transition: all $transition-duration ease;
+
+    &:hover {
+      transform: translateY(-2px);
+    }
+
+    // 统计卡片主题色
+    &.pending {
+      background: linear-gradient(135deg, #fef5e7 0%, #fff9e6 100%);
+      border-left: 3px solid $pending-color;
+
+      html.dark & {
+        background: linear-gradient(135deg, #2c2416 0%, #332819 100%);
+      }
+
+      .stat-icon {
+        color: $pending-color;
+      }
+    }
+
+    &.approved {
+      background: linear-gradient(135deg, #e8f8f5 0%, #e6f9f5 100%);
+      border-left: 3px solid $approved-color;
+
+      html.dark & {
+        background: linear-gradient(135deg, #162c22 0%, #183326 100%);
+      }
+
+      .stat-icon {
+        color: $approved-color;
+      }
+    }
+
+    &.rejected {
+      background: linear-gradient(135deg, #fdecea 0%, #fef0ef 100%);
+      border-left: 3px solid $rejected-color;
+
+      html.dark & {
+        background: linear-gradient(135deg, #2c1a1a 0%, #331d1d 100%);
+      }
+
+      .stat-icon {
+        color: $rejected-color;
+      }
+    }
+
+    &.total {
+      background: linear-gradient(135deg, #ebf5fb 0%, #e8f4fd 100%);
+      border-left: 3px solid $total-color;
+
+      html.dark & {
+        background: linear-gradient(135deg, #1a2533 0%, #1d2a3a 100%);
+      }
+
+      .stat-icon {
+        color: $total-color;
+      }
+    }
+
+    .stat-content {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+
+      .stat-icon {
+        width: 48px;
+        height: 48px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: $border-radius;
+        font-size: 24px;
+        background: rgba(255, 255, 255, 0.8);
+
+        html.dark & {
+          background: rgba(0, 0, 0, 0.3);
+        }
+      }
+
+      .stat-info {
+        flex: 1;
+
+        .stat-value {
+          font-size: 28px;
+          font-weight: 700;
+          line-height: 1;
+          margin-bottom: 6px;
+          color: #2c3e50;
+
+          html.dark & {
+            color: #ecf0f1;
+          }
+        }
+
+        .stat-label {
+          font-size: 13px;
+          color: #7f8c8d;
+          font-weight: 500;
+
+          html.dark & {
+            color: #95a5a6;
+          }
+        }
+      }
+    }
+  }
 }
 
-.stat-card {
-  border-radius: 12px;
-  border: none;
-  transition: all 0.3s ease;
-}
-
-.stat-card:hover {
-  transform: translateY(-4px);
-}
-
-.stat-card.pending {
-  background: linear-gradient(135deg, #fef5e7 0%, #fff9e6 100%);
-  border-left: 4px solid #f39c12;
-}
-
-.stat-card.approved {
-  background: linear-gradient(135deg, #e8f8f5 0%, #e6f9f5 100%);
-  border-left: 4px solid #27ae60;
-}
-
-.stat-card.rejected {
-  background: linear-gradient(135deg, #fdecea 0%, #fef0ef 100%);
-  border-left: 4px solid #e74c3c;
-}
-
-.stat-card.total {
-  background: linear-gradient(135deg, #ebf5fb 0%, #e8f4fd 100%);
-  border-left: 4px solid #3498db;
-}
-
-html.dark .stat-card.pending {
-  background: linear-gradient(135deg, #2c2416 0%, #332819 100%);
-}
-
-html.dark .stat-card.approved {
-  background: linear-gradient(135deg, #162c22 0%, #183326 100%);
-}
-
-html.dark .stat-card.rejected {
-  background: linear-gradient(135deg, #2c1a1a 0%, #331d1d 100%);
-}
-
-html.dark .stat-card.total {
-  background: linear-gradient(135deg, #1a2533 0%, #1d2a3a 100%);
-}
-
-.stat-content {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-}
-
-.stat-icon {
-  width: 56px;
-  height: 56px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 12px;
-  font-size: 28px;
-  background: rgba(255, 255, 255, 0.8);
-}
-
-html.dark .stat-icon {
-  background: rgba(0, 0, 0, 0.3);
-}
-
-.stat-card.pending .stat-icon {
-  color: #f39c12;
-}
-
-.stat-card.approved .stat-icon {
-  color: #27ae60;
-}
-
-.stat-card.rejected .stat-icon {
-  color: #e74c3c;
-}
-
-.stat-card.total .stat-icon {
-  color: #3498db;
-}
-
-.stat-info {
-  flex: 1;
-}
-
-.stat-value {
-  font-size: 32px;
-  font-weight: 700;
-  line-height: 1;
-  margin-bottom: 8px;
-  color: #2c3e50;
-}
-
-html.dark .stat-value {
-  color: #ecf0f1;
-}
-
-.stat-label {
-  font-size: 14px;
-  color: #7f8c8d;
-  font-weight: 500;
-}
-
-html.dark .stat-label {
-  color: #95a5a6;
-}
-
-/* 筛选卡片 */
+// 筛选卡片
 .filter-card {
-  margin-bottom: 20px;
-  border-radius: 12px;
+  margin-bottom: $card-gap;
+  border-radius: $border-radius;
   border: none;
+
+  .filter-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+
+    .filter-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+  }
 }
 
-.filter-content {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 16px;
-}
-
-.filter-left {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  flex-wrap: wrap;
-}
-
-/* 认证卡片容器 */
+// 认证卡片容器
 .auth-cards-container {
   min-height: 400px;
-  margin-bottom: 20px;
+  margin-bottom: $card-gap;
+
+  .auth-cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: $card-gap;
+  }
 }
 
-.auth-cards-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
-  gap: 20px;
-}
-
-/* 认证卡片 */
+// 认证卡片
 .auth-request-card {
-  border-radius: 12px;
+  border-radius: $border-radius;
   border: none;
-  transition: all 0.3s ease;
+  transition: all $transition-duration ease;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+
+    html.dark & {
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
+    }
+  }
+
+  .card-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 10px;
+
+    .user-basic-info {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex: 1;
+      min-width: 0;
+
+      .user-avatar {
+        flex-shrink: 0;
+      }
+
+      .user-details {
+        flex: 1;
+        min-width: 0;
+
+        .user-name {
+          font-size: 15px;
+          font-weight: 600;
+          color: #2c3e50;
+          margin-bottom: 4px;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+
+          html.dark & {
+            color: #ecf0f1;
+          }
+        }
+
+        .user-meta {
+          display: flex;
+          align-items: center;
+          gap: 6px;
+          flex-wrap: wrap;
+          font-size: 12px;
+
+          .user-phone,
+          .user-gender {
+            color: #7f8c8d;
+
+            html.dark & {
+              color: #95a5a6;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .card-content {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-bottom: 10px;
+
+    .info-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      font-size: 13px;
+
+      &.full-width {
+        flex-direction: column;
+        gap: 4px;
+      }
+
+      .info-label {
+        color: #7f8c8d;
+        font-weight: 500;
+        flex-shrink: 0;
+
+        html.dark & {
+          color: #95a5a6;
+        }
+      }
+
+      .info-value {
+        color: #2c3e50;
+        flex: 1;
+
+        html.dark & {
+          color: #ecf0f1;
+        }
+
+        &.reject-reason {
+          padding: 6px 8px;
+          background: #fdecea;
+          border-radius: 4px;
+          color: #e74c3c;
+
+          html.dark & {
+            background: #2c1a1a;
+          }
+        }
+      }
+    }
+  }
+
+  .card-images {
+    margin-bottom: 10px;
+
+    .images-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
+      gap: 6px;
+
+      .auth-image {
+        width: 100%;
+        height: 70px;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: all $transition-duration;
+
+        &:hover {
+          transform: scale(1.05);
+        }
+
+        .image-error {
+          width: 100%;
+          height: 100%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          background: #f5f7fa;
+          color: #bdc3c7;
+          font-size: 20px;
+
+          html.dark & {
+            background: #2c2c2c;
+          }
+        }
+      }
+    }
+  }
+
+  .card-actions {
+    display: flex;
+    gap: 6px;
+    justify-content: flex-end;
+  }
 }
 
-.auth-request-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
-}
-
-html.dark .auth-request-card:hover {
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
-}
-
-.card-header {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 12px;
-}
-
-.user-basic-info {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  flex: 1;
-}
-
-.user-avatar {
-  flex-shrink: 0;
-}
-
-.user-details {
-  flex: 1;
-  min-width: 0;
-}
-
-.user-name {
-  font-size: 16px;
-  font-weight: 600;
-  color: #2c3e50;
-  margin-bottom: 6px;
-}
-
-html.dark .user-name {
-  color: #ecf0f1;
-}
-
-.user-meta {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  flex-wrap: wrap;
-}
-
-.user-phone {
-  font-size: 13px;
-  color: #7f8c8d;
-}
-
-html.dark .user-phone {
-  color: #95a5a6;
-}
-
-.card-content {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 12px;
-}
-
-.info-row {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.info-row.full-width {
-  grid-column: 1 / -1;
-  flex-direction: column;
-  align-items: flex-start;
-}
-
-.info-label {
-  font-size: 13px;
-  color: #7f8c8d;
-  font-weight: 500;
-  flex-shrink: 0;
-}
-
-html.dark .info-label {
-  color: #95a5a6;
-}
-
-.info-value {
-  font-size: 14px;
-  color: #2c3e50;
-  flex: 1;
-}
-
-html.dark .info-value {
-  color: #ecf0f1;
-}
-
-.reject-reason {
-  padding: 8px;
-  background: #fdecea;
-  border-radius: 4px;
-  color: #e74c3c;
-  width: 100%;
-}
-
-html.dark .reject-reason {
-  background: #2c1a1a;
-}
-
-/* 认证图片 */
-.card-images {
-  margin-top: 16px;
-}
-
-.images-label {
-  font-size: 13px;
-  color: #7f8c8d;
-  font-weight: 500;
-  margin-bottom: 8px;
-}
-
-html.dark .images-label {
-  color: #95a5a6;
-}
-
-.images-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
-  gap: 8px;
-}
-
-.auth-image {
-  width: 100%;
-  height: 80px;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: all 0.3s;
-}
-
-.auth-image:hover {
-  transform: scale(1.05);
-}
-
-.image-error {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: #f5f7fa;
-  color: #bdc3c7;
-  font-size: 24px;
-}
-
-html.dark .image-error {
-  background: #2c2c2c;
-}
-
-/* 卡片操作 */
-.card-actions {
-  margin-top: 16px;
-  display: flex;
-  gap: 8px;
-  justify-content: flex-end;
-}
-
-/* 分页 */
+// 分页
 .pagination-wrapper {
   display: flex;
   justify-content: flex-end;
-  padding: 20px;
-  background: white;
-  border-radius: 12px;
+  padding: $primary-padding;
+  background: $card-bg-light;
+  border-radius: $border-radius;
+
+  html.dark & {
+    background: $card-bg-dark;
+  }
 }
 
-html.dark .pagination-wrapper {
-  background: #1a1a1a;
-}
-
-/* 详情对话框图片 */
-.detail-images {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-}
-
-/* 卡片列表过渡动画 */
+// 卡片列表过渡动画
 .card-list-move,
 .card-list-enter-active,
 .card-list-leave-active {
@@ -936,30 +842,30 @@ html.dark .pagination-wrapper {
   position: absolute;
 }
 
-/* 响应式设计 */
+// 响应式设计
 @media (max-width: 768px) {
   .auth-management {
-    padding: 12px;
+    padding: 10px;
   }
 
   .stats-cards {
     grid-template-columns: repeat(2, 1fr);
-    gap: 12px;
+    gap: 8px;
   }
 
-  .auth-cards-grid {
+  .auth-cards-container .auth-cards-grid {
     grid-template-columns: 1fr;
-    gap: 12px;
+    gap: 10px;
   }
 
   .filter-content {
     flex-direction: column;
     align-items: stretch;
-  }
 
-  .filter-left {
-    flex-direction: column;
-    align-items: stretch;
+    .filter-left {
+      flex-direction: column;
+      align-items: stretch;
+    }
   }
 }
 </style>

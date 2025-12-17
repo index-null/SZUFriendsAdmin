@@ -27,6 +27,14 @@ export default defineConfig({
       '@': path.resolve(__dirname, 'src'), // 把 @ 指向 src
     },
   },
+  // CSS 预处理器配置
+  css: {
+    preprocessorOptions: {
+      scss: {
+        // SCSS 配置选项
+      },
+    },
+  },
   // 基础路径 - 根据你的部署位置调整
   base: '/',
 
