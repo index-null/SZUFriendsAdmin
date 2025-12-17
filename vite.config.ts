@@ -10,9 +10,10 @@ export default defineConfig({
   plugins: [
     vue(),
     VueInspector({
-      toggleButtonVisibility: 'always', // 显示切换按钮
+      toggleButtonVisibility: 'active', // 显示切换按钮
       toggleComboKey: 'meta', // Command 键 + Click 触发跳转（macOS）
       // 不设置 launchEditor，完全依赖 LAUNCH_EDITOR 环境变量
+      disableInspectorOnEditorOpen: true, // 点击打开文件后自动关闭
     }),
     Components({
       resolvers: [ElementPlusResolver()],
