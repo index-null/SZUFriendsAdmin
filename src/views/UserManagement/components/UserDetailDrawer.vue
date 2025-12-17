@@ -28,9 +28,6 @@
           </div>
         </div>
         <el-descriptions :column="1" border class="info-descriptions">
-          <el-descriptions-item label="用户ID">
-            {{ userDetail.id }}
-          </el-descriptions-item>
           <el-descriptions-item v-if="userDetail.nickname" label="昵称">
             {{ userDetail.nickname }}
           </el-descriptions-item>
