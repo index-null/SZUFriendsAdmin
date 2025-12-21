@@ -124,6 +124,10 @@ export const DICT_TYPE = {
   STATUS: 'status',
   /** 校友信息身份 */
   IDENTITY: 'identity',
+  /** 校友学历类型 */
+  ALUMNI_TYPE: 'alumni_type',
+  /** 校友学历认证状态 */
+  ALUMNI_STATUS: 'alumni_status',
   /** 帖子类型 */
   POST_TYPE: 'post_type',
   /** 帖子内容块类型 */

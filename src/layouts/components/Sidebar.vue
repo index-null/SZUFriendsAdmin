@@ -40,6 +40,7 @@
             v-if="
               hasPermission('college:page') ||
               hasPermission('class') ||
+              hasPermission('alumni:page') ||
               hasPermission('user:page')
             "
             index="data-management"
@@ -61,6 +62,13 @@
             >
               <el-icon><Grid /></el-icon>
               <template #title>班级管理</template>
+            </el-menu-item>
+            <el-menu-item
+              v-if="hasPermission('alumni:page')"
+              index="/alumni-management"
+            >
+              <el-icon><Postcard /></el-icon>
+              <template #title>校友档案管理</template>
             </el-menu-item>
             <el-menu-item
               v-if="hasPermission('user:page')"
@@ -162,6 +170,7 @@ import {
   HomeFilled,
   School,
   Grid,
+  Postcard,
   User,
   UserFilled,
   Management,

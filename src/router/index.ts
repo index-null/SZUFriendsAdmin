@@ -7,6 +7,7 @@ const Register = () => import('../views/Register.vue')
 const Home = () => import('../views/Home.vue')
 const CollegeManagement = () => import('../views/CollegeManagement/index.vue')
 const ClassManagement = () => import('../views/ClassManagement/index.vue')
+const AlumniManagement = () => import('../views/AlumniManagement/index.vue')
 const UserManagement = () => import('../views/UserManagement/index.vue')
 const AdminManagement = () => import('../views/AdminManagement/index.vue')
 const RoleManagement = () => import('../views/RoleManagement/index.vue')
@@ -88,6 +89,18 @@ const routes: RouteRecordRaw[] = [
       title: '班级管理',
       requiresAuth: true,
       permission: 'class', // 需要 class 权限
+      showInMenu: true,
+    },
+  },
+  // 校友档案管理
+  {
+    path: '/alumni-management',
+    name: 'AlumniManagement',
+    component: AlumniManagement,
+    meta: {
+      title: '校友档案管理',
+      requiresAuth: true,
+      permission: 'alumni:page',
       showInMenu: true,
     },
   },
