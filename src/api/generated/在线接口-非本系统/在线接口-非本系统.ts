@@ -5,6 +5,10 @@
  * OpenAPI spec version: 1.0.0
  */
 import type {
+  GetWsDistrictV1Getchildren200,
+  GetWsDistrictV1GetchildrenParams,
+  GetWsDistrictV1List200,
+  GetWsDistrictV1ListParams,
   PostCheck200,
   PostCheckBody
 } from '../.ts.schemas';
@@ -27,5 +31,31 @@ const postCheck = (
     },
       );
     }
-  return {postCheck}};
+  /**
+ * @summary 获取省市区列表
+ */
+const getWsDistrictV1List = (
+    params?: GetWsDistrictV1ListParams,
+ ) => {
+      return customInstance<GetWsDistrictV1List200>(
+      {url: `/ws/district/v1/list`, method: 'GET',
+        params
+    },
+      );
+    }
+  /**
+ * @summary 获取下级行政区划
+ */
+const getWsDistrictV1Getchildren = (
+    params?: GetWsDistrictV1GetchildrenParams,
+ ) => {
+      return customInstance<GetWsDistrictV1Getchildren200>(
+      {url: `/ws/district/v1/getchildren`, method: 'GET',
+        params
+    },
+      );
+    }
+  return {postCheck,getWsDistrictV1List,getWsDistrictV1Getchildren}};
 export type PostCheckResult = NonNullable<Awaited<ReturnType<ReturnType<typeof get>['postCheck']>>>
+export type GetWsDistrictV1ListResult = NonNullable<Awaited<ReturnType<ReturnType<typeof get>['getWsDistrictV1List']>>>
+export type GetWsDistrictV1GetchildrenResult = NonNullable<Awaited<ReturnType<ReturnType<typeof get>['getWsDistrictV1Getchildren']>>>

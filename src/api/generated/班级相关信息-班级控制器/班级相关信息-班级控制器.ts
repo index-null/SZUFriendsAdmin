@@ -73,7 +73,7 @@ const deleteManagerClassId = (
  */
 const getManagerClassList = (
     _classQueryRequest: ClassQueryRequest,
-) => {
+ ) => {
       return customInstance<ResultListClassEntity>(
       {url: `/manager/class/list`, method: 'GET',
       headers: {'Content-Type': 'application/json', }

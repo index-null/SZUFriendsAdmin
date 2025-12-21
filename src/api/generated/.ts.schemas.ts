@@ -4,34 +4,1516 @@
  * 智能校友录
  * OpenAPI spec version: 1.0.0
  */
-export interface AuthRequestPageResponse {
-  /** ID */
-  id?: number;
-  /** 用户ID */
-  userId?: number;
-  /** 请求状态：PENDING-待审核, APPROVED-已通过, REJECTED-已拒绝 */
-  status?: string;
-  /** 认证身份 1-学生，2-教师，3-校友 */
-  identity?: number;
-  /** 真实姓名 */
-  realName?: string;
-  /** 性别 1-男，2-女 */
-  gender?: number;
-  /** 手机号 */
-  phone?: string;
-  /** 上传的认证信息（各种图片，以列表形式存储url） */
-  info?: string[];
-  /** 审核管理员ID */
-  reviewerId?: number;
-  /** 拒绝原因（status为REJECTED时必填） */
-  rejectReason?: string;
-  /** 审核时间 */
-  reviewedTime?: string;
+export interface TbActivity {
+  /**
+   * 主键ID
+   * @minimum 1
+   * @maximum 2147483647
+   */
+  id: number;
+  /**
+   * 活动名称
+   * @maxLength 200
+   */
+  activityName: string;
+  /**
+   * 发起人用户ID
+   * @minimum -2147483648
+   * @maximum 2147483647
+   */
+  creatorUserId: number;
+  /**
+   * 关联班级ID（可为空）
+   * @minimum -2147483648
+   * @maximum 2147483647
+   */
+  classId?: number;
+  /**
+   * 活动类型（1-班级活动，2-校友聚会，3-行业交流，4-其他）
+   * @minimum -2147483648
+   * @maximum 2147483647
+   */
+  activityType?: number;
+  /**
+   * 活动封面图
+   * @maxLength 500
+   */
+  coverImage?: string;
+  /**
+   * 活动描述
+   * @maxLength 65535
+   */
+  description: string;
+  /** 开始时间 */
+  startTime: string;
+  /** 结束时间 */
+  endTime: string;
+  /** 报名截止时间 */
+  registrationDeadline?: string;
+  /**
+   * 省份
+   * @maxLength 50
+   */
+  province?: string;
+  /**
+   * 城市
+   * @maxLength 50
+   */
+  city?: string;
+  /**
+   * 区/县
+   * @maxLength 50
+   */
+  district?: string;
+  /**
+   * 活动地址
+   * @maxLength 255
+   */
+  address?: string;
+  /** 经度 */
+  longitude?: number;
+  /** 纬度 */
+  latitude?: number;
+  /**
+   * 最大参与人数（NULL表示不限制）
+   * @minimum -2147483648
+   * @maximum 2147483647
+   */
+  maxParticipants?: number;
+  /**
+   * 当前参与人数
+   * @minimum -2147483648
+   * @maximum 2147483647
+   */
+  currentParticipants?: number;
+  /**
+   * 联系人
+   * @maxLength 50
+   */
+  contactPerson?: string;
+  /**
+   * 联系电话
+   * @maxLength 20
+   */
+  contactPhone?: string;
+  /** 活动费用 */
+  fees?: number;
+  /**
+   * 活动标签（逗号分隔）
+   * @maxLength 255
+   */
+  tags?: string;
+  /**
+   * 是否公开（0-私密，1-公开）
+   * @minimum -2147483648
+   * @maximum 2147483647
+   */
+  isPublic?: number;
+  /**
+   * 是否需要审批（0-否，1-是）
+   * @minimum -2147483648
+   * @maximum 2147483647
+   */
+  needApproval?: number;
+  /**
+   * 浏览次数
+   * @minimum -2147483648
+   * @maximum 2147483647
+   */
+  viewCount?: number;
+  /**
+   * 活动状态（1-报名中，2-进行中，3-已结束，4-已取消）
+   * @minimum -2147483648
+   * @maximum 2147483647
+   */
+  status?: number;
+  /** 创建时间 */
+  createTime: string;
+  /** 更新时间 */
+  updateTime: string;
+  /**
+   * 删除标志（0-未删除，1-已删除）
+   * @minimum -2147483648
+   * @maximum 2147483647
+   */
+  deleted: number;
 }
 
-export interface PageResultAuthRequestPageResponse {
+export interface TbActivityParticipant {
+  /**
+   * 主键ID
+   * @minimum 1
+   * @maximum 2147483647
+   */
+  id: number;
+  /**
+   * 活动ID
+   * @minimum -2147483648
+   * @maximum 2147483647
+   */
+  activityId: number;
+  /**
+   * 参与用户ID
+   * @minimum -2147483648
+   * @maximum 2147483647
+   */
+  userId: number;
+  /**
+   * 参与状态（1-已报名，2-已签到，3-已取消，4-待审核，5-审核拒绝）
+   * @minimum -2147483648
+   * @maximum 2147483647
+   */
+  participantStatus?: number;
+  /**
+   * 携带人数
+   * @minimum -2147483648
+   * @maximum 2147483647
+   */
+  guestCount?: number;
+  /**
+   * 报名备注
+   * @maxLength 255
+   */
+  registrationRemark?: string;
+  /**
+   * 审核人ID
+   * @minimum -2147483648
+   * @maximum 2147483647
+   */
+  approvalUserId?: number;
+  /** 审核时间 */
+  approvalTime?: string;
+  /**
+   * 审核备注
+   * @maxLength 255
+   */
+  approvalRemark?: string;
+  /** 签到时间 */
+  checkInTime?: string;
+  /** 创建时间 */
+  createTime: string;
+  /** 更新时间 */
+  updateTime: string;
+}
+
+export interface TbBusinessCard {
+  /**
+   * 主键ID
+   * @minimum 1
+   * @maximum 2147483647
+   */
+  id: number;
+  /**
+   * 用户ID
+   * @minimum -2147483648
+   * @maximum 2147483647
+   */
+  userId: number;
+  /**
+   * 名片名称
+   * @maxLength 100
+   */
+  cardName: string;
+  /**
+   * 真实姓名
+   * @maxLength 50
+   */
+  realName: string;
+  /**
+   * 公司名称
+   * @maxLength 200
+   */
+  company?: string;
+  /**
+   * 职位
+   * @maxLength 100
+   */
+  jobTitle?: string;
+  /**
+   * 电话
+   * @maxLength 20
+   */
+  phone?: string;
+  /**
+   * 邮箱
+   * @maxLength 100
+   */
+  email?: string;
+  /**
+   * 微信号
+   * @maxLength 50
+   */
+  wechat?: string;
+  /**
+   * QQ号
+   * @maxLength 20
+   */
+  qq?: string;
+  /**
+   * 地址
+   * @maxLength 255
+   */
+  address?: string;
+  /**
+   * 网站
+   * @maxLength 255
+   */
+  website?: string;
+  /**
+   * 头像
+   * @maxLength 500
+   */
+  avatar?: string;
+  /**
+   * 二维码
+   * @maxLength 500
+   */
+  qrCode?: string;
+  /**
+   * 个人简介
+   * @maxLength 500
+   */
+  introduction?: string;
+  /**
+   * 是否为默认名片（0-否，1-是）
+   * @minimum -2147483648
+   * @maximum 2147483647
+   */
+  isDefault?: number;
+  /**
+   * 是否公开（0-私密，1-公开）
+   * @minimum -2147483648
+   * @maximum 2147483647
+   */
+  isPublic?: number;
+  /**
+   * 分享次数
+   * @minimum -2147483648
+   * @maximum 2147483647
+   */
+  shareCount?: number;
+  /** 创建时间 */
+  createTime: string;
+  /** 更新时间 */
+  updateTime: string;
+  /**
+   * 删除标志（0-未删除，1-已删除）
+   * @minimum -2147483648
+   * @maximum 2147483647
+   */
+  deleted: number;
+}
+
+export interface TbCardExchange {
+  /**
+   * 主键ID
+   * @minimum 1
+   * @maximum 2147483647
+   */
+  id: number;
+  /**
+   * 发送方用户ID
+   * @minimum -2147483648
+   * @maximum 2147483647
+   */
+  senderId: number;
+  /**
+   * 接收方用户ID
+   * @minimum -2147483648
+   * @maximum 2147483647
+   */
+  receiverId: number;
+  /**
+   * 发送方名片ID
+   * @minimum -2147483648
+   * @maximum 2147483647
+   */
+  senderCardId: number;
+  /**
+   * 接收方名片ID（互换时填写）
+   * @minimum -2147483648
+   * @maximum 2147483647
+   */
+  receiverCardId?: number;
+  /**
+   * 交换类型（1-单向分享，2-双向交换）
+   * @minimum -2147483648
+   * @maximum 2147483647
+   */
+  exchangeType?: number;
+  /**
+   * 状态（1-待接收，2-已接收，3-已拒绝）
+   * @minimum -2147483648
+   * @maximum 2147483647
+   */
+  status?: number;
+  /**
+   * 附加消息
+   * @maxLength 255
+   */
+  message?: string;
+  /** 创建时间 */
+  createTime: string;
+  /** 更新时间 */
+  updateTime: string;
+}
+
+export interface TbClass {
+  /**
+   * 主键ID
+   * @minimum 1
+   * @maximum 2147483647
+   */
+  id: number;
+  /**
+   * 所属学院ID
+   * @minimum -2147483648
+   * @maximum 2147483647
+   */
+  collegeId: number;
+  /**
+   * 班级编码（唯一）
+   * @maxLength 50
+   */
+  classCode: string;
+  /**
+   * 班级名称
+   * @maxLength 100
+   */
+  className: string;
+  /**
+   * 年级（如：2020）
+   * @minimum -2147483648
+   * @maximum 2147483647
+   */
+  grade: number;
+  /**
+   * 专业
+   * @maxLength 100
+   */
+  major?: string;
+  /**
+   * 班级类型（1-本科，2-硕士，3-博士）
+   * @minimum -2147483648
+   * @maximum 2147483647
+   */
+  classType?: number;
+  /**
+   * 档长用户ID
+   * @minimum -2147483648
+   * @maximum 2147483647
+   */
+  leaderUserId?: number;
+  /**
+   * 成员数量
+   * @minimum -2147483648
+   * @maximum 2147483647
+   */
+  memberCount?: number;
+  /**
+   * 班级简介
+   * @maxLength 500
+   */
+  description?: string;
+  /**
+   * 班级封面图
+   * @maxLength 500
+   */
+  coverImage?: string;
+  /**
+   * 班级公告
+   * @maxLength 65535
+   */
+  notice?: string;
+  /**
+   * 状态（0-禁用，1-启用）
+   * @minimum -2147483648
+   * @maximum 2147483647
+   */
+  status?: number;
+  /** 创建时间 */
+  createTime: string;
+  /** 更新时间 */
+  updateTime: string;
+  /**
+   * 删除标志（0-未删除，1-已删除）
+   * @minimum -2147483648
+   * @maximum 2147483647
+   */
+  deleted: number;
+}
+
+export interface TbCollege {
+  /**
+   * 主键ID
+   * @minimum 1
+   * @maximum 2147483647
+   */
+  id: number;
+  /**
+   * 学院编码（唯一）
+   * @maxLength 50
+   */
+  collegeCode: string;
+  /**
+   * 学院名称
+   * @maxLength 100
+   */
+  collegeName: string;
+  /**
+   * 学院简介
+   * @maxLength 500
+   */
+  description?: string;
+  /**
+   * 学院Logo
+   * @maxLength 500
+   */
+  logo?: string;
+  /**
+   * 院长姓名
+   * @maxLength 50
+   */
+  dean?: string;
+  /**
+   * 联系电话
+   * @maxLength 20
+   */
+  contactPhone?: string;
+  /**
+   * 联系邮箱
+   * @maxLength 100
+   */
+  email?: string;
+  /**
+   * 学院地址
+   * @maxLength 255
+   */
+  address?: string;
+  /**
+   * 排序顺序
+   * @minimum -2147483648
+   * @maximum 2147483647
+   */
+  sortOrder?: number;
+  /**
+   * 状态（0-禁用，1-启用）
+   * @minimum -2147483648
+   * @maximum 2147483647
+   */
+  status?: number;
+  /** 创建时间 */
+  createTime: string;
+  /** 更新时间 */
+  updateTime: string;
+  /**
+   * 删除标志（0-未删除，1-已删除）
+   * @minimum -2147483648
+   * @maximum 2147483647
+   */
+  deleted: number;
+}
+
+export interface TbCompany {
+  /**
+   * 主键ID
+   * @minimum 1
+   * @maximum 2147483647
+   */
+  id: number;
+  /**
+   * 企业名称
+   * @maxLength 200
+   */
+  companyName: string;
+  /**
+   * 企业编码/统一社会信用代码
+   * @maxLength 100
+   */
+  companyCode?: string;
+  /**
+   * 所属行业
+   * @maxLength 100
+   */
+  industry?: string;
+  /**
+   * 企业类型
+   * @maxLength 50
+   */
+  companyType?: string;
+  /**
+   * 企业规模
+   * @maxLength 50
+   */
+  scale?: string;
+  /** 成立日期 */
+  foundedDate?: string;
+  /**
+   * 法人代表
+   * @maxLength 50
+   */
+  legalPerson?: string;
+  /**
+   * 注册资本
+   * @maxLength 50
+   */
+  registeredCapital?: string;
+  /**
+   * 省份
+   * @maxLength 50
+   */
+  province?: string;
+  /**
+   * 城市
+   * @maxLength 50
+   */
+  city?: string;
+  /**
+   * 区/县
+   * @maxLength 50
+   */
+  district?: string;
+  /**
+   * 详细地址
+   * @maxLength 255
+   */
+  address?: string;
+  /** 经度 */
+  longitude?: number;
+  /** 纬度 */
+  latitude?: number;
+  /**
+   * 联系电话
+   * @maxLength 20
+   */
+  contactPhone?: string;
+  /**
+   * 企业邮箱
+   * @maxLength 100
+   */
+  email?: string;
+  /**
+   * 企业网站
+   * @maxLength 255
+   */
+  website?: string;
+  /**
+   * 企业Logo
+   * @maxLength 500
+   */
+  logo?: string;
+  /**
+   * 企业简介
+   * @maxLength 65535
+   */
+  description?: string;
+  /**
+   * 经营范围
+   * @maxLength 65535
+   */
+  businessScope?: string;
+  /**
+   * 主营业务
+   * @maxLength 65535
+   */
+  mainProducts?: string;
+  /**
+   * 创建人用户ID（校友）
+   * @minimum -2147483648
+   * @maximum 2147483647
+   */
+  creatorUserId: number;
+  /**
+   * 浏览次数
+   * @minimum -2147483648
+   * @maximum 2147483647
+   */
+  viewCount?: number;
+  /**
+   * 状态（0-禁用，1-启用）
+   * @minimum -2147483648
+   * @maximum 2147483647
+   */
+  status?: number;
+  /** 创建时间 */
+  createTime: string;
+  /** 更新时间 */
+  updateTime: string;
+  /**
+   * 删除标志（0-未删除，1-已删除）
+   * @minimum -2147483648
+   * @maximum 2147483647
+   */
+  deleted: number;
+}
+
+export interface TbPermission {
+  /**
+   * 主键ID
+   * @minimum 1
+   * @maximum 2147483647
+   */
+  id: number;
+  /**
+   * 父权限ID（0表示顶级权限）
+   * @minimum -2147483648
+   * @maximum 2147483647
+   */
+  parentId?: number;
+  /**
+   * 权限编码（唯一，如：post:create、user:update）
+   * @maxLength 100
+   */
+  permissionCode: string;
+  /**
+   * 权限名称
+   * @maxLength 100
+   */
+  permissionName: string;
+  /**
+   * 权限类型（1-菜单，2-按钮，3-接口）
+   * @minimum -2147483648
+   * @maximum 2147483647
+   */
+  permissionType?: number;
+  /**
+   * 权限URL/接口路径
+   * @maxLength 255
+   */
+  url?: string;
+  /**
+   * HTTP方法（GET、POST等）
+   * @maxLength 10
+   */
+  method?: string;
+  /**
+   * 权限描述
+   * @maxLength 255
+   */
+  description?: string;
+  /**
+   * 排序顺序
+   * @minimum -2147483648
+   * @maximum 2147483647
+   */
+  sortOrder?: number;
+  /**
+   * 状态（0-禁用，1-启用）
+   * @minimum -2147483648
+   * @maximum 2147483647
+   */
+  status?: number;
+  /** 创建时间 */
+  createTime: string;
+  /** 更新时间 */
+  updateTime: string;
+  /**
+   * 删除标志（0-未删除，1-已删除）
+   * @minimum -2147483648
+   * @maximum 2147483647
+   */
+  deleted: number;
+}
+
+export interface TbPost {
+  /**
+   * 主键ID
+   * @minimum 1
+   * @maximum 2147483647
+   */
+  id: number;
+  /**
+   * 发帖用户ID
+   * @minimum -2147483648
+   * @maximum 2147483647
+   */
+  userId: number;
+  /**
+   * 所属班级ID（可为空，为空表示个人动态）
+   * @minimum -2147483648
+   * @maximum 2147483647
+   */
+  classId?: number;
+  /**
+   * 帖子内容
+   * @maxLength 65535
+   */
+  content: string;
+  /**
+   * 图片URL列表（JSON数组格式）
+   * @maxLength 65535
+   */
+  images?: string;
+  /**
+   * 视频URL
+   * @maxLength 500
+   */
+  videoUrl?: string;
+  /**
+   * 发帖地点
+   * @maxLength 255
+   */
+  location?: string;
+  /** 经度 */
+  longitude?: number;
+  /** 纬度 */
+  latitude?: number;
+  /**
+   * 帖子类型（1-普通动态，2-班级动态，3-通知公告）
+   * @minimum -2147483648
+   * @maximum 2147483647
+   */
+  postType?: number;
+  /**
+   * 是否置顶（0-否，1-是）
+   * @minimum -2147483648
+   * @maximum 2147483647
+   */
+  isTop?: number;
+  /** 置顶时间 */
+  topTime?: string;
+  /**
+   * 浏览次数
+   * @minimum -2147483648
+   * @maximum 2147483647
+   */
+  viewCount?: number;
+  /**
+   * 点赞数
+   * @minimum -2147483648
+   * @maximum 2147483647
+   */
+  likeCount?: number;
+  /**
+   * 评论数
+   * @minimum -2147483648
+   * @maximum 2147483647
+   */
+  commentCount?: number;
+  /**
+   * 分享数
+   * @minimum -2147483648
+   * @maximum 2147483647
+   */
+  shareCount?: number;
+  /**
+   * 状态（0-已删除，1-正常，2-已屏蔽）
+   * @minimum -2147483648
+   * @maximum 2147483647
+   */
+  status?: number;
+  /** 创建时间 */
+  createTime: string;
+  /** 更新时间 */
+  updateTime: string;
+  /**
+   * 删除标志（0-未删除，1-已删除）
+   * @minimum -2147483648
+   * @maximum 2147483647
+   */
+  deleted: number;
+}
+
+export interface TbPostComment {
+  /**
+   * 主键ID
+   * @minimum 1
+   * @maximum 2147483647
+   */
+  id: number;
+  /**
+   * 帖子ID
+   * @minimum -2147483648
+   * @maximum 2147483647
+   */
+  postId: number;
+  /**
+   * 评论用户ID
+   * @minimum -2147483648
+   * @maximum 2147483647
+   */
+  userId: number;
+  /**
+   * 父评论ID（0表示顶级评论）
+   * @minimum -2147483648
+   * @maximum 2147483647
+   */
+  parentId?: number;
+  /**
+   * 回复目标用户ID
+   * @minimum -2147483648
+   * @maximum 2147483647
+   */
+  replyToUserId?: number;
+  /**
+   * 评论内容
+   * @maxLength 65535
+   */
+  content: string;
+  /**
+   * 评论图片URL列表（JSON数组格式）
+   * @maxLength 65535
+   */
+  images?: string;
+  /**
+   * 点赞数
+   * @minimum -2147483648
+   * @maximum 2147483647
+   */
+  likeCount?: number;
+  /**
+   * 状态（0-已删除，1-正常，2-已屏蔽）
+   * @minimum -2147483648
+   * @maximum 2147483647
+   */
+  status?: number;
+  /** 创建时间 */
+  createTime: string;
+  /** 更新时间 */
+  updateTime: string;
+  /**
+   * 删除标志（0-未删除，1-已删除）
+   * @minimum -2147483648
+   * @maximum 2147483647
+   */
+  deleted: number;
+}
+
+export interface TbPostLike {
+  /**
+   * 主键ID
+   * @minimum 1
+   * @maximum 2147483647
+   */
+  id: number;
+  /**
+   * 帖子ID
+   * @minimum -2147483648
+   * @maximum 2147483647
+   */
+  postId: number;
+  /**
+   * 点赞用户ID
+   * @minimum -2147483648
+   * @maximum 2147483647
+   */
+  userId: number;
+  /** 创建时间 */
+  createTime: string;
+}
+
+export interface TbRole {
+  /**
+   * 主键ID
+   * @minimum 1
+   * @maximum 2147483647
+   */
+  id: number;
+  /**
+   * 角色编码（唯一，如：ADMIN、USER、CLASS_LEADER）
+   * @maxLength 50
+   */
+  roleCode: string;
+  /**
+   * 角色名称
+   * @maxLength 100
+   */
+  roleName: string;
+  /**
+   * 角色描述
+   * @maxLength 255
+   */
+  description?: string;
+  /**
+   * 排序顺序
+   * @minimum -2147483648
+   * @maximum 2147483647
+   */
+  sortOrder?: number;
+  /**
+   * 状态（0-禁用，1-启用）
+   * @minimum -2147483648
+   * @maximum 2147483647
+   */
+  status?: number;
+  /** 创建时间 */
+  createTime: string;
+  /** 更新时间 */
+  updateTime: string;
+  /**
+   * 删除标志（0-未删除，1-已删除）
+   * @minimum -2147483648
+   * @maximum 2147483647
+   */
+  deleted: number;
+}
+
+export interface TbRolePermission {
+  /**
+   * 主键ID
+   * @minimum 1
+   * @maximum 2147483647
+   */
+  id: number;
+  /**
+   * 角色ID
+   * @minimum -2147483648
+   * @maximum 2147483647
+   */
+  roleId: number;
+  /**
+   * 权限ID
+   * @minimum -2147483648
+   * @maximum 2147483647
+   */
+  permissionId: number;
+  /** 创建时间 */
+  createTime: string;
+}
+
+export interface TbUser {
+  /**
+   * 主键ID
+   * @minimum 1
+   * @maximum 2147483647
+   */
+  id: number;
+  /**
+   * 用户名（唯一）
+   * @maxLength 50
+   */
+  username: string;
+  /**
+   * 密码（加密后）
+   * @maxLength 255
+   */
+  password: string;
+  /**
+   * 微信小程序OpenID
+   * @maxLength 100
+   */
+  wxMpCode?: string;
+  /**
+   * 昵称
+   * @maxLength 50
+   */
+  nickname?: string;
+  /**
+   * 头像URL
+   * @maxLength 500
+   */
+  avatar?: string;
+  /**
+   * 邮箱
+   * @maxLength 100
+   */
+  email?: string;
+  /**
+   * 手机号
+   * @maxLength 20
+   */
+  phone?: string;
+  /**
+   * 性别（0-未知，1-男，2-女）
+   * @minimum -2147483648
+   * @maximum 2147483647
+   */
+  gender?: number;
+  /**
+   * 状态（0-禁用，1-启用）
+   * @minimum -2147483648
+   * @maximum 2147483647
+   */
+  status?: number;
+  /**
+   * 真实姓名
+   * @maxLength 50
+   */
+  realName?: string;
+  /**
+   * 学号/工号
+   * @maxLength 50
+   */
+  studentId?: string;
+  /**
+   * 用户类型（1-学生，2-教师，3-校友）
+   * @minimum -2147483648
+   * @maximum 2147483647
+   */
+  userType?: number;
+  /**
+   * 入学年份
+   * @minimum -2147483648
+   * @maximum 2147483647
+   */
+  admissionYear?: number;
+  /**
+   * 毕业年份
+   * @minimum -2147483648
+   * @maximum 2147483647
+   */
+  graduationYear?: number;
+  /**
+   * 专业
+   * @maxLength 100
+   */
+  major?: string;
+  /**
+   * 当前工作单位
+   * @maxLength 200
+   */
+  companyName?: string;
+  /**
+   * 职位
+   * @maxLength 100
+   */
+  jobTitle?: string;
+  /**
+   * 所在行业
+   * @maxLength 100
+   */
+  industry?: string;
+  /**
+   * 省份
+   * @maxLength 50
+   */
+  province?: string;
+  /**
+   * 城市
+   * @maxLength 50
+   */
+  city?: string;
+  /**
+   * 区/县
+   * @maxLength 50
+   */
+  district?: string;
+  /**
+   * 详细地址
+   * @maxLength 255
+   */
+  address?: string;
+  /** 经度 */
+  longitude?: number;
+  /** 纬度 */
+  latitude?: number;
+  /**
+   * 个人简介/一句话介绍
+   * @maxLength 500
+   */
+  bio?: string;
+  /** 生日 */
+  birthday?: string;
+  /**
+   * QQ号
+   * @maxLength 20
+   */
+  qq?: string;
+  /**
+   * 微信号
+   * @maxLength 50
+   */
+  wechat?: string;
+  /**
+   * 是否为档长（0-否，1-是）
+   * @minimum -2147483648
+   * @maximum 2147483647
+   */
+  isClassLeader?: number;
+  /** 创建时间 */
+  createTime: string;
+  /** 更新时间 */
+  updateTime: string;
+  /**
+   * 删除标志（0-未删除，1-已删除）
+   * @minimum -2147483648
+   * @maximum 2147483647
+   */
+  deleted: number;
+}
+
+export interface TbUserClass {
+  /**
+   * 主键ID
+   * @minimum 1
+   * @maximum 2147483647
+   */
+  id: number;
+  /**
+   * 用户ID
+   * @minimum -2147483648
+   * @maximum 2147483647
+   */
+  userId: number;
+  /**
+   * 班级ID
+   * @minimum -2147483648
+   * @maximum 2147483647
+   */
+  classId: number;
+  /**
+   * 加入方式（1-系统录入，2-用户申请）
+   * @minimum -2147483648
+   * @maximum 2147483647
+   */
+  joinType?: number;
+  /**
+   * 审核状态（1-待审核，2-已通过，3-已拒绝）
+   * @minimum -2147483648
+   * @maximum 2147483647
+   */
+  verifyStatus?: number;
+  /**
+   * 审核人ID
+   * @minimum -2147483648
+   * @maximum 2147483647
+   */
+  verifyUserId?: number;
+  /** 审核时间 */
+  verifyTime?: string;
+  /**
+   * 审核备注
+   * @maxLength 255
+   */
+  verifyRemark?: string;
+  /** 加入时间 */
+  joinTime?: string;
+  /** 创建时间 */
+  createTime: string;
+  /** 更新时间 */
+  updateTime: string;
+  /**
+   * 删除标志（0-未删除，1-已删除）
+   * @minimum -2147483648
+   * @maximum 2147483647
+   */
+  deleted: number;
+}
+
+export interface TbUserCompany {
+  /**
+   * 主键ID
+   * @minimum 1
+   * @maximum 2147483647
+   */
+  id: number;
+  /**
+   * 用户ID
+   * @minimum -2147483648
+   * @maximum 2147483647
+   */
+  userId: number;
+  /**
+   * 企业ID
+   * @minimum -2147483648
+   * @maximum 2147483647
+   */
+  companyId: number;
+  /**
+   * 关系类型（1-创始人，2-员工，3-投资人，4-合作伙伴）
+   * @minimum -2147483648
+   * @maximum 2147483647
+   */
+  relationshipType?: number;
+  /**
+   * 职位
+   * @maxLength 100
+   */
+  jobTitle?: string;
+  /**
+   * 部门
+   * @maxLength 100
+   */
+  department?: string;
+  /** 入职日期 */
+  joinDate?: string;
+  /** 离职日期 */
+  leaveDate?: string;
+  /**
+   * 是否在职（0-已离职，1-在职）
+   * @minimum -2147483648
+   * @maximum 2147483647
+   */
+  isCurrent?: number;
+  /**
+   * 关系描述
+   * @maxLength 500
+   */
+  description?: string;
+  /** 创建时间 */
+  createTime: string;
+  /** 更新时间 */
+  updateTime: string;
+  /**
+   * 删除标志（0-未删除，1-已删除）
+   * @minimum -2147483648
+   * @maximum 2147483647
+   */
+  deleted: number;
+}
+
+export interface TbUserFollow {
+  /**
+   * 主键ID
+   * @minimum 1
+   * @maximum 2147483647
+   */
+  id: number;
+  /**
+   * 关注者用户ID
+   * @minimum -2147483648
+   * @maximum 2147483647
+   */
+  followerId: number;
+  /**
+   * 被关注者用户ID
+   * @minimum -2147483648
+   * @maximum 2147483647
+   */
+  followeeId: number;
+  /**
+   * 备注
+   * @maxLength 100
+   */
+  remark?: string;
+  /** 创建时间 */
+  createTime: string;
+}
+
+export interface TbUserRole {
+  /**
+   * 主键ID
+   * @minimum 1
+   * @maximum 2147483647
+   */
+  id: number;
+  /**
+   * 用户ID
+   * @minimum -2147483648
+   * @maximum 2147483647
+   */
+  userId: number;
+  /**
+   * 角色ID
+   * @minimum -2147483648
+   * @maximum 2147483647
+   */
+  roleId: number;
+  /** 创建时间 */
+  createTime: string;
+}
+
+export interface ResultLong {
+  /** 响应状态码 */
+  code?: number;
+  /** 响应消息 */
+  message?: string;
+  /** 响应数据 */
+  data?: number;
+  /** 时间戳 */
+  timestamp?: number;
+}
+
+export interface ResultString {
+  /** 响应状态码 */
+  code?: number;
+  /** 响应消息 */
+  message?: string;
+  /** 响应数据 */
+  data?: string;
+  /** 时间戳 */
+  timestamp?: number;
+}
+
+export interface LoginResponse {
+  /** 访问令牌 */
+  token?: string;
+  /** 用户ID */
+  userId?: number;
+  /** 用户名 */
+  username?: string;
+  /** 昵称 */
+  nickname?: string;
+  /** 头像 */
+  avatar?: string;
+  /** 管理学院id (0-全部 -1 - 无数据权限 其它对应相应学院id) */
+  collegeLeaderId?: number;
+  /** 权限树
+支持前端根据权限标识动态生成页面元素 */
+  permissionTree?: PermissionTreeNodeResponse[];
+}
+
+export interface ResultLoginResponse {
+  /** 响应状态码 */
+  code?: number;
+  /** 响应消息 */
+  message?: string;
+  /** 响应数据 */
+  data?: LoginResponse;
+  /** 时间戳 */
+  timestamp?: number;
+}
+
+export interface LoginRequest {
+  /** 用户名 */
+  username?: string;
+  /** 密码 */
+  password?: string;
+  /** 微信小程序登录凭证 */
+  wxMpCode?: string;
+}
+
+export interface ResultBoolean {
+  /** 响应状态码 */
+  code?: number;
+  /** 响应消息 */
+  message?: string;
+  /** 响应数据 */
+  data?: boolean;
+  /** 时间戳 */
+  timestamp?: number;
+}
+
+export interface RegisterRequest {
+  /** 用户名（登录账号） */
+  username: string;
+  /** 密码（需符合格式要求） */
+  password: string;
+  /** 用户昵称（显示用） */
+  nickname: string;
+}
+
+export interface PermissionTreeNodeResponse {
+  /** 权限ID */
+  id?: number;
+  /** 父权限ID */
+  parentId?: number;
+  /** 权限编码 */
+  permissionCode?: string;
+  /** 权限名称 */
+  permissionName?: string;
+  /** 权限类型 */
+  permissionType?: number;
+  /** 访问路径 */
+  url?: string;
+  /** 请求方法 */
+  method?: string;
+  /** 权限描述 */
+  description?: string;
+  /** 排序字段 */
+  sortOrder?: number;
+  /** 角色是否拥有该权限 */
+  hasPermission?: boolean;
+  /** 状态（0-禁用，1-启用） */
+  status?: number;
+  /** 子权限列表
+使用默认初始化避免序列化时出现空指针 */
+  children?: PermissionTreeNodeResponse[];
+}
+
+export interface GrantPermissionsRequest {
+  /** 角色ID */
+  roleId: number;
+  /** 权限ID列表 */
+  permissionIds: number[];
+}
+
+export interface ResultListPermissionTreeNodeResponse {
+  /** 响应状态码 */
+  code?: number;
+  /** 响应消息 */
+  message?: string;
+  /** 响应数据 */
+  data?: PermissionTreeNodeResponse[];
+  /** 时间戳 */
+  timestamp?: number;
+}
+
+export interface PermissionResponse {
+  /** 权限ID */
+  id?: number;
+  /** 父权限ID（0表示顶级权限） */
+  parentId?: number;
+  /** 权限编码（唯一） */
+  permissionCode?: string;
+  /** 权限名称 */
+  permissionName?: string;
+  /** 权限类型（1-菜单，2-按钮，3-接口） */
+  permissionType?: number;
+  /** 权限URL/接口路径 */
+  url?: string;
+  /** HTTP方法（GET、POST等） */
+  method?: string;
+  /** 权限描述 */
+  description?: string;
+  /** 排序顺序 */
+  sortOrder?: number;
+  /** 状态（0-禁用，1-启用） */
+  status?: number;
+  /** 创建时间 */
+  createTime?: string;
+  /** 更新时间 */
+  updateTime?: string;
+}
+
+export interface ResultPermissionResponse {
+  /** 响应状态码 */
+  code?: number;
+  /** 响应消息 */
+  message?: string;
+  /** 响应数据 */
+  data?: PermissionResponse;
+  /** 时间戳 */
+  timestamp?: number;
+}
+
+export interface CreatePermissionRequest {
+  /** 父权限ID（0表示顶级权限） */
+  parentId: number;
+  /** 权限编码（唯一） */
+  permissionCode: string;
+  /** 权限名称 */
+  permissionName: string;
+  /** 权限类型（1-菜单，2-按钮，3-接口） */
+  permissionType: number;
+  /** 权限URL/接口路径 */
+  url?: string;
+  /** HTTP方法（GET、POST等） */
+  method?: string;
+  /** 权限描述 */
+  description?: string;
+  /** 排序顺序 */
+  sortOrder?: number;
+  /** 状态（0-禁用，1-启用） */
+  status?: number;
+}
+
+export interface UpdatePermissionRequest {
+  /** 权限ID */
+  id: number;
+  /** 父权限ID（0表示顶级权限） */
+  parentId?: number;
+  /** 权限编码（唯一） */
+  permissionCode: string;
+  /** 权限名称 */
+  permissionName: string;
+  /** 权限类型（1-菜单，2-按钮，3-接口） */
+  permissionType?: number;
+  /** 权限URL/接口路径 */
+  url?: string;
+  /** HTTP方法（GET、POST等） */
+  method?: string;
+  /** 权限描述 */
+  description?: string;
+  /** 排序顺序 */
+  sortOrder?: number;
+  /** 状态（0-禁用，1-启用） */
+  status?: number;
+}
+
+export interface PageResultPermissionResponse {
   /** 数据列表 */
-  records?: AuthRequestPageResponse[];
+  records?: PermissionResponse[];
   /** 总记录数 */
   total?: number;
   /** 当前页码 */
@@ -42,79 +1524,596 @@ export interface PageResultAuthRequestPageResponse {
   pages?: number;
 }
 
-export interface IdentityAuthRequestResponse {
-  /** ID */
-  id?: number;
-  /** 发起认证的用户ID */
-  userId?: number;
-  /** 请求状态：PENDING-待审核, APPROVED-已通过, REJECTED-已拒绝 */
-  status?: string;
-  /** 认证身份 1-学生，2-教师，3-校友 */
-  identity?: number;
-  /** 上传的认证信息（各种图片，以列表形式存储url） */
-  info?: string[];
-  /** 拒绝原因（status为REJECTED时必填） */
-  rejectReason?: string;
-  /** 审核时间 */
-  reviewedTime?: string;
+export interface ResultPageResultPermissionResponse {
+  /** 响应状态码 */
+  code?: number;
+  /** 响应消息 */
+  message?: string;
+  /** 响应数据 */
+  data?: PageResultPermissionResponse;
+  /** 时间戳 */
+  timestamp?: number;
 }
 
-export interface IdentityAuthResponse {
-  /** 用户ID */
-  userId?: number;
-  /** 认证状态：UNVERIFIED-未认证, PENDING-待审核, VERIFIED-已认证, REJECTED-被拒绝 */
-  authStatus?: string;
-  /** 累计发起认证次数（包括被拒绝后重新发起） */
-  attemptCount?: number;
-  /** 允许的最大认证次数，默认3次 */
-  maxAttempts?: number;
-  /** 当前进行中的认证请求ID（状态为PENDING时有效） */
-  currentRequestId?: number;
-  /** 认证通过时间 */
-  verifiedTime?: string;
-  /** 认证请求列表 包含所有发起的认证请求 包含请求状态：PENDING-待审核, APPROVED-已通过, REJECTED-已拒绝 */
-  requests?: IdentityAuthRequestResponse[];
-}
-
-export interface ProfileResponse {
-  /** 用户信息 */
-  userInfo?: UserInfoResponse;
-  /** 校友档案信息 */
-  alumniInfos?: AlumniPageResponse[];
-}
-
-export interface AlumniPageResponse {
-  /** id */
-  id?: number;
-  /** 姓名 */
-  name?: string;
-  /** 学号 */
-  number?: string;
-  /** 身份 1 学生 2 教师 3 校友 */
-  identity?: number;
-  /** 入学年份 */
-  grade?: number;
-  /** 本校学历 0 - 无 1 - 本科 2 - 硕士 3 - 博士 */
-  alumniType?: number;
-  /** 学院名称 */
-  collegeName?: string;
-  /** 学院 */
-  collegeId?: number;
-  /** 班级名称 */
-  className?: string;
-  /** 班级 */
-  classId?: number;
-  /** 专业 */
-  major?: string;
-  /** 是否认证 0 未认证 1 已认证 */
+export interface PermissionQueryRequest {
+  /** 当前页码（从1开始） */
+  current?: number;
+  /** 每页大小 */
+  size?: number;
+  /** 父权限ID（可选，用于查询子权限） */
+  parentId?: number;
+  /** 权限编码（模糊查询） */
+  permissionCode?: string;
+  /** 权限名称（模糊查询） */
+  permissionName?: string;
+  /** 权限类型（1-菜单，2-按钮，3-接口） */
+  permissionType?: number;
+  /** 状态（0-禁用，1-启用） */
   status?: number;
 }
 
-export interface UserInfoResponse {
+export interface ResultListPermissionResponse {
+  /** 响应状态码 */
+  code?: number;
+  /** 响应消息 */
+  message?: string;
+  /** 响应数据 */
+  data?: PermissionResponse[];
+  /** 时间戳 */
+  timestamp?: number;
+}
+
+export interface RoleResponse {
+  /** 角色ID */
+  id?: number;
+  /** 角色编码（唯一） */
+  roleCode?: string;
+  /** 角色名称 */
+  roleName?: string;
+  /** 角色描述 */
+  description?: string;
+  /** 排序顺序 */
+  sortOrder?: number;
+  /** 状态（0-禁用，1-启用） */
+  status?: number;
+  /** 用户是否绑定这个角色 */
+  isBind?: boolean;
+  /** 创建时间 */
+  createTime?: string;
+  /** 更新时间 */
+  updateTime?: string;
+}
+
+export interface ResultRoleResponse {
+  /** 响应状态码 */
+  code?: number;
+  /** 响应消息 */
+  message?: string;
+  /** 响应数据 */
+  data?: RoleResponse;
+  /** 时间戳 */
+  timestamp?: number;
+}
+
+export interface CreateRoleRequest {
+  /** 角色编码（唯一） */
+  roleCode: string;
+  /** 角色名称 */
+  roleName: string;
+  /** 角色描述 */
+  description?: string;
+  /** 排序顺序 */
+  sortOrder?: number;
+  /** 状态（0-禁用，1-启用） */
+  status?: number;
+}
+
+export interface UpdateRoleRequest {
+  /** 角色ID */
+  id: number;
+  /** 角色编码（唯一） */
+  roleCode: string;
+  /** 角色名称 */
+  roleName: string;
+  /** 角色描述 */
+  description?: string;
+  /** 排序顺序 */
+  sortOrder?: number;
+  /** 状态（0-禁用，1-启用） */
+  status?: number;
+}
+
+export interface PageResultRoleResponse {
+  /** 数据列表 */
+  records?: RoleResponse[];
+  /** 总记录数 */
+  total?: number;
+  /** 当前页码 */
+  current?: number;
+  /** 每页大小 */
+  size?: number;
+  /** 总页数 */
+  pages?: number;
+}
+
+export interface ResultPageResultRoleResponse {
+  /** 响应状态码 */
+  code?: number;
+  /** 响应消息 */
+  message?: string;
+  /** 响应数据 */
+  data?: PageResultRoleResponse;
+  /** 时间戳 */
+  timestamp?: number;
+}
+
+export interface RoleQueryRequest {
+  /** 当前页码（从1开始） */
+  current?: number;
+  /** 每页大小 */
+  size?: number;
+  /** 角色编码（模糊查询） */
+  roleCode?: string;
+  /** 角色名称（模糊查询） */
+  roleName?: string;
+  /** 状态（0-禁用，1-启用） */
+  status?: number;
+}
+
+export interface ResultListRoleResponse {
+  /** 响应状态码 */
+  code?: number;
+  /** 响应消息 */
+  message?: string;
+  /** 响应数据 */
+  data?: RoleResponse[];
+  /** 时间戳 */
+  timestamp?: number;
+}
+
+export interface AssignRolesRequest {
+  /** 用户ID */
+  userId: number;
+  /** 角色ID列表 */
+  roleIds: number[];
+}
+
+export interface RemoveRolesRequest {
+  /** 用户ID */
+  userId: number;
+  /** 角色ID列表 */
+  roleIds: number[];
+}
+
+export interface UpdateUserRolesRequest {
+  /** 用户ID */
+  userId: number;
+  /** 角色ID列表（会覆盖用户现有的所有角色）
+角色ID列表 */
+  roleIds: number[];
+}
+
+export interface CollegeEntity {
+  /** 主键ID */
+  id?: number;
+  /** 创建时间 */
+  createTime?: string;
+  /** 更新时间 */
+  updateTime?: string;
+  /** 学院名称 */
+  collegeName?: string;
+  /** 学院简介 */
+  description?: string;
+  /** 学院Logo */
+  logo?: string;
+  /** 联系电话 */
+  contactPhone?: string;
+  /** 联系邮箱 */
+  email?: string;
+  /** 学院地址 */
+  address?: string;
+  /** 学院网址 */
+  url?: string;
+  /** 管理员账号 */
+  adminAccount?: string;
+  /** 排序顺序 */
+  sortOrder?: number;
+  /** 状态（0-禁用，1-启用） */
+  status?: number;
+}
+
+export interface PageResultCollegeEntity {
+  /** 数据列表 */
+  records?: CollegeEntity[];
+  /** 总记录数 */
+  total?: number;
+  /** 当前页码 */
+  current?: number;
+  /** 每页大小 */
+  size?: number;
+  /** 总页数 */
+  pages?: number;
+}
+
+export interface ResultPageResultCollegeEntity {
+  /** 响应状态码 */
+  code?: number;
+  /** 响应消息 */
+  message?: string;
+  /** 响应数据 */
+  data?: PageResultCollegeEntity;
+  /** 时间戳 */
+  timestamp?: number;
+}
+
+export interface CollegePagesRequest {
+  /** 当前页码 */
+  current?: number;
+  /** 每页大小 */
+  size?: number;
+  /** 学院名称 */
+  collegeName?: string;
+  /** 状态（0-禁用，1-启用） */
+  status?: number;
+}
+
+export interface ClassEntity {
+  /** 主键ID */
+  id?: number;
+  /** 创建时间 */
+  createTime?: string;
+  /** 更新时间 */
+  updateTime?: string;
+  /** 所属学院ID */
+  collegeId?: number;
+  /** 班级名称 */
+  className?: string;
+  /** 年级（如：2020） */
+  grade?: number;
+  /** 专业 */
+  major?: string;
+  /** 班级类型（1-本科，2-硕士，3-博士） */
+  classType?: number;
+  /** 成员数量 */
+  memberCount?: number;
+  /** 班级简介 */
+  description?: string;
+  /** 班级封面图 */
+  coverImage?: string;
+  /** 班级公告 */
+  notice?: string;
+  /** 状态（0-禁用，1-启用） */
+  status?: number;
+}
+
+export interface PageResultClassEntity {
+  /** 数据列表 */
+  records?: ClassEntity[];
+  /** 总记录数 */
+  total?: number;
+  /** 当前页码 */
+  current?: number;
+  /** 每页大小 */
+  size?: number;
+  /** 总页数 */
+  pages?: number;
+}
+
+export interface ResultPageResultClassEntity {
+  /** 响应状态码 */
+  code?: number;
+  /** 响应消息 */
+  message?: string;
+  /** 响应数据 */
+  data?: PageResultClassEntity;
+  /** 时间戳 */
+  timestamp?: number;
+}
+
+export interface ClassPagesRequest {
+  /** 当前页码 */
+  current?: number;
+  /** 每页大小 */
+  size?: number;
+  /** 年级 */
+  grade?: number;
+  /** 所属学院ID */
+  collegeId?: number;
+  /** 班级名称 */
+  className?: string;
+  /** 班级类型（1-本科，2-硕士，3-博士） */
+  classType?: number;
+  /** 专业 */
+  major?: string;
+  /** 状态（0-禁用，1-启用） */
+  status?: number;
+}
+
+export interface ResultListString {
+  /** 响应状态码 */
+  code?: number;
+  /** 响应消息 */
+  message?: string;
+  /** 响应数据 */
+  data?: string[];
+  /** 时间戳 */
+  timestamp?: number;
+}
+
+export interface StudentRecords {
+  name?: string;
+  email?: string;
+}
+
+export interface ResultStudentRecords {
+  /** 响应状态码 */
+  code?: number;
+  /** 响应消息 */
+  message?: string;
+  /** 响应数据 */
+  data?: StudentRecords;
+  /** 时间戳 */
+  timestamp?: number;
+}
+
+export interface MapString {
+  key?: string;
+}
+
+export interface MimeType {
+  type?: string;
+  subtype?: string;
+  parameters?: MapString;
+  /** @nullable */
+  toStringValue?: string | null;
+}
+
+/**
+ * The{@link ModalityType} of the source data used to generate the embedding.
+ */
+export type EmbeddingResultMetadataModalityType = typeof EmbeddingResultMetadataModalityType[keyof typeof EmbeddingResultMetadataModalityType];
+
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const EmbeddingResultMetadataModalityType = {
+  TEXT: 'TEXT',
+  IMAGE: 'IMAGE',
+  AUDIO: 'AUDIO',
+  VIDEO: 'VIDEO',
+} as const;
+
+export type EmbeddingResultMetadataDocumentData = { [key: string]: unknown };
+
+export interface EmbeddingResultMetadata {
+  /** The{@link ModalityType} of the source data used to generate the embedding. */
+  modalityType?: EmbeddingResultMetadataModalityType;
+  documentId?: string;
+  mimeType?: MimeType;
+  documentData?: EmbeddingResultMetadataDocumentData;
+}
+
+export interface Embedding {
+  embedding?: number[];
+  index?: number;
+  metadata?: EmbeddingResultMetadata;
+}
+
+export interface Key { [key: string]: unknown }
+
+export interface MapObject {
+  key?: Key1;
+}
+
+export interface Usage { [key: string]: unknown }
+
+export interface EmbeddingResponseMetadata {
+  /** Metadata map. */
+  map?: MapObject;
+  model?: string;
+  usage?: Usage;
+}
+
+export interface EmbeddingResponse {
+  /** Embedding data. */
+  embeddings?: Embedding[];
+  /** Embedding metadata. */
+  metadata?: EmbeddingResponseMetadata;
+}
+
+export interface ResultEmbeddingResponse {
+  /** 响应状态码 */
+  code?: number;
+  /** 响应消息 */
+  message?: string;
+  /** 响应数据 */
+  data?: EmbeddingResponse;
+  /** 时间戳 */
+  timestamp?: number;
+}
+
+export type MediaData = { [key: string]: unknown };
+
+export interface Media {
+  /**
+   * An Id of the media object, usually defined when the model returns a reference to
+media it has been passed.
+   * @nullable
+   */
+  id?: string | null;
+  mimeType?: MimeType;
+  data?: MediaData;
+  /** The name of the media object that can be referenced by the AI model.
+<p>
+Important security note: This field is vulnerable to prompt injections, as the
+model might inadvertently interpret it as instructions. It is recommended to
+specify neutral names.
+
+<p>
+The name must only contain:
+<ul>
+<li>Alphanumeric characters
+<li>Whitespace characters (no more than one in a row)
+<li>Hyphens
+<li>Parentheses
+<li>Square brackets
+</ul> */
+  name?: string;
+}
+
+export interface Key1 { [key: string]: unknown }
+
+export interface Document {
+  /** Unique ID */
+  id?: string;
+  /** Document string content. */
+  text?: string;
+  /** Document media content */
+  media?: Media;
+  /** Metadata map. */
+  metadata?: MapObject;
+  /**
+   * A numeric score associated with this document that can represent various types of
+relevance measures.
+<p>
+Common uses include:
+<ul>
+<li>Measure of similarity between the embedding value of the document's text/media
+and a query vector, where higher scores indicate greater similarity (opposite of
+distance measure)
+<li>Text relevancy rankings from retrieval systems
+<li>Custom relevancy metrics from RAG patterns
+</ul>
+<p>
+Higher values typically indicate greater relevance or similarity.
+   * @nullable
+   */
+  score?: number | null;
+}
+
+export interface ResultListDocument {
+  /** 响应状态码 */
+  code?: number;
+  /** 响应消息 */
+  message?: string;
+  /** 响应数据 */
+  data?: Document[];
+  /** 时间戳 */
+  timestamp?: number;
+}
+
+export interface HashMapString {
+  '0'?: string;
+}
+
+export interface CollegeDictResponse {
+  /** 学院字典 id - 名称 */
+  collegeDict?: HashMapString;
+}
+
+export interface ResultCollegeDictResponse {
+  /** 响应状态码 */
+  code?: number;
+  /** 响应消息 */
+  message?: string;
+  /** 响应数据 */
+  data?: CollegeDictResponse;
+  /** 时间戳 */
+  timestamp?: number;
+}
+
+export interface DeviceInfo {
+  /** 设备ID */
+  deviceId?: string;
+  /** Token字符串 */
+  token?: string;
+  /** 设备类型：WEB、MOBILE、TABLET */
+  deviceType?: string;
+  /** 设备名称 */
+  deviceName?: string;
+  /** 操作系统 */
+  os?: string;
+  /** 浏览器 */
+  browser?: string;
+  /** 登录时间（时间戳，毫秒） */
+  loginTime?: number;
+  /** 最后访问时间（时间戳，毫秒） */
+  lastAccessTime?: number;
+  /** 登录IP地址 */
+  ip?: string;
+  /** 登录地点 */
+  location?: string;
+}
+
+export interface ResultListDeviceInfo {
+  /** 响应状态码 */
+  code?: number;
+  /** 响应消息 */
+  message?: string;
+  /** 响应数据 */
+  data?: DeviceInfo[];
+  /** 时间戳 */
+  timestamp?: number;
+}
+
+export interface UserPageVo {
   /** 用户ID */
   id?: number;
   /** 用户名（唯一） */
   username?: string;
+  /** 微信小程序OpenID */
+  wxMpCode?: string;
+  /** 头像URL */
+  avatar?: string;
+  /** 用户类型（1-学生，2-教师，3-校友） */
+  userType?: number;
+  /** 用户角色列表 */
+  roles?: RoleResponse[];
+}
+
+export interface PageResultUserPageVo {
+  /** 数据列表 */
+  records?: UserPageVo[];
+  /** 总记录数 */
+  total?: number;
+  /** 当前页码 */
+  current?: number;
+  /** 每页大小 */
+  size?: number;
+  /** 总页数 */
+  pages?: number;
+}
+
+export interface ResultPageResultUserPageVo {
+  /** 响应状态码 */
+  code?: number;
+  /** 响应消息 */
+  message?: string;
+  /** 响应数据 */
+  data?: PageResultUserPageVo;
+  /** 时间戳 */
+  timestamp?: number;
+}
+
+export interface UserPagesRequest {
+  /** 当前页码 */
+  current?: number;
+  /** 每页大小 */
+  size?: number;
+  /** 真实姓名 */
+  realName?: string;
+}
+
+export interface UserEntity {
+  /** 主键ID */
+  id?: number;
+  /** 创建时间 */
+  createTime?: string;
+  /** 更新时间 */
+  updateTime?: string;
+  /** 用户名（唯一） */
+  username?: string;
+  /** 密码（加密后） */
+  password?: string;
   /** 微信小程序OpenID */
   wxOpenid?: string;
   /** 昵称 */
@@ -127,9 +2126,11 @@ export interface UserInfoResponse {
   phone?: string;
   /** 性别（0-未知，1-男，2-女） */
   gender?: number;
+  /** 状态（0-禁用，1-启用） */
+  status?: number;
   /** 真实姓名 */
   realName?: string;
-  /** 用户类型（1-学生，2-教师，3-校友 4-游客 5-管理员） */
+  /** 用户类型（1-学生，2-教师，3-校友） */
   userType?: number;
   /** 当前工作单位 */
   companyName?: string;
@@ -137,9 +2138,18 @@ export interface UserInfoResponse {
   jobTitle?: string;
   /** 所在行业 */
   industry?: string;
-  /** ==================== 位置信息 ====================
-位置信息 */
-  locationResponse?: AlumniLocationResponse;
+  /** 省份 */
+  province?: string;
+  /** 城市 */
+  city?: string;
+  /** 区/县 */
+  district?: string;
+  /** 详细地址 */
+  address?: string;
+  /** 经度 */
+  longitude?: number;
+  /** 纬度 */
+  latitude?: number;
   /** 个人简介/一句话介绍 */
   bio?: string;
   /** 生日 */
@@ -152,102 +2162,444 @@ export interface UserInfoResponse {
   collegeLeaderId?: number;
 }
 
-export interface AlumniLocationResponse {
-  /** 用户ID */
-  userId?: number;
-  /** 姓名 */
-  name?: string;
-  /** 头像 */
-  avatar?: string;
-  /** 公司 */
-  company?: string;
-  /** 职位 */
-  position?: string;
-  /** 行业 */
-  industry?: string;
-  /** 经度（模糊后） */
-  longitude?: number;
-  /** 纬度（模糊后） */
-  latitude?: number;
-  /** 距离（米） */
-  distance?: number;
-  /** 省份 */
-  province?: string;
-  /** 城市 */
-  city?: string;
-  /** 区县 */
-  district?: string;
+export interface ResultUserEntity {
+  /** 响应状态码 */
+  code?: number;
+  /** 响应消息 */
+  message?: string;
+  /** 响应数据 */
+  data?: UserEntity;
+  /** 时间戳 */
+  timestamp?: number;
 }
 
 /**
- * 定位类型
+ * 操作状态（1-成功，0-失败）
  */
-export type MyLocationResponseLocationType = typeof MyLocationResponseLocationType[keyof typeof MyLocationResponseLocationType];
+export type OperationLogEntityStatus = typeof OperationLogEntityStatus[keyof typeof OperationLogEntityStatus];
 
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
-export const MyLocationResponseLocationType = {
-  GPS: 'GPS',
-  BASE_STATION: 'BASE_STATION',
-  WIFI: 'WIFI',
-  MANUAL: 'MANUAL',
+export const OperationLogEntityStatus = {
+  SUCCESS: 'SUCCESS',
+  FAILURE: 'FAILURE',
 } as const;
+
+export interface OperationLogEntity {
+  /** 主键ID */
+  id?: number;
+  /** 创建时间 */
+  createTime?: string;
+  /** 更新时间 */
+  updateTime?: string;
+  /** 功能模块（如：用户管理、活动管理、权限管理） */
+  module?: string;
+  /** 操作类型（如：新增、删除、修改、导出、登录、审核） */
+  action?: string;
+  /** 操作描述（支持SpEL表达式） */
+  description?: string;
+  /** 操作人ID（0表示系统/匿名） */
+  operatorId?: number;
+  /** 操作人姓名/账号 */
+  operatorName?: string;
+  /** 操作IP地址 */
+  operatorIp?: string;
+  /** 操作地点（通过IP解析） */
+  operatorLocation?: string;
+  /** 浏览器/设备信息（User-Agent） */
+  userAgent?: string;
+  /** 设备类型（WEB/MOBILE/TABLET） */
+  deviceType?: string;
+  /** 设备名称（如：Chrome浏览器） */
+  deviceName?: string;
+  /** 请求URL */
+  requestUrl?: string;
+  /** 请求方式（POST/PUT/DELETE/GET） */
+  requestMethod?: string;
+  /** 请求参数（JSON格式，注意敏感信息脱敏） */
+  requestParams?: string;
+  /** 响应结果（JSON格式，仅记录关键信息或异常信息） */
+  responseResult?: string;
+  /** 操作状态（1-成功，0-失败） */
+  status?: OperationLogEntityStatus;
+  /** 错误信息（仅失败时记录） */
+  errorMsg?: string;
+  /** 耗时（毫秒） */
+  costTime?: number;
+}
+
+export interface PageResultOperationLogEntity {
+  /** 数据列表 */
+  records?: OperationLogEntity[];
+  /** 总记录数 */
+  total?: number;
+  /** 当前页码 */
+  current?: number;
+  /** 每页大小 */
+  size?: number;
+  /** 总页数 */
+  pages?: number;
+}
+
+export interface ResultPageResultOperationLogEntity {
+  /** 响应状态码 */
+  code?: number;
+  /** 响应消息 */
+  message?: string;
+  /** 响应数据 */
+  data?: PageResultOperationLogEntity;
+  /** 时间戳 */
+  timestamp?: number;
+}
+
+export interface OperationLogQueryRequest {
+  /** 当前页码（从1开始） */
+  current?: number;
+  /** 每页大小 */
+  size?: number;
+  /** 功能模块（模糊查询） */
+  module?: string;
+  /** 操作类型（模糊查询） */
+  action?: string;
+  /** 操作人姓名/账号（模糊查询） */
+  operatorName?: string;
+  /** 操作人ID */
+  operatorId?: number;
+  /** 操作状态（1-成功，0-失败） */
+  status?: number;
+  /** 开始时间（操作时间范围查询） */
+  startTime?: string;
+  /** 结束时间（操作时间范围查询） */
+  endTime?: string;
+}
+
+export interface ResultOperationLogEntity {
+  /** 响应状态码 */
+  code?: number;
+  /** 响应消息 */
+  message?: string;
+  /** 操作日志实体类
+记录系统所有危险操作，供管理员审计查看 */
+  data?: OperationLogEntity;
+  /** 时间戳 */
+  timestamp?: number;
+}
+
+export interface DictEntity {
+  /** 主键ID */
+  id?: number;
+  /** 创建时间 */
+  createTime?: string;
+  /** 更新时间 */
+  updateTime?: string;
+  /** 字典类型 对应数据库字段 */
+  dictType?: string;
+  /** 字典名称描述 */
+  description?: string;
+  /** 备注信息 */
+  remarks?: string;
+}
+
+export interface ResultDictEntity {
+  /** 响应状态码 */
+  code?: number;
+  /** 响应消息 */
+  message?: string;
+  /** 响应数据 */
+  data?: DictEntity;
+  /** 时间戳 */
+  timestamp?: number;
+}
+
+export interface PageResultDictEntity {
+  /** 数据列表 */
+  records?: DictEntity[];
+  /** 总记录数 */
+  total?: number;
+  /** 当前页码 */
+  current?: number;
+  /** 每页大小 */
+  size?: number;
+  /** 总页数 */
+  pages?: number;
+}
+
+export interface ResultPageResultDictEntity {
+  /** 响应状态码 */
+  code?: number;
+  /** 响应消息 */
+  message?: string;
+  /** 响应数据 */
+  data?: PageResultDictEntity;
+  /** 时间戳 */
+  timestamp?: number;
+}
+
+export interface DictPagesRequest {
+  /** 当前页码 */
+  current?: number;
+  /** 每页大小 */
+  size?: number;
+  /** 查询条件 可根据字典名称描述 字典类型 来查询 */
+  query?: string;
+}
 
 /**
- * 可见级别
+ * 响应数据
  */
-export type MyLocationResponseVisibilityLevel = typeof MyLocationResponseVisibilityLevel[keyof typeof MyLocationResponseVisibilityLevel];
+export type ResultData = { [key: string]: unknown };
+
+export interface Result {
+  /** 响应状态码 */
+  code?: number;
+  /** 响应消息 */
+  message?: string;
+  /** 响应数据 */
+  data?: ResultData;
+  /** 时间戳 */
+  timestamp?: number;
+  /** 判断是否成功 */
+  success?: boolean;
+}
+
+export interface DictItemEntity {
+  /** 主键ID */
+  id?: number;
+  /** 创建时间 */
+  createTime?: string;
+  /** 更新时间 */
+  updateTime?: string;
+  /** 字典ID */
+  dictId?: number;
+  /** 字典项值 */
+  itemValue?: string;
+  /** 字典项名称 */
+  label?: string;
+  /** 字典类型 */
+  dictType?: string;
+  /** 字典项描述 */
+  description?: string;
+  /** 排序（升序） */
+  sortOrder?: number;
+}
+
+export interface PageResultDictItemEntity {
+  /** 数据列表 */
+  records?: DictItemEntity[];
+  /** 总记录数 */
+  total?: number;
+  /** 当前页码 */
+  current?: number;
+  /** 每页大小 */
+  size?: number;
+  /** 总页数 */
+  pages?: number;
+}
+
+export interface ResultPageResultDictItemEntity {
+  /** 响应状态码 */
+  code?: number;
+  /** 响应消息 */
+  message?: string;
+  /** 响应数据 */
+  data?: PageResultDictItemEntity;
+  /** 时间戳 */
+  timestamp?: number;
+}
+
+export interface DictItemPagesRequest {
+  /** 当前页码 */
+  current?: number;
+  /** 每页大小 */
+  size?: number;
+  /** 字典项id */
+  dictId?: number;
+}
+
+export interface ResultDictItemEntity {
+  /** 响应状态码 */
+  code?: number;
+  /** 响应消息 */
+  message?: string;
+  /** Created by IntelliJ IDEA.
+&#064;Author : Zys
+&#064;create 2025/11/25 12:10 */
+  data?: DictItemEntity;
+  /** 时间戳 */
+  timestamp?: number;
+}
+
+export interface ResultListDictItemEntity {
+  /** 响应状态码 */
+  code?: number;
+  /** 响应消息 */
+  message?: string;
+  /** 响应数据 */
+  data?: DictItemEntity[];
+  /** 时间戳 */
+  timestamp?: number;
+}
+
+export interface CreateDictRequest {
+  /** 字典类型 对应数据库字段 */
+  dictType: string;
+  /** 字典名称描述 */
+  description: string;
+  /** 备注信息 */
+  remarks?: string;
+}
+
+export interface UpdateDictRequest {
+  /** 主键ID */
+  id: number;
+  /** 字典名称描述 */
+  description?: string;
+  /** 备注信息 */
+  remarks?: string;
+}
+
+export interface CreateDictItemRequest {
+  /** 字典ID */
+  dictId: number;
+  /** 字典项值 */
+  itemValue: string;
+  /** 字典项名称 */
+  label: string;
+  /** 字典类型 */
+  dictType: string;
+  /** 字典项描述 */
+  description?: string;
+  /** 排序（升序） */
+  sortOrder?: number;
+}
+
+export interface UpdateDictItemRequest {
+  /** 主键ID */
+  id: number;
+  /** 字典项值 */
+  itemValue: string;
+  /** 字典项名称 */
+  label: string;
+  /** 字典项描述 */
+  description?: string;
+  /** 排序（升序） */
+  sortOrder?: number;
+}
+
+/**
+ * 操作状态（1-成功，0-失败）
+ */
+export type OperationLogResponseStatus = typeof OperationLogResponseStatus[keyof typeof OperationLogResponseStatus];
 
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
-export const MyLocationResponseVisibilityLevel = {
-  PRECISE: 'PRECISE',
-  DISTRICT: 'DISTRICT',
-  CITY: 'CITY',
+export const OperationLogResponseStatus = {
+  SUCCESS: 'SUCCESS',
+  FAILURE: 'FAILURE',
 } as const;
 
-export interface MyLocationResponse {
-  /** 用户ID */
-  userId?: number;
-  /** 姓名 */
-  name?: string;
-  /** 头像 */
-  avatar?: string;
-  /** 公司 */
-  company?: string;
-  /** 职位 */
-  position?: string;
-  /** 行业 */
-  industry?: string;
-  /** 经度（GCJ02坐标系） */
-  longitude?: number;
-  /** 纬度（GCJ02坐标系） */
-  latitude?: number;
-  /** 模糊经度 */
-  fuzzyLongitude?: number;
-  /** 模糊纬度 */
-  fuzzyLatitude?: number;
-  /** 省份 */
-  province?: string;
-  /** 城市 */
-  city?: string;
-  /** 区县 */
-  district?: string;
-  /** 详细地址 */
+export interface OperationLogResponse {
+  /** 主键ID */
+  id?: number;
+  /** 功能模块（如：用户管理、活动管理、权限管理） */
+  module?: string;
+  /** 操作类型（如：新增、删除、修改、导出、登录、审核） */
+  action?: string;
+  /** 操作描述（支持SpEL表达式） */
+  description?: string;
+  /** 操作人ID（0表示系统/匿名） */
+  operatorId?: number;
+  /** 操作人姓名/账号 */
+  operatorName?: string;
+  /** 操作IP地址 */
+  operatorIp?: string;
+  /** 操作地点（通过IP解析） */
+  operatorLocation?: string;
+  /** 浏览器/设备信息（User-Agent） */
+  userAgent?: string;
+  /** 设备类型（WEB/MOBILE/TABLET） */
+  deviceType?: string;
+  /** 设备名称（如：Chrome浏览器） */
+  deviceName?: string;
+  /** 请求URL */
+  requestUrl?: string;
+  /** 请求方式（POST/PUT/DELETE/GET） */
+  requestMethod?: string;
+  /** 操作状态（1-成功，0-失败） */
+  status?: OperationLogResponseStatus;
+  /** 错误信息（仅失败时记录） */
+  errorMsg?: string;
+  /** 耗时（毫秒） */
+  costTime?: number;
+  /** 操作时间 */
+  createTime?: string;
+}
+
+export interface PageResultOperationLogResponse {
+  /** 数据列表 */
+  records?: OperationLogResponse[];
+  /** 总记录数 */
+  total?: number;
+  /** 当前页码 */
+  current?: number;
+  /** 每页大小 */
+  size?: number;
+  /** 总页数 */
+  pages?: number;
+}
+
+export interface ResultPageResultOperationLogResponse {
+  /** 响应状态码 */
+  code?: number;
+  /** 响应消息 */
+  message?: string;
+  /** 响应数据 */
+  data?: PageResultOperationLogResponse;
+  /** 时间戳 */
+  timestamp?: number;
+}
+
+export interface CreateCollegeRequest {
+  /** 学院名称 */
+  collegeName?: string;
+  /** 学院简介 */
+  description?: string;
+  /** 学院Logo */
+  logo?: string;
+  /** 联系电话 */
+  contactPhone?: string;
+  /** 联系邮箱 */
+  email?: string;
+  /** 学院地址 */
   address?: string;
-  /** 定位类型 */
-  locationType?: MyLocationResponseLocationType;
-  /** 定位精度（米） */
-  accuracy?: number;
-  /** 是否对外可见 */
-  isVisible?: boolean;
-  /** 可见级别 */
-  visibilityLevel?: MyLocationResponseVisibilityLevel;
+  /** 学院网址 */
+  url?: string;
+  /** 管理员账号，会自动创建新的账号 */
+  adminAccount?: string;
+  /** 排序顺序 */
+  sortOrder?: number;
+  /** 状态（0-禁用，1-启用） */
+  status?: number;
 }
 
-export interface PageResultAlumniLocationResponse {
+export interface AdminUserPageResponse {
+  /** 用户ID */
+  id?: number;
+  /** 用户名（唯一） */
+  username?: string;
+  /** 头像URL */
+  avatar?: string;
+  /** 用户类型（1-学生，2-教师，3-校友 4-游客 5-管理员） */
+  userType?: number;
+  /** 用户角色列表 */
+  roles?: RoleResponse[];
+  /** 管理学院的id */
+  collegeLeaderId?: number;
+}
+
+export interface PageResultAdminUserPageResponse {
   /** 数据列表 */
-  records?: AlumniLocationResponse[];
+  records?: AdminUserPageResponse[];
   /** 总记录数 */
   total?: number;
   /** 当前页码 */
@@ -258,17 +2610,172 @@ export interface PageResultAlumniLocationResponse {
   pages?: number;
 }
 
-export interface PageResultAlumniPageResponse {
-  /** 数据列表 */
-  records?: AlumniPageResponse[];
-  /** 总记录数 */
-  total?: number;
+export interface ResultPageResultAdminUserPageResponse {
+  /** 响应状态码 */
+  code?: number;
+  /** 响应消息 */
+  message?: string;
+  /** 响应数据 */
+  data?: PageResultAdminUserPageResponse;
+  /** 时间戳 */
+  timestamp?: number;
+}
+
+export interface AdminUserPagesRequest {
   /** 当前页码 */
   current?: number;
   /** 每页大小 */
   size?: number;
-  /** 总页数 */
-  pages?: number;
+  /** 用户名（唯一） */
+  username?: string;
+}
+
+export interface AdminUserDetailsResponse {
+  /** 用户名（唯一） */
+  username?: string;
+  /** 昵称 */
+  nickname?: string;
+  /** 头像URL */
+  avatar?: string;
+  /** 真实姓名 */
+  realName?: string;
+  /** 邮箱 */
+  email?: string;
+  /** 手机号 */
+  phone?: string;
+  /** 状态（0-禁用，1-启用） */
+  status?: number;
+  /** 用户类型（1-学生，2-教师，3-校友 4-游客 5-管理员） */
+  userType?: number;
+  /** 个人简介/一句话介绍 */
+  bio?: string;
+  /** QQ号 */
+  qq?: string;
+  /** 微信号 */
+  wechat?: string;
+  /** 管理学院id (0-全部 -1 - 无数据权限 其它对应相应学院id) */
+  collegeLeaderId?: number;
+}
+
+export interface ResultAdminUserDetailsResponse {
+  /** 响应状态码 */
+  code?: number;
+  /** 响应消息 */
+  message?: string;
+  /** 响应数据 */
+  data?: AdminUserDetailsResponse;
+  /** 时间戳 */
+  timestamp?: number;
+}
+
+export interface AdminUserUpdateRequest {
+  /** 用户ID */
+  id: number;
+  /** 昵称 */
+  nickname?: string;
+  /** 头像URL */
+  avatar?: string;
+  /** 真实姓名 */
+  realName?: string;
+  /** 邮箱 */
+  email?: string;
+  /** 手机号 */
+  phone?: string;
+  /** 状态（0-禁用，1-启用） */
+  status?: number;
+  /** 个人简介/一句话介绍 */
+  bio?: string;
+  /** QQ号 */
+  qq?: string;
+  /** 微信号 */
+  wechat?: string;
+}
+
+/**
+ * 内容块类型：text-文本，image-图片，video-视频
+内容块类型
+ */
+export type ContentBlockType = typeof ContentBlockType[keyof typeof ContentBlockType];
+
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const ContentBlockType = {
+  TEXT: 'TEXT',
+  IMAGE: 'IMAGE',
+  VIDEO: 'VIDEO',
+} as const;
+
+export interface ContentBlock {
+  /** 内容块类型：text-文本，image-图片，video-视频
+内容块类型 */
+  type: ContentBlockType;
+  /** 排序顺序，从1开始 */
+  order?: number;
+  /**
+   * 文本内容（type=text时使用）
+文本内容（仅当type=text时使用）
+   * @maxLength 5000
+   */
+  content?: string;
+  /** 资源URL（type=image/video时使用）
+资源URL（当type=image或video时使用） */
+  url?: string;
+  /** 缩略图URL（type=image时使用）
+缩略图URL（仅当type=image时使用） */
+  thumbnail?: string;
+  /** 宽度（像素） */
+  width?: number;
+  /** 高度（像素） */
+  height?: number;
+  /** 文件大小（字节） */
+  fileSize?: number;
+  /** 视频封面URL（type=video时使用）
+视频封面URL（仅当type=video时使用） */
+  coverUrl?: string;
+  /** 视频时长（秒） */
+  duration?: number;
+}
+
+/**
+ * 帖子类型（1-普通动态，2-班级动态，3-通知公告）
+ */
+export type PostPublishRequestPostType = typeof PostPublishRequestPostType[keyof typeof PostPublishRequestPostType];
+
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const PostPublishRequestPostType = {
+  NORMAL: 'NORMAL',
+  CLASS: 'CLASS',
+  NOTICE: 'NOTICE',
+} as const;
+
+export interface PostPublishRequest {
+  /**
+   * 帖子标题（可选）
+   * @maxLength 100
+   */
+  title: string;
+  /**
+   * 封面图片
+   * @maxLength 500
+   */
+  cover?: string;
+  /**
+   * 内容块数组
+   * @minItems 1
+   * @maxItems 20
+   */
+  contentBlocks: ContentBlock[];
+  /** 所属班级ID */
+  classId?: number;
+  /** 帖子类型（1-普通动态，2-班级动态，3-通知公告） */
+  postType: PostPublishRequestPostType;
+  /** 发帖地点 */
+  location?: string;
+  /** 经度 */
+  longitude?: number;
+  /** 纬度 */
+  latitude?: number;
 }
 
 /**
@@ -334,13 +2841,13 @@ export interface PageResultPostResponse {
   pages?: number;
 }
 
-export interface ResultLong {
+export interface ResultPageResultPostResponse {
   /** 响应状态码 */
   code?: number;
   /** 响应消息 */
   message?: string;
   /** 响应数据 */
-  data?: number;
+  data?: PageResultPostResponse;
   /** 时间戳 */
   timestamp?: number;
 }
@@ -422,65 +2929,78 @@ export interface PostDetailResponse {
   updateTime?: string;
 }
 
-/**
- * 内容块类型：text-文本，image-图片，video-视频
-内容块类型
- */
-export type ContentBlockType = typeof ContentBlockType[keyof typeof ContentBlockType];
-
-
-// eslint-disable-next-line @typescript-eslint/no-redeclare
-export const ContentBlockType = {
-  TEXT: 'TEXT',
-  IMAGE: 'IMAGE',
-  VIDEO: 'VIDEO',
-} as const;
-
-export interface ContentBlock {
-  /** 内容块类型：text-文本，image-图片，video-视频
-内容块类型 */
-  type: ContentBlockType;
-  /** 排序顺序，从1开始 */
-  order?: number;
-  /**
-   * 文本内容（type=text时使用）
-文本内容（仅当type=text时使用）
-   * @maxLength 5000
-   */
-  content?: string;
-  /** 资源URL（type=image/video时使用）
-资源URL（当type=image或video时使用） */
-  url?: string;
-  /** 缩略图URL（type=image时使用）
-缩略图URL（仅当type=image时使用） */
-  thumbnail?: string;
-  /** 宽度（像素） */
-  width?: number;
-  /** 高度（像素） */
-  height?: number;
-  /** 文件大小（字节） */
-  fileSize?: number;
-  /** 视频封面URL（type=video时使用）
-视频封面URL（仅当type=video时使用） */
-  coverUrl?: string;
-  /** 视频时长（秒） */
-  duration?: number;
-}
-
-export interface ResultString {
+export interface ResultPostDetailResponse {
   /** 响应状态码 */
   code?: number;
   /** 响应消息 */
   message?: string;
   /** 响应数据 */
-  data?: string;
+  data?: PostDetailResponse;
   /** 时间戳 */
   timestamp?: number;
 }
 
-export interface AdminUserDetailsResponse {
-  /** 用户名（唯一） */
-  username?: string;
+export interface ResultVoid {
+  /** 响应状态码 */
+  code?: number;
+  /** 响应消息 */
+  message?: string;
+  /** 响应数据 */
+  data?: null;
+  /** 时间戳 */
+  timestamp?: number;
+}
+
+/**
+ * 排序字段：TIME -时间，HOT-热度，FOLLOW -关注
+ */
+export type PostQueryRequestSortBy = typeof PostQueryRequestSortBy[keyof typeof PostQueryRequestSortBy];
+
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const PostQueryRequestSortBy = {
+  TIME: 'TIME',
+  HOT: 'HOT',
+  FOLLOW: 'FOLLOW',
+} as const;
+
+export interface PostQueryRequest {
+  /**
+   * 页码，从1开始
+   * @minimum 1
+   */
+  pageNum?: number;
+  /**
+   * 每页大小，最大100
+   * @minimum 1
+   * @maximum 100
+   */
+  pageSize?: number;
+  /** 排序字段：TIME -时间，HOT-热度，FOLLOW -关注 */
+  sortBy?: PostQueryRequestSortBy;
+  /** 班级ID筛选 */
+  classId?: number;
+  /** 用户ID筛选（查某人的帖子） */
+  userId?: number;
+  /** 帖子类型筛选 */
+  postType?: number;
+  /** 搜索关键词（标题+内容） */
+  keyword?: string;
+  /** 只看有图片的帖子 */
+  hasImage?: boolean;
+  /** 只看有视频的帖子 */
+  hasVideo?: boolean;
+  /** 当前位置经度（附近帖子） */
+  longitude?: number;
+  /** 当前位置纬度（附近帖子） */
+  latitude?: number;
+  /** 附近范围（千米） */
+  distance?: number;
+}
+
+export interface CreateCollegeAdminRequest {
+  /** 用户名 */
+  username: string;
   /** 昵称 */
   nickname?: string;
   /** 头像URL */
@@ -493,57 +3013,34 @@ export interface AdminUserDetailsResponse {
   phone?: string;
   /** 状态（0-禁用，1-启用） */
   status?: number;
-  /** 用户类型（1-学生，2-教师，3-校友 4-游客 5-管理员） */
-  userType?: number;
   /** 个人简介/一句话介绍 */
   bio?: string;
   /** QQ号 */
   qq?: string;
   /** 微信号 */
   wechat?: string;
-  /** 管理学院id (0-全部 -1 - 无数据权限 其它对应相应学院id) */
-  collegeLeaderId?: number;
+  /** 学院id */
+  collegeId: number;
 }
 
-export interface AdminUserPageResponse {
+export interface UserPageResponse {
   /** 用户ID */
   id?: number;
   /** 用户名（唯一） */
   username?: string;
+  /** 微信小程序OpenID */
+  wxMpCode?: string;
   /** 头像URL */
   avatar?: string;
-  /** 用户类型（1-学生，2-教师，3-校友 4-游客 5-管理员） */
+  /** 用户类型（1-学生，2-教师，3-校友） */
   userType?: number;
   /** 用户角色列表 */
   roles?: RoleResponse[];
-  /** 管理学院的id */
-  collegeLeaderId?: number;
 }
 
-export interface RoleResponse {
-  /** 角色ID */
-  id?: number;
-  /** 角色编码（唯一） */
-  roleCode?: string;
-  /** 角色名称 */
-  roleName?: string;
-  /** 角色描述 */
-  description?: string;
-  /** 排序顺序 */
-  sortOrder?: number;
-  /** 状态（0-禁用，1-启用） */
-  status?: number;
-  /** 用户是否绑定这个角色 */
-  isBind?: boolean;
-  /** 创建时间 */
-  createTime?: string;
-  /** 更新时间 */
-  updateTime?: string;
-}
-
-export interface PageResultAdminUserPageResponse {
+export interface PageResultUserPageResponse {
   /** 数据列表 */
-  records?: AdminUserPageResponse[];
+  records?: UserPageResponse[];
   /** 总记录数 */
   total?: number;
   /** 当前页码 */
@@ -554,55 +3051,15 @@ export interface PageResultAdminUserPageResponse {
   pages?: number;
 }
 
-export interface HashMapString {
-  '0'?: string;
-}
-
-export interface CollegeDictResponse {
-  /** 学院字典 id - 名称 */
-  collegeDict?: HashMapString;
-}
-
-export interface PageResultCollegeEntity {
-  /** 数据列表 */
-  records?: CollegeEntity[];
-  /** 总记录数 */
-  total?: number;
-  /** 当前页码 */
-  current?: number;
-  /** 每页大小 */
-  size?: number;
-  /** 总页数 */
-  pages?: number;
-}
-
-export interface CollegeEntity {
-  /** 主键ID */
-  id?: number;
-  /** 创建时间 */
-  createTime?: string;
-  /** 更新时间 */
-  updateTime?: string;
-  /** 学院名称 */
-  collegeName?: string;
-  /** 学院简介 */
-  description?: string;
-  /** 学院Logo */
-  logo?: string;
-  /** 联系电话 */
-  contactPhone?: string;
-  /** 联系邮箱 */
-  email?: string;
-  /** 学院地址 */
-  address?: string;
-  /** 学院网址 */
-  url?: string;
-  /** 管理员账号 */
-  adminAccount?: string;
-  /** 排序顺序 */
-  sortOrder?: number;
-  /** 状态（0-禁用，1-启用） */
-  status?: number;
+export interface ResultPageResultUserPageResponse {
+  /** 响应状态码 */
+  code?: number;
+  /** 响应消息 */
+  message?: string;
+  /** 响应数据 */
+  data?: PageResultUserPageResponse;
+  /** 时间戳 */
+  timestamp?: number;
 }
 
 export interface AlumniExcelResponse {
@@ -614,276 +3071,71 @@ export interface AlumniExcelResponse {
   errorMessages?: string[];
 }
 
-export interface PageResultClassEntity {
-  /** 数据列表 */
-  records?: ClassEntity[];
-  /** 总记录数 */
-  total?: number;
-  /** 当前页码 */
-  current?: number;
-  /** 每页大小 */
-  size?: number;
-  /** 总页数 */
-  pages?: number;
-}
-
-export interface ClassEntity {
-  /** 主键ID */
-  id?: number;
-  /** 创建时间 */
-  createTime?: string;
-  /** 更新时间 */
-  updateTime?: string;
-  /** 所属学院ID */
-  collegeId?: number;
-  /** 班级名称 */
-  className?: string;
-  /** 年级（如：2020） */
-  grade?: number;
-  /** 专业 */
-  major?: string;
-  /** 班级类型（1-本科，2-硕士，3-博士） */
-  classType?: number;
-  /** 成员数量 */
-  memberCount?: number;
-  /** 班级简介 */
-  description?: string;
-  /** 班级封面图 */
-  coverImage?: string;
-  /** 班级公告 */
-  notice?: string;
-  /** 状态（0-禁用，1-启用） */
-  status?: number;
-}
-
-export interface DictItemEntity {
-  /** 主键ID */
-  id?: number;
-  /** 创建时间 */
-  createTime?: string;
-  /** 更新时间 */
-  updateTime?: string;
-  /** 字典ID */
-  dictId?: number;
-  /** 字典项值 */
-  itemValue?: string;
-  /** 字典项名称 */
-  label?: string;
-  /** 字典类型 */
-  dictType?: string;
-  /** 字典项描述 */
-  description?: string;
-  /** 排序（升序） */
-  sortOrder?: number;
-}
-
-export interface PageResultDictItemEntity {
-  /** 数据列表 */
-  records?: DictItemEntity[];
-  /** 总记录数 */
-  total?: number;
-  /** 当前页码 */
-  current?: number;
-  /** 每页大小 */
-  size?: number;
-  /** 总页数 */
-  pages?: number;
-}
-
-export interface CreatePermissionRequest {
-  /** 父权限ID（0表示顶级权限） */
-  parentId: number;
-  /** 权限编码（唯一） */
-  permissionCode: string;
-  /** 权限名称 */
-  permissionName: string;
-  /** 权限类型（1-菜单，2-按钮，3-接口） */
-  permissionType: number;
-  /** 权限URL/接口路径 */
-  url?: string;
-  /** HTTP方法（GET、POST等） */
-  method?: string;
-  /** 权限描述 */
-  description?: string;
-  /** 排序顺序 */
-  sortOrder?: number;
-  /** 状态（0-禁用，1-启用） */
-  status?: number;
-}
-
-export interface PageResultDictEntity {
-  /** 数据列表 */
-  records?: DictEntity[];
-  /** 总记录数 */
-  total?: number;
-  /** 当前页码 */
-  current?: number;
-  /** 每页大小 */
-  size?: number;
-  /** 总页数 */
-  pages?: number;
-}
-
-export interface DictEntity {
-  /** 主键ID */
-  id?: number;
-  /** 创建时间 */
-  createTime?: string;
-  /** 更新时间 */
-  updateTime?: string;
-  /** 字典类型 对应数据库字段 */
-  dictType?: string;
-  /** 字典名称描述 */
-  description?: string;
-  /** 备注信息 */
-  remarks?: string;
-}
-
-export interface ResultPermissionResponse {
+export interface ResultAlumniExcelResponse {
   /** 响应状态码 */
   code?: number;
   /** 响应消息 */
   message?: string;
   /** 响应数据 */
-  data?: PermissionResponse;
+  data?: AlumniExcelResponse;
   /** 时间戳 */
   timestamp?: number;
 }
 
-export interface PermissionResponse {
-  /** 权限ID */
+export interface ResultListClassEntity {
+  /** 响应状态码 */
+  code?: number;
+  /** 响应消息 */
+  message?: string;
+  /** 响应数据 */
+  data?: ClassEntity[];
+  /** 时间戳 */
+  timestamp?: number;
+}
+
+export interface ClassQueryRequest {
+  /** 班级名称 模糊查询 */
+  className?: string;
+  /** 班级类型 */
+  classType?: number;
+  /** 班级所属学院ID */
+  collegeId?: number;
+  /** 班级年级 */
+  grade?: number;
+  /** 班级专业 */
+  major?: string;
+}
+
+export interface AlumniPageResponse {
+  /** id */
   id?: number;
-  /** 父权限ID（0表示顶级权限） */
-  parentId?: number;
-  /** 权限编码（唯一） */
-  permissionCode?: string;
-  /** 权限名称 */
-  permissionName?: string;
-  /** 权限类型（1-菜单，2-按钮，3-接口） */
-  permissionType?: number;
-  /** 权限URL/接口路径 */
-  url?: string;
-  /** HTTP方法（GET、POST等） */
-  method?: string;
-  /** 权限描述 */
-  description?: string;
-  /** 排序顺序 */
-  sortOrder?: number;
-  /** 状态（0-禁用，1-启用） */
+  /** 姓名 */
+  name?: string;
+  /** 学号 */
+  number?: string;
+  /** 身份 1 学生 2 教师 3 校友 */
+  identity?: number;
+  /** 入学年份 */
+  grade?: number;
+  /** 本校学历 0 - 无 1 - 本科 2 - 硕士 3 - 博士 */
+  alumniType?: number;
+  /** 学院名称 */
+  collegeName?: string;
+  /** 学院 */
+  collegeId?: number;
+  /** 班级名称 */
+  className?: string;
+  /** 班级 */
+  classId?: number;
+  /** 专业 */
+  major?: string;
+  /** 是否认证 0 未认证 1 已认证 */
   status?: number;
-  /** 创建时间 */
-  createTime?: string;
-  /** 更新时间 */
-  updateTime?: string;
 }
 
-/**
- * 操作状态（1-成功，0-失败）
- */
-export type OperationLogEntityStatus = typeof OperationLogEntityStatus[keyof typeof OperationLogEntityStatus];
-
-
-// eslint-disable-next-line @typescript-eslint/no-redeclare
-export const OperationLogEntityStatus = {
-  SUCCESS: 'SUCCESS',
-  FAILURE: 'FAILURE',
-} as const;
-
-export interface OperationLogEntity {
-  /** 主键ID */
-  id?: number;
-  /** 创建时间 */
-  createTime?: string;
-  /** 更新时间 */
-  updateTime?: string;
-  /** 功能模块（如：用户管理、活动管理、权限管理） */
-  module?: string;
-  /** 操作类型（如：新增、删除、修改、导出、登录、审核） */
-  action?: string;
-  /** 操作描述（支持SpEL表达式） */
-  description?: string;
-  /** 操作人ID（0表示系统/匿名） */
-  operatorId?: number;
-  /** 操作人姓名/账号 */
-  operatorName?: string;
-  /** 操作IP地址 */
-  operatorIp?: string;
-  /** 操作地点（通过IP解析） */
-  operatorLocation?: string;
-  /** 浏览器/设备信息（User-Agent） */
-  userAgent?: string;
-  /** 设备类型（WEB/MOBILE/TABLET） */
-  deviceType?: string;
-  /** 设备名称（如：Chrome浏览器） */
-  deviceName?: string;
-  /** 请求URL */
-  requestUrl?: string;
-  /** 请求方式（POST/PUT/DELETE/GET） */
-  requestMethod?: string;
-  /** 请求参数（JSON格式，注意敏感信息脱敏） */
-  requestParams?: string;
-  /** 响应结果（JSON格式，仅记录关键信息或异常信息） */
-  responseResult?: string;
-  /** 操作状态（1-成功，0-失败） */
-  status?: OperationLogEntityStatus;
-  /** 错误信息（仅失败时记录） */
-  errorMsg?: string;
-  /** 耗时（毫秒） */
-  costTime?: number;
-}
-
-/**
- * 操作状态（1-成功，0-失败）
- */
-export type OperationLogResponseStatus = typeof OperationLogResponseStatus[keyof typeof OperationLogResponseStatus];
-
-
-// eslint-disable-next-line @typescript-eslint/no-redeclare
-export const OperationLogResponseStatus = {
-  SUCCESS: 'SUCCESS',
-  FAILURE: 'FAILURE',
-} as const;
-
-export interface OperationLogResponse {
-  /** 主键ID */
-  id?: number;
-  /** 功能模块（如：用户管理、活动管理、权限管理） */
-  module?: string;
-  /** 操作类型（如：新增、删除、修改、导出、登录、审核） */
-  action?: string;
-  /** 操作描述（支持SpEL表达式） */
-  description?: string;
-  /** 操作人ID（0表示系统/匿名） */
-  operatorId?: number;
-  /** 操作人姓名/账号 */
-  operatorName?: string;
-  /** 操作IP地址 */
-  operatorIp?: string;
-  /** 操作地点（通过IP解析） */
-  operatorLocation?: string;
-  /** 浏览器/设备信息（User-Agent） */
-  userAgent?: string;
-  /** 设备类型（WEB/MOBILE/TABLET） */
-  deviceType?: string;
-  /** 设备名称（如：Chrome浏览器） */
-  deviceName?: string;
-  /** 请求URL */
-  requestUrl?: string;
-  /** 请求方式（POST/PUT/DELETE/GET） */
-  requestMethod?: string;
-  /** 操作状态（1-成功，0-失败） */
-  status?: OperationLogResponseStatus;
-  /** 错误信息（仅失败时记录） */
-  errorMsg?: string;
-  /** 耗时（毫秒） */
-  costTime?: number;
-  /** 操作时间 */
-  createTime?: string;
-}
-
-export interface PageResultOperationLogResponse {
+export interface PageResultAlumniPageResponse {
   /** 数据列表 */
-  records?: OperationLogResponse[];
+  records?: AlumniPageResponse[];
   /** 总记录数 */
   total?: number;
   /** 当前页码 */
@@ -894,36 +3146,66 @@ export interface PageResultOperationLogResponse {
   pages?: number;
 }
 
-export interface UpdatePermissionRequest {
-  /** 权限ID */
-  id: number;
-  /** 父权限ID（0表示顶级权限） */
-  parentId?: number;
-  /** 权限编码（唯一） */
-  permissionCode: string;
-  /** 权限名称 */
-  permissionName: string;
-  /** 权限类型（1-菜单，2-按钮，3-接口） */
-  permissionType?: number;
-  /** 权限URL/接口路径 */
-  url?: string;
-  /** HTTP方法（GET、POST等） */
-  method?: string;
-  /** 权限描述 */
-  description?: string;
-  /** 排序顺序 */
-  sortOrder?: number;
-  /** 状态（0-禁用，1-启用） */
-  status?: number;
-}
-
-export interface ResultBoolean {
+export interface ResultPageResultAlumniPageResponse {
   /** 响应状态码 */
   code?: number;
   /** 响应消息 */
   message?: string;
   /** 响应数据 */
-  data?: boolean;
+  data?: PageResultAlumniPageResponse;
+  /** 时间戳 */
+  timestamp?: number;
+}
+
+export interface AlumniPageRequest {
+  /** 当前页码 */
+  current?: number;
+  /** 每页大小 */
+  size?: number;
+  /** 身份 1 学生 2 教师 3 校友 */
+  identity?: number;
+  /** 入学年份 */
+  grade?: number;
+  /** 学院 */
+  collegeId?: number;
+  /** 班级 */
+  classId?: number;
+  /** 专业 */
+  major?: string;
+  /** 姓名 模糊匹配 */
+  name?: string;
+  /** 学号 后模糊匹配 */
+  number?: string;
+  /** 是否认证 0 未认证 1 已认证 */
+  status?: number;
+}
+
+export interface CreateAlumniRequest {
+  /** 姓名 */
+  name: string;
+  /** 学号 */
+  number: string;
+  /** 身份 1 学生 2 教师 3 校友 */
+  identity: number;
+  /** 入学年份 */
+  grade: number;
+  /** 本校学历 0 - 无 1 - 本科 2 - 硕士 3 - 博士 */
+  alumniType: number;
+  /** 学院 */
+  collegeId: number;
+  /** 班级 */
+  classId?: number;
+  /** 专业 */
+  major?: string;
+}
+
+export interface ResultListAlumniPageResponse {
+  /** 响应状态码 */
+  code?: number;
+  /** 响应消息 */
+  message?: string;
+  /** 响应数据 */
+  data?: AlumniPageResponse[];
   /** 时间戳 */
   timestamp?: number;
 }
@@ -964,395 +3246,29 @@ export interface PageResultNoAdminUserPageResponse {
   pages?: number;
 }
 
-export interface DeviceInfo {
-  /** 设备ID */
-  deviceId?: string;
-  /** Token字符串 */
-  token?: string;
-  /** 设备类型：WEB、MOBILE、TABLET */
-  deviceType?: string;
-  /** 设备名称 */
-  deviceName?: string;
-  /** 操作系统 */
-  os?: string;
-  /** 浏览器 */
-  browser?: string;
-  /** 登录时间（时间戳，毫秒） */
-  loginTime?: number;
-  /** 最后访问时间（时间戳，毫秒） */
-  lastAccessTime?: number;
-  /** 登录IP地址 */
-  ip?: string;
-  /** 登录地点 */
-  location?: string;
-}
-
-export type MediaData = { [key: string]: unknown };
-
-export interface Media {
-  /**
-   * An Id of the media object, usually defined when the model returns a reference to
-media it has been passed.
-   * @nullable
-   */
-  id?: string | null;
-  mimeType?: MimeType;
-  data?: MediaData;
-  /** The name of the media object that can be referenced by the AI model.
-<p>
-Important security note: This field is vulnerable to prompt injections, as the
-model might inadvertently interpret it as instructions. It is recommended to
-specify neutral names.
-
-<p>
-The name must only contain:
-<ul>
-<li>Alphanumeric characters
-<li>Whitespace characters (no more than one in a row)
-<li>Hyphens
-<li>Parentheses
-<li>Square brackets
-</ul> */
-  name?: string;
-}
-
-export interface MimeType {
-  type?: string;
-  subtype?: string;
-  parameters?: MapString;
-  /** @nullable */
-  toStringValue?: string | null;
-}
-
-export interface MapString {
-  key?: string;
-}
-
-export interface Document {
-  /** Unique ID */
-  id?: string;
-  /** Document string content. */
-  text?: string;
-  /** Document media content */
-  media?: Media;
-  /** Metadata for the document. It should not be nested and values should be restricted
-to string, int, float, boolean for simple use with Vector Dbs. */
-  metadata?: MapObject;
-  /**
-   * A numeric score associated with this document that can represent various types of
-relevance measures.
-<p>
-Common uses include:
-<ul>
-<li>Measure of similarity between the embedding value of the document's text/media
-and a query vector, where higher scores indicate greater similarity (opposite of
-distance measure)
-<li>Text relevancy rankings from retrieval systems
-<li>Custom relevancy metrics from RAG patterns
-</ul>
-<p>
-Higher values typically indicate greater relevance or similarity.
-   * @nullable
-   */
-  score?: number | null;
-}
-
-export interface MapObject {
-  key?: Key;
-}
-
-export interface Key { [key: string]: unknown }
-
-export interface Usage { [key: string]: unknown }
-
-export interface PermissionQueryRequest {
-  /** 当前页码（从1开始） */
-  current?: number;
-  /** 每页大小 */
-  size?: number;
-  /** 父权限ID（可选，用于查询子权限） */
-  parentId?: number;
-  /** 权限编码（模糊查询） */
-  permissionCode?: string;
-  /** 权限名称（模糊查询） */
-  permissionName?: string;
-  /** 权限类型（1-菜单，2-按钮，3-接口） */
-  permissionType?: number;
-  /** 状态（0-禁用，1-启用） */
-  status?: number;
-}
-
-export interface ResultPageResultPermissionResponse {
+export interface ResultPageResultNoAdminUserPageResponse {
   /** 响应状态码 */
   code?: number;
   /** 响应消息 */
   message?: string;
   /** 响应数据 */
-  data?: PageResultPermissionResponse;
+  data?: PageResultNoAdminUserPageResponse;
   /** 时间戳 */
   timestamp?: number;
 }
 
-export interface PageResultPermissionResponse {
-  /** 数据列表 */
-  records?: PermissionResponse[];
-  /** 总记录数 */
-  total?: number;
-  /** 当前页码 */
-  current?: number;
-  /** 每页大小 */
-  size?: number;
-  /** 总页数 */
-  pages?: number;
-}
-
-export interface EmbeddingResponseMetadata {
-  /** Metadata for the document. It should not be nested and values should be restricted
-to string, int, float, boolean for simple use with Vector Dbs. */
-  map?: MapObject;
-  model?: string;
-  usage?: Usage;
-}
-
-export interface ResultListPermissionResponse {
-  /** 响应状态码 */
-  code?: number;
-  /** 响应消息 */
-  message?: string;
-  /** 响应数据 */
-  data?: PermissionResponse[];
-  /** 时间戳 */
-  timestamp?: number;
-}
-
-export interface ResultListPermissionTreeNodeResponse {
-  /** 响应状态码 */
-  code?: number;
-  /** 响应消息 */
-  message?: string;
-  /** 响应数据 */
-  data?: PermissionTreeNodeResponse[];
-  /** 时间戳 */
-  timestamp?: number;
-}
-
-export interface PermissionTreeNodeResponse {
-  /** 权限ID */
-  id?: number;
-  /** 父权限ID */
-  parentId?: number;
-  /** 权限编码 */
-  permissionCode?: string;
-  /** 权限名称 */
-  permissionName?: string;
-  /** 权限类型 */
-  permissionType?: number;
-  /** 访问路径 */
-  url?: string;
-  /** 请求方法 */
-  method?: string;
-  /** 权限描述 */
-  description?: string;
-  /** 排序字段 */
-  sortOrder?: number;
-  /** 角色是否拥有该权限 */
-  hasPermission?: boolean;
-  /** 状态（0-禁用，1-启用） */
-  status?: number;
-  /** 子权限列表
-使用默认初始化避免序列化时出现空指针 */
-  children?: PermissionTreeNodeResponse[];
-}
-
-export interface LoginRequest {
-  /** 用户名 */
-  username?: string;
-  /** 密码 */
-  password?: string;
-  /** 微信小程序登录凭证 */
-  wxMpCode?: string;
-}
-
-/**
- * The{@link ModalityType} of the source data used to generate the embedding.
- */
-export type EmbeddingResultMetadataModalityType = typeof EmbeddingResultMetadataModalityType[keyof typeof EmbeddingResultMetadataModalityType];
-
-
-// eslint-disable-next-line @typescript-eslint/no-redeclare
-export const EmbeddingResultMetadataModalityType = {
-  TEXT: 'TEXT',
-  IMAGE: 'IMAGE',
-  AUDIO: 'AUDIO',
-  VIDEO: 'VIDEO',
-} as const;
-
-export type EmbeddingResultMetadataDocumentData = { [key: string]: unknown };
-
-export interface EmbeddingResultMetadata {
-  /** The{@link ModalityType} of the source data used to generate the embedding. */
-  modalityType?: EmbeddingResultMetadataModalityType;
-  documentId?: string;
-  mimeType?: MimeType;
-  documentData?: EmbeddingResultMetadataDocumentData;
-}
-
-export interface Embedding {
-  embedding?: number[];
-  index?: number;
-  metadata?: EmbeddingResultMetadata;
-}
-
-export interface ResultLoginResponse {
-  /** 响应状态码 */
-  code?: number;
-  /** 响应消息 */
-  message?: string;
-  /** 响应数据 */
-  data?: LoginResponse;
-  /** 时间戳 */
-  timestamp?: number;
-}
-
-export interface LoginResponse {
-  /** 访问令牌 */
-  token?: string;
+export interface BindUserAlumniRequest {
   /** 用户ID */
-  userId?: number;
-  /** 用户名 */
-  username?: string;
-  /** 昵称 */
-  nickname?: string;
-  /** 头像 */
-  avatar?: string;
-  /** 管理学院id (0-全部 -1 - 无数据权限 其它对应相应学院id) */
-  collegeLeaderId?: number;
-  /** 权限树
-支持前端根据权限标识动态生成页面元素 */
-  permissionTree?: PermissionTreeNodeResponse[];
+  userId: number;
+  /** 校友ID */
+  alumniId: number;
 }
 
-export interface EmbeddingResponse {
-  /** Embedding data. */
-  embeddings?: Embedding[];
-  /** Embedding metadata. */
-  metadata?: EmbeddingResponseMetadata;
-}
-
-export interface RegisterRequest {
-  /** 用户名（登录账号） */
-  username: string;
-  /** 密码（需符合格式要求） */
-  password: string;
-  /** 用户昵称（显示用） */
-  nickname: string;
-}
-
-export interface StudentRecords {
-  name?: string;
-  email?: string;
-}
-
-export interface PageResultRoleResponse {
-  /** 数据列表 */
-  records?: RoleResponse[];
-  /** 总记录数 */
-  total?: number;
-  /** 当前页码 */
-  current?: number;
-  /** 每页大小 */
-  size?: number;
-  /** 总页数 */
-  pages?: number;
-}
-
-export interface CreateRoleRequest {
-  /** 角色编码（唯一） */
-  roleCode: string;
-  /** 角色名称 */
-  roleName: string;
-  /** 角色描述 */
-  description?: string;
-  /** 排序顺序 */
-  sortOrder?: number;
-  /** 状态（0-禁用，1-启用） */
-  status?: number;
-}
-
-export interface ResultRoleResponse {
-  /** 响应状态码 */
-  code?: number;
-  /** 响应消息 */
-  message?: string;
-  /** 角色响应DTO
-用于返回角色详细信息 */
-  data?: RoleResponse;
-  /** 时间戳 */
-  timestamp?: number;
-}
-
-export interface UpdateRoleRequest {
-  /** 角色ID */
-  id: number;
-  /** 角色编码（唯一） */
-  roleCode: string;
-  /** 角色名称 */
-  roleName: string;
-  /** 角色描述 */
-  description?: string;
-  /** 排序顺序 */
-  sortOrder?: number;
-  /** 状态（0-禁用，1-启用） */
-  status?: number;
-}
-
-export interface AuthRequestHandlerRequest {
-  /** ID */
-  id?: number;
-  /** 处理结果：APPROVED-已通过, REJECTED-已拒绝 */
-  result: string;
-  /** 拒绝原因（result为REJECTED时必填） */
-  rejectReason?: string;
-}
-
-export interface ResultPageResultAuthRequestPageResponse {
-  /** 响应状态码 */
-  code?: number;
-  /** 响应消息 */
-  message?: string;
-  /** 响应数据 */
-  data?: PageResultAuthRequestPageResponse;
-  /** 时间戳 */
-  timestamp?: number;
-}
-
-export interface AuthRequestsPageRequest {
-  /** 当前页码 */
-  current?: number;
-  /** 每页大小 */
-  size?: number;
-  /** 认证身份 1-学生，2-教师，3-校友 */
-  identity?: number;
-  /** 状态：PENDING-待审核, APPROVED-已通过, REJECTED-已拒绝 */
-  status?: string;
-}
-
-export interface IdentityAuthSubmitRequest {
-  /** 认证身份 1-学生，2-教师，3-校友 */
-  identity: number;
-  /** 上传的认证信息（各种图片，以列表形式存储url） */
-  info?: string[];
-}
-
-export interface ResultIdentityAuthResponse {
-  /** 响应状态码 */
-  code?: number;
-  /** 响应消息 */
-  message?: string;
-  /** 响应数据 */
-  data?: IdentityAuthResponse;
-  /** 时间戳 */
-  timestamp?: number;
+export interface ProfileResponse {
+  /** 用户信息 */
+  userInfo?: UserInfoResponse;
+  /** 校友档案信息 */
+  alumniInfos?: AlumniPageResponse[];
 }
 
 export interface ResultProfileResponse {
@@ -1366,7 +3282,13 @@ export interface ResultProfileResponse {
   timestamp?: number;
 }
 
-export interface UpdateProfileRequest {
+export interface UserInfoResponse {
+  /** 用户ID */
+  id?: number;
+  /** 用户名（唯一） */
+  username?: string;
+  /** 微信小程序OpenID */
+  wxOpenid?: string;
   /** 昵称 */
   nickname?: string;
   /** 头像URL */
@@ -1379,12 +3301,17 @@ export interface UpdateProfileRequest {
   gender?: number;
   /** 真实姓名 */
   realName?: string;
+  /** 用户类型（1-学生，2-教师，3-校友 4-游客 5-管理员） */
+  userType?: number;
   /** 当前工作单位 */
   companyName?: string;
   /** 职位 */
   jobTitle?: string;
   /** 所在行业 */
   industry?: string;
+  /** ==================== 位置信息 ====================
+位置信息 */
+  locationResponse?: AlumniLocationResponse;
   /** 个人简介/一句话介绍 */
   bio?: string;
   /** 生日 */
@@ -1393,8 +3320,19 @@ export interface UpdateProfileRequest {
   qq?: string;
   /** 微信号 */
   wechat?: string;
-  /** 位置信息更新请求 */
-  locationUpdateRequest?: LocationUpdateRequest;
+  /** 管理学院id (0-全部 -1 - 无数据权限 其它对应相应学院id) */
+  collegeLeaderId?: number;
+}
+
+export interface ResultUserInfoResponse {
+  /** 响应状态码 */
+  code?: number;
+  /** 响应消息 */
+  message?: string;
+  /** 用户信息 */
+  data?: UserInfoResponse;
+  /** 时间戳 */
+  timestamp?: number;
 }
 
 /**
@@ -1455,15 +3393,50 @@ export interface LocationUpdateRequest {
   isVisible?: boolean;
 }
 
-export interface ResultMyLocationResponse {
-  /** 响应状态码 */
-  code?: number;
-  /** 响应消息 */
-  message?: string;
-  /** 响应数据 */
-  data?: MyLocationResponse;
-  /** 时间戳 */
-  timestamp?: number;
+export interface AlumniLocationResponse {
+  /** 用户ID */
+  userId?: number;
+  /** 姓名 */
+  name?: string;
+  /** 头像 */
+  avatar?: string;
+  /** 公司 */
+  company?: string;
+  /** 邮箱 */
+  email?: string;
+  /** 手机号 */
+  phone?: string;
+  /** 职位 */
+  position?: string;
+  /** 行业 */
+  industry?: string;
+  /** 经度（模糊后） */
+  longitude?: number;
+  /** 纬度（模糊后） */
+  latitude?: number;
+  /** 距离（米） */
+  distance?: number;
+  /** 省份 */
+  province?: string;
+  /** 城市 */
+  city?: string;
+  /** 区县 */
+  district?: string;
+  /** 详细地址 */
+  address?: string;
+}
+
+export interface PageResultAlumniLocationResponse {
+  /** 数据列表 */
+  records?: AlumniLocationResponse[];
+  /** 总记录数 */
+  total?: number;
+  /** 当前页码 */
+  current?: number;
+  /** 每页大小 */
+  size?: number;
+  /** 总页数 */
+  pages?: number;
 }
 
 export interface ResultPageResultAlumniLocationResponse {
@@ -1492,6 +3465,8 @@ export interface NearbyAlumniRequest {
   industry?: string;
   /** 城市筛选 */
   city?: string;
+  /** 用户真实名称 */
+  realName?: string;
   /**
    * 页码
    * @minimum 1
@@ -1505,688 +3480,561 @@ export interface NearbyAlumniRequest {
   pageSize?: number;
 }
 
-export interface RoleQueryRequest {
-  /** 当前页码（从1开始） */
-  current?: number;
-  /** 每页大小 */
-  size?: number;
-  /** 角色编码（模糊查询） */
-  roleCode?: string;
-  /** 角色名称（模糊查询） */
-  roleName?: string;
-  /** 状态（0-禁用，1-启用） */
-  status?: number;
+export interface ResultListAlumniLocationResponse {
+  /** 响应状态码 */
+  code?: number;
+  /** 响应消息 */
+  message?: string;
+  /** 响应数据 */
+  data?: AlumniLocationResponse[];
+  /** 时间戳 */
+  timestamp?: number;
 }
 
-export interface BindUserAlumniRequest {
+export interface BoundsQueryRequest {
+  /** 西南角经度 */
+  southWestLng: number;
+  /** 西南角纬度 */
+  southWestLat: number;
+  /** 东北角经度 */
+  northEastLng: number;
+  /** 东北角纬度 */
+  northEastLat: number;
+  /** 行业筛选 */
+  industry?: string;
+  /** 城市筛选 */
+  city?: string;
+}
+
+/**
+ * 可见级别：1-精确(10米) 2-模糊到区(1公里) 3-模糊到市(5公里)
+ */
+export type PrivacySettingRequestVisibilityLevel = typeof PrivacySettingRequestVisibilityLevel[keyof typeof PrivacySettingRequestVisibilityLevel];
+
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const PrivacySettingRequestVisibilityLevel = {
+  PRECISE: 'PRECISE',
+  DISTRICT: 'DISTRICT',
+  CITY: 'CITY',
+} as const;
+
+export interface PrivacySettingRequest {
+  /** 是否对外可见 */
+  isVisible: boolean;
+  /** 可见级别：1-精确(10米) 2-模糊到区(1公里) 3-模糊到市(5公里) */
+  visibilityLevel?: PrivacySettingRequestVisibilityLevel;
+}
+
+export interface ResultAlumniLocationResponse {
+  /** 响应状态码 */
+  code?: number;
+  /** 响应消息 */
+  message?: string;
+  /** ==================== 位置信息 ====================
+位置信息 */
+  data?: AlumniLocationResponse;
+  /** 时间戳 */
+  timestamp?: number;
+}
+
+export interface UpdateProfileRequest {
+  /** 昵称 */
+  nickname?: string;
+  /** 头像URL */
+  avatar?: string;
+  /** 邮箱 */
+  email?: string;
+  /** 手机号 */
+  phone?: string;
+  /** 性别（0-未知，1-男，2-女） */
+  gender?: number;
+  /** 真实姓名 */
+  realName?: string;
+  /** 当前工作单位 */
+  companyName?: string;
+  /** 职位 */
+  jobTitle?: string;
+  /** 所在行业 */
+  industry?: string;
+  /** 个人简介/一句话介绍 */
+  bio?: string;
+  /** 生日 */
+  birthday?: string;
+  /** QQ号 */
+  qq?: string;
+  /** 微信号 */
+  wechat?: string;
+  /** 位置信息更新请求 */
+  locationUpdateRequest?: LocationUpdateRequest;
+}
+
+/**
+ * 定位类型
+ */
+export type MyLocationResponseLocationType = typeof MyLocationResponseLocationType[keyof typeof MyLocationResponseLocationType];
+
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const MyLocationResponseLocationType = {
+  GPS: 'GPS',
+  BASE_STATION: 'BASE_STATION',
+  WIFI: 'WIFI',
+  MANUAL: 'MANUAL',
+} as const;
+
+/**
+ * 可见级别
+ */
+export type MyLocationResponseVisibilityLevel = typeof MyLocationResponseVisibilityLevel[keyof typeof MyLocationResponseVisibilityLevel];
+
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const MyLocationResponseVisibilityLevel = {
+  PRECISE: 'PRECISE',
+  DISTRICT: 'DISTRICT',
+  CITY: 'CITY',
+} as const;
+
+export interface MyLocationResponse {
   /** 用户ID */
-  userId: number;
-  /** 校友ID */
-  alumniId: number;
-}
-
-export interface ResultListAlumniPageResponse {
-  /** 响应状态码 */
-  code?: number;
-  /** 响应消息 */
-  message?: string;
-  /** 响应数据 */
-  data?: AlumniPageResponse[];
-  /** 时间戳 */
-  timestamp?: number;
-}
-
-export interface CreateAlumniRequest {
+  userId?: number;
   /** 姓名 */
-  name: string;
-  /** 学号 */
-  number: string;
-  /** 身份 1 学生 2 教师 3 校友 */
+  name?: string;
+  /** 头像 */
+  avatar?: string;
+  /** 公司 */
+  company?: string;
+  /** 职位 */
+  position?: string;
+  /** 行业 */
+  industry?: string;
+  /** 经度（GCJ02坐标系） */
+  longitude?: number;
+  /** 纬度（GCJ02坐标系） */
+  latitude?: number;
+  /** 模糊经度 */
+  fuzzyLongitude?: number;
+  /** 模糊纬度 */
+  fuzzyLatitude?: number;
+  /** 省份 */
+  province?: string;
+  /** 城市 */
+  city?: string;
+  /** 区县 */
+  district?: string;
+  /** 详细地址 */
+  address?: string;
+  /** 定位类型 */
+  locationType?: MyLocationResponseLocationType;
+  /** 定位精度（米） */
+  accuracy?: number;
+  /** 是否对外可见 */
+  isVisible?: boolean;
+  /** 可见级别 */
+  visibilityLevel?: MyLocationResponseVisibilityLevel;
+}
+
+export interface ResultMyLocationResponse {
+  /** 响应状态码 */
+  code?: number;
+  /** 响应消息 */
+  message?: string;
+  /** 响应数据 */
+  data?: MyLocationResponse;
+  /** 时间戳 */
+  timestamp?: number;
+}
+
+export interface IdentityAuthRequestResponse {
+  /** ID */
+  id?: number;
+  /** 发起认证的用户ID */
+  userId?: number;
+  /** 请求状态：PENDING-待审核, APPROVED-已通过, REJECTED-已拒绝 */
+  status?: string;
+  /** 认证身份 1-学生，2-教师，3-校友 */
+  identity?: number;
+  /** 上传的认证信息（各种图片，以列表形式存储url） */
+  info?: string[];
+  /** 拒绝原因（status为REJECTED时必填） */
+  rejectReason?: string;
+  /** 审核时间 */
+  reviewedTime?: string;
+}
+
+export interface IdentityAuthResponse {
+  /** 用户ID */
+  userId?: number;
+  /** 认证状态：UNVERIFIED-未认证, PENDING-待审核, VERIFIED-已认证, REJECTED-被拒绝 */
+  authStatus?: string;
+  /** 累计发起认证次数（包括被拒绝后重新发起） */
+  attemptCount?: number;
+  /** 允许的最大认证次数，默认3次 */
+  maxAttempts?: number;
+  /** 当前进行中的认证请求ID（状态为PENDING时有效） */
+  currentRequestId?: number;
+  /** 认证通过时间 */
+  verifiedTime?: string;
+  /** 认证请求列表 包含所有发起的认证请求 包含请求状态：PENDING-待审核, APPROVED-已通过, REJECTED-已拒绝 */
+  requests?: IdentityAuthRequestResponse[];
+}
+
+export interface ResultIdentityAuthResponse {
+  /** 响应状态码 */
+  code?: number;
+  /** 响应消息 */
+  message?: string;
+  /** 响应数据 */
+  data?: IdentityAuthResponse;
+  /** 时间戳 */
+  timestamp?: number;
+}
+
+export interface IdentityAuthSubmitRequest {
+  /** 认证身份 1-学生，2-教师，3-校友 */
   identity: number;
-  /** 入学年份 */
-  grade: number;
-  /** 本校学历 0 - 无 1 - 本科 2 - 硕士 3 - 博士 */
-  alumniType: number;
-  /** 学院 */
-  collegeId: number;
-  /** 班级 */
-  classId?: number;
-  /** 专业 */
-  major?: string;
+  /** 上传的认证信息（各种图片，以列表形式存储url） */
+  info?: string[];
 }
 
-export interface ResultPageResultAlumniPageResponse {
-  /** 响应状态码 */
-  code?: number;
-  /** 响应消息 */
-  message?: string;
-  /** 响应数据 */
-  data?: PageResultAlumniPageResponse;
-  /** 时间戳 */
-  timestamp?: number;
+export interface AuthRequestEntity {
+  /** 主键ID */
+  id?: number;
+  /** 创建时间 */
+  createTime?: string;
+  /** 更新时间 */
+  updateTime?: string;
+  /** 发起认证的用户ID */
+  userId?: number;
+  /** 请求状态：PENDING-待审核, APPROVED-已通过, REJECTED-已拒绝 */
+  status?: string;
+  /** 真实姓名 */
+  realName?: string;
+  /** 认证身份 1-学生，2-教师，3-校友 */
+  identity?: number;
+  /** 性别 1-男，2-女 */
+  gender?: number;
+  /** 手机号 */
+  phone?: string;
+  /** 上传的认证信息（各种图片，以列表形式存储url） */
+  info?: string[];
+  /** 审核管理员ID */
+  reviewerId?: number;
+  /** 拒绝原因（status为REJECTED时必填） */
+  rejectReason?: string;
+  /** 审核时间 */
+  reviewedTime?: string;
 }
 
-export interface ResultPageResultRoleResponse {
-  /** 响应状态码 */
-  code?: number;
-  /** 响应消息 */
-  message?: string;
-  /** 响应数据 */
-  data?: PageResultRoleResponse;
-  /** 时间戳 */
-  timestamp?: number;
-}
-
-export interface ResultListRoleResponse {
-  /** 响应状态码 */
-  code?: number;
-  /** 响应消息 */
-  message?: string;
-  /** 响应数据 */
-  data?: RoleResponse[];
-  /** 时间戳 */
-  timestamp?: number;
-}
-
-export interface AlumniPageRequest {
+export interface PageResultAuthRequestEntity {
+  /** 数据列表 */
+  records?: AuthRequestEntity[];
+  /** 总记录数 */
+  total?: number;
   /** 当前页码 */
   current?: number;
   /** 每页大小 */
   size?: number;
+  /** 总页数 */
+  pages?: number;
+}
+
+export interface ResultPageResultAuthRequestEntity {
+  /** 响应状态码 */
+  code?: number;
+  /** 响应消息 */
+  message?: string;
+  /** 响应数据 */
+  data?: PageResultAuthRequestEntity;
+  /** 时间戳 */
+  timestamp?: number;
+}
+
+export interface AuthRequestsPageRequest {
+  /** 当前页码 */
+  current?: number;
+  /** 每页大小 */
+  size?: number;
+  /** 姓名 */
+  name?: string;
+  /** 认证身份 1-学生，2-教师，3-校友 */
+  identity?: number;
+  /** 状态：PENDING-待审核, APPROVED-已通过, REJECTED-已拒绝 */
+  status?: string;
+}
+
+export interface AuthRequestHandlerRequest {
+  /** ID */
+  id?: number;
+  /** 处理结果：APPROVED-已通过, REJECTED-已拒绝 */
+  result: string;
+  /** 拒绝原因（result为REJECTED时必填） */
+  rejectReason?: string;
+}
+
+export interface AuthRequestPageResponse {
+  /** ID */
+  id?: number;
+  /** 用户ID */
+  userId?: number;
+  /** 请求状态：PENDING-待审核, APPROVED-已通过, REJECTED-已拒绝 */
+  status?: string;
+  /** 认证身份 1-学生，2-教师，3-校友 */
+  identity?: number;
+  /** 真实姓名 */
+  realName?: string;
+  /** 性别 1-男，2-女 */
+  gender?: number;
+  /** 手机号 */
+  phone?: string;
+  /** 上传的认证信息（各种图片，以列表形式存储url） */
+  info?: string[];
+  /** 审核管理员ID */
+  reviewerId?: number;
+  /** 拒绝原因（status为REJECTED时必填） */
+  rejectReason?: string;
+  /** 审核时间 */
+  reviewedTime?: string;
+}
+
+export interface PageResultAuthRequestPageResponse {
+  /** 数据列表 */
+  records?: AuthRequestPageResponse[];
+  /** 总记录数 */
+  total?: number;
+  /** 当前页码 */
+  current?: number;
+  /** 每页大小 */
+  size?: number;
+  /** 总页数 */
+  pages?: number;
+}
+
+export interface ResultPageResultAuthRequestPageResponse {
+  /** 响应状态码 */
+  code?: number;
+  /** 响应消息 */
+  message?: string;
+  /** 响应数据 */
+  data?: PageResultAuthRequestPageResponse;
+  /** 时间戳 */
+  timestamp?: number;
+}
+
+export interface ResultInteger {
+  /** 响应状态码 */
+  code?: number;
+  /** 响应消息 */
+  message?: string;
+  /** 响应数据 */
+  data?: number;
+  /** 时间戳 */
+  timestamp?: number;
+}
+
+export interface IndustryImportRequest {
+  /** 行业代码 */
+  code?: string;
+  /** 行业名称 */
+  name?: string;
+  /** 子行业列表 */
+  children?: IndustryImportRequest[];
+}
+
+export interface IndustryTreeResponse {
+  /** 主键ID */
+  id?: number;
+  /** 行业代码 */
+  code?: string;
+  /** 行业名称 */
+  name?: string;
+  /** 父级代码 */
+  parentCode?: string;
+  /** 层级 */
+  level?: number;
+  /** 子行业列表 */
+  children?: IndustryTreeResponse[];
+}
+
+export interface ResultListIndustryTreeResponse {
+  /** 响应状态码 */
+  code?: number;
+  /** 响应消息 */
+  message?: string;
+  /** 响应数据 */
+  data?: IndustryTreeResponse[];
+  /** 时间戳 */
+  timestamp?: number;
+}
+
+export interface IndustryResponse {
+  /** 主键ID */
+  id?: number;
+  /** 行业代码 */
+  code?: string;
+  /** 行业名称 */
+  name?: string;
+  /** 父级代码 */
+  parentCode?: string;
+  /** 层级 */
+  level?: number;
+  /** 完整路径 */
+  fullPath?: string;
+}
+
+export interface ResultListIndustryResponse {
+  /** 响应状态码 */
+  code?: number;
+  /** 响应消息 */
+  message?: string;
+  /** 响应数据 */
+  data?: IndustryResponse[];
+  /** 时间戳 */
+  timestamp?: number;
+}
+
+export interface CityImportRequest {
+  /** 地区代码 */
+  code?: string;
+  /** 地区名称 */
+  name?: string;
+  /** 邮政编码 */
+  post_code?: string;
+  /** 子级地区（市级） */
+  citys?: CityImportRequest[];
+  /** 子级地区（区县级） */
+  areas?: CityImportRequest[];
+  /** 子级地区（街道/乡镇级） */
+  towns?: CityImportRequest[];
+}
+
+export interface CityResponse {
+  /** 主键ID */
+  id?: number;
+  /** 地区代码 */
+  code?: string;
+  /** 地区名称 */
+  name?: string;
+  /** 邮政编码 */
+  postCode?: string;
+  /** 父级代码 */
+  parentCode?: string;
+  /** 层级 */
+  level?: number;
+  /** 完整路径 */
+  fullPath?: string;
+}
+
+export interface ResultListCityResponse {
+  /** 响应状态码 */
+  code?: number;
+  /** 响应消息 */
+  message?: string;
+  /** 响应数据 */
+  data?: CityResponse[];
+  /** 时间戳 */
+  timestamp?: number;
+}
+
+export interface Location {
+  /** 纬度 */
+  lat?: number;
+  /** 经度 */
+  lng?: number;
+}
+
+export interface DistrictInfo {
+  /** 行政区划全称，如'内蒙古自治区' */
+  fullname?: string;
+  /** 子级行政区划在下级数组中的下标位置 */
+  cidx?: number[];
+  /** 行政区划唯一标识（adcode） */
+  id?: string;
+  /** 行政区划简称，如'内蒙古' */
+  name?: string;
+  /** 行政区划级别，1:省级，2:市级，3:区县级 */
+  level?: number;
+  /** 行政区划中心点坐标 */
+  location?: Location;
+  /** 行政区划拼音，每一下标为一个字的全拼，如：['nei','meng','gu'] */
+  pinyin?: string[];
+  /** 下级行政区划列表（新版API返回） */
+  districts?: DistrictInfo[];
+  /** 行政区划轮廓点串，数组每一项为一个多边形 */
+  polygon?: number[][];
+  /** 完整区划信息（仅搜索接口返回） */
+  address?: string;
+}
+
+export interface ResultListDistrictInfo {
+  /** 响应状态码 */
+  code?: number;
+  /** 响应消息 */
+  message?: string;
+  /** 响应数据 */
+  data?: DistrictInfo[];
+  /** 时间戳 */
+  timestamp?: number;
+}
+
+export interface UpdateAlumniRequest {
+  /** id */
+  id?: number;
+  /** 姓名 */
+  name?: string;
+  /** 学号 */
+  number?: string;
   /** 身份 1 学生 2 教师 3 校友 */
   identity?: number;
   /** 入学年份 */
   grade?: number;
+  /** 本校学历 0 - 无 1 - 本科 2 - 硕士 3 - 博士 */
+  alumniType?: number;
   /** 学院 */
   collegeId?: number;
   /** 班级 */
   classId?: number;
   /** 专业 */
   major?: string;
-  /** 姓名 模糊匹配 */
+}
+
+export interface PageResultString {
+  /** 数据列表 */
+  records?: string[];
+  /** 总记录数 */
+  total?: number;
+  /** 当前页码 */
+  current?: number;
+  /** 每页大小 */
+  size?: number;
+  /** 总页数 */
+  pages?: number;
+}
+
+export interface ResultPageResultString {
+  /** 响应状态码 */
+  code?: number;
+  /** 响应消息 */
+  message?: string;
+  /** 响应数据 */
+  data?: PageResultString;
+  /** 时间戳 */
+  timestamp?: number;
+}
+
+export interface CompanyInfoPageRequest {
+  /** 当前页码 */
+  current?: number;
+  /** 每页大小 */
+  size?: number;
+  /** 公司名称 拼音 模糊匹配 */
+  key: string;
+}
+
+export interface CreateCompanyInfoRequest {
+  /** 公司名称 */
   name?: string;
-  /** 学号 后模糊匹配 */
-  number?: string;
-  /** 是否认证 0 未认证 1 已认证 */
-  status?: number;
-}
-
-export interface ResultListClassEntity {
-  /** 响应状态码 */
-  code?: number;
-  /** 响应消息 */
-  message?: string;
-  /** 响应数据 */
-  data?: ClassEntity[];
-  /** 时间戳 */
-  timestamp?: number;
-}
-
-export interface ClassQueryRequest {
-  /** 班级名称 模糊查询 */
-  className?: string;
-  /** 班级类型 */
-  classType?: number;
-  /** 班级所属学院ID */
-  collegeId?: number;
-  /** 班级年级 */
-  grade?: number;
-  /** 班级专业 */
-  major?: string;
-}
-
-export interface CreateCollegeAdminRequest {
-  /** 用户名 */
-  username: string;
-  /** 昵称 */
-  nickname?: string;
-  /** 头像URL */
-  avatar?: string;
-  /** 真实姓名 */
-  realName?: string;
-  /** 邮箱 */
-  email?: string;
-  /** 手机号 */
-  phone?: string;
-  /** 状态（0-禁用，1-启用） */
-  status?: number;
-  /** 个人简介/一句话介绍 */
-  bio?: string;
-  /** QQ号 */
-  qq?: string;
-  /** 微信号 */
-  wechat?: string;
-  /** 学院id */
-  collegeId: number;
-}
-
-/**
- * 排序字段：TIME -时间，HOT-热度，FOLLOW -关注
- */
-export type PostQueryRequestSortBy = typeof PostQueryRequestSortBy[keyof typeof PostQueryRequestSortBy];
-
-
-// eslint-disable-next-line @typescript-eslint/no-redeclare
-export const PostQueryRequestSortBy = {
-  TIME: 'TIME',
-  HOT: 'HOT',
-  FOLLOW: 'FOLLOW',
-} as const;
-
-export interface PostQueryRequest {
-  /**
-   * 页码，从1开始
-   * @minimum 1
-   */
-  pageNum?: number;
-  /**
-   * 每页大小，最大100
-   * @minimum 1
-   * @maximum 100
-   */
-  pageSize?: number;
-  /** 排序字段：TIME -时间，HOT-热度，FOLLOW -关注 */
-  sortBy?: PostQueryRequestSortBy;
-  /** 班级ID筛选 */
-  classId?: number;
-  /** 用户ID筛选（查某人的帖子） */
-  userId?: number;
-  /** 帖子类型筛选 */
-  postType?: number;
-  /** 搜索关键词（标题+内容） */
-  keyword?: string;
-  /** 只看有图片的帖子 */
-  hasImage?: boolean;
-  /** 只看有视频的帖子 */
-  hasVideo?: boolean;
-  /** 当前位置经度（附近帖子） */
-  longitude?: number;
-  /** 当前位置纬度（附近帖子） */
-  latitude?: number;
-  /** 附近范围（千米） */
-  distance?: number;
-}
-
-export interface ResultPageResultPostResponse {
-  /** 响应状态码 */
-  code?: number;
-  /** 响应消息 */
-  message?: string;
-  /** 响应数据 */
-  data?: PageResultPostResponse;
-  /** 时间戳 */
-  timestamp?: number;
-}
-
-export interface GrantPermissionsRequest {
-  /** 角色ID */
-  roleId: number;
-  /** 权限ID列表 */
-  permissionIds: number[];
-}
-
-export interface ResultVoid {
-  /** 响应状态码 */
-  code?: number;
-  /** 响应消息 */
-  message?: string;
-  /** 响应数据 */
-  data?: null;
-  /** 时间戳 */
-  timestamp?: number;
-}
-
-export interface ResultPostDetailResponse {
-  /** 响应状态码 */
-  code?: number;
-  /** 响应消息 */
-  message?: string;
-  /** 响应数据 */
-  data?: PostDetailResponse;
-  /** 时间戳 */
-  timestamp?: number;
-}
-
-/**
- * 帖子类型（1-普通动态，2-班级动态，3-通知公告）
- */
-export type PostPublishRequestPostType = typeof PostPublishRequestPostType[keyof typeof PostPublishRequestPostType];
-
-
-// eslint-disable-next-line @typescript-eslint/no-redeclare
-export const PostPublishRequestPostType = {
-  NORMAL: 'NORMAL',
-  CLASS: 'CLASS',
-  NOTICE: 'NOTICE',
-} as const;
-
-export interface PostPublishRequest {
-  /**
-   * 帖子标题（可选）
-   * @maxLength 100
-   */
-  title: string;
-  /**
-   * 封面图片
-   * @maxLength 500
-   */
-  cover?: string;
-  /**
-   * 内容块数组
-   * @minItems 1
-   * @maxItems 20
-   */
-  contentBlocks: ContentBlock[];
-  /** 所属班级ID */
-  classId?: number;
-  /** 帖子类型（1-普通动态，2-班级动态，3-通知公告） */
-  postType: PostPublishRequestPostType;
-  /** 发帖地点 */
-  location?: string;
-  /** 经度 */
-  longitude?: number;
-  /** 纬度 */
-  latitude?: number;
-}
-
-export interface AdminUserUpdateRequest {
-  /** 用户ID */
-  id: number;
-  /** 昵称 */
-  nickname?: string;
-  /** 头像URL */
-  avatar?: string;
-  /** 真实姓名 */
-  realName?: string;
-  /** 邮箱 */
-  email?: string;
-  /** 手机号 */
-  phone?: string;
-  /** 状态（0-禁用，1-启用） */
-  status?: number;
-  /** 个人简介/一句话介绍 */
-  bio?: string;
-  /** QQ号 */
-  qq?: string;
-  /** 微信号 */
-  wechat?: string;
-}
-
-export interface ResultAdminUserDetailsResponse {
-  /** 响应状态码 */
-  code?: number;
-  /** 响应消息 */
-  message?: string;
-  /** 响应数据 */
-  data?: AdminUserDetailsResponse;
-  /** 时间戳 */
-  timestamp?: number;
-}
-
-export interface ResultPageResultAdminUserPageResponse {
-  /** 响应状态码 */
-  code?: number;
-  /** 响应消息 */
-  message?: string;
-  /** 响应数据 */
-  data?: PageResultAdminUserPageResponse;
-  /** 时间戳 */
-  timestamp?: number;
-}
-
-export interface AdminUserPagesRequest {
-  /** 当前页码 */
-  current?: number;
-  /** 每页大小 */
-  size?: number;
-  /** 用户名（唯一） */
-  username?: string;
-}
-
-export interface ResultCollegeDictResponse {
-  /** 响应状态码 */
-  code?: number;
-  /** 响应消息 */
-  message?: string;
-  /** 响应数据 */
-  data?: CollegeDictResponse;
-  /** 时间戳 */
-  timestamp?: number;
-}
-
-export interface ClassPagesRequest {
-  /** 当前页码 */
-  current?: number;
-  /** 每页大小 */
-  size?: number;
-  /** 年级 */
-  grade?: number;
-  /** 所属学院ID */
-  collegeId?: number;
-  /** 班级名称 */
-  className?: string;
-  /** 班级类型（1-本科，2-硕士，3-博士） */
-  classType?: number;
-  /** 专业 */
-  major?: string;
-  /** 状态（0-禁用，1-启用） */
-  status?: number;
-}
-
-export interface ResultPageResultClassEntity {
-  /** 响应状态码 */
-  code?: number;
-  /** 响应消息 */
-  message?: string;
-  /** 响应数据 */
-  data?: PageResultClassEntity;
-  /** 时间戳 */
-  timestamp?: number;
-}
-
-export interface CreateCollegeRequest {
-  /** 学院名称 */
-  collegeName?: string;
-  /** 学院简介 */
-  description?: string;
-  /** 学院Logo */
-  logo?: string;
-  /** 联系电话 */
-  contactPhone?: string;
-  /** 联系邮箱 */
-  email?: string;
-  /** 学院地址 */
-  address?: string;
-  /** 学院网址 */
-  url?: string;
-  /** 管理员账号，会自动创建新的账号 */
-  adminAccount?: string;
-  /** 排序顺序 */
-  sortOrder?: number;
-  /** 状态（0-禁用，1-启用） */
-  status?: number;
-}
-
-export interface ResultPageResultCollegeEntity {
-  /** 响应状态码 */
-  code?: number;
-  /** 响应消息 */
-  message?: string;
-  /** 响应数据 */
-  data?: PageResultCollegeEntity;
-  /** 时间戳 */
-  timestamp?: number;
-}
-
-export interface CollegePagesRequest {
-  /** 当前页码 */
-  current?: number;
-  /** 每页大小 */
-  size?: number;
-  /** 学院名称 */
-  collegeName?: string;
-  /** 状态（0-禁用，1-启用） */
-  status?: number;
-}
-
-export interface ResultAlumniExcelResponse {
-  /** 响应状态码 */
-  code?: number;
-  /** 响应消息 */
-  message?: string;
-  /** 响应数据 */
-  data?: AlumniExcelResponse;
-  /** 时间戳 */
-  timestamp?: number;
-}
-
-export interface ResultListDictItemEntity {
-  /** 响应状态码 */
-  code?: number;
-  /** 响应消息 */
-  message?: string;
-  /** 响应数据 */
-  data?: DictItemEntity[];
-  /** 时间戳 */
-  timestamp?: number;
-}
-
-export interface UpdateDictItemRequest {
-  /** 主键ID */
-  id: number;
-  /** 字典项值 */
-  itemValue: string;
-  /** 字典项名称 */
-  label: string;
-  /** 字典项描述 */
-  description?: string;
-  /** 排序（升序） */
-  sortOrder?: number;
-}
-
-export interface CreateDictItemRequest {
-  /** 字典ID */
-  dictId: number;
-  /** 字典项值 */
-  itemValue: string;
-  /** 字典项名称 */
-  label: string;
-  /** 字典类型 */
-  dictType: string;
-  /** 字典项描述 */
-  description?: string;
-  /** 排序（升序） */
-  sortOrder?: number;
-}
-
-export interface ResultDictItemEntity {
-  /** 响应状态码 */
-  code?: number;
-  /** 响应消息 */
-  message?: string;
-  /** Created by IntelliJ IDEA.
-&#064;Author : Zys
-&#064;create 2025/11/25 12:10 */
-  data?: DictItemEntity;
-  /** 时间戳 */
-  timestamp?: number;
-}
-
-export interface ResultPageResultDictItemEntity {
-  /** 响应状态码 */
-  code?: number;
-  /** 响应消息 */
-  message?: string;
-  /** 响应数据 */
-  data?: PageResultDictItemEntity;
-  /** 时间戳 */
-  timestamp?: number;
-}
-
-export interface DictItemPagesRequest {
-  /** 当前页码 */
-  current?: number;
-  /** 每页大小 */
-  size?: number;
-  /** 字典项id */
-  dictId?: number;
-}
-
-export interface UpdateDictRequest {
-  /** 主键ID */
-  id: number;
-  /** 字典名称描述 */
-  description?: string;
-  /** 备注信息 */
-  remarks?: string;
-}
-
-export interface CreateDictRequest {
-  /** 字典类型 对应数据库字段 */
-  dictType: string;
-  /** 字典名称描述 */
-  description: string;
-  /** 备注信息 */
-  remarks?: string;
-}
-
-export interface ResultPageResultDictEntity {
-  /** 响应状态码 */
-  code?: number;
-  /** 响应消息 */
-  message?: string;
-  /** 响应数据 */
-  data?: PageResultDictEntity;
-  /** 时间戳 */
-  timestamp?: number;
-}
-
-export interface DictPagesRequest {
-  /** 当前页码 */
-  current?: number;
-  /** 每页大小 */
-  size?: number;
-  /** 查询条件 可根据字典名称描述 字典类型 来查询 */
-  query?: string;
-}
-
-export interface ResultDictEntity {
-  /** 响应状态码 */
-  code?: number;
-  /** 响应消息 */
-  message?: string;
-  /** Created by IntelliJ IDEA.
-&#064;Author : Zys
-&#064;create 2025/11/25 12:10 */
-  data?: DictEntity;
-  /** 时间戳 */
-  timestamp?: number;
-}
-
-export interface ResultOperationLogEntity {
-  /** 响应状态码 */
-  code?: number;
-  /** 响应消息 */
-  message?: string;
-  /** 响应数据 */
-  data?: OperationLogEntity;
-  /** 时间戳 */
-  timestamp?: number;
-}
-
-export interface ResultPageResultOperationLogResponse {
-  /** 响应状态码 */
-  code?: number;
-  /** 响应消息 */
-  message?: string;
-  /** 响应数据 */
-  data?: PageResultOperationLogResponse;
-  /** 时间戳 */
-  timestamp?: number;
-}
-
-export interface OperationLogQueryRequest {
-  /** 当前页码（从1开始） */
-  current?: number;
-  /** 每页大小 */
-  size?: number;
-  /** 功能模块（模糊查询） */
-  module?: string;
-  /** 操作类型（模糊查询） */
-  action?: string;
-  /** 操作人姓名/账号（模糊查询） */
-  operatorName?: string;
-  /** 操作人ID */
-  operatorId?: number;
-  /** 操作状态（1-成功，0-失败） */
-  status?: number;
-  /** 开始时间（操作时间范围查询） */
-  startTime?: string;
-  /** 结束时间（操作时间范围查询） */
-  endTime?: string;
-}
-
-export interface ResultUserInfoResponse {
-  /** 响应状态码 */
-  code?: number;
-  /** 响应消息 */
-  message?: string;
-  /** 用户信息 */
-  data?: UserInfoResponse;
-  /** 时间戳 */
-  timestamp?: number;
-}
-
-export interface ResultPageResultNoAdminUserPageResponse {
-  /** 响应状态码 */
-  code?: number;
-  /** 响应消息 */
-  message?: string;
-  /** 响应数据 */
-  data?: PageResultNoAdminUserPageResponse;
-  /** 时间戳 */
-  timestamp?: number;
-}
-
-export interface UserPagesRequest {
-  /** 当前页码 */
-  current?: number;
-  /** 每页大小 */
-  size?: number;
-  /** 真实姓名 */
-  realName?: string;
-}
-
-export interface UpdateUserRolesRequest {
-  /** 用户ID */
-  userId: number;
-  /** 角色ID列表（会覆盖用户现有的所有角色）
-角色ID列表 */
-  roleIds: number[];
-}
-
-export interface ResultListDeviceInfo {
-  /** 响应状态码 */
-  code?: number;
-  /** 响应消息 */
-  message?: string;
-  /** 响应数据 */
-  data?: DeviceInfo[];
-  /** 时间戳 */
-  timestamp?: number;
-}
-
-export interface ResultListDocument {
-  /** 响应状态码 */
-  code?: number;
-  /** 响应消息 */
-  message?: string;
-  /** 响应数据 */
-  data?: Document[];
-  /** 时间戳 */
-  timestamp?: number;
-}
-
-export interface ResultEmbeddingResponse {
-  /** 响应状态码 */
-  code?: number;
-  /** 响应消息 */
-  message?: string;
-  /** 响应数据 */
-  data?: EmbeddingResponse;
-  /** 时间戳 */
-  timestamp?: number;
-}
-
-export interface ResultStudentRecords {
-  /** 响应状态码 */
-  code?: number;
-  /** 响应消息 */
-  message?: string;
-  /** 响应数据 */
-  data?: StudentRecords;
-  /** 时间戳 */
-  timestamp?: number;
 }
 
 export type PostCommunityPostParams = {
@@ -2309,10 +4157,57 @@ pageNum: number;
 pageSize: number;
 };
 
+export type GetCommunityLocationRegionParams = {
+/**
+ * 父id，空则返回省
+ */
+parentId?: string;
+};
+
+export type GetCommunityLocationRegionSearchParams = {
+keyword: string;
+};
+
 export type PostCheckBody = {
+  /** apiKey */
   key: string;
+  /** 查询文本 */
   content: string;
 };
 
 export type PostCheck200 = { [key: string]: unknown };
+
+export type GetWsDistrictV1ListParams = {
+key?: string;
+struct_type?: string;
+output?: string;
+callback?: string;
+};
+
+export type GetWsDistrictV1List200 = { [key: string]: unknown };
+
+export type GetWsDistrictV1GetchildrenParams = {
+key?: string;
+id?: string;
+get_polygon?: string;
+max_offset?: string;
+output?: string;
+callback?: string;
+};
+
+export type GetWsDistrictV1Getchildren200 = { [key: string]: unknown };
+
+export type GetCommunityIndustrySearchParams = {
+/**
+ * 搜索关键词 搜索关键词
+ */
+keyword: string;
+};
+
+export type GetCommunityIndustryChildrenParams = {
+/**
+ * 父级行业代码，为空时查询顶级行业 父级行业代码，不传或传空查询顶级行业
+ */
+parentCode?: string;
+};
 

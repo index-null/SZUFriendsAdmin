@@ -5,8 +5,11 @@
  * OpenAPI spec version: 1.0.0
  */
 import type {
+  GetCommunityLocationRegionParams,
+  GetCommunityLocationRegionSearchParams,
   LocationUpdateRequest,
   NearbyAlumniRequest,
+  ResultListDistrictInfo,
   ResultMyLocationResponse,
   ResultPageResultAlumniLocationResponse,
   ResultVoid
@@ -63,7 +66,39 @@ const getCommunityLocationMy = (
     },
       );
     }
-  return {putCommunityLocationUpdate,postCommunityLocationNearby,getCommunityLocationMy}};
+  /**
+ * 获取行政区划信息
+获取行政区划信息
+查询行政区划信息
+ * @summary 获取行政区划信息
+ */
+const getCommunityLocationRegion = (
+    params?: GetCommunityLocationRegionParams,
+ ) => {
+      return customInstance<ResultListDistrictInfo>(
+      {url: `/community/location/region`, method: 'GET',
+        params
+    },
+      );
+    }
+  /**
+ * 关键字搜索行政区划
+关键字搜索行政区划
+根据关键字搜索行政区划
+ * @summary 关键字搜索行政区划
+ */
+const getCommunityLocationRegionSearch = (
+    params: GetCommunityLocationRegionSearchParams,
+ ) => {
+      return customInstance<ResultListDistrictInfo>(
+      {url: `/community/location/region/search`, method: 'GET',
+        params
+    },
+      );
+    }
+  return {putCommunityLocationUpdate,postCommunityLocationNearby,getCommunityLocationMy,getCommunityLocationRegion,getCommunityLocationRegionSearch}};
 export type PutCommunityLocationUpdateResult = NonNullable<Awaited<ReturnType<ReturnType<typeof get>['putCommunityLocationUpdate']>>>
 export type PostCommunityLocationNearbyResult = NonNullable<Awaited<ReturnType<ReturnType<typeof get>['postCommunityLocationNearby']>>>
 export type GetCommunityLocationMyResult = NonNullable<Awaited<ReturnType<ReturnType<typeof get>['getCommunityLocationMy']>>>
+export type GetCommunityLocationRegionResult = NonNullable<Awaited<ReturnType<ReturnType<typeof get>['getCommunityLocationRegion']>>>
+export type GetCommunityLocationRegionSearchResult = NonNullable<Awaited<ReturnType<ReturnType<typeof get>['getCommunityLocationRegionSearch']>>>

@@ -13,7 +13,8 @@ import type {
   ResultAlumniExcelResponse,
   ResultBoolean,
   ResultListAlumniPageResponse,
-  ResultPageResultAlumniPageResponse
+  ResultPageResultAlumniPageResponse,
+  UpdateAlumniRequest
 } from '../.ts.schemas';
 
 import { customInstance } from '../../mutator';
@@ -23,7 +24,7 @@ import { customInstance } from '../../mutator';
   export const get = () => {
 /**
  * 目前支持 学生 教师 导入
- * @summary 批量上传校友信息
+ * @summary 批量导入校友信息
  */
 const postManagerAlumniBatch = (
     postManagerAlumniBatchBody: PostManagerAlumniBatchBody,
@@ -69,6 +70,21 @@ const postManagerAlumni = (
       );
     }
   /**
+ * 管理端 修改校友信息
+修改校友信息
+ * @summary 修改校友信息
+ */
+const putManagerAlumni = (
+    updateAlumniRequest: UpdateAlumniRequest,
+ ) => {
+      return customInstance<ResultBoolean>(
+      {url: `/manager/alumni`, method: 'PUT',
+      headers: {'Content-Type': 'application/json', },
+      data: updateAlumniRequest
+    },
+      );
+    }
+  /**
  * @summary 根据姓名查询校友信息
  */
 const getManagerAlumniName = (
@@ -109,10 +125,25 @@ const postManagerAlumniBindAlumni = (
     },
       );
     }
-  return {postManagerAlumniBatch,postManagerAlumniPage,postManagerAlumni,getManagerAlumniName,postManagerAlumniList,postManagerAlumniBindAlumni}};
+  /**
+ * 管理端 删除校友信息
+删除校友信息
+ * @summary 删除校友信息
+ */
+const deleteManagerAlumniId = (
+    id: number,
+ ) => {
+      return customInstance<ResultBoolean>(
+      {url: `/manager/alumni/${id}`, method: 'DELETE'
+    },
+      );
+    }
+  return {postManagerAlumniBatch,postManagerAlumniPage,postManagerAlumni,putManagerAlumni,getManagerAlumniName,postManagerAlumniList,postManagerAlumniBindAlumni,deleteManagerAlumniId}};
 export type PostManagerAlumniBatchResult = NonNullable<Awaited<ReturnType<ReturnType<typeof get>['postManagerAlumniBatch']>>>
 export type PostManagerAlumniPageResult = NonNullable<Awaited<ReturnType<ReturnType<typeof get>['postManagerAlumniPage']>>>
 export type PostManagerAlumniResult = NonNullable<Awaited<ReturnType<ReturnType<typeof get>['postManagerAlumni']>>>
+export type PutManagerAlumniResult = NonNullable<Awaited<ReturnType<ReturnType<typeof get>['putManagerAlumni']>>>
 export type GetManagerAlumniNameResult = NonNullable<Awaited<ReturnType<ReturnType<typeof get>['getManagerAlumniName']>>>
 export type PostManagerAlumniListResult = NonNullable<Awaited<ReturnType<ReturnType<typeof get>['postManagerAlumniList']>>>
 export type PostManagerAlumniBindAlumniResult = NonNullable<Awaited<ReturnType<ReturnType<typeof get>['postManagerAlumniBindAlumni']>>>
+export type DeleteManagerAlumniIdResult = NonNullable<Awaited<ReturnType<ReturnType<typeof get>['deleteManagerAlumniId']>>>
