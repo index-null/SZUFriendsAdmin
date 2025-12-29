@@ -73,6 +73,14 @@
             <el-option :value="2" label="教师" />
             <el-option :value="3" label="校友" />
           </el-select>
+
+          <el-input
+            v-model="filterForm.name"
+            placeholder="搜索姓名"
+            clearable
+            style="width: 140px"
+            @change="handleSearch"
+          />
         </div>
 
         <el-button :icon="RefreshRight" @click="handleReset">刷新</el-button>
@@ -264,6 +272,7 @@ const { getLabel: getIdentityLabel } = useDict(DICT_TYPE.USER_TYPE)
 const filterForm = reactive({
   status: '' as string,
   identity: undefined as number | undefined,
+  name: '' as string,
 })
 
 // 分页参数
@@ -314,6 +323,7 @@ const fetchAuthRequests = async () => {
       size: pagination.size,
       status: filterForm.status || undefined,
       identity: filterForm.identity,
+      name: filterForm.name || undefined,
     }
     const response = await authApi.postAuthIdentityRequestsPage(params)
 
@@ -346,6 +356,7 @@ const handleSearch = () => {
 const handleReset = () => {
   filterForm.status = ''
   filterForm.identity = undefined
+  filterForm.name = ''
   pagination.current = 1
   fetchAuthRequests()
 }
