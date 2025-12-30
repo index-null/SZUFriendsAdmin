@@ -18,6 +18,8 @@ const OperationLogStatistics = () =>
   import('../views/OperationLogStatistics/index.vue')
 const AuthenticationManagement = () =>
   import('../views/AuthenticationManagement/index.vue')
+const PostManagement = () => import('../views/PostManagement/index.vue')
+const PostModeration = () => import('../views/PostModeration/index.vue')
 const Profile = () => import('../views/Profile/index.vue')
 const NotFound = () => import('../views/NotFound.vue')
 
@@ -185,6 +187,30 @@ const routes: RouteRecordRaw[] = [
       title: '认证管理',
       requiresAuth: true,
       permission: 'auth:page',
+      showInMenu: true,
+    },
+  },
+  // 帖子管理
+  {
+    path: '/post-management',
+    name: 'PostManagement',
+    component: PostManagement,
+    meta: {
+      title: '帖子管理',
+      requiresAuth: true,
+      permission: 'post:page',
+      showInMenu: true,
+    },
+  },
+  // 帖子审核
+  {
+    path: '/post-moderation',
+    name: 'PostModeration',
+    component: PostModeration,
+    meta: {
+      title: '帖子审核',
+      requiresAuth: true,
+      permission: 'post:moderation',
       showInMenu: true,
     },
   },

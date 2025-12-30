@@ -132,6 +132,8 @@ export const DICT_TYPE = {
   POST_TYPE: 'post_type',
   /** 帖子内容块类型 */
   CONTENT_blOCK_TYPE: 'content_block_type',
+  /** 帖子标签 */
+  POST_TAG: 'post_tag',
 } as const
 
 /**

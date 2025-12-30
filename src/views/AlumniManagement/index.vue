@@ -391,7 +391,7 @@ const {
   postManagerAlumniBatch,
 } = get()
 
-const { getManagerFileDownloadTemplate } = getFileApi()
+const { getManagerFileDownloadFileKey } = getFileApi()
 
 // 字典选项
 const identityOptions = ref<any[]>([])
@@ -609,7 +609,7 @@ const handleImport = () => {
 
 const downloadTemplate = async () => {
   try {
-    const response = (await getManagerFileDownloadTemplate(
+    const response = (await getManagerFileDownloadFileKey(
       'alumni-template',
     )) as unknown as DownloadResponse
     downloadFromResponse(response, 'alumni-template.xlsx')

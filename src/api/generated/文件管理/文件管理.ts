@@ -53,21 +53,6 @@ const getManagerFileDownloadFileKey = (
     },
       );
     }
-  /**
- * 下载模板
-下载导入模板
-根据模板key下载模板文件
- * @summary 下载模板
- */
-const getManagerFileDownloadTemplate = (
-    fileKey: string,
- ) => {
-      return customInstance<ResultVoid>(
-      {url: `/manager/file/download/${fileKey}`, method: 'GET'
-    },
-      );
-    }
-  return {postManagerFileUpload,getManagerFileDownloadFileKey,getManagerFileDownloadTemplate}};
+  return {postManagerFileUpload,getManagerFileDownloadFileKey}};
 export type PostManagerFileUploadResult = NonNullable<Awaited<ReturnType<ReturnType<typeof get>['postManagerFileUpload']>>>
 export type GetManagerFileDownloadFileKeyResult = NonNullable<Awaited<ReturnType<ReturnType<typeof get>['getManagerFileDownloadFileKey']>>>
-export type GetManagerFileDownloadTemplateResult = NonNullable<Awaited<ReturnType<ReturnType<typeof get>['getManagerFileDownloadTemplate']>>>

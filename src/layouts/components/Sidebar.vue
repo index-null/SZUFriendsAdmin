@@ -41,7 +41,8 @@
               hasPermission('college:page') ||
               hasPermission('class') ||
               hasPermission('alumni:page') ||
-              hasPermission('user:page')
+              hasPermission('user:page') ||
+              hasPermission('post:page')
             "
             index="data-management"
           >
@@ -76,6 +77,13 @@
             >
               <el-icon><User /></el-icon>
               <template #title>用户管理</template>
+            </el-menu-item>
+            <el-menu-item
+              v-if="hasPermission('post:page')"
+              index="/post-management"
+            >
+              <el-icon><ChatLineSquare /></el-icon>
+              <template #title>帖子管理</template>
             </el-menu-item>
           </el-sub-menu>
 
@@ -126,7 +134,9 @@
           <!-- 审核管理 -->
           <el-sub-menu
             v-if="
-              hasPermission('auth:page') || hasPermission('operation-log:page')
+              hasPermission('auth:page') ||
+              hasPermission('operation-log:page') ||
+              hasPermission('post:moderation')
             "
             index="audit-management"
           >
@@ -142,10 +152,17 @@
               <template #title>认证管理</template>
             </el-menu-item>
             <el-menu-item
+              v-if="hasPermission('post:moderation')"
+              index="/post-moderation"
+            >
+              <el-icon><DocumentChecked /></el-icon>
+              <template #title>帖子审核</template>
+            </el-menu-item>
+            <el-menu-item
               v-if="hasPermission('operation-log:page')"
               index="/operation-log-statistics"
             >
-              <el-icon><DocumentChecked /></el-icon>
+              <el-icon><Tickets /></el-icon>
               <template #title>操作日志</template>
             </el-menu-item>
           </el-sub-menu>
@@ -183,6 +200,8 @@ import {
   DataAnalysis,
   Setting,
   Monitor,
+  ChatLineSquare,
+  Tickets,
 } from '@element-plus/icons-vue'
 import { usePermission } from '@/stores'
 
