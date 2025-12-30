@@ -151,17 +151,14 @@ import { Plus, Edit, Delete, CirclePlus } from '@element-plus/icons-vue'
 import { usePermission, useDicts } from '@/stores'
 import { DICT_TYPE } from '@/utils/dict'
 import PermissionFormDialog from './components/PermissionFormDialog.vue'
+import { get as getPermissionApi } from '@/api/generated/用户认证控制器-权限管理/用户认证控制器-权限管理'
 import type {
   PermissionTreeNodeResponse,
   CreatePermissionRequest,
   UpdatePermissionRequest,
-} from '@/api/modules/permission'
-import {
-  getPermissionTree,
-  createPermission,
-  updatePermission,
-  deletePermission,
-} from '@/api/modules/permission'
+} from '@/api/generated/.ts.schemas'
+
+const permissionApi = getPermissionApi()
 
 const { hasPermission } = usePermission()
 
@@ -254,7 +251,7 @@ const convertTreeToTableData = (
 const fetchData = async () => {
   loading.value = true
   try {
-    const data = await getPermissionTree()
+    const data = (await permissionApi.getAuthPermissionTreeAll()) as any
     permissionTree.value = data
     tableData.value = convertTreeToTableData(data)
   } catch (error) {
@@ -308,7 +305,7 @@ const handleDelete = async (row: PermissionTreeNodeResponse) => {
     })
 
     loading.value = true
-    await deletePermission(row.id!)
+    await permissionApi.deleteAuthPermissionPermissionId(row.id!)
     ElMessage.success('删除成功')
     await fetchData()
   } catch (error) {
@@ -327,10 +324,10 @@ const handleFormSuccess = async (
   loading.value = true
   try {
     if ('id' in data) {
-      await updatePermission(data)
+      await permissionApi.putAuthPermission(data)
       ElMessage.success('更新成功')
     } else {
-      await createPermission(data)
+      await permissionApi.postAuthPermission(data)
       ElMessage.success('创建成功')
     }
     formDialogVisible.value = false

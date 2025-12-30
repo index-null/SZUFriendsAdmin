@@ -1,10 +1,7 @@
 /**
  * API 模块统一导出
+ * 注意：所有模块已迁移到 generated 目录，此文件保留仅为兼容性
+ * 请直接使用 @/api/generated/* 中的 API
  */
 
-export * from './auth'
-export * from './admin'
-export * from './user'
-export * from './role'
-export * from './permission'
-export * from './dict'
+// 此目录已废弃，请使用 generated 目录

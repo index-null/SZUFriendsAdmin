@@ -4,7 +4,7 @@
  */
 
 import { useDictStore } from '@/stores/modules/dict'
-import type { DictItemEntity } from '@/api/modules/dict'
+import type { DictItemEntity } from '@/api/generated/.ts.schemas'
 
 /**
  * 字典选项接口（用于下拉框等组件）

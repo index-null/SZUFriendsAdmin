@@ -4,7 +4,9 @@
  */
 
 import { ref, onMounted } from 'vue'
-import { getCollegeDict } from '@/api/modules/college'
+import { get as getCollegeApi } from '@/api/generated/学院信息控制器/学院信息控制器'
+
+const collegeApi = getCollegeApi()
 
 /**
  * 学院映射 Hook
@@ -28,8 +30,9 @@ export const useCollegeMap = () => {
 
     loading.value = true
     try {
-      const dict = await getCollegeDict()
-      collegeMap.value = dict
+      const response = (await collegeApi.getManagerCollegeDict()) as any
+      // API 返回格式可能已经解包
+      collegeMap.value = response?.collegeDict || response || {}
       loaded.value = true
     } catch (error) {
       console.error('加载学院字典失败:', error)

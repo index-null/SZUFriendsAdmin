@@ -117,7 +117,7 @@ import type {
   CreatePermissionRequest,
   UpdatePermissionRequest,
   PermissionTreeNodeResponse,
-} from '@/api/modules/permission'
+} from '@/api/generated/.ts.schemas'
 
 // 使用字典
 const { allDictOptions } = useDicts([

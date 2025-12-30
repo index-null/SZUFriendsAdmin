@@ -1,19 +1,26 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
-import {
-  login as loginApi,
-  register as registerApi,
-  logout as logoutApi,
-} from '@/api/modules/auth'
+import { get as getAuthApi } from '@/api/generated/用户认证控制器-认证管理/用户认证控制器-认证管理'
 import type {
   LoginRequest,
   LoginResponse,
   RegisterRequest,
-  LoginResponseExtended,
-} from '@/api/modules/auth'
+  PermissionTreeNodeResponse,
+} from '@/api/generated/.ts.schemas'
 import { getToken, setToken, removeToken } from '@/api'
 import { ElMessage } from 'element-plus'
-import type { PermissionTreeNodeResponse } from '@/api/generated/.ts.schemas'
+
+// 初始化认证 API
+const authApi = getAuthApi()
+
+/**
+ * 登录响应扩展
+ * 添加前端需要的计算字段
+ */
+export interface LoginResponseExtended extends LoginResponse {
+  permissions?: string[] // 从 permissionTree 提取的权限码列表
+  roles?: string[] // 从权限或其他字段计算得出的角色列表
+}
 
 /**
  * 用户状态 Store
@@ -155,7 +162,7 @@ export const useUserStore = defineStore('user', () => {
   const login = async (params: LoginRequest) => {
     loading.value = true
     try {
-      const data = await loginApi(params)
+      const data = (await authApi.postAuthLogin(params)) as LoginResponse
 
       // 确保 token 存在
       if (!data.token) {
@@ -182,7 +189,7 @@ export const useUserStore = defineStore('user', () => {
   const register = async (params: RegisterRequest) => {
     loading.value = true
     try {
-      await registerApi(params)
+      await authApi.postAuthRegister(params)
       ElMessage.success('注册成功，请登录')
       return true
     } catch (error: any) {
@@ -199,7 +206,7 @@ export const useUserStore = defineStore('user', () => {
   const logout = async () => {
     try {
       // 调用后端登出接口（可选）
-      await logoutApi().catch(() => {
+      await authApi.postAuthLogout().catch(() => {
         // 即使后端登出失败，也要清除前端状态
       })
     } finally {

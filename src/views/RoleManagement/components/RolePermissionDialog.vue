@@ -65,11 +65,13 @@
 <script setup lang="ts">
 import { ref, computed, watch } from 'vue'
 import { ElMessage, ElTree } from 'element-plus'
+import { get as getRoleApi } from '@/api/generated/用户认证控制器-角色管理/用户认证控制器-角色管理'
 import type {
   RoleResponse,
   PermissionTreeNodeResponse,
-} from '@/api/modules/role'
-import { getRolePermissions } from '@/api/modules/role'
+} from '@/api/generated/.ts.schemas'
+
+const roleApi = getRoleApi()
 
 interface Props {
   visible: boolean
@@ -162,7 +164,7 @@ watch(
 const fetchRolePermissions = async (roleId: number) => {
   loading.value = true
   try {
-    const data = await getRolePermissions(roleId)
+    const data = (await roleApi.getAuthRoleRoleIdPermissions(roleId)) as any
     permissionTree.value = data || []
 
     // 提取已选中的权限ID（只提取叶子节点）

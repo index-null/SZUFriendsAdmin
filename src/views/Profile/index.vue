@@ -410,12 +410,16 @@ import {
   Camera,
   InfoFilled,
 } from '@element-plus/icons-vue'
-import { getProfile, updateProfile } from '@/api/modules/user'
+import { get as getProfileApi } from '@/api/generated/个人资料管理/个人资料管理'
 import { get as getCommunityApi } from '@/api/generated/社区控制器/社区控制器'
-import type { UpdateProfileRequest } from '@/api/generated/.ts.schemas'
+import type {
+  UpdateProfileRequest,
+  ProfileResponse,
+} from '@/api/generated/.ts.schemas'
 import { useUserStore } from '@/stores/modules/user'
 
-// 初始化上传 API
+// 初始化 API
+const profileApi = getProfileApi()
 const communityApi = getCommunityApi()
 
 // 用户 Store
@@ -472,7 +476,7 @@ const originalLocationData = ref<any>({})
 const loadProfile = async () => {
   loading.value = true
   try {
-    const data = await getProfile()
+    const data = (await profileApi.getAuthProfile()) as ProfileResponse
 
     if (data?.userInfo) {
       // 设置基本信息
@@ -579,7 +583,7 @@ const handleFileUpload = async (file: File) => {
     formData.value.avatar = uploadedUrl
 
     // 保存到后端
-    await updateProfile({
+    await profileApi.postAuthProfile({
       avatar: uploadedUrl,
     })
 
@@ -663,7 +667,7 @@ const saveProfile = async () => {
       }
     }
 
-    await updateProfile(submitData)
+    await profileApi.postAuthProfile(submitData)
 
     ElMessage.success('保存成功')
 

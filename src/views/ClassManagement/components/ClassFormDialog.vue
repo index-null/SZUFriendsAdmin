@@ -131,8 +131,7 @@ import { ref, reactive, watch } from 'vue'
 import { ElMessage, type FormInstance, type FormRules } from 'element-plus'
 import { useDict } from '@/stores'
 import { DICT_TYPE } from '@/utils/dict'
-import type { ClassEntity } from '@/api/modules/class'
-import type { CollegeEntity } from '@/api/modules/college'
+import type { ClassEntity, CollegeEntity } from '@/api/generated/.ts.schemas'
 
 // 使用字典
 const { dictOptions: classTypeOptions } = useDict(DICT_TYPE.CLASS_TYPE)

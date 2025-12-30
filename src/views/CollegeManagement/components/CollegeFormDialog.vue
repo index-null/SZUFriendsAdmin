@@ -143,7 +143,7 @@
 <script setup lang="ts">
 import { ref, computed, watch } from 'vue'
 import { ElMessage, type FormInstance, type FormRules } from 'element-plus'
-import type { CollegeEntity } from '@/api/modules/college'
+import type { CollegeEntity } from '@/api/generated/.ts.schemas'
 import { useDict } from '@/stores/composables/useDict'
 import { DICT_TYPE } from '@/utils/dict'
 

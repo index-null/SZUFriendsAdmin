@@ -180,17 +180,15 @@ import {
   Delete,
   Key,
 } from '@element-plus/icons-vue'
-import {
-  getRolePages,
-  createRole,
-  updateRole,
-  deleteRole,
-  grantPermissionsToRole,
-  type RoleResponse,
-  type RoleQueryRequest,
-  type CreateRoleRequest,
-  type UpdateRoleRequest,
-} from '@/api/modules/role'
+import { get as getRoleApi } from '@/api/generated/用户认证控制器-角色管理/用户认证控制器-角色管理'
+import type {
+  RoleResponse,
+  RoleQueryRequest,
+  CreateRoleRequest,
+  UpdateRoleRequest,
+} from '@/api/generated/.ts.schemas'
+
+const roleApi = getRoleApi()
 import { usePermission } from '@/stores'
 import { useDict } from '@/stores/composables/useDict'
 import { DICT_TYPE } from '@/utils/dict'
@@ -230,11 +228,11 @@ const formatDate = (date?: string) => {
 const fetchData = async () => {
   loading.value = true
   try {
-    const data = await getRolePages({
+    const data = (await roleApi.postAuthRoleQuery({
       ...searchForm,
       current: pagination.current,
       size: pagination.size,
-    })
+    })) as any
 
     tableData.value = data.records || []
     pagination.total = data.total || 0
@@ -286,7 +284,7 @@ const handleDelete = async (row: RoleResponse) => {
 
     if (!row.id) return
 
-    await deleteRole(row.id)
+    await roleApi.deleteAuthRoleRoleId(row.id)
     ElMessage.success('删除成功')
     fetchData()
   } catch (error) {
@@ -314,7 +312,9 @@ const handleBatchDelete = async () => {
     )
 
     loading.value = true
-    const deletePromises = selectedIds.value.map((id) => deleteRole(id))
+    const deletePromises = selectedIds.value.map((id) =>
+      roleApi.deleteAuthRoleRoleId(id),
+    )
     const results = await Promise.allSettled(deletePromises)
 
     const successCount = results.filter((r) => r.status === 'fulfilled').length
@@ -352,8 +352,8 @@ const handleFormSuccess = async (
   try {
     const isEdit = 'id' in formData && !!formData.id
     await (isEdit
-      ? updateRole(formData as UpdateRoleRequest)
-      : createRole(formData))
+      ? roleApi.putAuthRole(formData as UpdateRoleRequest)
+      : roleApi.postAuthRole(formData))
 
     ElMessage.success(isEdit ? '更新成功' : '创建成功')
     formDialogVisible.value = false
@@ -368,7 +368,7 @@ const handlePermissionSuccess = async (
   permissionIds: number[],
 ) => {
   try {
-    await grantPermissionsToRole({ roleId, permissionIds })
+    await roleApi.postAuthRolePermissionGrant({ roleId, permissionIds })
     ElMessage.success('权限分配成功')
     permissionDialogVisible.value = false
   } catch (error) {

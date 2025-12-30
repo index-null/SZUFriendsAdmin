@@ -330,7 +330,13 @@
         <template #tip>
           <div class="el-upload__tip">
             只能上传 xls/xlsx 文件
-            <!-- <el-link type="primary" :underline="false" style="font-size: 12px; vertical-align: baseline;" @click="downloadTemplate">下载模板</el-link> (暂不支持) -->
+            <el-link
+              type="primary"
+              :underline="false"
+              style="font-size: 12px; vertical-align: baseline"
+              @click="downloadTemplate"
+              >下载模板</el-link
+            >
           </div>
         </template>
       </el-upload>
@@ -363,6 +369,7 @@ import {
 import { ElMessage, ElMessageBox } from 'element-plus'
 import type { FormInstance, UploadInstance, UploadFile } from 'element-plus'
 import { get } from '@/api/generated/校友档案信息控制器/校友档案信息控制器'
+import { get as getFileApi } from '@/api/generated/文件管理/文件管理'
 import type {
   AlumniPageRequest,
   AlumniPageResponse,
@@ -371,6 +378,8 @@ import type {
 } from '@/api/generated/.ts.schemas'
 import { DICT_TYPE, getDictOptions } from '@/utils/dict'
 import { usePermission } from '@/stores'
+import { downloadFromResponse } from '@/utils/download'
+import type { DownloadResponse } from '@/utils/download'
 
 const { hasPermission } = usePermission()
 
@@ -381,6 +390,8 @@ const {
   deleteManagerAlumniId,
   postManagerAlumniBatch,
 } = get()
+
+const { getManagerFileDownloadTemplate } = getFileApi()
 
 // 字典选项
 const identityOptions = ref<any[]>([])
@@ -594,6 +605,17 @@ const handleImport = () => {
   importDialog.visible = true
   fileToUpload.value = null
   if (uploadRef.value) uploadRef.value.clearFiles()
+}
+
+const downloadTemplate = async () => {
+  try {
+    const response = (await getManagerFileDownloadTemplate(
+      'alumni-template',
+    )) as unknown as DownloadResponse
+    downloadFromResponse(response, 'alumni-template.xlsx')
+  } catch (error) {
+    ElMessage.error('下载模板失败')
+  }
 }
 
 const handleFileChange = (uploadFile: UploadFile) => {

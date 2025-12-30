@@ -2776,6 +2776,8 @@ export interface PostPublishRequest {
   longitude?: number;
   /** 纬度 */
   latitude?: number;
+  /** 标签列表，获取标签项在字典（post_tag） */
+  tags?: string[];
 }
 
 /**
@@ -2791,6 +2793,20 @@ export const PostResponsePostType = {
   NOTICE: 'NOTICE',
 } as const;
 
+/**
+ * 状态（0-已删除，1-正常，2-已屏蔽）
+ */
+export type PostResponseStatus = typeof PostResponseStatus[keyof typeof PostResponseStatus];
+
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const PostResponseStatus = {
+  DELETED: 'DELETED',
+  NORMAL: 'NORMAL',
+  BLOCKED: 'BLOCKED',
+  REVIEWING: 'REVIEWING',
+} as const;
+
 export interface PostResponse {
   /** 帖子ID */
   postId?: number;
@@ -2804,10 +2820,6 @@ export interface PostResponse {
   cover?: string;
   /** 内容摘要，最多100字符 */
   contentPreview?: string;
-  /** 图片数量统计 */
-  imageCount?: number;
-  /** 视频数量统计 */
-  videoCount?: number;
   /** 发帖地点 */
   location?: string;
   /** 帖子类型 */
@@ -2824,8 +2836,18 @@ export interface PostResponse {
   shareCount?: number;
   /** 当前用户是否已点赞 */
   isLiked?: boolean;
+  /** 状态（0-已删除，1-正常，2-已屏蔽） */
+  status?: PostResponseStatus;
   /** 创建时间 */
   createTime?: string;
+  /** 昵称 */
+  nickname?: string;
+  /** 头像URL */
+  avatar?: string;
+  /** 用户类型（1-学生，2-教师，3-校友 4-游客 5-管理员） */
+  userType?: number;
+  /** 标签列表，获取标签项在字典（post_tag） */
+  tags?: string[];
 }
 
 export interface PageResultPostResponse {
@@ -2876,6 +2898,7 @@ export const PostDetailResponseStatus = {
   DELETED: 'DELETED',
   NORMAL: 'NORMAL',
   BLOCKED: 'BLOCKED',
+  REVIEWING: 'REVIEWING',
 } as const;
 
 export interface PostDetailResponse {
@@ -2921,12 +2944,20 @@ export interface PostDetailResponse {
   isAuthor?: boolean;
   /** 是否可编辑 */
   canEdit?: boolean;
+  /** 昵称 */
+  nickname?: string;
+  /** 头像URL */
+  avatar?: string;
+  /** 用户类型（1-学生，2-教师，3-校友 4-游客 5-管理员） */
+  userType?: number;
   /** 是否可删除 */
   canDelete?: boolean;
   /** 创建时间 */
   createTime?: string;
   /** 更新时间 */
   updateTime?: string;
+  /** 标签列表，获取标签项在字典（post_tag） */
+  tags?: string[];
 }
 
 export interface ResultPostDetailResponse {
@@ -2996,6 +3027,8 @@ export interface PostQueryRequest {
   latitude?: number;
   /** 附近范围（千米） */
   distance?: number;
+  /** 标签列表筛选（包含任一标签即可），获取标签项在字典（post_tag） */
+  tags?: string[];
 }
 
 export interface CreateCollegeAdminRequest {
@@ -4037,6 +4070,188 @@ export interface CreateCompanyInfoRequest {
   name?: string;
 }
 
+/**
+ * 排序字段：TIME -时间，HOT-热度，FOLLOW -关注
+ */
+export type PostModerationQueryRequestSortBy = typeof PostModerationQueryRequestSortBy[keyof typeof PostModerationQueryRequestSortBy];
+
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const PostModerationQueryRequestSortBy = {
+  TIME: 'TIME',
+  HOT: 'HOT',
+  FOLLOW: 'FOLLOW',
+} as const;
+
+export interface PostModerationQueryRequest {
+  /**
+   * 页码，从1开始
+   * @minimum 1
+   */
+  pageNum?: number;
+  /**
+   * 每页大小，最大100
+   * @minimum 1
+   * @maximum 100
+   */
+  pageSize?: number;
+  /** 排序字段：TIME -时间，HOT-热度，FOLLOW -关注 */
+  sortBy?: PostModerationQueryRequestSortBy;
+  /** 班级ID筛选 */
+  classId?: number;
+  /** 用户ID筛选（查某人的帖子） */
+  userId?: number;
+  /** 帖子类型筛选 */
+  postType?: number;
+  /** 搜索关键词（标题+内容） */
+  keyword?: string;
+  /** 只看有图片的帖子 */
+  hasImage?: boolean;
+  /** 只看有视频的帖子 */
+  hasVideo?: boolean;
+  /** 当前位置经度（附近帖子） */
+  longitude?: number;
+  /** 当前位置纬度（附近帖子） */
+  latitude?: number;
+  /** 附近范围（千米） */
+  distance?: number;
+  /** 帖子状态列表（可查询多种状态的帖子） */
+  postStatusEnumList?: string[];
+}
+
+export interface PostReviewEntity {
+  /** 主键ID */
+  id?: number;
+  /** 创建时间 */
+  createTime?: string;
+  /** 更新时间 */
+  updateTime?: string;
+  /** 帖子ID */
+  postId?: number;
+  /** 操作人ID（0表示系统自动审核） */
+  operatorId?: number;
+  /** 操作人姓名 */
+  operatorName?: string;
+  /** 审核意见 */
+  opinion?: string;
+}
+
+export interface ResultListPostReviewEntity {
+  /** 响应状态码 */
+  code?: number;
+  /** 响应消息 */
+  message?: string;
+  /** 响应数据 */
+  data?: PostReviewEntity[];
+  /** 时间戳 */
+  timestamp?: number;
+}
+
+export interface CommentReplyResponse {
+  /** 评论ID */
+  commentId?: number;
+  /** 父评论ID */
+  parentId?: number;
+  /** 评论用户ID */
+  userId?: number;
+  /** 用户名 */
+  username?: string;
+  /** 昵称 */
+  nickname?: string;
+  /** 头像 */
+  avatar?: string;
+  /** 回复目标用户ID */
+  replyToUserId?: number;
+  /** 回复目标用户名 */
+  replyToUsername?: string;
+  /** 回复目标昵称 */
+  replyToNickname?: string;
+  /** 评论内容 */
+  content?: string;
+  /** 评论图片列表 */
+  images?: string[];
+  /** 点赞数 */
+  likeCount?: number;
+  /** 当前用户是否已点赞 */
+  liked?: boolean;
+  /** 创建时间 */
+  createTime?: string;
+  /** 是否可撤销（2分钟内） */
+  canDelete?: boolean;
+}
+
+export interface CommentResponse {
+  /** 评论ID */
+  commentId?: number;
+  /** 帖子ID */
+  postId?: number;
+  /** 评论用户ID */
+  userId?: number;
+  /** 用户名 */
+  username?: string;
+  /** 昵称 */
+  nickname?: string;
+  /** 头像 */
+  avatar?: string;
+  /** 评论内容 */
+  content?: string;
+  /** 评论图片列表 */
+  images?: string[];
+  /** 点赞数 */
+  likeCount?: number;
+  /** 当前用户是否已点赞 */
+  liked?: boolean;
+  /** 回复数量 */
+  replyCount?: number;
+  /** 创建时间 */
+  createTime?: string;
+  /** 是否可撤销（2分钟内） */
+  canDelete?: boolean;
+  /** 回复列表（最多显示3条） */
+  replies?: CommentReplyResponse[];
+}
+
+export interface PageResultCommentResponse {
+  /** 数据列表 */
+  records?: CommentResponse[];
+  /** 总记录数 */
+  total?: number;
+  /** 当前页码 */
+  current?: number;
+  /** 每页大小 */
+  size?: number;
+  /** 总页数 */
+  pages?: number;
+}
+
+export interface ResultPageResultCommentResponse {
+  /** 响应状态码 */
+  code?: number;
+  /** 响应消息 */
+  message?: string;
+  /** 响应数据 */
+  data?: PageResultCommentResponse;
+  /** 时间戳 */
+  timestamp?: number;
+}
+
+export interface CommentPublishRequest {
+  /** 父评论ID（0或null表示顶级评论） */
+  parentId?: number;
+  /** 回复目标用户ID（二级回复时必填） */
+  replyToUserId?: number;
+  /**
+   * 评论内容
+   * @maxLength 1000
+   */
+  content: string;
+  /**
+   * 评论图片URL列表（最多3张）
+   * @maxItems 3
+   */
+  images?: string[];
+}
+
 export type PostCommunityPostParams = {
 /**
  * 帖子标题
@@ -4209,5 +4424,39 @@ export type GetCommunityIndustryChildrenParams = {
  * 父级行业代码，为空时查询顶级行业 父级行业代码，不传或传空查询顶级行业
  */
 parentCode?: string;
+};
+
+export type PostManagerFileUploadParams = {
+fileKey?: string;
+};
+
+export type PostManagerFileUploadBody = {
+  /** 文件 */
+  file?: Blob;
+};
+
+export type PostCommunityPostsModerationPostIdApproveParams = {
+/**
+ * 通过原因 通过原因
+ */
+reason?: string;
+};
+
+export type PostCommunityPostsModerationPostIdBlockParams = {
+/**
+ * 屏蔽原因 屏蔽原因
+ */
+reason: string;
+};
+
+export type GetCommunityPostsPostIdCommentsParams = {
+/**
+ * 页码 页码
+ */
+pageNum: number;
+/**
+ * 每页大小 每页大小
+ */
+pageSize: number;
 };
 

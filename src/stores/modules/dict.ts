@@ -1,6 +1,9 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
-import { getDictItemsByType, type DictItemEntity } from '@/api/modules/dict'
+import { get as getDictItemApi } from '@/api/generated/字典管理-字典项/字典管理-字典项'
+import type { DictItemEntity } from '@/api/generated/.ts.schemas'
+
+const dictItemApi = getDictItemApi()
 
 /**
  * 字典项缓存映射
@@ -86,7 +89,7 @@ export const useDictStore = defineStore('dict', () => {
     loadingMap.value[dictType] = true
 
     try {
-      const items = await getDictItemsByType(dictType)
+      const items = await dictItemApi.getManagerDictTypeDictType(dictType)
       // 按 sortOrder 排序
       const sortedItems = items.sort(
         (a, b) => (a.sortOrder || 0) - (b.sortOrder || 0),

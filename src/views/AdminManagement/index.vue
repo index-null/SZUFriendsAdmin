@@ -240,15 +240,14 @@ import {
 import { usePermission, useDict } from '@/stores'
 import { DICT_TYPE } from '@/utils/dict'
 import { useCollegeMap } from '@/composables/useCollegeMap'
-import {
-  getAdminUserPages,
-  getAdminUserById,
-  updateAdminUser,
-  resetAdminUserPassword,
-  type AdminUserPageResponse,
-  type AdminUserDetailsResponse,
-  type AdminUserUpdateRequest,
-} from '@/api/modules/admin'
+import { get as getAdminApi } from '@/api/generated/管理员管理/管理员管理'
+import type {
+  AdminUserPageResponse,
+  AdminUserDetailsResponse,
+  AdminUserUpdateRequest,
+} from '@/api/generated/.ts.schemas'
+
+const adminApi = getAdminApi()
 
 const { hasPermission } = usePermission()
 
@@ -316,7 +315,7 @@ const submitting = ref(false)
 const fetchAdminList = async () => {
   loading.value = true
   try {
-    const response = await getAdminUserPages({
+    const response = await adminApi.postManagerAdminUserPage({
       current: pagination.current,
       size: pagination.size,
       username: searchForm.username || undefined,
@@ -370,9 +369,9 @@ const handleCurrentChange = (page: number) => {
 const handleView = async (row: AdminUserPageResponse) => {
   if (!row.id) return
   try {
-    const response = await getAdminUserById(row.id)
+    const response = await adminApi.getManagerAdminUserUserIdDetails(row.id)
     if (response) {
-      currentAdmin.value = response
+      currentAdmin.value = response as AdminUserDetailsResponse
       detailDialogVisible.value = true
     } else {
       ElMessage.error('获取管理员详情失败')
@@ -387,9 +386,9 @@ const handleView = async (row: AdminUserPageResponse) => {
 const handleEdit = async (row: AdminUserPageResponse) => {
   if (!row.id) return
   try {
-    const response = await getAdminUserById(row.id)
+    const response = await adminApi.getManagerAdminUserUserIdDetails(row.id)
     if (response) {
-      const admin = response
+      const admin = response as AdminUserDetailsResponse
       editForm.id = row.id
       editForm.nickname = admin.nickname || ''
       editForm.realName = admin.realName || ''
@@ -418,7 +417,7 @@ const handleSaveEdit = async () => {
 
     submitting.value = true
     try {
-      await updateAdminUser(editForm)
+      await adminApi.putManagerAdminUser(editForm)
       ElMessage.success('更新管理员信息成功')
       editDialogVisible.value = false
       fetchAdminList()
@@ -445,7 +444,7 @@ const handleResetPassword = async (row: AdminUserPageResponse) => {
       },
     )
 
-    await resetAdminUserPassword(row.id)
+    await adminApi.putManagerAdminUserUserIdResetPassword(row.id)
     ElMessage.success('密码重置成功')
   } catch (error) {
     if (error !== 'cancel') {

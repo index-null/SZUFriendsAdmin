@@ -4,6 +4,10 @@ import axios, {
   type AxiosError,
 } from 'axios'
 import { ElMessage } from 'element-plus'
+import {
+  parseFilenameFromHeader,
+  type DownloadResponse,
+} from '@/utils/download'
 
 /**
  * 创建一个 Axios 实例供 Orval 使用
@@ -51,7 +55,23 @@ service.interceptors.request.use((config) => {
 // 简单的响应拦截器：提取数据和统一错误处理
 service.interceptors.response.use(
   (response) => {
-    const { data } = response
+    const { data, headers, status, config } = response
+
+    // 文件下载：检测 content-disposition 头或响应类型为 blob（仅在 200 成功响应时）
+    if (
+      status === 200 &&
+      (data instanceof Blob ||
+        config.responseType === 'blob' ||
+        headers['content-disposition']?.includes('attachment'))
+    ) {
+      // 返回包含 blob 和文件名的对象
+      const downloadResponse: DownloadResponse = {
+        blob: data,
+        filename: parseFilenameFromHeader(headers['content-disposition']),
+      }
+      return downloadResponse
+    }
+
     // 统一返回 data.data 或 data
     if (
       data &&
@@ -121,6 +141,11 @@ export const customInstance = <T>(
   config: AxiosRequestConfig,
 ): Promise<UnwrapResult<T>> => {
   const source = axios.CancelToken.source()
+
+  // 文件下载端点自动设置 responseType: 'blob'
+  if (config.url?.includes('/file/download/')) {
+    config.responseType = 'blob'
+  }
 
   const promise = service({
     ...config,

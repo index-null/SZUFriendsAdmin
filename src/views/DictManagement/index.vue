@@ -285,24 +285,19 @@ import {
   type FormRules,
 } from 'element-plus'
 import { Search, Edit, Delete, Plus } from '@element-plus/icons-vue'
-import {
-  getDictPages,
-  createDict,
-  updateDict,
-  deleteDict,
-  getDictItemsByType,
-  createDictItem,
-  updateDictItem,
-  deleteDictItem,
-  checkDictType,
-  checkDictItem,
-  type DictEntity,
-  type CreateDictRequest,
-  type UpdateDictRequest,
-  type DictItemEntity,
-  type CreateDictItemRequest,
-  type UpdateDictItemRequest,
-} from '@/api/modules/dict'
+import { get as getDictApi } from '@/api/generated/字典管理-字典/字典管理-字典'
+import { get as getDictItemApi } from '@/api/generated/字典管理-字典项/字典管理-字典项'
+import type {
+  DictEntity,
+  CreateDictRequest,
+  UpdateDictRequest,
+  DictItemEntity,
+  CreateDictItemRequest,
+  UpdateDictItemRequest,
+} from '@/api/generated/.ts.schemas'
+
+const dictApi = getDictApi()
+const dictItemApi = getDictItemApi()
 import { useDictStore } from '@/stores'
 
 const dictStore = useDictStore()
@@ -378,11 +373,11 @@ const itemRules: FormRules = {
 const loadData = async () => {
   loading.value = true
   try {
-    const response = await getDictPages({
+    const response = (await dictApi.postManagerDictPage({
       current: pagination.current,
       size: pagination.size,
       query: searchForm.query || undefined,
-    })
+    })) as any
 
     tableData.value = response.records || []
     pagination.total = response.total || 0
@@ -400,7 +395,9 @@ const loadDictItems = async (dict: DictEntity) => {
 
   itemsLoading.value = true
   try {
-    const response = await getDictItemsByType(dict.dictType)
+    const response = (await dictItemApi.getManagerDictTypeDictType(
+      dict.dictType,
+    )) as any
     dictItems.value = response || []
   } catch (error) {
     ElMessage.error('加载字典项失败')
@@ -469,7 +466,7 @@ const handleDelete = async (row: DictEntity) => {
       },
     )
 
-    await deleteDict(row.id!)
+    await dictApi.deleteManagerDictId(row.id!)
     ElMessage.success('删除成功')
 
     // 清除字典缓存
@@ -503,7 +500,7 @@ const handleSubmit = async () => {
     if (!isEdit.value) {
       const dictType = form.dictType?.trim()
       if (dictType) {
-        const isAvailable = await checkDictType(dictType)
+        const isAvailable = await dictApi.getManagerDictCheck({ dictType })
         if (!isAvailable) {
           ElMessage.error(`字典类型 "${dictType}" 已存在，无法创建`)
           return
@@ -514,14 +511,14 @@ const handleSubmit = async () => {
     submitLoading.value = true
 
     if (isEdit.value) {
-      await updateDict({
+      await dictApi.putManagerDict({
         id: form.id!,
         description: form.description,
         remarks: form.remarks,
       } as UpdateDictRequest)
       ElMessage.success('修改成功')
     } else {
-      await createDict({
+      await dictApi.postManagerDict({
         dictType: form.dictType!,
         description: form.description!,
         remarks: form.remarks,
@@ -560,7 +557,7 @@ const handleDictTypeBlur = async () => {
   if (!dictType) return
 
   try {
-    const isAvailable = await checkDictType(dictType)
+    const isAvailable = await dictApi.getManagerDictCheck({ dictType })
     if (!isAvailable) {
       ElMessage.warning(`字典类型 "${dictType}" 已存在，请使用其他类型`)
       // 清空字段让用户重新输入
@@ -609,7 +606,7 @@ const handleDeleteItem = async (item: DictItemEntity) => {
       type: 'warning',
     })
 
-    await deleteDictItem(item.id!)
+    await dictItemApi.deleteManagerDictItemId(item.id!)
     ElMessage.success('删除成功')
 
     // 清除字典缓存
@@ -640,7 +637,7 @@ const handleItemSubmit = async () => {
     if (!isItemEdit.value) {
       const label = itemForm.label?.trim()
       if (label && currentDict.value?.dictType) {
-        const isAvailable = await checkDictItem({
+        const isAvailable = await dictItemApi.getManagerDictItemCheck({
           dictType: currentDict.value.dictType,
           label: label,
         })
@@ -654,7 +651,7 @@ const handleItemSubmit = async () => {
     itemSubmitLoading.value = true
 
     if (isItemEdit.value) {
-      await updateDictItem({
+      await dictItemApi.putManagerDictItem({
         id: itemForm.id!,
         label: itemForm.label!,
         itemValue: itemForm.itemValue!,
@@ -667,7 +664,7 @@ const handleItemSubmit = async () => {
         ElMessage.error('字典信息不完整')
         return
       }
-      await createDictItem({
+      await dictItemApi.postManagerDictItem({
         dictId: currentDict.value.id,
         dictType: currentDict.value.dictType,
         label: itemForm.label!,
@@ -711,7 +708,7 @@ const handleDictItemLabelBlur = async () => {
   if (!label || !currentDict.value?.dictType) return
 
   try {
-    const isAvailable = await checkDictItem({
+    const isAvailable = await dictItemApi.getManagerDictItemCheck({
       dictType: currentDict.value.dictType,
       label: label,
     })

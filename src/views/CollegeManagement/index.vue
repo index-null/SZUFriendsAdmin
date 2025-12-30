@@ -180,14 +180,13 @@
 import { ref, reactive, onMounted } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { Search, Refresh, Plus, Edit, Delete } from '@element-plus/icons-vue'
-import {
-  getCollegePages,
-  createCollege,
-  updateCollege,
-  deleteCollege,
-  type CollegeEntity,
-  type CollegePagesRequest,
-} from '@/api/modules/college'
+import { get as getCollegeApi } from '@/api/generated/学院信息控制器/学院信息控制器'
+import type {
+  CollegeEntity,
+  CollegePagesRequest,
+} from '@/api/generated/.ts.schemas'
+
+const collegeApi = getCollegeApi()
 import { usePermission } from '@/stores'
 import { useDict } from '@/stores/composables/useDict'
 import { DICT_TYPE } from '@/utils/dict'
@@ -219,11 +218,11 @@ const tableData = ref<CollegeEntity[]>([])
 const fetchData = async () => {
   loading.value = true
   try {
-    const data = await getCollegePages({
+    const data = (await collegeApi.postManagerCollegePages({
       ...searchForm,
       current: pagination.current,
       size: pagination.size,
-    })
+    })) as any
 
     tableData.value = data.records || []
     pagination.total = data.total || 0
@@ -269,7 +268,7 @@ const handleDelete = async (row: CollegeEntity) => {
 
     if (!row.id) return
 
-    await deleteCollege(row.id)
+    await collegeApi.deleteManagerCollegeId(row.id)
     ElMessage.success('删除成功')
     fetchData()
   } catch (error) {
@@ -298,7 +297,9 @@ const handleBatchDelete = async () => {
     )
 
     loading.value = true
-    const deletePromises = selectedIds.value.map((id) => deleteCollege(id))
+    const deletePromises = selectedIds.value.map((id) =>
+      collegeApi.deleteManagerCollegeId(id),
+    )
     const results = await Promise.allSettled(deletePromises)
 
     const successCount = results.filter((r) => r.status === 'fulfilled').length
@@ -333,7 +334,9 @@ const handlePageChange = () => {
 const handleFormSuccess = async (formData: CollegeEntity) => {
   try {
     const isEdit = !!formData.id
-    await (isEdit ? updateCollege(formData) : createCollege(formData))
+    await (isEdit
+      ? collegeApi.putManagerCollege(formData)
+      : collegeApi.postManagerCollege(formData))
 
     ElMessage.success(isEdit ? '更新成功' : '创建成功')
     dialogVisible.value = false

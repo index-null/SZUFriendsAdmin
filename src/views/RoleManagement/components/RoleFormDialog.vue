@@ -96,7 +96,7 @@ import type {
   RoleResponse,
   CreateRoleRequest,
   UpdateRoleRequest,
-} from '@/api/modules/role'
+} from '@/api/generated/.ts.schemas'
 import { useDict } from '@/stores/composables/useDict'
 import { DICT_TYPE } from '@/utils/dict'
 

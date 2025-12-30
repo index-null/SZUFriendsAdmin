@@ -230,15 +230,16 @@
 import { ref, reactive, onMounted } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { Search, Refresh, Plus, Edit, Delete } from '@element-plus/icons-vue'
-import {
-  getClassPages,
-  createClass,
-  updateClass,
-  deleteClass,
-  type ClassEntity,
-  type ClassPagesRequest,
-} from '@/api/modules/class'
-import { getCollegePages, type CollegeEntity } from '@/api/modules/college'
+import { get as getClassApi } from '@/api/generated/班级相关信息-班级控制器/班级相关信息-班级控制器'
+import { get as getCollegeApi } from '@/api/generated/学院信息控制器/学院信息控制器'
+import type {
+  ClassEntity,
+  ClassPagesRequest,
+  CollegeEntity,
+} from '@/api/generated/.ts.schemas'
+
+const classApi = getClassApi()
+const collegeApi = getCollegeApi()
 import { useUserStore } from '@/stores/modules/user'
 import { usePermission, useDicts } from '@/stores'
 import { DICT_TYPE } from '@/utils/dict'
@@ -286,7 +287,7 @@ const tableData = ref<ClassEntity[]>([])
 // 获取学院列表（保留用于下拉选择）
 const fetchCollegeList = async () => {
   try {
-    const data = await getCollegePages({
+    const data = await collegeApi.postManagerCollegePages({
       current: 1,
       size: 1000, // 获取所有学院
       status: 1, // 只获取启用的学院
@@ -319,7 +320,7 @@ const fetchData = async () => {
       params.collegeId = searchForm.collegeId ?? 0
     }
 
-    const data = await getClassPages(params)
+    const data = (await classApi.postManagerClassPages(params)) as any
     tableData.value = data.records || []
     pagination.total = data.total || 0
   } catch (error) {
@@ -370,7 +371,7 @@ const handleDelete = async (row: ClassEntity) => {
 
     if (!row.id) return
 
-    await deleteClass(row.id)
+    await classApi.deleteManagerClassId(row.id)
     ElMessage.success('删除成功')
     fetchData()
   } catch (error) {
@@ -399,7 +400,9 @@ const handleBatchDelete = async () => {
     )
 
     loading.value = true
-    const deletePromises = selectedIds.value.map((id) => deleteClass(id))
+    const deletePromises = selectedIds.value.map((id) =>
+      classApi.deleteManagerClassId(id),
+    )
     const results = await Promise.allSettled(deletePromises)
 
     const successCount = results.filter((r) => r.status === 'fulfilled').length
@@ -434,7 +437,9 @@ const handlePageChange = () => {
 const handleFormSuccess = async (formData: ClassEntity) => {
   try {
     const isEdit = !!formData.id
-    await (isEdit ? updateClass(formData) : createClass(formData))
+    await (isEdit
+      ? classApi.putManagerClass(formData)
+      : classApi.postManagerClass(formData))
 
     ElMessage.success(isEdit ? '更新成功' : '创建成功')
     dialogVisible.value = false

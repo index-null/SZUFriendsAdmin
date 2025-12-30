@@ -5,7 +5,7 @@
 
 import { ref, computed, onMounted, type Ref } from 'vue'
 import { useDictStore } from '../modules/dict'
-import type { DictItemEntity } from '@/api/modules/dict'
+import type { DictItemEntity } from '@/api/generated/.ts.schemas'
 import { dictItemsToOptions, type DictOption } from '@/utils/dict'
 
 /**
