@@ -202,6 +202,7 @@
       title="帖子详情"
       size="500px"
       direction="rtl"
+      destroy-on-close
     >
       <div v-if="currentPost" class="post-detail">
         <div class="detail-header">

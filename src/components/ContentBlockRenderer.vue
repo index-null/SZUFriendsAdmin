@@ -33,6 +33,7 @@
       <!-- 视频内容 -->
       <div v-else-if="isVideoBlock(block)" class="content-media content-video">
         <video
+          ref="videoRefs"
           :src="block.url"
           :poster="block.coverUrl || block.thumbnail"
           controls
@@ -58,7 +59,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
 import { Loading, PictureFilled } from '@element-plus/icons-vue'
 import type { ContentBlock } from '@/api/generated/.ts.schemas'
 
@@ -69,6 +70,25 @@ interface Props {
 
 const props = withDefaults(defineProps<Props>(), {
   blocks: () => [],
+})
+
+// 视频元素引用
+const videoRefs = ref<HTMLVideoElement[]>([])
+
+/**
+ * 暂停所有视频
+ */
+const pauseAllVideos = () => {
+  videoRefs.value.forEach((video) => {
+    if (video && !video.paused) {
+      video.pause()
+    }
+  })
+}
+
+// 暴露方法供父组件调用
+defineExpose({
+  pauseAllVideos,
 })
 
 // 图片扩展名
