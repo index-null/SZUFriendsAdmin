@@ -7,7 +7,7 @@ import type {
   RegisterRequest,
   PermissionTreeNodeResponse,
 } from '@/api/generated/.ts.schemas'
-import { getToken, setToken, removeToken } from '@/api'
+import { getToken, setToken, removeToken } from '@/api/mutator'
 import { ElMessage } from 'element-plus'
 
 // 初始化认证 API

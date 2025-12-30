@@ -10,25 +10,37 @@ import {
 } from '@/utils/download'
 
 /**
- * 创建一个 Axios 实例供 Orval 使用
+ * API 配置常量
  */
-
 const BASE_URL = '/api'
 const TOKEN_KEY = 'access_token'
+
+/**
+ * Token 管理
+ */
+export const getToken = (): string | null => {
+  return localStorage.getItem(TOKEN_KEY)
+}
+
+export const setToken = (token: string): void => {
+  localStorage.setItem(TOKEN_KEY, token)
+}
+
+export const removeToken = (): void => {
+  localStorage.removeItem(TOKEN_KEY)
+}
 
 /**
  * 跳转到登录页
  * 使用 window.location.href 避免 Orval 编译时解析路由及 .vue 文件
  */
 const redirectToLogin = () => {
-  // 清除本地存储的 token
-  localStorage.removeItem(TOKEN_KEY)
+  removeToken()
 
   // 保存当前路径用于登录后跳转
   const currentPath = window.location.pathname
 
   if (currentPath !== '/login') {
-    // 使用 window.location 跳转，避免依赖 Vue Router
     const redirectUrl = `/login?redirect=${encodeURIComponent(currentPath)}`
     window.location.href = redirectUrl
   }

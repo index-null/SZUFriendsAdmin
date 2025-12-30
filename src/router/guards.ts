@@ -3,7 +3,7 @@
  * 最佳实践：将守卫逻辑分离到独立文件，提高代码可维护性
  */
 import type { Router, RouteLocationNormalized } from 'vue-router'
-import { getToken } from '@/api'
+import { getToken } from '@/api/mutator'
 import { useUserStore } from '@/stores/modules/user'
 
 /**
