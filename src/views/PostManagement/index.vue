@@ -230,22 +230,7 @@
 
         <!-- 内容块 -->
         <div class="detail-content">
-          <template
-            v-for="(block, index) in currentPost.contentBlocks"
-            :key="index"
-          >
-            <p v-if="block.type === 'TEXT'" class="content-text">
-              {{ block.content }}
-            </p>
-            <el-image
-              v-else-if="block.type === 'IMAGE'"
-              :src="block.content"
-              fit="contain"
-              class="content-image"
-              :preview-src-list="getImageList(currentPost.contentBlocks)"
-              preview-teleported
-            />
-          </template>
+          <ContentBlockRenderer :blocks="currentPost.contentBlocks" />
         </div>
 
         <!-- 标签 -->
@@ -313,11 +298,11 @@ import {
 import { useDict } from '@/stores'
 import { DICT_TYPE } from '@/utils/dict'
 import { get as getPostApi } from '@/api/generated/帖子管理/帖子管理'
+import ContentBlockRenderer from '@/components/ContentBlockRenderer.vue'
 import type {
   PostResponse,
   PostQueryRequest,
   PostDetailResponse,
-  ContentBlock,
 } from '@/api/generated/.ts.schemas'
 
 const postApi = getPostApi()
@@ -557,14 +542,6 @@ const formatTime = (time?: string) => {
   if (diff < 604800000) return `${Math.floor(diff / 86400000)}天前`
 
   return date.toLocaleDateString()
-}
-
-// 获取图片列表
-const getImageList = (blocks?: ContentBlock[]) => {
-  if (!blocks) return []
-  return blocks
-    .filter((b) => b.type === 'IMAGE' && b.content)
-    .map((b) => b.content as string)
 }
 
 // 初始化
@@ -856,23 +833,6 @@ $card-bg-dark: #1a1a1a;
 
   .detail-content {
     margin-bottom: 16px;
-
-    .content-text {
-      font-size: 14px;
-      line-height: 1.8;
-      color: #2c3e50;
-      margin: 0 0 12px;
-
-      html.dark & {
-        color: #ecf0f1;
-      }
-    }
-
-    .content-image {
-      width: 100%;
-      border-radius: 8px;
-      margin-bottom: 12px;
-    }
   }
 
   .detail-tags {
