@@ -95,13 +95,7 @@
 
             <!-- 封面图 -->
             <div v-if="post.cover" class="post-cover">
-              <el-image
-                :src="post.cover"
-                fit="cover"
-                class="cover-image"
-                :preview-src-list="[post.cover]"
-                preview-teleported
-              >
+              <el-image :src="post.cover" fit="cover" class="cover-image">
                 <template #error>
                   <div class="image-error">
                     <el-icon><Picture /></el-icon>
