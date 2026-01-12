@@ -5,7 +5,9 @@
       <el-card class="stat-card reviewing" shadow="hover">
         <div class="stat-content">
           <div class="stat-icon">
-            <el-icon><Clock /></el-icon>
+            <el-icon>
+              <Clock />
+            </el-icon>
           </div>
           <div class="stat-info">
             <div class="stat-value">{{ statistics.reviewing }}</div>
@@ -17,7 +19,9 @@
       <el-card class="stat-card normal" shadow="hover">
         <div class="stat-content">
           <div class="stat-icon">
-            <el-icon><CircleCheck /></el-icon>
+            <el-icon>
+              <CircleCheck />
+            </el-icon>
           </div>
           <div class="stat-info">
             <div class="stat-value">{{ statistics.normal }}</div>
@@ -29,7 +33,9 @@
       <el-card class="stat-card blocked" shadow="hover">
         <div class="stat-content">
           <div class="stat-icon">
-            <el-icon><CircleClose /></el-icon>
+            <el-icon>
+              <CircleClose />
+            </el-icon>
           </div>
           <div class="stat-info">
             <div class="stat-value">{{ statistics.blocked }}</div>
@@ -41,7 +47,9 @@
       <el-card class="stat-card total" shadow="hover">
         <div class="stat-content">
           <div class="stat-icon">
-            <el-icon><Document /></el-icon>
+            <el-icon>
+              <Document />
+            </el-icon>
           </div>
           <div class="stat-info">
             <div class="stat-value">{{ statistics.total }}</div>
@@ -104,7 +112,9 @@
           <div class="post-header">
             <div class="author-info">
               <el-avatar :size="36" :src="post.avatar" class="author-avatar">
-                <el-icon><User /></el-icon>
+                <el-icon>
+                  <User />
+                </el-icon>
               </el-avatar>
               <div class="author-details">
                 <div class="author-name">{{ post.nickname || '匿名用户' }}</div>
@@ -132,16 +142,12 @@
 
             <!-- 封面图 -->
             <div v-if="post.cover" class="post-cover">
-              <el-image
-                :src="post.cover"
-                fit="cover"
-                class="cover-image"
-                :preview-src-list="[post.cover]"
-                preview-teleported
-              >
+              <el-image :src="post.cover" fit="cover" class="cover-image">
                 <template #error>
                   <div class="image-error">
-                    <el-icon><Picture /></el-icon>
+                    <el-icon>
+                      <Picture />
+                    </el-icon>
                   </div>
                 </template>
               </el-image>
@@ -164,15 +170,21 @@
           <!-- 帖子统计 -->
           <div class="post-stats">
             <div class="stat-item">
-              <el-icon><View /></el-icon>
+              <el-icon>
+                <View />
+              </el-icon>
               <span>{{ post.viewCount || 0 }}</span>
             </div>
             <div class="stat-item">
-              <el-icon><Star /></el-icon>
+              <el-icon>
+                <Star />
+              </el-icon>
               <span>{{ post.likeCount || 0 }}</span>
             </div>
             <div class="stat-item">
-              <el-icon><ChatDotRound /></el-icon>
+              <el-icon>
+                <ChatDotRound />
+              </el-icon>
               <span>{{ post.commentCount || 0 }}</span>
             </div>
           </div>
@@ -234,7 +246,9 @@
       <div v-if="currentPost" class="post-detail">
         <div class="detail-header">
           <el-avatar :size="48" :src="currentPost.avatar">
-            <el-icon><User /></el-icon>
+            <el-icon>
+              <User />
+            </el-icon>
           </el-avatar>
           <div class="detail-author">
             <div class="author-name">
@@ -261,22 +275,7 @@
 
         <!-- 内容块 -->
         <div class="detail-content">
-          <template
-            v-for="(block, index) in currentPost.contentBlocks"
-            :key="index"
-          >
-            <p v-if="block.type === 'TEXT'" class="content-text">
-              {{ block.content }}
-            </p>
-            <el-image
-              v-else-if="block.type === 'IMAGE'"
-              :src="block.content"
-              fit="contain"
-              class="content-image"
-              :preview-src-list="getImageList(currentPost.contentBlocks)"
-              preview-teleported
-            />
-          </template>
+          <ContentBlockRenderer :blocks="currentPost.contentBlocks" />
         </div>
 
         <!-- 标签 -->
@@ -296,22 +295,30 @@
 
         <!-- 位置信息 -->
         <div v-if="currentPost.location" class="detail-location">
-          <el-icon><Location /></el-icon>
+          <el-icon>
+            <Location />
+          </el-icon>
           <span>{{ currentPost.location }}</span>
         </div>
 
         <!-- 统计数据 -->
         <div class="detail-stats">
           <div class="stat-item">
-            <el-icon><View /></el-icon>
+            <el-icon>
+              <View />
+            </el-icon>
             <span>{{ currentPost.viewCount || 0 }} 浏览</span>
           </div>
           <div class="stat-item">
-            <el-icon><Star /></el-icon>
+            <el-icon>
+              <Star />
+            </el-icon>
             <span>{{ currentPost.likeCount || 0 }} 点赞</span>
           </div>
           <div class="stat-item">
-            <el-icon><ChatDotRound /></el-icon>
+            <el-icon>
+              <ChatDotRound />
+            </el-icon>
             <span>{{ currentPost.commentCount || 0 }} 评论</span>
           </div>
         </div>
@@ -441,12 +448,12 @@ import {
 import { useDict } from '@/stores'
 import { DICT_TYPE } from '@/utils/dict'
 import { get as getModerationApi } from '@/api/generated/帖子审核管理/帖子审核管理'
+import ContentBlockRenderer from '@/components/ContentBlockRenderer.vue'
 import type {
   PostResponse,
   PostModerationQueryRequest,
   PostDetailResponse,
   PostReviewEntity,
-  ContentBlock,
 } from '@/api/generated/.ts.schemas'
 
 const moderationApi = getModerationApi()
@@ -754,14 +761,6 @@ const formatTime = (time?: string) => {
   if (diff < 604800000) return `${Math.floor(diff / 86400000)}天前`
 
   return date.toLocaleDateString()
-}
-
-// 获取图片列表
-const getImageList = (blocks?: ContentBlock[]) => {
-  if (!blocks) return []
-  return blocks
-    .filter((b) => b.type === 'IMAGE' && b.content)
-    .map((b) => b.content as string)
 }
 
 // 初始化
@@ -1173,23 +1172,6 @@ $card-bg-dark: #1a1a1a;
 
   .detail-content {
     margin-bottom: 16px;
-
-    .content-text {
-      font-size: 14px;
-      line-height: 1.8;
-      color: #2c3e50;
-      margin: 0 0 12px;
-
-      html.dark & {
-        color: #ecf0f1;
-      }
-    }
-
-    .content-image {
-      width: 100%;
-      border-radius: 8px;
-      margin-bottom: 12px;
-    }
   }
 
   .detail-tags {
