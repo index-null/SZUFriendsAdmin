@@ -1036,6 +1036,7 @@ $card-bg-dark: #1a1a1a;
       margin: 0 0 12px;
       display: -webkit-box;
       -webkit-line-clamp: 2;
+      line-clamp: 2;
       -webkit-box-orient: vertical;
       overflow: hidden;
 

@@ -5,10 +5,18 @@ import AutoImport from 'unplugin-auto-import/vite'
 import Components from 'unplugin-vue-components/vite'
 import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
 import VueInspector from 'vite-plugin-vue-inspector'
+import checker from 'vite-plugin-checker'
 
 export default defineConfig({
   plugins: [
     vue(),
+    // CSS检查插件 - 开发时实时显示CSS错误
+    checker({
+      stylelint: {
+        lintCommand: 'stylelint "./src/**/*.{css,vue,scss}"',
+        watchPath: './src', // 性能优化：只监听src目录
+      },
+    }),
     VueInspector({
       toggleButtonVisibility: 'active', // 显示切换按钮
       toggleComboKey: 'meta', // Command 键 + Click 触发跳转（macOS）
