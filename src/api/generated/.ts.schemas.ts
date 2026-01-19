@@ -1725,6 +1725,39 @@ export interface TopCommentResponse {
   isTopComment?: boolean;
 }
 
+export interface CardResponse {
+  /** 是否为好友 */
+  isFriend?: boolean;
+  /** 用户ID */
+  userId?: number;
+  /** 昵称 */
+  nickname?: string;
+  /** 头像URL */
+  avatar?: string;
+  /** 性别（0-未知，1-男，2-女） */
+  gender?: number;
+  /** 当前工作单位 */
+  companyName?: string;
+  /** 职位 */
+  jobTitle?: string;
+  /** 所在行业 */
+  industry?: string;
+  /** 用户位置信息 */
+  location?: AlumniLocationResponse;
+  /** 个人简介/一句话介绍 */
+  bio?: string;
+  /** 真实姓名 */
+  realName?: string;
+  /** 邮箱 */
+  email?: string;
+  /** 手机号 */
+  phone?: string;
+  /** QQ号 */
+  qq?: string;
+  /** 微信号 */
+  wechat?: string;
+}
+
 export interface ResultString {
   /** 响应状态码 */
   code?: number;
@@ -2234,6 +2267,24 @@ export interface TopCommentActionRequest {
   commentId: number;
 }
 
+export interface CreateFriendRequest {
+  /** 接收方ID */
+  receiverId?: number;
+  /** 请求消息 */
+  message?: string;
+}
+
+export interface ResultCardResponse {
+  /** 响应状态码 */
+  code?: number;
+  /** 响应消息 */
+  message?: string;
+  /** 响应数据 */
+  data?: CardResponse;
+  /** 时间戳 */
+  timestamp?: number;
+}
+
 export interface LoginResponse {
   /** 访问令牌 */
   token?: string;
@@ -2570,6 +2621,13 @@ export interface ResultPageResultTopCommentResponse {
   timestamp?: number;
 }
 
+export interface HandleFriendRequest {
+  /** 请求ID */
+  requestId?: number;
+  /** 处理结果 */
+  requestStatus?: string;
+}
+
 export interface ResultLoginResponse {
   /** 响应状态码 */
   code?: number;
@@ -2815,6 +2873,11 @@ export interface TopCommentPageRequest {
   size?: number;
 }
 
+export interface DeleteFriendRequest {
+  /** 好友ID */
+  friendId?: number;
+}
+
 export interface LoginRequest {
   /** 用户名 */
   username?: string;
@@ -3049,6 +3112,15 @@ export interface ReplyCommentResponse {
   createTime?: string;
 }
 
+export interface FriendResponse {
+  /** 用户ID */
+  userId?: number;
+  /** 用户真实姓名 */
+  realName?: string;
+  /** 用户头像 */
+  avatar?: string;
+}
+
 export interface ResultBoolean {
   /** 响应状态码 */
   code?: number;
@@ -3231,6 +3303,13 @@ export interface PageResultReplyCommentResponse {
   pages?: number;
 }
 
+export interface GroupedFriendsResponse {
+  /** 首字母 */
+  letter?: string;
+  /** 该字母下的好友列表 */
+  friends?: FriendResponse[];
+}
+
 export interface RegisterRequest {
   /** 用户名（登录账号） */
   username: string;
@@ -3392,6 +3471,17 @@ export interface ResultPageResultReplyCommentResponse {
   message?: string;
   /** 响应数据 */
   data?: PageResultReplyCommentResponse;
+  /** 时间戳 */
+  timestamp?: number;
+}
+
+export interface ResultListGroupedFriendsResponse {
+  /** 响应状态码 */
+  code?: number;
+  /** 响应消息 */
+  message?: string;
+  /** 响应数据 */
+  data?: GroupedFriendsResponse[];
   /** 时间戳 */
   timestamp?: number;
 }
@@ -3625,6 +3715,23 @@ export interface ReplyCommentPageRequest {
   size?: number;
 }
 
+export interface FriendRequestResponse {
+  /** ID */
+  id?: number;
+  /** 发送方ID */
+  senderId?: number;
+  /** 发送方真实姓名 */
+  senderRealName?: string;
+  /** 接收方ID */
+  receiverId?: number;
+  /** 请求消息 */
+  message?: string;
+  /** 请求状态('PENDING' - 待处理,'ACCEPTED' - 已接受,'REJECTED' - 已拒绝,'EXPIRED' - 已过期) */
+  requestStatus?: string;
+  /** 请求时间 */
+  createTime?: string;
+}
+
 export interface GrantPermissionsRequest {
   /** 角色ID */
   roleId: number;
@@ -3761,6 +3868,19 @@ export interface PostReviewEntity {
   opinion?: string;
 }
 
+export interface PageResultFriendRequestResponse {
+  /** 数据列表 */
+  records?: FriendRequestResponse[];
+  /** 总记录数 */
+  total?: number;
+  /** 当前页码 */
+  current?: number;
+  /** 每页大小 */
+  size?: number;
+  /** 总页数 */
+  pages?: number;
+}
+
 export interface ResultListPermissionTreeNodeResponse {
   /** 响应状态码 */
   code?: number;
@@ -3855,6 +3975,17 @@ export interface TopCommentPublishRequest {
   images?: string[];
 }
 
+export interface ResultPageResultFriendRequestResponse {
+  /** 响应状态码 */
+  code?: number;
+  /** 响应消息 */
+  message?: string;
+  /** 响应数据 */
+  data?: PageResultFriendRequestResponse;
+  /** 时间戳 */
+  timestamp?: number;
+}
+
 export interface PermissionResponse {
   /** 权限ID */
   id?: number;
@@ -3928,6 +4059,13 @@ export interface ReplyCommentPublishRequest {
    * @maxItems 3
    */
   images?: string[];
+}
+
+export interface FriendRequestPageRequest {
+  /** 当前页码 */
+  current?: number;
+  /** 每页大小 */
+  size?: number;
 }
 
 export interface ResultPermissionResponse {

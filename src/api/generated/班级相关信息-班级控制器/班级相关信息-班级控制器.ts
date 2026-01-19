@@ -69,6 +69,8 @@ const deleteManagerClassId = (
       );
     }
   /**
+ * 根据自由组合的查询条件 获取班级列表
+根据自由组合的查询条件 获取班级列表
  * @summary 根据自由组合的查询条件 获取班级列表
  */
 const postManagerClassList = (
