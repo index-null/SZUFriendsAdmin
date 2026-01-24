@@ -1,0 +1,64 @@
+---
+description: 
+alwaysApply: true
+---
+
+1. 页面API调用规范
+- **关键**: 项目中 customInstance 拦截器已经做了响应解包处理，直接返回了 response.data.data
+- **原因**: `mutator.ts` 中的响应拦截器已经自动解包了 `data` 字段
+- **正确做法**: 直接访问records等的返回值，如 `response.records`
+
+路由规范：
+未指明时，请默认在src/layouts/components/Sidebar.vue中为新增的界面路由添加一个菜单导航
+
+设计规范：
+修改前使用firecrawl mcp学习最佳实践，不要仅仅是使用太传统的纯表格管理 
+
+
+2.接口类型定义查询
+<tool_definitions>
+  
+  <tool_definition>
+    <name>find_interface_lines</name>
+    <description>
+      在超大文件 src/api/generated/.ts.schemas.ts 中快速查找指定 TypeScript Interface 或 Type Alias 的起始行和结束行。
+      这个工具非常快速，因为它只调用 grep 等终端命令，不会读取整个文件。
+      
+      **目标：** 确定一个类型是否已存在，并返回其在文件中的准确位置。
+      **文件路径：** src/api/generated/.ts.schemas.ts
+    </description>
+    <parameters>
+      <parameter>
+        <name>type_name</name>
+        <type>string</type>
+        <description>需要查找的 TypeScript Interface 或 Type Alias 的名称，例如 UserDetailsResponse。</description>
+      </parameter>
+    </parameters>
+  </tool_definition>
+
+  <tool_definition>
+    <name>read_lines_in_file</name>
+    <description>
+      根据精确的行号范围，从超大文件 src/api/generated/.ts.schemas.ts 中读取指定的代码内容。
+      这个工具用于获取已找到的 Interface 的完整定义内容。
+      **文件路径：** src/api/generated/.ts.schemas.ts
+    </description>
+    <parameters>
+      <parameter>
+        <name>start_line</name>
+        <type>integer</type>
+        <description>需要读取的起始行号 (包含)。</description>
+      </parameter>
+      <parameter>
+        <name>end_line</name>
+        <type>integer</type>
+        <description>需要读取的结束行号 (包含)。</description>
+      </parameter>
+    </parameters>
+  </tool_definition>
+  
+</tool_definitions>
+
+3. 页面接口调用规范
+
+接口已经由拉取的openapi.json通过orval配置自动生成，不需要也禁止修改。必须直接使用src/api/generated的现成接口，直接在vue文件中引入，严禁创建任何接口定义文件；如有任何接口本身的问题，请为我总结出接口侧定义的问题，不必尝试修改接口本身，这是无意义的，因为每次更新接口，变更都会被覆盖

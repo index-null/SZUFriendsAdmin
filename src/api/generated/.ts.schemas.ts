@@ -1758,6 +1758,30 @@ export interface CardResponse {
   wechat?: string;
 }
 
+export interface TemplateListResponse {
+  /** 模板ID */
+  id?: number;
+  /** 模板编码 */
+  templateCode?: string;
+  /** 模板名称 */
+  templateName?: string;
+  /** 模板图标 */
+  templateIcon?: string;
+  /** 模板描述 */
+  templateDesc?: string;
+  /** 排序号 */
+  sortOrder?: number;
+  /** 是否启用 */
+  isEnabled?: boolean;
+}
+
+export interface FieldOptionInfo {
+  /** 选项值 */
+  value?: string;
+  /** 选项标签 */
+  label?: string;
+}
+
 export interface ResultString {
   /** 响应状态码 */
   code?: number;
@@ -2285,6 +2309,17 @@ export interface ResultCardResponse {
   timestamp?: number;
 }
 
+export interface ResultListTemplateListResponse {
+  /** 响应状态码 */
+  code?: number;
+  /** 响应消息 */
+  message?: string;
+  /** 响应数据 */
+  data?: TemplateListResponse[];
+  /** 时间戳 */
+  timestamp?: number;
+}
+
 export interface LoginResponse {
   /** 访问令牌 */
   token?: string;
@@ -2628,6 +2663,25 @@ export interface HandleFriendRequest {
   requestStatus?: string;
 }
 
+export interface FieldOptionResponse {
+  /** 选项ID */
+  id?: number;
+  /** 选项值 */
+  value?: string;
+  /** 选项标签 */
+  label?: string;
+  /** 选项图标 */
+  icon?: string;
+  /** 排序号 */
+  sortOrder?: number;
+  /** 是否启用 */
+  isEnabled?: boolean;
+}
+
+export interface MapTemplateFieldInfo {
+  key?: Key;
+}
+
 export interface ResultLoginResponse {
   /** 响应状态码 */
   code?: number;
@@ -2727,19 +2781,6 @@ export interface ResultPageResultAdminUserPageResponse {
   timestamp?: number;
 }
 
-/**
- * 帖子类型（1-普通动态，2-班级动态，3-通知公告）
- */
-export type PostPublishRequestPostType = typeof PostPublishRequestPostType[keyof typeof PostPublishRequestPostType];
-
-
-// eslint-disable-next-line @typescript-eslint/no-redeclare
-export const PostPublishRequestPostType = {
-  NORMAL: 'NORMAL',
-  CLASS: 'CLASS',
-  NOTICE: 'NOTICE',
-} as const;
-
 export interface PostPublishRequest {
   /**
    * 帖子标题（可选）
@@ -2760,7 +2801,9 @@ export interface PostPublishRequest {
   /** 所属班级ID */
   classId?: number;
   /** 帖子类型（1-普通动态，2-班级动态，3-通知公告） */
-  postType: PostPublishRequestPostType;
+  postType: string;
+  /** 扩展字段，key为字段编码，value为字段信息（包含用户填写的值） */
+  extendedFields?: MapTemplateFieldInfo;
   /** 发帖地点 */
   location?: string;
   /** 经度 */
@@ -2876,6 +2919,52 @@ export interface TopCommentPageRequest {
 export interface DeleteFriendRequest {
   /** 好友ID */
   friendId?: number;
+}
+
+/**
+ * 字段类型
+ */
+export type TemplateFieldResponseFieldType = typeof TemplateFieldResponseFieldType[keyof typeof TemplateFieldResponseFieldType];
+
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const TemplateFieldResponseFieldType = {
+  TEXT: 'TEXT',
+  SELECT: 'SELECT',
+} as const;
+
+export interface TemplateFieldResponse {
+  /** 字段ID */
+  id?: number;
+  /** 字段编码 */
+  fieldCode?: string;
+  /** 字段名称 */
+  fieldName?: string;
+  /** 字段类型 */
+  fieldType?: TemplateFieldResponseFieldType;
+  /** 是否必填 */
+  isRequired?: boolean;
+  /** 默认值 */
+  defaultValue?: string;
+  /** 占位提示文本 */
+  placeholder?: string;
+  /** 排序号 */
+  sortOrder?: number;
+  /** 是否启用 */
+  isEnabled?: boolean;
+  /** 选项列表（用于下拉框、单选框） */
+  options?: FieldOptionResponse[];
+}
+
+export interface TemplateConfigInfo {
+  /** 模板编码 */
+  templateCode?: string;
+  /** 模板名称 */
+  templateName?: string;
+  /** 模板图标 */
+  templateIcon?: string;
+  /** 扩展字段列表，key为字段编码，value为字段信息 */
+  fields?: MapTemplateFieldInfo;
 }
 
 export interface LoginRequest {
@@ -3121,6 +3210,36 @@ export interface FriendResponse {
   avatar?: string;
 }
 
+export interface TemplateConfigResponse {
+  /** 模板ID */
+  id?: number;
+  /** 模板编码 */
+  templateCode?: string;
+  /** 模板名称 */
+  templateName?: string;
+  /** 模板图标 */
+  templateIcon?: string;
+  /** 模板描述 */
+  templateDesc?: string;
+  /** 排序号 */
+  sortOrder?: number;
+  /** 是否启用 */
+  isEnabled?: boolean;
+  /** 字段列表 */
+  fields?: TemplateFieldResponse[];
+}
+
+export interface ResultTemplateConfigInfo {
+  /** 响应状态码 */
+  code?: number;
+  /** 响应消息 */
+  message?: string;
+  /** 响应数据 */
+  data?: TemplateConfigInfo;
+  /** 时间戳 */
+  timestamp?: number;
+}
+
 export interface ResultBoolean {
   /** 响应状态码 */
   code?: number;
@@ -3310,6 +3429,17 @@ export interface GroupedFriendsResponse {
   friends?: FriendResponse[];
 }
 
+export interface ResultTemplateConfigResponse {
+  /** 响应状态码 */
+  code?: number;
+  /** 响应消息 */
+  message?: string;
+  /** 响应数据 */
+  data?: TemplateConfigResponse;
+  /** 时间戳 */
+  timestamp?: number;
+}
+
 export interface RegisterRequest {
   /** 用户名（登录账号） */
   username: string;
@@ -3486,7 +3616,34 @@ export interface ResultListGroupedFriendsResponse {
   timestamp?: number;
 }
 
-export interface Key { [key: string]: unknown }
+/**
+ * 字段类型
+ */
+export type KeyFieldType = typeof KeyFieldType[keyof typeof KeyFieldType];
+
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const KeyFieldType = {
+  TEXT: 'TEXT',
+  SELECT: 'SELECT',
+} as const;
+
+export interface Key {
+  /** 字段编码 */
+  fieldCode?: string;
+  /** 字段名称 */
+  fieldName?: string;
+  /** 字段类型 */
+  fieldType?: KeyFieldType;
+  /** 是否必填 */
+  isRequired?: boolean;
+  /** 占位提示文本 */
+  placeholder?: string;
+  /** 选项列表（用于下拉框、单选框） */
+  options?: FieldOptionInfo[];
+  /** 输入值（用户填写的值） */
+  value?: string;
+}
 
 export interface DictItemEntity {
   /** 主键ID */
@@ -3508,19 +3665,6 @@ export interface DictItemEntity {
   /** 排序（升序） */
   sortOrder?: number;
 }
-
-/**
- * 帖子类型
- */
-export type PostDetailResponsePostType = typeof PostDetailResponsePostType[keyof typeof PostDetailResponsePostType];
-
-
-// eslint-disable-next-line @typescript-eslint/no-redeclare
-export const PostDetailResponsePostType = {
-  NORMAL: 'NORMAL',
-  CLASS: 'CLASS',
-  NOTICE: 'NOTICE',
-} as const;
 
 /**
  * 状态
@@ -3554,7 +3698,9 @@ export interface PostDetailResponse {
   /** 纬度 */
   latitude?: number;
   /** 帖子类型 */
-  postType?: PostDetailResponsePostType;
+  postType?: string;
+  /** 扩展字段，key为字段编码，value为字段信息（包含用户填写的值） */
+  extendedFields?: MapTemplateFieldInfo;
   /** 是否置顶 */
   isTop?: boolean;
   /** 置顶时间 */
@@ -3730,6 +3876,21 @@ export interface FriendRequestResponse {
   requestStatus?: string;
   /** 请求时间 */
   createTime?: string;
+}
+
+export interface TemplateConfigRequest {
+  /** 模板编码 */
+  templateCode: string;
+  /** 模板名称 */
+  templateName: string;
+  /** 模板图标 */
+  templateIcon?: string;
+  /** 模板描述 */
+  templateDesc?: string;
+  /** 排序号 */
+  sortOrder: number;
+  /** 是否启用 */
+  isEnabled?: boolean;
 }
 
 export interface GrantPermissionsRequest {
@@ -3986,6 +4147,39 @@ export interface ResultPageResultFriendRequestResponse {
   timestamp?: number;
 }
 
+/**
+ * 字段类型
+ */
+export type TemplateFieldRequestFieldType = typeof TemplateFieldRequestFieldType[keyof typeof TemplateFieldRequestFieldType];
+
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const TemplateFieldRequestFieldType = {
+  TEXT: 'TEXT',
+  SELECT: 'SELECT',
+} as const;
+
+export interface TemplateFieldRequest {
+  /** 模板编码 */
+  templateCode: string;
+  /** 字段编码 */
+  fieldCode: string;
+  /** 字段名称 */
+  fieldName: string;
+  /** 字段类型 */
+  fieldType: TemplateFieldRequestFieldType;
+  /** 是否必填 */
+  isRequired?: boolean;
+  /** 默认值 */
+  defaultValue?: string;
+  /** 占位提示文本 */
+  placeholder?: string;
+  /** 排序号 */
+  sortOrder: number;
+  /** 是否启用 */
+  isEnabled?: boolean;
+}
+
 export interface PermissionResponse {
   /** 权限ID */
   id?: number;
@@ -4068,6 +4262,17 @@ export interface FriendRequestPageRequest {
   size?: number;
 }
 
+export interface ResultListFieldOptionResponse {
+  /** 响应状态码 */
+  code?: number;
+  /** 响应消息 */
+  message?: string;
+  /** 响应数据 */
+  data?: FieldOptionResponse[];
+  /** 时间戳 */
+  timestamp?: number;
+}
+
 export interface ResultPermissionResponse {
   /** 响应状态码 */
   code?: number;
@@ -4110,6 +4315,23 @@ export interface ResultDictItemEntity {
   data?: DictItemEntity;
   /** 时间戳 */
   timestamp?: number;
+}
+
+export interface TemplateFieldOptionRequest {
+  /** 选项ID（编辑时必填） */
+  id?: number;
+  /** 选项分组 */
+  optionGroup: string;
+  /** 选项值 */
+  optionValue: string;
+  /** 选项标签 */
+  optionLabel: string;
+  /** 选项图标 */
+  optionIcon?: string;
+  /** 排序号 */
+  sortOrder: number;
+  /** 是否启用 */
+  isEnabled?: boolean;
 }
 
 export interface CreatePermissionRequest {
@@ -4745,5 +4967,26 @@ export type PostCommunityPostsModerationPostIdBlockParams = {
  * 屏蔽原因 屏蔽原因
  */
 reason: string;
+};
+
+export type PutManagerTemplatesIdStatusParams = {
+/**
+ * 是否启用 是否启用
+ */
+enabled: boolean;
+};
+
+export type PutManagerTemplatesFieldsIdStatusParams = {
+/**
+ * 是否启用 是否启用
+ */
+enabled: boolean;
+};
+
+export type PutManagerTemplatesOptionsIdStatusParams = {
+/**
+ * 是否启用 是否启用
+ */
+enabled: boolean;
 };
 

@@ -42,7 +42,8 @@
               hasPermission('class') ||
               hasPermission('alumni:page') ||
               hasPermission('user:page') ||
-              hasPermission('post:page')
+              hasPermission('post:page') ||
+              hasPermission('template:page')
             "
             index="data-management"
           >
@@ -84,6 +85,13 @@
             >
               <el-icon><ChatLineSquare /></el-icon>
               <template #title>帖子管理</template>
+            </el-menu-item>
+            <el-menu-item
+              v-if="hasPermission('template:page')"
+              index="/template-management"
+            >
+              <el-icon><Files /></el-icon>
+              <template #title>帖子模板管理</template>
             </el-menu-item>
           </el-sub-menu>
 
@@ -202,6 +210,7 @@ import {
   Monitor,
   ChatLineSquare,
   Tickets,
+  Files,
 } from '@element-plus/icons-vue'
 import { usePermission } from '@/stores'
 

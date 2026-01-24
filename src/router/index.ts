@@ -20,6 +20,7 @@ const AuthenticationManagement = () =>
   import('../views/AuthenticationManagement/index.vue')
 const PostManagement = () => import('../views/PostManagement/index.vue')
 const PostModeration = () => import('../views/PostModeration/index.vue')
+const TemplateManagement = () => import('../views/TemplateManagement/index.vue')
 const Profile = () => import('../views/Profile/index.vue')
 const NotFound = () => import('../views/NotFound.vue')
 
@@ -199,6 +200,18 @@ const routes: RouteRecordRaw[] = [
       title: '帖子管理',
       requiresAuth: true,
       permission: 'post:page',
+      showInMenu: true,
+    },
+  },
+  // 帖子模板管理
+  {
+    path: '/template-management',
+    name: 'TemplateManagement',
+    component: TemplateManagement,
+    meta: {
+      title: '帖子模板管理',
+      requiresAuth: true,
+      permission: 'template:page',
       showInMenu: true,
     },
   },
