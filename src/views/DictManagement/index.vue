@@ -949,4 +949,71 @@ onMounted(() => {
   justify-content: center;
   height: 100%;
 }
+
+/* Dark mode */
+html.dark .dict-management {
+  background-color: #0a0a0a;
+}
+
+html.dark .dict-header {
+  background-color: #1a1a1a;
+  border-bottom-color: #333;
+}
+
+html.dark .dict-title {
+  color: #fff;
+}
+
+html.dark .dict-master-panel {
+  background-color: #1a1a1a;
+  border-right-color: #333;
+}
+
+html.dark .panel-header {
+  border-bottom-color: #333;
+}
+
+html.dark .panel-header h3 {
+  color: #fff;
+}
+
+html.dark .dict-item {
+  background-color: #1a1a1a;
+  border-color: #333;
+}
+
+html.dark .dict-item:hover {
+  border-color: #409eff;
+}
+
+html.dark .dict-item.active {
+  background-color: rgba(64, 158, 255, 0.15);
+  border-color: #409eff;
+}
+
+html.dark .dict-name {
+  color: #fff;
+}
+
+html.dark .dict-item-desc {
+  color: #909399;
+}
+
+html.dark .panel-footer {
+  background-color: #1a1a1a;
+  border-top-color: #333;
+}
+
+html.dark .dict-detail-panel {
+  background-color: #1a1a1a;
+}
+
+html.dark .detail-header {
+  background-color: #1a1a1a;
+  border-bottom-color: #333;
+}
+
+html.dark .detail-header h3 {
+  color: #fff;
+}
 </style>
