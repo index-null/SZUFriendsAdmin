@@ -142,10 +142,10 @@ A: 使用 try-catch 块。响应拦截器会在错误时 reject promise。
 当后端 API 更新后，运行以下命令重新生成 API 代码：
 
 ```bash
-npm run api
+pnpm run api
 # 或分步执行
-npm run download-api  # 下载最新 OpenAPI 规范
-npm run generate-api  # 生成 API 代码
+pnpm run download-api  # 下载最新 OpenAPI 规范
+pnpm run generate-api  # 生成 API 代码
 ```
 
 生成的代码会自动应用 `UnwrapResult` 类型系统。

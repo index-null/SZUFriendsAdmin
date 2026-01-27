@@ -20,7 +20,7 @@ export default defineConfig({
     VueInspector({
       toggleButtonVisibility: 'active', // 显示切换按钮
       toggleComboKey: 'meta', // Command 键 + Click 触发跳转（macOS）
-      // 不设置 launchEditor，完全依赖 LAUNCH_EDITOR 环境变量
+      launchEditor: 'cursor',
       disableInspectorOnEditorOpen: true, // 点击打开文件后自动关闭
     }),
     Components({

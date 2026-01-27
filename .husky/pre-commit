@@ -1,11 +1,11 @@
-echo "🔍 Running pre-commit checks..."
+echo "Running pre-commit checks..."
 
 # 1. 运行 lint-staged（ESLint + Prettier）
-echo "\n📝 Step 1/2: Linting and formatting staged files..."
-npx lint-staged || exit 1
+echo "\nStep 1/2: Linting and formatting staged files..."
+pnpm exec lint-staged || exit 1
 
 # 2. 运行类型检查（TypeScript）
-echo "\n🔧 Step 2/2: Running TypeScript type check..."
-npm run type-check || exit 1
+echo "\nStep 2/2: Running TypeScript type check..."
+pnpm run type-check || exit 1
 
-echo "\n✅ All pre-commit checks passed!"
+echo "\nAll pre-commit checks passed!"

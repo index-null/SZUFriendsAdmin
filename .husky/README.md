@@ -22,7 +22,7 @@
 #### Step 2: TypeScript 类型检查
 
 - **vue-tsc**: 运行 TypeScript 编译器进行类型检查
-- **命令**: `npm run type-check`（即 `vue-tsc -b --noEmit`）
+- **命令**: `pnpm run type-check`（即 `vue-tsc -b --noEmit`）
 - **作用范围**: 检查整个项目的类型安全
 - **速度**: 约 3-10 秒（取决于项目大小）
 
@@ -91,26 +91,26 @@ docs(readme): update installation guide
 
 ```bash
 # 开发服务器
-npm run dev
+pnpm run dev
 
 # 类型检查（不生成文件）
-npm run type-check
+pnpm run type-check
 
 # 代码检查
-npm run lint          # 检查并自动修复
-npm run lint:check    # 仅检查，不修复
+pnpm run lint          # 检查并自动修复
+pnpm run lint:check    # 仅检查，不修复
 
 # 代码格式化
-npm run format        # 格式化所有文件
-npm run format:check  # 检查格式，不修改
+pnpm run format        # 格式化所有文件
+pnpm run format:check  # 检查格式，不修改
 
 # 构建
-npm run build         # 类型检查 + 构建生产版本
+pnpm run build         # 类型检查 + 构建生产版本
 
 # API 相关
-npm run download-api  # 下载 OpenAPI 规范
-npm run generate-api  # 生成 API 代码
-npm run api           # 下载 + 生成（一键操作）
+pnpm run download-api  # 下载 OpenAPI 规范
+pnpm run generate-api  # 生成 API 代码
+pnpm run api           # 下载 + 生成（一键操作）
 ```
 
 ## 🚨 为什么之前没有发现类型错误？
@@ -120,7 +120,7 @@ npm run api           # 下载 + 生成（一键操作）
 之前的 `.husky/pre-commit` 只包含：
 
 ```bash
-npx lint-staged
+pnpm exec lint-staged
 ```
 
 这只运行了 ESLint 和 Prettier，**没有运行 TypeScript 类型检查**。
@@ -131,10 +131,10 @@ npx lint-staged
 
 ```bash
 # 1. Lint-Staged（ESLint + Prettier）
-npx lint-staged || exit 1
+pnpm exec lint-staged || exit 1
 
 # 2. TypeScript 类型检查
-npm run type-check || exit 1
+pnpm run type-check || exit 1
 ```
 
 这样可以确保：
@@ -152,8 +152,8 @@ npm run type-check || exit 1
 git status
 
 # 运行完整检查（可选）
-npm run lint:check
-npm run type-check
+pnpm run lint:check
+pnpm run type-check
 
 # 提交
 git commit -m "your message"
@@ -176,10 +176,10 @@ git commit -m "your message"
 
 ```bash
 # 运行类型检查查看所有错误
-npm run type-check
+pnpm run type-check
 
 # 修复错误后重新运行
-npm run type-check
+pnpm run type-check
 
 # 确认无误后提交
 git add .
@@ -192,7 +192,7 @@ git commit -m "fix: resolve type errors"
 
 ```bash
 # 重新安装 husky
-npm run prepare
+pnpm run prepare
 
 # 确保 hooks 有执行权限
 chmod +x .husky/pre-commit
