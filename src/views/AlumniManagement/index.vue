@@ -272,23 +272,42 @@
         </el-row>
         <el-row :gutter="20">
           <el-col :span="12">
-            <!-- 学院ID 暂时使用输入框，建议后续改为下拉选择 -->
-            <el-form-item label="学院ID" prop="collegeId">
-              <el-input-number
+            <el-form-item label="学院" prop="collegeId">
+              <el-select
                 v-model="form.collegeId"
-                :min="1"
+                placeholder="请选择学院"
                 style="width: 100%"
-              />
+                filterable
+                clearable
+                @change="handleCollegeChange"
+              >
+                <el-option
+                  v-for="item in collegeOptions"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value"
+                />
+              </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <!-- 班级ID 暂时使用输入框，建议后续改为下拉选择 -->
-            <el-form-item label="班级ID" prop="classId">
-              <el-input-number
+            <el-form-item label="班级" prop="classId">
+              <el-select
                 v-model="form.classId"
-                :min="1"
+                placeholder="请先选择学院"
                 style="width: 100%"
-              />
+                filterable
+                clearable
+                :loading="classLoading"
+                :disabled="!form.collegeId"
+              >
+                <el-option
+                  v-for="item in classOptions"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value"
+                />
+              </el-select>
             </el-form-item>
           </el-col>
         </el-row>
@@ -370,11 +389,14 @@ import { ElMessage, ElMessageBox } from 'element-plus'
 import type { FormInstance, UploadInstance, UploadFile } from 'element-plus'
 import { get } from '@/api/generated/校友档案信息控制器/校友档案信息控制器'
 import { get as getFileApi } from '@/api/generated/文件管理/文件管理'
+import { get as getCollegeApi } from '@/api/generated/学院信息控制器/学院信息控制器'
+import { get as getClassApi } from '@/api/generated/班级相关信息-班级控制器/班级相关信息-班级控制器'
 import type {
   AlumniPageRequest,
   AlumniPageResponse,
   CreateAlumniRequest,
   UpdateAlumniRequest,
+  ClassEntity,
 } from '@/api/generated/.ts.schemas'
 import { DICT_TYPE, getDictOptions } from '@/utils/dict'
 import { usePermission } from '@/stores'
@@ -392,17 +414,62 @@ const {
 } = get()
 
 const { getManagerFileDownloadFileKey } = getFileApi()
+const { getManagerCollegeDict } = getCollegeApi()
+const { postManagerClassList } = getClassApi()
 
 // 字典选项
 const identityOptions = ref<any[]>([])
 const statusOptions = ref<any[]>([])
 const alumniTypeOptions = ref<any[]>([])
 
+// 学院和班级选项
+const collegeOptions = ref<{ label: string; value: number }[]>([])
+const classOptions = ref<{ label: string; value: number }[]>([])
+const classLoading = ref(false)
+
 // 加载字典
 const loadDicts = async () => {
   identityOptions.value = await getDictOptions(DICT_TYPE.IDENTITY)
   statusOptions.value = await getDictOptions(DICT_TYPE.ALUMNI_STATUS)
   alumniTypeOptions.value = await getDictOptions(DICT_TYPE.ALUMNI_TYPE)
+}
+
+// 加载学院列表
+const loadCollegeOptions = async () => {
+  try {
+    const res = await getManagerCollegeDict()
+    if (res && res.collegeDict) {
+      collegeOptions.value = Object.entries(res.collegeDict).map(
+        ([id, name]) => ({
+          label: name as string,
+          value: Number(id),
+        }),
+      )
+    }
+  } catch (error) {
+    console.error('获取学院列表失败', error)
+  }
+}
+
+// 加载班级列表（根据学院ID筛选）
+const loadClassOptions = async (collegeId?: number) => {
+  classLoading.value = true
+  try {
+    const res = await postManagerClassList({ collegeId })
+    if (res && Array.isArray(res)) {
+      classOptions.value = res.map((item: ClassEntity) => ({
+        label: item.className || '',
+        value: item.id as number,
+      }))
+    } else {
+      classOptions.value = []
+    }
+  } catch (error) {
+    console.error('获取班级列表失败', error)
+    classOptions.value = []
+  } finally {
+    classLoading.value = false
+  }
 }
 
 // 辅助函数：获取标签
@@ -514,7 +581,17 @@ const rules = {
   identity: [{ required: true, message: '请选择身份', trigger: 'change' }],
   grade: [{ required: true, message: '请输入入学年份', trigger: 'blur' }],
   alumniType: [{ required: true, message: '请选择学历', trigger: 'change' }],
-  collegeId: [{ required: true, message: '请输入学院ID', trigger: 'blur' }], // 暂时必填
+  collegeId: [{ required: true, message: '请选择学院', trigger: 'change' }],
+}
+
+// 学院变化时清空班级并重新加载班级列表
+const handleCollegeChange = (collegeId: number | undefined) => {
+  form.classId = undefined
+  if (collegeId) {
+    loadClassOptions(collegeId)
+  } else {
+    classOptions.value = []
+  }
 }
 
 // 新增
@@ -541,7 +618,10 @@ const handleEdit = (row: AlumniPageResponse) => {
   dialog.title = '修改校友'
   dialog.visible = true
   Object.assign(form, row) // 复制数据
-  // 注意：API 返回的字段可能和 Request 字段略有不同（例如 null vs undefined），可能需要处理
+  // 如果有学院ID，加载该学院的班级列表
+  if (row.collegeId) {
+    loadClassOptions(row.collegeId)
+  }
 }
 
 // 提交表单
@@ -666,6 +746,7 @@ const submitImport = async () => {
 
 onMounted(() => {
   loadDicts()
+  loadCollegeOptions()
   getList()
 })
 </script>
