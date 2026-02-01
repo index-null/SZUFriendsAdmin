@@ -26,7 +26,7 @@ const CONFIG = {
   // API 版本
   apiVersion: '2024-03-28',
   // OpenAPI 版本: '2.0' | '3.0' | '3.1'
-  oasVersion: '3.0',
+  oasVersion: '3.1',
   // 导出格式: 'JSON' | 'YAML'
   exportFormat: 'JSON',
 }

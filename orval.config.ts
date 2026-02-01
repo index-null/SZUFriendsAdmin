@@ -10,7 +10,7 @@ export default defineConfig({
     },
     output: {
       target: './src/api/generated',
-      client: 'axios',
+      client: 'axios', // 使用 axios client 保持 get/post 等包裹函数结构
       mode: 'tags-split', // 按 tag 分割成多个文件
       clean: true, // 每次生成前清理旧文件
       prettier: true,
