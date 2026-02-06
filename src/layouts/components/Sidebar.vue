@@ -42,8 +42,7 @@
               hasPermission('class') ||
               hasPermission('alumni:page') ||
               hasPermission('user:page') ||
-              hasPermission('post:page') ||
-              hasPermission('template:page')
+              hasPermission('post:page')
             "
             index="data-management"
           >
@@ -86,13 +85,6 @@
               <el-icon><ChatLineSquare /></el-icon>
               <template #title>帖子管理</template>
             </el-menu-item>
-            <el-menu-item
-              v-if="hasPermission('template:page')"
-              index="/template-management"
-            >
-              <el-icon><Files /></el-icon>
-              <template #title>帖子模板管理</template>
-            </el-menu-item>
           </el-sub-menu>
 
           <!-- 系统管理 -->
@@ -101,7 +93,8 @@
               hasPermission('admin-user:page') ||
               hasPermission('role:page') ||
               hasPermission('permission:page') ||
-              hasPermission('dict:page')
+              hasPermission('dict:page') ||
+              hasPermission('template:page')
             "
             index="system-management"
           >
@@ -136,6 +129,13 @@
             >
               <el-icon><Notebook /></el-icon>
               <template #title>字典管理</template>
+            </el-menu-item>
+            <el-menu-item
+              v-if="hasPermission('template:page')"
+              index="/template-management"
+            >
+              <el-icon><Files /></el-icon>
+              <template #title>帖子模板管理</template>
             </el-menu-item>
           </el-sub-menu>
 

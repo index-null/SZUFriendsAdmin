@@ -28,8 +28,12 @@
         stripe
         style="width: 100%"
       >
-        <el-table-column prop="id" label="用户ID" width="80" align="center" />
-        <el-table-column prop="username" label="用户名" width="150" />
+        <el-table-column type="index" label="序号" width="80" align="center" />
+        <el-table-column label="真实姓名" width="120" align="center">
+          <template #default="{ row }">
+            {{ row.realName || '-' }}
+          </template>
+        </el-table-column>
         <el-table-column label="头像" width="80" align="center">
           <template #default="{ row }">
             <el-avatar v-if="row.avatar" :src="row.avatar" :size="40" />
@@ -45,11 +49,6 @@
             </el-tag>
           </template>
         </el-table-column>
-        <el-table-column label="真实姓名" width="120" align="center">
-          <template #default="{ row }">
-            {{ row.realName || '-' }}
-          </template>
-        </el-table-column>
         <el-table-column label="性别" width="80" align="center">
           <template #default="{ row }">
             {{ getGenderLabel(row.gender) }}
@@ -62,39 +61,10 @@
             <div v-else>-</div>
           </template>
         </el-table-column>
-        <el-table-column label="校友档案" min-width="300">
+        <el-table-column label="公司信息" min-width="200">
           <template #default="{ row }">
-            <div
-              v-if="row.alumniInfos && row.alumniInfos.length > 0"
-              class="alumni-infos"
-            >
-              <div
-                v-for="alumni in row.alumniInfos"
-                :key="alumni.id"
-                class="alumni-item"
-              >
-                <el-tag
-                  :type="getAlumniTypeTag(alumni.identity)"
-                  size="small"
-                  effect="plain"
-                >
-                  {{ getIdentityLabel(alumni.identity) }}
-                </el-tag>
-                <span class="alumni-text">
-                  {{ alumni.number }} | {{ alumni.major }} |
-                  {{ alumni.className }}
-                </span>
-                <el-tag
-                  v-if="alumni.status === 1"
-                  type="success"
-                  size="small"
-                  effect="plain"
-                >
-                  已认证
-                </el-tag>
-              </div>
-            </div>
-            <el-text v-else type="info">暂无档案</el-text>
+            <span v-if="row.companyName">{{ row.companyName }}</span>
+            <el-text v-else type="info">暂无</el-text>
           </template>
         </el-table-column>
         <el-table-column label="操作" width="280" align="center" fixed="right">
@@ -216,13 +186,7 @@ const { hasPermission } = usePermission()
 
 // 使用字典
 const { getLabel: getUserTypeLabel } = useDict(DICT_TYPE.USER_TYPE)
-const { getLabel: getIdentityLabel } = useDict(DICT_TYPE.IDENTITY)
 const { getLabel: getGenderLabel } = useDict(DICT_TYPE.GENDER)
-
-// 获取校友身份类型标签颜色（使用 userType 的颜色映射）
-const getAlumniTypeTag = (identity?: number) => {
-  return getUserTypeTag(identity)
-}
 
 // API 实例
 const userApi = getUserApi()
@@ -460,24 +424,5 @@ onMounted(() => {
   margin-top: 20px;
   display: flex;
   justify-content: flex-end;
-}
-
-/* 校友档案样式 */
-.alumni-infos {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.alumni-item {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 12px;
-}
-
-.alumni-text {
-  color: #606266;
-  flex: 1;
 }
 </style>
