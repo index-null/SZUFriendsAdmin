@@ -10,41 +10,59 @@
             clearable
             style="width: 200px"
             :prefix-icon="Search"
-            @change="handleSearch"
+            @keyup.enter="handleSearch"
+            @clear="handleSearch"
           />
 
           <el-select
             v-model="filterForm.postType"
             placeholder="帖子类型"
             clearable
-            style="width: 140px"
+            style="width: 120px"
             @change="handleSearch"
           >
-            <el-option label="普通帖子" value="NORMAL" />
-            <el-option label="班级帖子" value="CLASS" />
-            <el-option label="公告" value="NOTICE" />
+            <el-option
+              v-for="type in postTypeOptions"
+              :key="type.value"
+              :label="type.label"
+              :value="type.value"
+            />
+          </el-select>
+
+          <el-select
+            v-model="filterForm.tags"
+            placeholder="标签筛选"
+            clearable
+            multiple
+            collapse-tags
+            collapse-tags-tooltip
+            style="width: 180px"
+            @change="handleSearch"
+          >
+            <el-option
+              v-for="tag in tagOptions"
+              :key="tag.value"
+              :label="tag.label"
+              :value="tag.value"
+            />
           </el-select>
 
           <el-select
             v-model="filterForm.sortBy"
             placeholder="排序方式"
-            style="width: 140px"
+            style="width: 120px"
             @change="handleSearch"
           >
             <el-option label="最新发布" value="TIME" />
             <el-option label="最热门" value="HOT" />
           </el-select>
 
-          <el-checkbox v-model="filterForm.hasImage" @change="handleSearch">
-            有图片
-          </el-checkbox>
-
-          <el-checkbox v-model="filterForm.hasVideo" @change="handleSearch">
-            有视频
-          </el-checkbox>
+          <el-button type="primary" :icon="Search" @click="handleSearch">
+            搜索
+          </el-button>
         </div>
 
-        <el-button :icon="RefreshRight" @click="handleReset">刷新</el-button>
+        <el-button :icon="RefreshRight" @click="handleReset">重置</el-button>
       </div>
     </el-card>
 
@@ -193,12 +211,25 @@
     <!-- 帖子详情抽屉 -->
     <el-drawer
       v-model="detailDrawerVisible"
-      title="帖子详情"
-      size="500px"
+      size="520px"
       direction="rtl"
       destroy-on-close
     >
+      <template #header>
+        <div class="drawer-header">
+          <span class="drawer-title">帖子详情</span>
+          <el-tag
+            v-if="currentPost"
+            :type="getStatusTagType(currentPost.status)"
+            size="small"
+          >
+            {{ getStatusLabel(currentPost.status) }}
+          </el-tag>
+        </div>
+      </template>
+
       <div v-if="currentPost" class="post-detail">
+        <!-- 作者信息 -->
         <div class="detail-header">
           <el-avatar :size="48" :src="currentPost.avatar">
             <el-icon><User /></el-icon>
@@ -214,13 +245,22 @@
               >
                 {{ getPostTypeLabel(currentPost.postType) }}
               </el-tag>
-              <span class="post-time">{{
-                formatTime(currentPost.createTime)
-              }}</span>
+              <span class="post-time">
+                {{ formatTime(currentPost.createTime) }}
+              </span>
+              <el-tag
+                v-if="currentPost.isTop"
+                type="danger"
+                size="small"
+                effect="dark"
+              >
+                置顶
+              </el-tag>
             </div>
           </div>
         </div>
 
+        <!-- 标题 -->
         <h2 class="detail-title">{{ currentPost.title || '无标题' }}</h2>
 
         <!-- 内容块 -->
@@ -268,6 +308,33 @@
             <span>{{ currentPost.shareCount || 0 }} 分享</span>
           </div>
         </div>
+
+        <!-- 详情页操作按钮 -->
+        <div class="detail-actions">
+          <el-button
+            v-if="!currentPost.isTop"
+            type="warning"
+            :icon="Top"
+            @click="handleTopFromDetail"
+          >
+            置顶帖子
+          </el-button>
+          <el-button
+            v-else
+            type="info"
+            :icon="Bottom"
+            @click="handleUntopFromDetail"
+          >
+            取消置顶
+          </el-button>
+          <el-button
+            type="danger"
+            :icon="Delete"
+            @click="handleDeleteFromDetail"
+          >
+            删除帖子
+          </el-button>
+        </div>
       </div>
     </el-drawer>
   </div>
@@ -303,15 +370,19 @@ import type {
 const postApi = getPostApi()
 
 // 使用字典
-const { getLabel: getTagLabel } = useDict(DICT_TYPE.POST_TAG)
+const { getLabel: getTagLabel, dictOptions: tagOptions } = useDict(
+  DICT_TYPE.POST_TAG,
+)
+const { getLabel: getPostTypeLabel, dictOptions: postTypeOptions } = useDict(
+  DICT_TYPE.POST_TYPE,
+)
 
 // 筛选表单
 const filterForm = reactive({
   keyword: '',
   postType: undefined as string | undefined,
   sortBy: 'TIME' as string,
-  hasImage: false,
-  hasVideo: false,
+  tags: [] as string[],
 })
 
 // 分页参数
@@ -339,8 +410,7 @@ const fetchPosts = async () => {
       sortBy: filterForm.sortBy as PostQueryRequest['sortBy'],
       keyword: filterForm.keyword || undefined,
       postType: filterForm.postType || undefined,
-      hasImage: filterForm.hasImage || undefined,
-      hasVideo: filterForm.hasVideo || undefined,
+      tags: filterForm.tags.length > 0 ? filterForm.tags : undefined,
     }
     const response = await postApi.postCommunityPostsPage(params)
 
@@ -374,8 +444,7 @@ const handleReset = () => {
   filterForm.keyword = ''
   filterForm.postType = undefined
   filterForm.sortBy = 'TIME'
-  filterForm.hasImage = false
-  filterForm.hasVideo = false
+  filterForm.tags = []
   pagination.current = 1
   fetchPosts()
 }
@@ -482,24 +551,98 @@ const handleDelete = async (post: PostResponse) => {
   }
 }
 
-// 获取帖子类型标签类型
+// 详情页操作 - 置顶
+const handleTopFromDetail = async () => {
+  if (!currentPost.value?.postId) return
+  try {
+    await ElMessageBox.confirm(
+      `确定要置顶帖子"${currentPost.value.title || '无标题'}"吗？`,
+      '置顶帖子',
+      {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning',
+      },
+    )
+
+    await postApi.putCommunityPostsPostIdTop(currentPost.value.postId)
+    ElMessage.success('帖子已置顶')
+    currentPost.value.isTop = true
+    fetchPosts()
+  } catch (error) {
+    if (error !== 'cancel') {
+      console.error('置顶帖子失败:', error)
+      ElMessage.error('置顶帖子失败')
+    }
+  }
+}
+
+// 详情页操作 - 取消置顶
+const handleUntopFromDetail = async () => {
+  if (!currentPost.value?.postId) return
+  try {
+    await ElMessageBox.confirm(
+      `确定要取消置顶帖子"${currentPost.value.title || '无标题'}"吗？`,
+      '取消置顶',
+      {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'info',
+      },
+    )
+
+    await postApi.putCommunityPostsPostIdUntop(currentPost.value.postId)
+    ElMessage.success('已取消置顶')
+    currentPost.value.isTop = false
+    fetchPosts()
+  } catch (error) {
+    if (error !== 'cancel') {
+      console.error('取消置顶失败:', error)
+      ElMessage.error('取消置顶失败')
+    }
+  }
+}
+
+// 详情页操作 - 删除
+const handleDeleteFromDetail = async () => {
+  if (!currentPost.value?.postId) return
+  try {
+    await ElMessageBox.confirm(
+      `确定要删除帖子"${currentPost.value.title || '无标题'}"吗？此操作不可恢复！`,
+      '删除帖子',
+      {
+        confirmButtonText: '确定删除',
+        cancelButtonText: '取消',
+        type: 'error',
+      },
+    )
+
+    await postApi.deleteCommunityPostsPostId(currentPost.value.postId)
+    ElMessage.success('帖子已删除')
+    detailDrawerVisible.value = false
+    fetchPosts()
+  } catch (error) {
+    if (error !== 'cancel') {
+      console.error('删除帖子失败:', error)
+      ElMessage.error('删除帖子失败')
+    }
+  }
+}
+
+// 获取帖子类型标签类型（根据类型动态返回颜色）
 const getPostTypeTagType = (postType?: string) => {
-  const map: Record<string, 'primary' | 'success' | 'warning'> = {
+  // 使用不同颜色区分类型
+  if (!postType) return 'info'
+  const colorMap: Record<
+    string,
+    'primary' | 'success' | 'warning' | 'danger' | 'info'
+  > = {
     NORMAL: 'primary',
     CLASS: 'success',
     NOTICE: 'warning',
+    PARTNER: 'danger',
   }
-  return postType ? map[postType] || 'primary' : 'primary'
-}
-
-// 获取帖子类型标签文本
-const getPostTypeLabel = (postType?: string) => {
-  const map: Record<string, string> = {
-    NORMAL: '普通',
-    CLASS: '班级',
-    NOTICE: '公告',
-  }
-  return postType ? map[postType] || '未知' : '未知'
+  return colorMap[postType] || 'info'
 }
 
 // 获取状态标签类型
@@ -802,6 +945,7 @@ $card-bg-dark: #1a1a1a;
         align-items: center;
         gap: 8px;
         margin-top: 4px;
+        flex-wrap: wrap;
 
         .post-time {
           font-size: 12px;
@@ -856,6 +1000,7 @@ $card-bg-dark: #1a1a1a;
     padding: 16px;
     background: #f5f7fa;
     border-radius: 8px;
+    margin-bottom: 20px;
 
     html.dark & {
       background: #2c2c2c;
@@ -872,6 +1017,29 @@ $card-bg-dark: #1a1a1a;
         color: #95a5a6;
       }
     }
+  }
+
+  .detail-actions {
+    display: flex;
+    gap: 12px;
+    padding-top: 16px;
+    border-top: 1px solid #ebeef5;
+
+    html.dark & {
+      border-top-color: #363636;
+    }
+  }
+}
+
+// 抽屉头部
+.drawer-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  .drawer-title {
+    font-size: 16px;
+    font-weight: 600;
   }
 }
 

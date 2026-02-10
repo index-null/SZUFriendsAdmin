@@ -2374,6 +2374,36 @@ export interface ResultListTemplateListResponse {
   timestamp?: number;
 }
 
+/**
+ * 字段类型
+ */
+export type TemplateFieldInfoFieldType = typeof TemplateFieldInfoFieldType[keyof typeof TemplateFieldInfoFieldType];
+
+
+export const TemplateFieldInfoFieldType = {
+  TEXT: 'TEXT',
+  SELECT: 'SELECT',
+} as const;
+
+export interface TemplateFieldInfo {
+  /** 字段编码 */
+  fieldCode?: string;
+  /** 字段名称 */
+  fieldName?: string;
+  /** 字段类型 */
+  fieldType?: TemplateFieldInfoFieldType;
+  /** 是否必填 */
+  isRequired?: boolean;
+  /** 排序号 */
+  sortOrder?: number;
+  /** 占位提示文本 */
+  placeholder?: string;
+  /** 选项列表（用于下拉框、单选框） */
+  options?: FieldOptionInfo[];
+  /** 输入值（用户填写的值） */
+  value?: string;
+}
+
 export interface PermissionTreeNodeResponse {
   /** 权限ID */
   id?: number;
@@ -2851,7 +2881,7 @@ export interface PostPublishRequest {
   /** 帖子类型（1-普通动态，2-班级动态，3-通知公告） */
   postType: string;
   /** 扩展字段，key为字段编码，value为字段信息（包含用户填写的值） */
-  extendedFields?: MapTemplateFieldInfo;
+  extendedFields?: TemplateFieldInfo[];
   /** 发帖地点 */
   location?: string;
   /** 经度 */
@@ -3011,7 +3041,7 @@ export interface TemplateConfigInfo {
   /** 模板图标 */
   templateIcon?: string;
   /** 扩展字段列表，key为字段编码，value为字段信息 */
-  fields?: MapTemplateFieldInfo;
+  fields?: TemplateFieldInfo[];
 }
 
 export interface LoginRequest {
@@ -3070,18 +3100,6 @@ export interface AdminUserPagesRequest {
 }
 
 /**
- * 帖子类型
- */
-export type PostResponsePostType = typeof PostResponsePostType[keyof typeof PostResponsePostType];
-
-
-export const PostResponsePostType = {
-  NORMAL: 'NORMAL',
-  CLASS: 'CLASS',
-  NOTICE: 'NOTICE',
-} as const;
-
-/**
  * 状态（0-已删除，1-正常，2-已屏蔽）
  */
 export type PostResponseStatus = typeof PostResponseStatus[keyof typeof PostResponseStatus];
@@ -3110,7 +3128,9 @@ export interface PostResponse {
   /** 发帖地点 */
   location?: string;
   /** 帖子类型 */
-  postType?: PostResponsePostType;
+  postType?: string;
+  /** 扩展字段，key为字段编码，value为字段信息（包含用户填写的值） */
+  extendedFields?: MapTemplateFieldInfo;
   /** 是否置顶（0-否，1-是） */
   isTop?: number;
   /** 浏览次数 */
@@ -3715,7 +3735,7 @@ export interface PostDetailResponse {
   /** 帖子类型 */
   postType?: string;
   /** 扩展字段，key为字段编码，value为字段信息（包含用户填写的值） */
-  extendedFields?: MapTemplateFieldInfo;
+  extendedFields?: TemplateFieldInfo[];
   /** 是否置顶 */
   isTop?: boolean;
   /** 置顶时间 */
@@ -3790,10 +3810,6 @@ export interface PostQueryRequest {
   postType?: string;
   /** 搜索关键词（标题+内容） */
   keyword?: string;
-  /** 只看有图片的帖子 */
-  hasImage?: boolean;
-  /** 只看有视频的帖子 */
-  hasVideo?: boolean;
   /** 当前位置经度（附近帖子） */
   longitude?: number;
   /** 当前位置纬度（附近帖子） */
@@ -3802,6 +3818,10 @@ export interface PostQueryRequest {
   distance?: number;
   /** 标签列表筛选（包含任一标签即可），获取标签项在字典（post_tag） */
   tags?: string[];
+  /** 学院ID列表筛选（筛选用户所属学院与给定学院有交集的帖子） */
+  collegeIds?: number[];
+  /** 公司名称筛选（在帖子内容中模糊匹配） */
+  company?: string;
 }
 
 export interface NoAdminUserPageResponse {

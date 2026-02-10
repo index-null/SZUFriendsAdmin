@@ -28,6 +28,20 @@ import { customInstance } from '../../mutator';
 
   export const get = (axiosInstance: AxiosInstance = axios.default) => {
 /**
+ * 获取帖子模板详情（用于前端发帖）
+获取帖子模板详情
+获取模板详情，用于前端发帖时展示扩展字段
+ * @summary 获取帖子模板详情
+ */
+const getCommunityPostsTemplatesTemplateCode = (
+    templateCode: string,
+ ) => {
+      return customInstance<ResultTemplateConfigInfo>(
+      {url: `/community/posts/templates/${templateCode}`, method: 'GET'
+    },
+      );
+    }
+  /**
  * 发布帖子
 发布帖子
 发布新帖子，支持图文混排
@@ -204,21 +218,8 @@ const postCommunityPostsPostIdShare = (
     },
       );
     }
-  /**
- * 获取帖子模板详情（用于前端发帖）
-获取帖子模板详情
-获取模板详情，用于前端发帖时展示扩展字段
- * @summary 获取帖子模板详情
- */
-const getCommunityPostsTemplatesTemplateCode = (
-    templateCode: string,
- ) => {
-      return customInstance<ResultTemplateConfigInfo>(
-      {url: `/community/posts/templates/${templateCode}`, method: 'GET'
-    },
-      );
-    }
-  return {postCommunityPosts,getCommunityPostsPostId,putCommunityPostsPostId,deleteCommunityPostsPostId,postCommunityPostsPage,putCommunityPostsPostIdTop,putCommunityPostsPostIdUntop,postCommunityPostsPostIdLike,deleteCommunityPostsPostIdLike,getCommunityPostsLiked,getCommunityPostsPublished,postCommunityPostsPostIdShare,getCommunityPostsTemplatesTemplateCode}};
+  return {getCommunityPostsTemplatesTemplateCode,postCommunityPosts,getCommunityPostsPostId,putCommunityPostsPostId,deleteCommunityPostsPostId,postCommunityPostsPage,putCommunityPostsPostIdTop,putCommunityPostsPostIdUntop,postCommunityPostsPostIdLike,deleteCommunityPostsPostIdLike,getCommunityPostsLiked,getCommunityPostsPublished,postCommunityPostsPostIdShare}};
+export type GetCommunityPostsTemplatesTemplateCodeResult = NonNullable<Awaited<ReturnType<ReturnType<typeof get>['getCommunityPostsTemplatesTemplateCode']>>>
 export type PostCommunityPostsResult = NonNullable<Awaited<ReturnType<ReturnType<typeof get>['postCommunityPosts']>>>
 export type GetCommunityPostsPostIdResult = NonNullable<Awaited<ReturnType<ReturnType<typeof get>['getCommunityPostsPostId']>>>
 export type PutCommunityPostsPostIdResult = NonNullable<Awaited<ReturnType<ReturnType<typeof get>['putCommunityPostsPostId']>>>
@@ -231,4 +232,3 @@ export type DeleteCommunityPostsPostIdLikeResult = NonNullable<Awaited<ReturnTyp
 export type GetCommunityPostsLikedResult = NonNullable<Awaited<ReturnType<ReturnType<typeof get>['getCommunityPostsLiked']>>>
 export type GetCommunityPostsPublishedResult = NonNullable<Awaited<ReturnType<ReturnType<typeof get>['getCommunityPostsPublished']>>>
 export type PostCommunityPostsPostIdShareResult = NonNullable<Awaited<ReturnType<ReturnType<typeof get>['postCommunityPostsPostIdShare']>>>
-export type GetCommunityPostsTemplatesTemplateCodeResult = NonNullable<Awaited<ReturnType<ReturnType<typeof get>['getCommunityPostsTemplatesTemplateCode']>>>
