@@ -12,6 +12,7 @@ import type {
 
 import type {
   GetCommunityPostsLikedParams,
+  GetCommunityPostsPostsParams,
   GetCommunityPostsPublishedParams,
   PostPublishRequest,
   PostQueryRequest,
@@ -218,7 +219,23 @@ const postCommunityPostsPostIdShare = (
     },
       );
     }
-  return {getCommunityPostsTemplatesTemplateCode,postCommunityPosts,getCommunityPostsPostId,putCommunityPostsPostId,deleteCommunityPostsPostId,postCommunityPostsPage,putCommunityPostsPostIdTop,putCommunityPostsPostIdUntop,postCommunityPostsPostIdLike,deleteCommunityPostsPostIdLike,getCommunityPostsLiked,getCommunityPostsPublished,postCommunityPostsPostIdShare}};
+  /**
+ * 获取推荐帖子列表
+基于用户画像的个性化推荐
+获取推荐帖子
+基于用户兴趣、好友动态、热门内容等多维度推荐帖子
+ * @summary 获取推荐帖子
+ */
+const getCommunityPostsPosts = (
+    params: GetCommunityPostsPostsParams,
+ ) => {
+      return customInstance<ResultPageResultPostResponse>(
+      {url: `/community/posts/posts`, method: 'GET',
+        params
+    },
+      );
+    }
+  return {getCommunityPostsTemplatesTemplateCode,postCommunityPosts,getCommunityPostsPostId,putCommunityPostsPostId,deleteCommunityPostsPostId,postCommunityPostsPage,putCommunityPostsPostIdTop,putCommunityPostsPostIdUntop,postCommunityPostsPostIdLike,deleteCommunityPostsPostIdLike,getCommunityPostsLiked,getCommunityPostsPublished,postCommunityPostsPostIdShare,getCommunityPostsPosts}};
 export type GetCommunityPostsTemplatesTemplateCodeResult = NonNullable<Awaited<ReturnType<ReturnType<typeof get>['getCommunityPostsTemplatesTemplateCode']>>>
 export type PostCommunityPostsResult = NonNullable<Awaited<ReturnType<ReturnType<typeof get>['postCommunityPosts']>>>
 export type GetCommunityPostsPostIdResult = NonNullable<Awaited<ReturnType<ReturnType<typeof get>['getCommunityPostsPostId']>>>
@@ -232,3 +249,4 @@ export type DeleteCommunityPostsPostIdLikeResult = NonNullable<Awaited<ReturnTyp
 export type GetCommunityPostsLikedResult = NonNullable<Awaited<ReturnType<ReturnType<typeof get>['getCommunityPostsLiked']>>>
 export type GetCommunityPostsPublishedResult = NonNullable<Awaited<ReturnType<ReturnType<typeof get>['getCommunityPostsPublished']>>>
 export type PostCommunityPostsPostIdShareResult = NonNullable<Awaited<ReturnType<ReturnType<typeof get>['postCommunityPostsPostIdShare']>>>
+export type GetCommunityPostsPostsResult = NonNullable<Awaited<ReturnType<ReturnType<typeof get>['getCommunityPostsPosts']>>>

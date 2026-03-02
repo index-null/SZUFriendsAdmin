@@ -94,7 +94,8 @@
               hasPermission('role:page') ||
               hasPermission('permission:page') ||
               hasPermission('dict:page') ||
-              hasPermission('template:page')
+              hasPermission('template:page') ||
+              hasPermission('recommend:manage')
             "
             index="system-management"
           >
@@ -136,6 +137,13 @@
             >
               <el-icon><Files /></el-icon>
               <template #title>帖子模板管理</template>
+            </el-menu-item>
+            <el-menu-item
+              v-if="hasPermission('recommend:manage')"
+              index="/recommend-management"
+            >
+              <el-icon><MagicStick /></el-icon>
+              <template #title>推荐系统</template>
             </el-menu-item>
           </el-sub-menu>
 
@@ -211,6 +219,7 @@ import {
   ChatLineSquare,
   Tickets,
   Files,
+  MagicStick,
 } from '@element-plus/icons-vue'
 import { usePermission } from '@/stores'
 

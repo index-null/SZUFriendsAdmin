@@ -2748,6 +2748,8 @@ export interface Key {
   fieldType?: KeyFieldType;
   /** 是否必填 */
   isRequired?: boolean;
+  /** 排序号 */
+  sortOrder?: number;
   /** 占位提示文本 */
   placeholder?: string;
   /** 选项列表（用于下拉框、单选框） */
@@ -4899,6 +4901,17 @@ pageSize: number;
 export type GetCommunityPostsPublishedParams = {
 /**
  * 页码 页码
+ */
+pageNum: number;
+/**
+ * 每页大小 每页大小
+ */
+pageSize: number;
+};
+
+export type GetCommunityPostsPostsParams = {
+/**
+ * 页码 页码，从1开始
  */
 pageNum: number;
 /**

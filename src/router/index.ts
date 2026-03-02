@@ -21,6 +21,8 @@ const AuthenticationManagement = () =>
 const PostManagement = () => import('../views/PostManagement/index.vue')
 const PostModeration = () => import('../views/PostModeration/index.vue')
 const TemplateManagement = () => import('../views/TemplateManagement/index.vue')
+const RecommendManagement = () =>
+  import('../views/RecommendManagement/index.vue')
 const Profile = () => import('../views/Profile/index.vue')
 const NotFound = () => import('../views/NotFound.vue')
 
@@ -212,6 +214,18 @@ const routes: RouteRecordRaw[] = [
       title: '帖子模板管理',
       requiresAuth: true,
       permission: 'template:page',
+      showInMenu: true,
+    },
+  },
+  // 推荐系统管理
+  {
+    path: '/recommend-management',
+    name: 'RecommendManagement',
+    component: RecommendManagement,
+    meta: {
+      title: '推荐系统',
+      requiresAuth: true,
+      permission: 'recommend:manage',
       showInMenu: true,
     },
   },
