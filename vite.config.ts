@@ -57,6 +57,15 @@ export default defineConfig({
         // 如果后端没有 /api 前缀，需要重写路径
         // rewrite: (path) => path.replace(/^\/api/, ''),
       },
+      // Coze API 代理 - 避免 CORS 并隐藏 API Key
+      '/coze-api': {
+        target: 'https://api.coze.cn',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/coze-api/, ''),
+        headers: {
+          Origin: 'https://api.coze.cn',
+        },
+      },
     },
   },
 

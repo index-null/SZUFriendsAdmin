@@ -131,19 +131,19 @@ const getMediaTypeByUrl = (url?: string): 'image' | 'video' | null => {
  * 判断是否为文本块
  */
 const isTextBlock = (block: ContentBlock): boolean => {
-  const type = block.type?.toUpperCase()
-  return type === 'TEXT' && !!block.content
+  const type = block.type?.toLowerCase()
+  return type === 'text' && !!block.content
 }
 
 /**
  * 判断是否为图片块
  */
 const isImageBlock = (block: ContentBlock): boolean => {
-  const type = block.type?.toUpperCase()
+  const type = block.type?.toLowerCase()
   // 优先使用 type 字段判断
-  if (type === 'IMAGE') return true
+  if (type === 'image') return true
   // 如果 type 不明确，根据 URL 后缀判断
-  if (!type || type === 'UNKNOWN') {
+  if (!type || type === 'unknown') {
     const mediaType = getMediaTypeByUrl(block.url || block.content)
     return mediaType === 'image'
   }
@@ -154,11 +154,11 @@ const isImageBlock = (block: ContentBlock): boolean => {
  * 判断是否为视频块
  */
 const isVideoBlock = (block: ContentBlock): boolean => {
-  const type = block.type?.toUpperCase()
+  const type = block.type?.toLowerCase()
   // 优先使用 type 字段判断
-  if (type === 'VIDEO') return true
+  if (type === 'video') return true
   // 如果 type 不明确，根据 URL 后缀判断
-  if (!type || type === 'UNKNOWN') {
+  if (!type || type === 'unknown') {
     const mediaType = getMediaTypeByUrl(block.url || block.content)
     return mediaType === 'video'
   }

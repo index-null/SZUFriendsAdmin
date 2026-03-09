@@ -1817,6 +1817,17 @@ export interface FieldOptionInfo {
   label?: string;
 }
 
+export interface ResultListLong {
+  /** 响应状态码 */
+  code?: number;
+  /** 响应消息 */
+  message?: string;
+  /** 响应数据 */
+  data?: number[];
+  /** 时间戳 */
+  timestamp?: number;
+}
+
 export interface ResultString {
   /** 响应状态码 */
   code?: number;
@@ -2541,9 +2552,9 @@ export type ContentBlockType = typeof ContentBlockType[keyof typeof ContentBlock
 
 
 export const ContentBlockType = {
-  TEXT: 'TEXT',
-  IMAGE: 'IMAGE',
-  VIDEO: 'VIDEO',
+  text: 'text',
+  image: 'image',
+  video: 'video',
 } as const;
 
 export interface ContentBlock {

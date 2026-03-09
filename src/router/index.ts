@@ -23,6 +23,7 @@ const PostModeration = () => import('../views/PostModeration/index.vue')
 const TemplateManagement = () => import('../views/TemplateManagement/index.vue')
 const RecommendManagement = () =>
   import('../views/RecommendManagement/index.vue')
+const PostBatchImport = () => import('../views/PostBatchImport/index.vue')
 const Profile = () => import('../views/Profile/index.vue')
 const NotFound = () => import('../views/NotFound.vue')
 
@@ -238,6 +239,18 @@ const routes: RouteRecordRaw[] = [
       title: '帖子审核',
       requiresAuth: true,
       permission: 'post:moderation',
+      showInMenu: true,
+    },
+  },
+  // 帖子批量导入
+  {
+    path: '/post-batch-import',
+    name: 'PostBatchImport',
+    component: PostBatchImport,
+    meta: {
+      title: '帖子批量导入',
+      requiresAuth: true,
+      permission: 'post:page',
       showInMenu: true,
     },
   },

@@ -145,6 +145,13 @@
               <el-icon><MagicStick /></el-icon>
               <template #title>推荐系统</template>
             </el-menu-item>
+            <el-menu-item
+              v-if="hasPermission('post:page')"
+              index="/post-batch-import"
+            >
+              <el-icon><Upload /></el-icon>
+              <template #title>帖子批量导入</template>
+            </el-menu-item>
           </el-sub-menu>
 
           <!-- 审核管理 -->
@@ -220,6 +227,7 @@ import {
   Tickets,
   Files,
   MagicStick,
+  Upload,
 } from '@element-plus/icons-vue'
 import { usePermission } from '@/stores'
 
