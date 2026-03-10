@@ -32,6 +32,19 @@ jobs:
       - name: Lint check
         run: pnpm run lint:check
 
+      - name: Create .env.production
+        run: |
+          cat > .env.production << EOF
+          # 生产环境变量
+          # API 基础路径（生产环境前后端同域，使用相对路径）
+          VITE_API_BASE_URL=/api
+
+          # Coze API 配置（用于帖子改写工作流）
+          VITE_COZE_API_KEY=${{ secrets.VITE_COZE_API_KEY }}
+          VITE_COZE_WORKFLOW_ID=${{ secrets.VITE_COZE_WORKFLOW_ID }}
+          VITE_COZE_APP_ID=${{ secrets.VITE_COZE_APP_ID }}
+          EOF
+
       - name: Build
         run: pnpm run build
 
