@@ -24,6 +24,7 @@ const TemplateManagement = () => import('../views/TemplateManagement/index.vue')
 const RecommendManagement = () =>
   import('../views/RecommendManagement/index.vue')
 const PostBatchImport = () => import('../views/PostBatchImport/index.vue')
+const FeedbackManagement = () => import('../views/FeedbackManagement/index.vue')
 const Profile = () => import('../views/Profile/index.vue')
 const NotFound = () => import('../views/NotFound.vue')
 
@@ -251,6 +252,18 @@ const routes: RouteRecordRaw[] = [
       title: '帖子批量导入',
       requiresAuth: true,
       permission: 'post:page',
+      showInMenu: true,
+    },
+  },
+  // 反馈管理
+  {
+    path: '/feedback-management',
+    name: 'FeedbackManagement',
+    component: FeedbackManagement,
+    meta: {
+      title: '反馈管理',
+      requiresAuth: true,
+      permission: 'feedback:page',
       showInMenu: true,
     },
   },

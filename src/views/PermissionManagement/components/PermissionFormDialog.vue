@@ -250,9 +250,9 @@ watch(
         permissionCode: props.data.permissionCode || '',
         permissionName: props.data.permissionName || '',
         permissionType: props.data.permissionType ?? 1,
-        url: props.data.url,
-        method: props.data.method,
-        description: props.data.description,
+        url: props.data.url ?? undefined,
+        method: props.data.method ?? undefined,
+        description: props.data.description ?? undefined,
         sortOrder: props.data.sortOrder,
         status: props.data.status ?? 1, // 使用节点的status，默认启用
       }

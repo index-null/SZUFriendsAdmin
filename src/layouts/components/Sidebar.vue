@@ -159,7 +159,8 @@
             v-if="
               hasPermission('auth:page') ||
               hasPermission('operation-log:page') ||
-              hasPermission('post:moderation')
+              hasPermission('post:moderation') ||
+              hasPermission('feedback:page')
             "
             index="audit-management"
           >
@@ -180,6 +181,13 @@
             >
               <el-icon><DocumentChecked /></el-icon>
               <template #title>帖子审核</template>
+            </el-menu-item>
+            <el-menu-item
+              v-if="hasPermission('feedback:page')"
+              index="/feedback-management"
+            >
+              <el-icon><ChatLineRound /></el-icon>
+              <template #title>反馈管理</template>
             </el-menu-item>
             <el-menu-item
               v-if="hasPermission('operation-log:page')"
@@ -224,6 +232,7 @@ import {
   Setting,
   Monitor,
   ChatLineSquare,
+  ChatLineRound,
   Tickets,
   Files,
   MagicStick,

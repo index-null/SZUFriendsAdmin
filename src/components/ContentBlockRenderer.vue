@@ -34,8 +34,8 @@
       <div v-else-if="isVideoBlock(block)" class="content-media content-video">
         <video
           ref="videoRefs"
-          :src="block.url"
-          :poster="block.coverUrl || block.thumbnail"
+          :src="block.url ?? undefined"
+          :poster="block.coverUrl || block.thumbnail || undefined"
           controls
           preload="metadata"
           playsinline

@@ -1740,14 +1740,26 @@ export interface TopCommentResponse {
   postId?: number;
   /** 评论用户ID */
   userId?: number;
-  /** 昵称 */
-  nickname?: string;
-  /** 头像 */
-  avatar?: string;
-  /** 评论内容 */
-  content?: string;
-  /** 评论图片列表 */
-  images?: string[];
+  /**
+   * 昵称
+   * @nullable
+   */
+  nickname?: string | null;
+  /**
+   * 头像
+   * @nullable
+   */
+  avatar?: string | null;
+  /**
+   * 评论内容
+   * @nullable
+   */
+  content?: string | null;
+  /**
+   * 评论图片列表
+   * @nullable
+   */
+  images?: string[] | null;
   /** 点赞数 */
   likeCount?: number;
   /** 当前用户是否已点赞 */
@@ -1756,8 +1768,11 @@ export interface TopCommentResponse {
   replyCount?: number;
   /** 创建时间 */
   createTime?: string;
-  /** 是否是置顶评论（没有或仅有一条） */
-  isTopComment?: boolean;
+  /**
+   * 是否是置顶评论（没有或仅有一条）
+   * @nullable
+   */
+  isTopComment?: boolean | null;
 }
 
 export interface CardResponse {
@@ -2415,6 +2430,19 @@ export interface TemplateFieldInfo {
   value?: string;
 }
 
+export interface SubmitFeedbackRequest {
+  /** 反馈类型（1-建议，2-BUG，3-投诉，4-其他） */
+  type: number;
+  /** 联系方式（可选）
+联系方式（手机/邮箱） */
+  contact?: string;
+  /** 反馈内容 */
+  content: string;
+  /** 图片列表（可选）
+图片 URL 列表 */
+  images?: string[];
+}
+
 export interface PermissionTreeNodeResponse {
   /** 权限ID */
   id?: number;
@@ -2428,14 +2456,20 @@ export interface PermissionTreeNodeResponse {
   permissionType?: number;
   /** 访问路径 */
   url?: string;
-  /** 请求方法 */
-  method?: string;
+  /**
+   * 请求方法
+   * @nullable
+   */
+  method?: string | null;
   /** 权限描述 */
   description?: string;
   /** 排序字段 */
   sortOrder?: number;
-  /** 角色是否拥有该权限 */
-  hasPermission?: boolean;
+  /**
+   * 角色是否拥有该权限
+   * @nullable
+   */
+  hasPermission?: boolean | null;
   /** 状态（0-禁用，1-启用） */
   status?: number;
   /** 子权限列表
@@ -2450,10 +2484,16 @@ export interface LoginResponse {
   userId?: number;
   /** 用户名 */
   username?: string;
-  /** 昵称 */
-  nickname?: string;
-  /** 头像 */
-  avatar?: string;
+  /**
+   * 昵称
+   * @nullable
+   */
+  nickname?: string | null;
+  /**
+   * 头像
+   * @nullable
+   */
+  avatar?: string | null;
   /** 管理学院id (0-全部 -1 - 无数据权限 其它对应相应学院id) */
   collegeLeaderId?: number;
   /** 权限树
@@ -2569,23 +2609,44 @@ export interface ContentBlock {
    * @maxLength 5000
    */
   content?: string;
-  /** 资源URL（type=image/video时使用）
-资源URL（当type=image或video时使用） */
-  url?: string;
-  /** 缩略图URL（type=image时使用）
-缩略图URL（仅当type=image时使用） */
-  thumbnail?: string;
-  /** 宽度（像素） */
-  width?: number;
-  /** 高度（像素） */
-  height?: number;
-  /** 文件大小（字节） */
-  fileSize?: number;
-  /** 视频封面URL（type=video时使用）
-视频封面URL（仅当type=video时使用） */
-  coverUrl?: string;
-  /** 视频时长（秒） */
-  duration?: number;
+  /**
+   * 资源URL（type=image/video时使用）
+资源URL（当type=image或video时使用）
+   * @nullable
+   */
+  url?: string | null;
+  /**
+   * 缩略图URL（type=image时使用）
+缩略图URL（仅当type=image时使用）
+   * @nullable
+   */
+  thumbnail?: string | null;
+  /**
+   * 宽度（像素）
+   * @nullable
+   */
+  width?: number | null;
+  /**
+   * 高度（像素）
+   * @nullable
+   */
+  height?: number | null;
+  /**
+   * 文件大小（字节）
+   * @nullable
+   */
+  fileSize?: number | null;
+  /**
+   * 视频封面URL（type=video时使用）
+视频封面URL（仅当type=video时使用）
+   * @nullable
+   */
+  coverUrl?: string | null;
+  /**
+   * 视频时长（秒）
+   * @nullable
+   */
+  duration?: number | null;
 }
 
 export interface ClassQueryRequest {
@@ -2771,6 +2832,42 @@ export interface Key {
 
 export interface MapTemplateFieldInfo {
   key?: Key;
+}
+
+export interface FeedbackResponse {
+  /** 反馈 ID */
+  id?: number;
+  /** 用户 ID */
+  userId?: number;
+  /** 用户名 */
+  username?: string;
+  /** 昵称 */
+  nickname?: string;
+  /** 头像 URL */
+  avatar?: string;
+  /** 联系方式 */
+  contact?: string;
+  /** 反馈类型（1-建议，2-BUG，3-投诉，4-其他）
+反馈类型 */
+  type?: number;
+  /** 反馈内容 */
+  content?: string;
+  /** 图片列表
+图片 URL 列表 */
+  images?: string[];
+  /** 状态（0-未读，1-已读，2-已处理）
+状态 */
+  status?: number;
+  /** 是否星标（0-否，1-是）
+是否星标 */
+  star?: number;
+  /** 回复内容
+后台回复内容 */
+  reply?: string;
+  /** 创建时间 */
+  createTime?: string;
+  /** 更新时间 */
+  updateTime?: string;
 }
 
 export interface ResultLoginResponse {
@@ -3057,6 +3154,19 @@ export interface TemplateConfigInfo {
   fields?: TemplateFieldInfo[];
 }
 
+export interface PageResultFeedbackResponse {
+  /** 数据列表 */
+  records?: FeedbackResponse[];
+  /** 总记录数 */
+  total?: number;
+  /** 当前页码 */
+  current?: number;
+  /** 每页大小 */
+  size?: number;
+  /** 总页数 */
+  pages?: number;
+}
+
 export interface LoginRequest {
   /** 用户名 */
   username?: string;
@@ -3130,20 +3240,29 @@ export interface PostResponse {
   postId?: number;
   /** 用户ID */
   userId?: number;
-  /** 班级ID */
-  classId?: number;
+  /**
+   * 班级ID
+   * @nullable
+   */
+  classId?: number | null;
   /** 帖子标题 */
   title?: string;
-  /** 封面 */
-  cover?: string;
+  /**
+   * 封面
+   * @nullable
+   */
+  cover?: string | null;
   /** 内容摘要，最多100字符 */
   contentPreview?: string;
-  /** 发帖地点 */
-  location?: string;
+  /**
+   * 发帖地点
+   * @nullable
+   */
+  location?: string | null;
   /** 帖子类型 */
   postType?: string;
   /** 扩展字段，key为字段编码，value为字段信息（包含用户填写的值） */
-  extendedFields?: MapTemplateFieldInfo;
+  extendedFields?: MapTemplateFieldInfo | null;
   /** 是否置顶（0-否，1-是） */
   isTop?: number;
   /** 浏览次数 */
@@ -3166,8 +3285,11 @@ export interface PostResponse {
   avatar?: string;
   /** 用户类型（1-学生，2-教师，3-校友 4-游客 5-管理员） */
   userType?: number;
-  /** 标签列表，获取标签项在字典（post_tag） */
-  tags?: string[];
+  /**
+   * 标签列表，获取标签项在字典（post_tag）
+   * @nullable
+   */
+  tags?: string[] | null;
 }
 
 export interface ResultPageResultAlumniLocationResponse {
@@ -3268,14 +3390,26 @@ export interface ReplyCommentResponse {
   replyToNickname?: string;
   /** 评论内容 */
   content?: string;
-  /** 评论图片列表 */
-  images?: string[];
-  /** 点赞数 */
-  likeCount?: number;
-  /** 当前用户是否已点赞 */
-  liked?: boolean;
-  /** 创建时间 */
-  createTime?: string;
+  /**
+   * 评论图片列表
+   * @nullable
+   */
+  images?: string[] | null;
+  /**
+   * 点赞数
+   * @nullable
+   */
+  likeCount?: number | null;
+  /**
+   * 当前用户是否已点赞
+   * @nullable
+   */
+  liked?: boolean | null;
+  /**
+   * 创建时间
+   * @nullable
+   */
+  createTime?: string | null;
 }
 
 export interface FriendResponse {
@@ -3313,6 +3447,17 @@ export interface ResultTemplateConfigInfo {
   message?: string;
   /** 响应数据 */
   data?: TemplateConfigInfo;
+  /** 时间戳 */
+  timestamp?: number;
+}
+
+export interface ResultPageResultFeedbackResponse {
+  /** 响应状态码 */
+  code?: number;
+  /** 响应消息 */
+  message?: string;
+  /** 响应数据 */
+  data?: PageResultFeedbackResponse;
   /** 时间戳 */
   timestamp?: number;
 }
@@ -3520,6 +3665,22 @@ export interface ResultTemplateConfigResponse {
   timestamp?: number;
 }
 
+export interface FeedbackPageRequest {
+  /** 当前页码 */
+  current?: number;
+  /** 每页大小 */
+  size?: number;
+  /** 反馈类型（1-建议，2-BUG，3-投诉，4-其他）
+反馈类型 */
+  type?: number;
+  /** 状态（0-未读，1-已读，2-已处理）
+状态 */
+  status?: number;
+  /** 是否星标（0-否，1-是）
+是否星标 */
+  star?: number;
+}
+
 export interface RegisterRequest {
   /** 用户名（登录账号） */
   username: string;
@@ -3694,6 +3855,17 @@ export interface ResultListGroupedFriendsResponse {
   timestamp?: number;
 }
 
+export interface ResultFeedbackResponse {
+  /** 响应状态码 */
+  code?: number;
+  /** 响应消息 */
+  message?: string;
+  /** 响应数据 */
+  data?: FeedbackResponse;
+  /** 时间戳 */
+  timestamp?: number;
+}
+
 export interface DictItemEntity {
   /** 主键ID */
   id?: number;
@@ -3733,60 +3905,108 @@ export interface PostDetailResponse {
   postId?: number;
   /** 用户ID */
   userId?: number;
-  /** 班级ID */
-  classId?: number;
+  /**
+   * 班级ID
+   * @nullable
+   */
+  classId?: number | null;
   /** 帖子标题 */
   title?: string;
   /** 内容块数组 */
   contentBlocks?: ContentBlock[];
-  /** 发帖地点 */
-  location?: string;
-  /** 经度 */
-  longitude?: number;
-  /** 纬度 */
-  latitude?: number;
+  /**
+   * 发帖地点
+   * @nullable
+   */
+  location?: string | null;
+  /**
+   * 经度
+   * @nullable
+   */
+  longitude?: number | null;
+  /**
+   * 纬度
+   * @nullable
+   */
+  latitude?: number | null;
   /** 帖子类型 */
   postType?: string;
-  /** 扩展字段，key为字段编码，value为字段信息（包含用户填写的值） */
-  extendedFields?: TemplateFieldInfo[];
-  /** 是否置顶 */
-  isTop?: boolean;
-  /** 置顶时间 */
-  topTime?: string;
+  /**
+   * 扩展字段，key为字段编码，value为字段信息（包含用户填写的值）
+   * @nullable
+   */
+  extendedFields?: TemplateFieldInfo[] | null;
+  /**
+   * 是否置顶
+   * @nullable
+   */
+  isTop?: boolean | null;
+  /**
+   * 置顶时间
+   * @nullable
+   */
+  topTime?: string | null;
   /** 浏览次数 */
   viewCount?: number;
   /** 点赞数 */
   likeCount?: number;
   /** 评论数 */
   commentCount?: number;
-  /** 分享数 */
-  shareCount?: number;
-  /** 图片数量 */
-  imageCount?: number;
-  /** 视频数量 */
-  videoCount?: number;
+  /**
+   * 分享数
+   * @nullable
+   */
+  shareCount?: number | null;
+  /**
+   * 图片数量
+   * @nullable
+   */
+  imageCount?: number | null;
+  /**
+   * 视频数量
+   * @nullable
+   */
+  videoCount?: number | null;
   /** 状态 */
   status?: PostDetailResponseStatus;
   /** 当前用户是否已点赞 */
   isLiked?: boolean;
-  /** 是否为帖子作者 */
-  isAuthor?: boolean;
-  /** 是否可编辑 */
-  canEdit?: boolean;
-  /** 昵称 */
-  nickname?: string;
-  /** 头像URL */
-  avatar?: string;
-  /** 用户类型（1-学生，2-教师，3-校友 4-游客 5-管理员） */
-  userType?: number;
+  /**
+   * 是否为帖子作者
+   * @nullable
+   */
+  isAuthor?: boolean | null;
+  /**
+   * 是否可编辑
+   * @nullable
+   */
+  canEdit?: boolean | null;
+  /**
+   * 昵称
+   * @nullable
+   */
+  nickname?: string | null;
+  /**
+   * 头像URL
+   * @nullable
+   */
+  avatar?: string | null;
+  /**
+   * 用户类型（1-学生，2-教师，3-校友 4-游客 5-管理员）
+   * @nullable
+   */
+  userType?: number | null;
   /** 是否可删除 */
   canDelete?: boolean;
   /** 创建时间 */
   createTime?: string;
   /** 更新时间 */
   updateTime?: string;
-  /** 标签列表，获取标签项在字典（post_tag） */
-  tags?: string[];
+  /**
+   * 标签列表，获取标签项在字典（post_tag）
+   * @nullable
+   */
+  tags?: string[] | null;
 }
 
 /**
@@ -4820,6 +5040,10 @@ export type PostManagerAlumniBatchBody = {
   file?: Blob;
 };
 
+export type PostManagerAlumniBatchSimpleStudentBody = {
+  file?: Blob;
+};
+
 export type GetManagerAlumniNameParams = {
 /**
  * 姓名 姓名
@@ -5025,5 +5249,26 @@ export type PutManagerTemplatesOptionsIdStatusParams = {
  * 是否启用 是否启用
  */
 enabled: boolean;
+};
+
+export type PutCommunityFeedbackFeedbackIdStatusParams = {
+/**
+ * 新状态 新状态（0-未读，1-已读，2-已处理）
+ */
+status: number;
+};
+
+export type PutCommunityFeedbackFeedbackIdStarParams = {
+/**
+ * 星标状态 星标状态（0-否，1-是）
+ */
+star: number;
+};
+
+export type PostCommunityFeedbackFeedbackIdReplyParams = {
+/**
+ * 回复内容 回复内容
+ */
+replyContent: string;
 };
 

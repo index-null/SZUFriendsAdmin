@@ -16,6 +16,7 @@ import type {
   CreateAlumniRequest,
   GetManagerAlumniNameParams,
   PostManagerAlumniBatchBody,
+  PostManagerAlumniBatchSimpleStudentBody,
   ResultAlumniExcelResponse,
   ResultBoolean,
   ResultListAlumniPageResponse,
@@ -61,15 +62,23 @@ if(postManagerAlumniBatchBody.file !== undefined) {
       );
     }
   /**
- * 管理端 删除校友信息
-删除校友信息
- * @summary 删除校友信息
+ * 管理端 批量导入简略版校友信息
+只包含姓名、学号、专业，年份从学号前四位自动提取
+批量导入简略学生校友信息
+只包含姓名、学号、专业，年份从学号前四位自动提取，身份默认学生
+ * @summary 批量导入简略学生校友信息
  */
-const deleteManagerAlumniId = (
-    id: number,
- ) => {
-      return customInstance<ResultBoolean>(
-      {url: `/manager/alumni/${id}`, method: 'DELETE'
+const postManagerAlumniBatchSimpleStudent = (
+    postManagerAlumniBatchSimpleStudentBody: PostManagerAlumniBatchSimpleStudentBody,
+ ) => {const formData = new FormData();
+if(postManagerAlumniBatchSimpleStudentBody.file !== undefined) {
+ formData.append(`file`, postManagerAlumniBatchSimpleStudentBody.file);
+ }
+
+      return customInstance<ResultAlumniExcelResponse>(
+      {url: `/manager/alumni/batch/simple-student`, method: 'POST',
+      headers: {'Content-Type': 'multipart/form-data', },
+       data: formData
     },
       );
     }
@@ -100,6 +109,19 @@ const putManagerAlumni = (
       {url: `/manager/alumni`, method: 'PUT',
       headers: {'Content-Type': 'application/json', },
       data: updateAlumniRequest
+    },
+      );
+    }
+  /**
+ * 管理端 删除校友信息
+删除校友信息
+ * @summary 删除校友信息
+ */
+const deleteManagerAlumniId = (
+    id: number,
+ ) => {
+      return customInstance<ResultBoolean>(
+      {url: `/manager/alumni/${id}`, method: 'DELETE'
     },
       );
     }
@@ -144,12 +166,13 @@ const postManagerAlumniList = (
     },
       );
     }
-  return {postManagerAlumniPage,postManagerAlumniBatch,deleteManagerAlumniId,postManagerAlumni,putManagerAlumni,getManagerAlumniName,postManagerAlumniBindAlumni,postManagerAlumniList}};
+  return {postManagerAlumniPage,postManagerAlumniBatch,postManagerAlumniBatchSimpleStudent,postManagerAlumni,putManagerAlumni,deleteManagerAlumniId,getManagerAlumniName,postManagerAlumniBindAlumni,postManagerAlumniList}};
 export type PostManagerAlumniPageResult = NonNullable<Awaited<ReturnType<ReturnType<typeof get>['postManagerAlumniPage']>>>
 export type PostManagerAlumniBatchResult = NonNullable<Awaited<ReturnType<ReturnType<typeof get>['postManagerAlumniBatch']>>>
-export type DeleteManagerAlumniIdResult = NonNullable<Awaited<ReturnType<ReturnType<typeof get>['deleteManagerAlumniId']>>>
+export type PostManagerAlumniBatchSimpleStudentResult = NonNullable<Awaited<ReturnType<ReturnType<typeof get>['postManagerAlumniBatchSimpleStudent']>>>
 export type PostManagerAlumniResult = NonNullable<Awaited<ReturnType<ReturnType<typeof get>['postManagerAlumni']>>>
 export type PutManagerAlumniResult = NonNullable<Awaited<ReturnType<ReturnType<typeof get>['putManagerAlumni']>>>
+export type DeleteManagerAlumniIdResult = NonNullable<Awaited<ReturnType<ReturnType<typeof get>['deleteManagerAlumniId']>>>
 export type GetManagerAlumniNameResult = NonNullable<Awaited<ReturnType<ReturnType<typeof get>['getManagerAlumniName']>>>
 export type PostManagerAlumniBindAlumniResult = NonNullable<Awaited<ReturnType<ReturnType<typeof get>['postManagerAlumniBindAlumni']>>>
 export type PostManagerAlumniListResult = NonNullable<Awaited<ReturnType<ReturnType<typeof get>['postManagerAlumniList']>>>
