@@ -92,12 +92,120 @@
           </el-select>
         </div>
 
-        <el-button :icon="RefreshRight" @click="handleReset">刷新</el-button>
+        <div class="filter-right">
+          <ViewModeToggle v-model="viewMode" />
+          <el-button :icon="RefreshRight" @click="handleReset">刷新</el-button>
+        </div>
       </div>
     </el-card>
 
-    <!-- 帖子列表 -->
-    <div v-loading="loading" class="posts-container">
+    <!-- 表格视图 -->
+    <el-card v-if="viewMode === 'table'" class="table-card" shadow="never">
+      <el-table
+        v-loading="loading"
+        :data="posts"
+        border
+        stripe
+        style="width: 100%"
+      >
+        <el-table-column type="index" label="#" width="60" align="center" />
+        <el-table-column label="作者" width="160">
+          <template #default="{ row }">
+            <div class="table-author">
+              <el-avatar :size="28" :src="row.avatar">
+                <el-icon><User /></el-icon>
+              </el-avatar>
+              <span>{{ row.nickname || '匿名用户' }}</span>
+            </div>
+          </template>
+        </el-table-column>
+        <el-table-column label="标题" min-width="200" show-overflow-tooltip>
+          <template #default="{ row }">
+            <el-link
+              type="primary"
+              :underline="false"
+              @click="handleViewDetail(row)"
+            >
+              {{ row.title || '无标题' }}
+            </el-link>
+          </template>
+        </el-table-column>
+        <el-table-column label="类型" width="90" align="center">
+          <template #default="{ row }">
+            <el-tag :type="getPostTypeTagType(row.postType)" size="small">
+              {{ getPostTypeLabel(row.postType) }}
+            </el-tag>
+          </template>
+        </el-table-column>
+        <el-table-column label="状态" width="90" align="center">
+          <template #default="{ row }">
+            <el-tag
+              :type="getStatusTagType(row.status)"
+              size="small"
+              effect="dark"
+            >
+              {{ getStatusLabel(row.status) }}
+            </el-tag>
+          </template>
+        </el-table-column>
+        <el-table-column
+          label="浏览"
+          width="70"
+          align="center"
+          prop="viewCount"
+        />
+        <el-table-column
+          label="点赞"
+          width="70"
+          align="center"
+          prop="likeCount"
+        />
+        <el-table-column
+          label="评论"
+          width="70"
+          align="center"
+          prop="commentCount"
+        />
+        <el-table-column label="发布时间" width="120" align="center">
+          <template #default="{ row }">
+            {{ formatTime(row.createTime) }}
+          </template>
+        </el-table-column>
+        <el-table-column label="操作" width="220" align="center" fixed="right">
+          <template #default="{ row }">
+            <el-button
+              type="primary"
+              size="small"
+              link
+              @click="handleViewReviews(row)"
+            >
+              审核记录
+            </el-button>
+            <el-button
+              v-if="row.status === 'REVIEWING' || row.status === 'BLOCKED'"
+              type="success"
+              size="small"
+              link
+              @click="handleApprove(row)"
+            >
+              通过
+            </el-button>
+            <el-button
+              v-if="row.status === 'REVIEWING' || row.status === 'NORMAL'"
+              type="danger"
+              size="small"
+              link
+              @click="handleBlock(row)"
+            >
+              屏蔽
+            </el-button>
+          </template>
+        </el-table-column>
+      </el-table>
+    </el-card>
+
+    <!-- 卡片视图 -->
+    <div v-else v-loading="loading" class="posts-container">
       <el-empty v-if="!loading && posts.length === 0" description="暂无帖子" />
 
       <TransitionGroup name="card-list" tag="div" class="posts-grid">
@@ -457,6 +565,8 @@ import type {
 } from '@/api/generated/.ts.schemas'
 
 const moderationApi = getModerationApi()
+
+const viewMode = ref<'table' | 'card'>('table')
 
 // 使用字典
 const { getLabel: getTagLabel } = useDict(DICT_TYPE.POST_TAG)
@@ -933,6 +1043,30 @@ $card-bg-dark: #1a1a1a;
       gap: 12px;
       flex-wrap: wrap;
     }
+
+    .filter-right {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-shrink: 0;
+    }
+  }
+}
+
+// 表格卡片
+.table-card {
+  margin-bottom: $card-gap;
+  border-radius: $border-radius;
+  border: none;
+
+  .table-author {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .text-muted {
+    color: #c0c4cc;
   }
 }
 

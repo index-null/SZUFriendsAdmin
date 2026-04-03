@@ -35,21 +35,86 @@
             <template #title>首页</template>
           </el-menu-item>
 
+          <!-- 内容管理 -->
+          <el-sub-menu
+            v-if="
+              hasPermission('post:page') ||
+              hasPermission('post:moderation') ||
+              hasPermission('template:page')
+            "
+            index="content-management"
+          >
+            <template #title>
+              <el-icon><ChatLineSquare /></el-icon>
+              <span>内容管理</span>
+            </template>
+            <el-menu-item
+              v-if="hasPermission('post:page')"
+              index="/post-management"
+            >
+              <el-icon><ChatLineSquare /></el-icon>
+              <template #title>帖子管理</template>
+            </el-menu-item>
+            <el-menu-item
+              v-if="hasPermission('post:moderation')"
+              index="/post-moderation"
+            >
+              <el-icon><DocumentChecked /></el-icon>
+              <template #title>帖子审核</template>
+            </el-menu-item>
+            <el-menu-item index="/job-management" disabled>
+              <el-icon><Suitcase /></el-icon>
+              <template #title>职通车管理</template>
+            </el-menu-item>
+            <el-menu-item index="/job-moderation" disabled>
+              <el-icon><SuitcaseLine /></el-icon>
+              <template #title>职通车审核</template>
+            </el-menu-item>
+            <el-menu-item
+              v-if="hasPermission('post:page')"
+              index="/post-batch-import"
+            >
+              <el-icon><Upload /></el-icon>
+              <template #title>帖子导入</template>
+            </el-menu-item>
+            <el-menu-item
+              v-if="hasPermission('template:page')"
+              index="/template-management"
+            >
+              <el-icon><Files /></el-icon>
+              <template #title>帖子模板管理</template>
+            </el-menu-item>
+          </el-sub-menu>
+
           <!-- 信息管理 -->
           <el-sub-menu
             v-if="
+              hasPermission('user:page') ||
+              hasPermission('auth:page') ||
               hasPermission('college:page') ||
               hasPermission('class') ||
-              hasPermission('alumni:page') ||
-              hasPermission('user:page') ||
-              hasPermission('post:page')
+              hasPermission('alumni:page')
             "
-            index="data-management"
+            index="info-management"
           >
             <template #title>
               <el-icon><DataAnalysis /></el-icon>
               <span>信息管理</span>
             </template>
+            <el-menu-item
+              v-if="hasPermission('user:page')"
+              index="/user-management"
+            >
+              <el-icon><User /></el-icon>
+              <template #title>用户管理</template>
+            </el-menu-item>
+            <el-menu-item
+              v-if="hasPermission('auth:page')"
+              index="/authentication-management"
+            >
+              <el-icon><Checked /></el-icon>
+              <template #title>认证管理</template>
+            </el-menu-item>
             <el-menu-item
               v-if="hasPermission('college:page')"
               index="/college-management"
@@ -71,19 +136,33 @@
               <el-icon><Postcard /></el-icon>
               <template #title>校友档案管理</template>
             </el-menu-item>
+          </el-sub-menu>
+
+          <!-- 系统运维 -->
+          <el-sub-menu
+            v-if="
+              hasPermission('feedback:page') ||
+              hasPermission('operation-log:page')
+            "
+            index="ops-management"
+          >
+            <template #title>
+              <el-icon><Monitor /></el-icon>
+              <span>系统运维</span>
+            </template>
             <el-menu-item
-              v-if="hasPermission('user:page')"
-              index="/user-management"
+              v-if="hasPermission('feedback:page')"
+              index="/feedback-management"
             >
-              <el-icon><User /></el-icon>
-              <template #title>用户管理</template>
+              <el-icon><ChatLineRound /></el-icon>
+              <template #title>反馈管理</template>
             </el-menu-item>
             <el-menu-item
-              v-if="hasPermission('post:page')"
-              index="/post-management"
+              v-if="hasPermission('operation-log:page')"
+              index="/operation-log-statistics"
             >
-              <el-icon><ChatLineSquare /></el-icon>
-              <template #title>帖子管理</template>
+              <el-icon><Tickets /></el-icon>
+              <template #title>操作日志</template>
             </el-menu-item>
           </el-sub-menu>
 
@@ -91,11 +170,10 @@
           <el-sub-menu
             v-if="
               hasPermission('admin-user:page') ||
+              hasPermission('recommend:manage') ||
               hasPermission('role:page') ||
               hasPermission('permission:page') ||
-              hasPermission('dict:page') ||
-              hasPermission('template:page') ||
-              hasPermission('recommend:manage')
+              hasPermission('dict:page')
             "
             index="system-management"
           >
@@ -109,6 +187,13 @@
             >
               <el-icon><UserFilled /></el-icon>
               <template #title>管理员管理</template>
+            </el-menu-item>
+            <el-menu-item
+              v-if="hasPermission('recommend:manage')"
+              index="/recommend-management"
+            >
+              <el-icon><MagicStick /></el-icon>
+              <template #title>推荐系统</template>
             </el-menu-item>
             <el-menu-item
               v-if="hasPermission('role:page')"
@@ -130,71 +215,6 @@
             >
               <el-icon><Notebook /></el-icon>
               <template #title>字典管理</template>
-            </el-menu-item>
-            <el-menu-item
-              v-if="hasPermission('template:page')"
-              index="/template-management"
-            >
-              <el-icon><Files /></el-icon>
-              <template #title>帖子模板管理</template>
-            </el-menu-item>
-            <el-menu-item
-              v-if="hasPermission('recommend:manage')"
-              index="/recommend-management"
-            >
-              <el-icon><MagicStick /></el-icon>
-              <template #title>推荐系统</template>
-            </el-menu-item>
-            <el-menu-item
-              v-if="hasPermission('post:page')"
-              index="/post-batch-import"
-            >
-              <el-icon><Upload /></el-icon>
-              <template #title>帖子批量导入</template>
-            </el-menu-item>
-          </el-sub-menu>
-
-          <!-- 审核管理 -->
-          <el-sub-menu
-            v-if="
-              hasPermission('auth:page') ||
-              hasPermission('operation-log:page') ||
-              hasPermission('post:moderation') ||
-              hasPermission('feedback:page')
-            "
-            index="audit-management"
-          >
-            <template #title>
-              <el-icon><Monitor /></el-icon>
-              <span>审核管理</span>
-            </template>
-            <el-menu-item
-              v-if="hasPermission('auth:page')"
-              index="/authentication-management"
-            >
-              <el-icon><Checked /></el-icon>
-              <template #title>认证管理</template>
-            </el-menu-item>
-            <el-menu-item
-              v-if="hasPermission('post:moderation')"
-              index="/post-moderation"
-            >
-              <el-icon><DocumentChecked /></el-icon>
-              <template #title>帖子审核</template>
-            </el-menu-item>
-            <el-menu-item
-              v-if="hasPermission('feedback:page')"
-              index="/feedback-management"
-            >
-              <el-icon><ChatLineRound /></el-icon>
-              <template #title>反馈管理</template>
-            </el-menu-item>
-            <el-menu-item
-              v-if="hasPermission('operation-log:page')"
-              index="/operation-log-statistics"
-            >
-              <el-icon><Tickets /></el-icon>
-              <template #title>操作日志</template>
             </el-menu-item>
           </el-sub-menu>
         </el-menu>
@@ -237,6 +257,8 @@ import {
   Files,
   MagicStick,
   Upload,
+  Suitcase,
+  SuitcaseLine,
 } from '@element-plus/icons-vue'
 import { usePermission } from '@/stores'
 

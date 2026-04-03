@@ -81,6 +81,7 @@ declare module 'vue' {
     RouterView: typeof import('vue-router')['RouterView']
     SzuLogo: typeof import('./src/components/SzuLogo.vue')['default']
     ThemeToggle: typeof import('./src/components/ThemeToggle.vue')['default']
+    ViewModeToggle: typeof import('./src/components/ViewModeToggle.vue')['default']
   }
   export interface GlobalDirectives {
     vLoading: typeof import('element-plus/es')['ElLoadingDirective']

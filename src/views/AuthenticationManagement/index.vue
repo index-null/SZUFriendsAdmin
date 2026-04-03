@@ -83,12 +83,116 @@
           />
         </div>
 
-        <el-button :icon="RefreshRight" @click="handleReset">刷新</el-button>
+        <div class="filter-right">
+          <ViewModeToggle v-model="viewMode" />
+          <el-button :icon="RefreshRight" @click="handleReset">刷新</el-button>
+        </div>
       </div>
     </el-card>
 
-    <!-- 认证申请列表 -->
-    <div v-loading="loading" class="auth-cards-container">
+    <!-- 表格视图 -->
+    <el-card v-if="viewMode === 'table'" class="table-card" shadow="never">
+      <el-table
+        v-loading="loading"
+        :data="authRequests"
+        border
+        stripe
+        style="width: 100%"
+      >
+        <el-table-column type="index" label="#" width="60" align="center" />
+        <el-table-column label="姓名" width="120" align="center">
+          <template #default="{ row }">
+            {{ row.realName || '-' }}
+          </template>
+        </el-table-column>
+        <el-table-column label="身份" width="90" align="center">
+          <template #default="{ row }">
+            <el-tag :type="getIdentityTagType(row.identity)" size="small">
+              {{ getIdentityLabel(row.identity) }}
+            </el-tag>
+          </template>
+        </el-table-column>
+        <el-table-column
+          label="手机号"
+          width="130"
+          align="center"
+          prop="phone"
+        />
+        <el-table-column label="性别" width="80" align="center">
+          <template #default="{ row }">
+            {{ getGenderLabel(row.gender) }}
+          </template>
+        </el-table-column>
+        <el-table-column label="状态" width="90" align="center">
+          <template #default="{ row }">
+            <el-tag :type="getStatusTagType(row.status)" size="small">
+              {{ getStatusLabel(row.status) }}
+            </el-tag>
+          </template>
+        </el-table-column>
+        <el-table-column label="认证图片" width="120" align="center">
+          <template #default="{ row }">
+            <template v-if="row.info && row.info.length > 0">
+              <el-image
+                :src="row.info[0]"
+                :preview-src-list="row.info"
+                fit="cover"
+                style="width: 40px; height: 40px; border-radius: 4px"
+                preview-teleported
+                :z-index="9999"
+              />
+              <span
+                v-if="row.info.length > 1"
+                class="text-muted"
+                style="margin-left: 4px"
+              >
+                +{{ row.info.length - 1 }}
+              </span>
+            </template>
+            <span v-else class="text-muted">-</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="审核时间" min-width="160" show-overflow-tooltip>
+          <template #default="{ row }">
+            {{ row.reviewedTime || '-' }}
+          </template>
+        </el-table-column>
+        <el-table-column label="拒绝原因" min-width="160" show-overflow-tooltip>
+          <template #default="{ row }">
+            <span v-if="row.rejectReason" class="text-danger">
+              {{ row.rejectReason }}
+            </span>
+            <span v-else class="text-muted">-</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="操作" width="140" align="center" fixed="right">
+          <template #default="{ row }">
+            <el-button
+              v-if="row.status === 'PENDING'"
+              type="success"
+              size="small"
+              link
+              @click="handleApprove(row)"
+            >
+              通过
+            </el-button>
+            <el-button
+              v-if="row.status === 'PENDING'"
+              type="danger"
+              size="small"
+              link
+              @click="handleReject(row)"
+            >
+              拒绝
+            </el-button>
+            <span v-if="row.status !== 'PENDING'" class="text-muted">-</span>
+          </template>
+        </el-table-column>
+      </el-table>
+    </el-card>
+
+    <!-- 卡片视图 -->
+    <div v-else v-loading="loading" class="auth-cards-container">
       <el-empty
         v-if="!loading && authRequests.length === 0"
         description="暂无认证申请"
@@ -263,6 +367,8 @@ import type {
 } from '@/api/generated/.ts.schemas'
 
 const authApi = getAuthApi()
+
+const viewMode = ref<'table' | 'card'>('table')
 
 // 使用字典
 const { getLabel: getGenderLabel } = useDict(DICT_TYPE.GENDER)
@@ -640,6 +746,28 @@ $card-bg-dark: #1a1a1a;
       gap: 12px;
       flex-wrap: wrap;
     }
+
+    .filter-right {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-shrink: 0;
+    }
+  }
+}
+
+// 表格卡片
+.table-card {
+  margin-bottom: $card-gap;
+  border-radius: $border-radius;
+  border: none;
+
+  .text-muted {
+    color: #c0c4cc;
+  }
+
+  .text-danger {
+    color: #e74c3c;
   }
 }
 

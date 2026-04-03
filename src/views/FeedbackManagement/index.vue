@@ -87,12 +87,128 @@
           </el-select>
         </div>
 
-        <el-button :icon="RefreshRight" @click="handleReset">刷新</el-button>
+        <div class="filter-right">
+          <ViewModeToggle v-model="viewMode" />
+          <el-button :icon="RefreshRight" @click="handleReset">刷新</el-button>
+        </div>
       </div>
     </el-card>
 
-    <!-- 反馈列表 -->
-    <div v-loading="loading" class="feedback-container">
+    <!-- 表格视图 -->
+    <el-card v-if="viewMode === 'table'" class="table-card" shadow="never">
+      <el-table
+        v-loading="loading"
+        :data="feedbackList"
+        border
+        stripe
+        style="width: 100%"
+      >
+        <el-table-column type="index" label="#" width="60" align="center" />
+        <el-table-column label="用户" width="160">
+          <template #default="{ row }">
+            <div class="table-author">
+              <el-avatar :size="28" :src="row.avatar">
+                <el-icon><User /></el-icon>
+              </el-avatar>
+              <span>{{ row.nickname || row.username || '匿名用户' }}</span>
+            </div>
+          </template>
+        </el-table-column>
+        <el-table-column label="内容" min-width="240" show-overflow-tooltip>
+          <template #default="{ row }">
+            <el-link
+              type="primary"
+              :underline="false"
+              @click="handleViewDetail(row)"
+            >
+              {{ row.content || '暂无内容' }}
+            </el-link>
+          </template>
+        </el-table-column>
+        <el-table-column label="类型" width="80" align="center">
+          <template #default="{ row }">
+            <el-tag :type="getTypeTagType(row.type)" size="small">
+              {{ getTypeLabel(row.type) }}
+            </el-tag>
+          </template>
+        </el-table-column>
+        <el-table-column label="状态" width="80" align="center">
+          <template #default="{ row }">
+            <el-tag
+              :type="getStatusTagType(row.status)"
+              size="small"
+              effect="dark"
+            >
+              {{ getStatusLabel(row.status) }}
+            </el-tag>
+          </template>
+        </el-table-column>
+        <el-table-column label="星标" width="70" align="center">
+          <template #default="{ row }">
+            <el-icon
+              :style="{
+                color: row.star === 1 ? '#e67e22' : '#c0c4cc',
+                cursor: 'pointer',
+                fontSize: '16px',
+              }"
+              @click="handleToggleStar(row)"
+            >
+              <component :is="row.star === 1 ? StarFilled : Star" />
+            </el-icon>
+          </template>
+        </el-table-column>
+        <el-table-column label="图片" width="80" align="center">
+          <template #default="{ row }">
+            <template v-if="row.images && row.images.length > 0">
+              <el-image
+                :src="row.images[0]"
+                :preview-src-list="row.images"
+                fit="cover"
+                style="width: 36px; height: 36px; border-radius: 4px"
+                preview-teleported
+                :z-index="9999"
+              />
+            </template>
+            <span v-else class="text-muted">-</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="联系方式" width="130" show-overflow-tooltip>
+          <template #default="{ row }">
+            {{ row.contact || '-' }}
+          </template>
+        </el-table-column>
+        <el-table-column label="时间" width="120" align="center">
+          <template #default="{ row }">
+            {{ formatTime(row.createTime) }}
+          </template>
+        </el-table-column>
+        <el-table-column label="操作" width="160" align="center" fixed="right">
+          <template #default="{ row }">
+            <el-button
+              v-if="row.status === 0"
+              type="primary"
+              size="small"
+              link
+              @click="handleMarkRead(row)"
+            >
+              已读
+            </el-button>
+            <el-button
+              v-if="row.status !== 2"
+              type="success"
+              size="small"
+              link
+              @click="handleReply(row)"
+            >
+              回复
+            </el-button>
+          </template>
+        </el-table-column>
+      </el-table>
+    </el-card>
+
+    <!-- 卡片视图 -->
+    <div v-else v-loading="loading" class="feedback-container">
       <el-empty
         v-if="!loading && feedbackList.length === 0"
         description="暂无反馈"
@@ -109,7 +225,6 @@
           }"
           shadow="hover"
         >
-          <!-- 反馈头部 -->
           <div class="feedback-header">
             <div class="user-info">
               <el-avatar :size="36" :src="item.avatar" class="user-avatar">
@@ -138,11 +253,9 @@
             </div>
           </div>
 
-          <!-- 反馈内容 -->
           <div class="feedback-body" @click="handleViewDetail(item)">
             <p class="feedback-content">{{ item.content || '暂无内容' }}</p>
 
-            <!-- 图片预览 -->
             <div
               v-if="item.images && item.images.length > 0"
               class="feedback-images"
@@ -173,20 +286,17 @@
               </div>
             </div>
 
-            <!-- 联系方式 -->
             <div v-if="item.contact" class="feedback-contact">
               <el-icon><Phone /></el-icon>
               <span>{{ item.contact }}</span>
             </div>
           </div>
 
-          <!-- 回复内容 -->
           <div v-if="item.reply" class="feedback-reply">
             <div class="reply-label">管理员回复</div>
             <div class="reply-content">{{ item.reply }}</div>
           </div>
 
-          <!-- 操作按钮 -->
           <div class="feedback-actions">
             <el-button
               :type="item.star === 1 ? 'warning' : 'default'"
@@ -408,8 +518,11 @@ import type {
   FeedbackResponse,
   FeedbackPageRequest,
 } from '@/api/generated/.ts.schemas'
+import ViewModeToggle from '@/components/ViewModeToggle.vue'
 
 const feedbackApi = getFeedbackApi()
+
+const viewMode = ref<'table' | 'card'>('table')
 
 // 筛选表单
 const filterForm = reactive({
@@ -863,6 +976,30 @@ $card-bg-dark: #1a1a1a;
       gap: 12px;
       flex-wrap: wrap;
     }
+
+    .filter-right {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-shrink: 0;
+    }
+  }
+}
+
+// 表格卡片
+.table-card {
+  margin-bottom: $card-gap;
+  border-radius: $border-radius;
+  border: none;
+
+  .table-author {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .text-muted {
+    color: #c0c4cc;
   }
 }
 

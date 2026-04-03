@@ -62,12 +62,144 @@
           </el-button>
         </div>
 
-        <el-button :icon="RefreshRight" @click="handleReset">重置</el-button>
+        <div class="filter-right">
+          <ViewModeToggle v-model="viewMode" />
+          <el-button :icon="RefreshRight" @click="handleReset">重置</el-button>
+        </div>
       </div>
     </el-card>
 
-    <!-- 帖子列表 -->
-    <div v-loading="loading" class="posts-container">
+    <!-- 表格视图 -->
+    <el-card v-if="viewMode === 'table'" class="table-card" shadow="never">
+      <el-table
+        v-loading="loading"
+        :data="posts"
+        border
+        stripe
+        style="width: 100%"
+      >
+        <el-table-column type="index" label="#" width="60" align="center" />
+        <el-table-column label="作者" width="160">
+          <template #default="{ row }">
+            <div class="table-author">
+              <el-avatar :size="28" :src="row.avatar">
+                <el-icon><User /></el-icon>
+              </el-avatar>
+              <span>{{ row.nickname || '匿名用户' }}</span>
+            </div>
+          </template>
+        </el-table-column>
+        <el-table-column label="标题" min-width="200" show-overflow-tooltip>
+          <template #default="{ row }">
+            <el-link
+              type="primary"
+              :underline="false"
+              @click="handleViewDetail(row)"
+            >
+              {{ row.title || '无标题' }}
+            </el-link>
+          </template>
+        </el-table-column>
+        <el-table-column label="类型" width="90" align="center">
+          <template #default="{ row }">
+            <el-tag :type="getPostTypeTagType(row.postType)" size="small">
+              {{ getPostTypeLabel(row.postType) }}
+            </el-tag>
+          </template>
+        </el-table-column>
+        <el-table-column label="状态" width="90" align="center">
+          <template #default="{ row }">
+            <el-tag :type="getStatusTagType(row.status)" size="small">
+              {{ getStatusLabel(row.status) }}
+            </el-tag>
+          </template>
+        </el-table-column>
+        <el-table-column label="置顶" width="70" align="center">
+          <template #default="{ row }">
+            <el-tag v-if="row.isTop" type="danger" size="small" effect="dark">
+              是
+            </el-tag>
+            <span v-else class="text-muted">-</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="标签" width="180">
+          <template #default="{ row }">
+            <template v-if="row.tags && row.tags.length > 0">
+              <el-tag
+                v-for="tag in row.tags.slice(0, 2)"
+                :key="tag"
+                size="small"
+                type="info"
+                effect="plain"
+                style="margin-right: 4px"
+              >
+                {{ getTagLabel(tag) }}
+              </el-tag>
+              <span v-if="row.tags.length > 2" class="text-muted">
+                +{{ row.tags.length - 2 }}
+              </span>
+            </template>
+            <span v-else class="text-muted">-</span>
+          </template>
+        </el-table-column>
+        <el-table-column
+          label="浏览"
+          width="70"
+          align="center"
+          prop="viewCount"
+        />
+        <el-table-column
+          label="点赞"
+          width="70"
+          align="center"
+          prop="likeCount"
+        />
+        <el-table-column
+          label="评论"
+          width="70"
+          align="center"
+          prop="commentCount"
+        />
+        <el-table-column label="发布时间" width="120" align="center">
+          <template #default="{ row }">
+            {{ formatTime(row.createTime) }}
+          </template>
+        </el-table-column>
+        <el-table-column label="操作" width="160" align="center" fixed="right">
+          <template #default="{ row }">
+            <el-button
+              v-if="!row.isTop"
+              type="warning"
+              size="small"
+              link
+              @click="handleTop(row)"
+            >
+              置顶
+            </el-button>
+            <el-button
+              v-else
+              type="info"
+              size="small"
+              link
+              @click="handleUntop(row)"
+            >
+              取消置顶
+            </el-button>
+            <el-button
+              type="danger"
+              size="small"
+              link
+              @click="handleDelete(row)"
+            >
+              删除
+            </el-button>
+          </template>
+        </el-table-column>
+      </el-table>
+    </el-card>
+
+    <!-- 卡片视图 -->
+    <div v-else v-loading="loading" class="posts-container">
       <el-empty v-if="!loading && posts.length === 0" description="暂无帖子" />
 
       <TransitionGroup name="card-list" tag="div" class="posts-grid">
@@ -361,6 +493,7 @@ import { useDict } from '@/stores'
 import { DICT_TYPE } from '@/utils/dict'
 import { get as getPostApi } from '@/api/generated/帖子管理/帖子管理'
 import ContentBlockRenderer from '@/components/ContentBlockRenderer.vue'
+import ViewModeToggle from '@/components/ViewModeToggle.vue'
 import type {
   PostResponse,
   PostQueryRequest,
@@ -368,6 +501,8 @@ import type {
 } from '@/api/generated/.ts.schemas'
 
 const postApi = getPostApi()
+
+const viewMode = ref<'table' | 'card'>('table')
 
 // 使用字典
 const { getLabel: getTagLabel, dictOptions: tagOptions } = useDict(
@@ -729,6 +864,30 @@ $card-bg-dark: #1a1a1a;
       gap: 12px;
       flex-wrap: wrap;
     }
+
+    .filter-right {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-shrink: 0;
+    }
+  }
+}
+
+// 表格卡片
+.table-card {
+  margin-bottom: $card-gap;
+  border-radius: $border-radius;
+  border: none;
+
+  .table-author {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .text-muted {
+    color: #c0c4cc;
   }
 }
 
