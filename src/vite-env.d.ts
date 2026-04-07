@@ -6,6 +6,7 @@ interface ImportMetaEnv {
   readonly VITE_COZE_API_KEY: string
   readonly VITE_COZE_WORKFLOW_ID: string
   readonly VITE_COZE_APP_ID: string
+  readonly VITE_COZE_BOT_ID: string
 }
 
 interface ImportMeta {

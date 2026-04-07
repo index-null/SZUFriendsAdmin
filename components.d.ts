@@ -12,6 +12,7 @@ export {}
 declare module 'vue' {
   export interface GlobalComponents {
     AuthLeftPanel: typeof import('./src/components/AuthLeftPanel.vue')['default']
+    ChatAssistant: typeof import('./src/components/ChatAssistant.vue')['default']
     ContentBlockRenderer: typeof import('./src/components/ContentBlockRenderer.vue')['default']
     ElAlert: typeof import('element-plus/es')['ElAlert']
     ElAside: typeof import('element-plus/es')['ElAside']

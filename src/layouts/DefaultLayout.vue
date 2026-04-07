@@ -25,20 +25,19 @@ import { ref, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import Sidebar from './components/Sidebar.vue'
 import Header from './components/Header.vue'
+import { useChatSDK } from '@/composables/useChatSDK'
 
 const route = useRoute()
 
-// 侧边栏折叠状态
 const isCollapsed = ref(false)
 
-// 切换侧边栏
 const toggleSidebar = () => {
   isCollapsed.value = !isCollapsed.value
-  // 持久化到 localStorage
   localStorage.setItem('sidebar-collapsed', String(isCollapsed.value))
 }
 
-// 从 localStorage 恢复状态
+useChatSDK()
+
 onMounted(() => {
   const savedState = localStorage.getItem('sidebar-collapsed')
   if (savedState !== null) {
