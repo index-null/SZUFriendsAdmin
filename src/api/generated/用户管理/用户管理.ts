@@ -101,22 +101,23 @@ const getAuthUserUserId = (
       );
     }
   /**
- * 禁用用户
-[user:forbid] 禁用用户
- * @summary 禁用用户
+ * 改变用户状态
+[user:change-status] 改变用户状态
+ * @summary 改变用户状态
  */
-const putAuthUserForbidUserId = (
+const putAuthUserStatusUserIdStatus = (
     userId: number,
+    status: number,
  ) => {
       return customInstance<ResultBoolean>(
-      {url: `/auth/user/forbid/${userId}`, method: 'PUT'
+      {url: `/auth/user/status/${userId}/${status}`, method: 'PUT'
     },
       );
     }
-  return {getAuthUserUserIdRoles,getAuthUserUserIdPermissions,putAuthUserUpdateRoles,postAuthUserPages,getAuthUserUserId,putAuthUserForbidUserId}};
+  return {getAuthUserUserIdRoles,getAuthUserUserIdPermissions,putAuthUserUpdateRoles,postAuthUserPages,getAuthUserUserId,putAuthUserStatusUserIdStatus}};
 export type GetAuthUserUserIdRolesResult = NonNullable<Awaited<ReturnType<ReturnType<typeof get>['getAuthUserUserIdRoles']>>>
 export type GetAuthUserUserIdPermissionsResult = NonNullable<Awaited<ReturnType<ReturnType<typeof get>['getAuthUserUserIdPermissions']>>>
 export type PutAuthUserUpdateRolesResult = NonNullable<Awaited<ReturnType<ReturnType<typeof get>['putAuthUserUpdateRoles']>>>
 export type PostAuthUserPagesResult = NonNullable<Awaited<ReturnType<ReturnType<typeof get>['postAuthUserPages']>>>
 export type GetAuthUserUserIdResult = NonNullable<Awaited<ReturnType<ReturnType<typeof get>['getAuthUserUserId']>>>
-export type PutAuthUserForbidUserIdResult = NonNullable<Awaited<ReturnType<ReturnType<typeof get>['putAuthUserForbidUserId']>>>
+export type PutAuthUserStatusUserIdStatusResult = NonNullable<Awaited<ReturnType<ReturnType<typeof get>['putAuthUserStatusUserIdStatus']>>>

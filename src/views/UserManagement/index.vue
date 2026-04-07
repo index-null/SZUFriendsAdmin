@@ -107,13 +107,22 @@
               >重置密码</el-button
             >
             <el-button
-              v-if="hasPermission('user:forbid') && row.status === 1"
+              v-if="hasPermission('user:change-status') && row.status === 1"
               type="danger"
               size="small"
               :icon="CircleClose"
               link
-              @click="handleForbidUser(row)"
+              @click="handleChangeStatus(row, 0)"
               >禁用</el-button
+            >
+            <el-button
+              v-if="hasPermission('user:change-status') && row.status === 0"
+              type="success"
+              size="small"
+              :icon="CircleCheck"
+              link
+              @click="handleChangeStatus(row, 1)"
+              >启用</el-button
             >
           </template>
         </el-table-column>
@@ -182,6 +191,7 @@ import {
   Lock,
   User,
   CircleClose,
+  CircleCheck,
 } from '@element-plus/icons-vue'
 import { usePermission, useDict } from '@/stores'
 import { DICT_TYPE } from '@/utils/dict'
@@ -402,26 +412,30 @@ const handleResetPassword = async (
   }
 }
 
-// 禁用用户
-const handleForbidUser = async (row: PostAuthUserPages200DataRecordsItem) => {
+// 改变用户状态
+const handleChangeStatus = async (
+  row: PostAuthUserPages200DataRecordsItem,
+  status: number,
+) => {
   if (!row.id) return
+  const isForbid = status === 0
+  const actionLabel = isForbid ? '禁用' : '启用'
+  const message = isForbid
+    ? `确定要禁用用户 "${row.realName || row.username}" 吗？禁用后该用户将无法登录系统。`
+    : `确定要启用用户 "${row.realName || row.username}" 吗？`
   try {
-    await ElMessageBox.confirm(
-      `确定要禁用用户 "${row.realName || row.username}" 吗？禁用后该用户将无法登录系统。`,
-      '禁用用户',
-      {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning',
-      },
-    )
-    await userApi.putAuthUserForbidUserId(row.id)
-    ElMessage.success('用户已禁用')
+    await ElMessageBox.confirm(message, `${actionLabel}用户`, {
+      confirmButtonText: '确定',
+      cancelButtonText: '取消',
+      type: 'warning',
+    })
+    await userApi.putAuthUserStatusUserIdStatus(row.id, status)
+    ElMessage.success(`用户已${actionLabel}`)
     fetchUserList()
   } catch (error) {
     if (error !== 'cancel') {
-      console.error('禁用用户失败:', error)
-      ElMessage.error('禁用用户失败')
+      console.error(`${actionLabel}用户失败:`, error)
+      ElMessage.error(`${actionLabel}用户失败`)
     }
   }
 }
