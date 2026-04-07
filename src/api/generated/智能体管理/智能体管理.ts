@@ -15,12 +15,15 @@ import type {
   PostAgentEmbeddingSearchParams,
   PostAgentFormatParams,
   PostAgentImageGenerateParams,
-  PostAgentPostGenerateParams,
+  PostAgentPostTagsGenerateParams,
   PostAgentRagChatParams,
   PostAgentToolChatParams,
+  PostGenerateRequest,
   ResultBoolean,
   ResultEmbeddingResponse,
   ResultListDocument,
+  ResultListString,
+  ResultPostPublishRequest,
   ResultString,
   ResultStudentRecords
 } from '../.ts.schemas';
@@ -35,14 +38,15 @@ import { customInstance } from '../../mutator';
 根据主题生成生活帖子的内容模板
 生成帖子模板
 [agent:post:generate] 根据主题生成生活帖子的内容模板
- * @summary 生成帖子模板
+ * @summary 生成结构化帖子
  */
 const postAgentPostGenerate = (
-    params: PostAgentPostGenerateParams,
+    postGenerateRequest: PostGenerateRequest,
  ) => {
-      return customInstance<string[]>(
+      return customInstance<ResultPostPublishRequest>(
       {url: `/agent/post/generate`, method: 'POST',
-        params
+      headers: {'Content-Type': 'application/json', },
+      data: postGenerateRequest
     },
       );
     }
@@ -191,7 +195,23 @@ const postAgentChat = (
     },
       );
     }
-  return {postAgentPostGenerate,postAgentFormat,postAgentToolChat,postAgentRagChat,postAgentImageGenerate,postAgentEmbedding,deleteAgentEmbedding,postAgentEmbeddingAdd,postAgentEmbeddingSearch,postAgentChat}};
+  /**
+ * 生成帖子标签
+根据帖子内容提示词生成标准标签列表
+生成帖子标签
+[agent:post:tags:generate] 根据帖子内容提示词生成标准标签列表
+ * @summary 生成帖子标签
+ */
+const postAgentPostTagsGenerate = (
+    params: PostAgentPostTagsGenerateParams,
+ ) => {
+      return customInstance<ResultListString>(
+      {url: `/agent/post/tags/generate`, method: 'POST',
+        params
+    },
+      );
+    }
+  return {postAgentPostGenerate,postAgentFormat,postAgentToolChat,postAgentRagChat,postAgentImageGenerate,postAgentEmbedding,deleteAgentEmbedding,postAgentEmbeddingAdd,postAgentEmbeddingSearch,postAgentChat,postAgentPostTagsGenerate}};
 export type PostAgentPostGenerateResult = NonNullable<Awaited<ReturnType<ReturnType<typeof get>['postAgentPostGenerate']>>>
 export type PostAgentFormatResult = NonNullable<Awaited<ReturnType<ReturnType<typeof get>['postAgentFormat']>>>
 export type PostAgentToolChatResult = NonNullable<Awaited<ReturnType<ReturnType<typeof get>['postAgentToolChat']>>>
@@ -202,3 +222,4 @@ export type DeleteAgentEmbeddingResult = NonNullable<Awaited<ReturnType<ReturnTy
 export type PostAgentEmbeddingAddResult = NonNullable<Awaited<ReturnType<ReturnType<typeof get>['postAgentEmbeddingAdd']>>>
 export type PostAgentEmbeddingSearchResult = NonNullable<Awaited<ReturnType<ReturnType<typeof get>['postAgentEmbeddingSearch']>>>
 export type PostAgentChatResult = NonNullable<Awaited<ReturnType<ReturnType<typeof get>['postAgentChat']>>>
+export type PostAgentPostTagsGenerateResult = NonNullable<Awaited<ReturnType<ReturnType<typeof get>['postAgentPostTagsGenerate']>>>

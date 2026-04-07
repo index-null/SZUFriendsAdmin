@@ -67,7 +67,17 @@
             <el-text v-else type="info">暂无</el-text>
           </template>
         </el-table-column>
-        <el-table-column label="操作" width="280" align="center" fixed="right">
+        <el-table-column label="状态" width="80" align="center">
+          <template #default="{ row }">
+            <el-tag
+              :type="row.status === 1 ? 'success' : 'danger'"
+              size="small"
+            >
+              {{ row.status === 1 ? '正常' : '禁用' }}
+            </el-tag>
+          </template>
+        </el-table-column>
+        <el-table-column label="操作" width="340" align="center" fixed="right">
           <template #default="{ row }">
             <el-button
               v-if="hasPermission('user:view')"
@@ -95,6 +105,15 @@
               link
               @click="handleResetPassword(row)"
               >重置密码</el-button
+            >
+            <el-button
+              v-if="hasPermission('user:forbid') && row.status === 1"
+              type="danger"
+              size="small"
+              :icon="CircleClose"
+              link
+              @click="handleForbidUser(row)"
+              >禁用</el-button
             >
           </template>
         </el-table-column>
@@ -162,6 +181,7 @@ import {
   Setting,
   Lock,
   User,
+  CircleClose,
 } from '@element-plus/icons-vue'
 import { usePermission, useDict } from '@/stores'
 import { DICT_TYPE } from '@/utils/dict'
@@ -169,7 +189,7 @@ import { get as getUserApi } from '@/api/generated/用户管理/用户管理'
 import { get as getRoleApi } from '@/api/generated/用户认证控制器-角色管理/用户认证控制器-角色管理'
 import UserDetailDrawer from './components/UserDetailDrawer.vue'
 import type {
-  NoAdminUserPageResponse,
+  PostAuthUserPages200DataRecordsItem,
   UserPagesRequest,
   UserInfoResponse,
   RoleResponse,
@@ -205,7 +225,7 @@ const pagination = reactive({
 })
 
 // 表格数据
-const tableData = ref<NoAdminUserPageResponse[]>([])
+const tableData = ref<PostAuthUserPages200DataRecordsItem[]>([])
 const loading = ref(false)
 
 // 用户详情
@@ -292,7 +312,7 @@ const handleCurrentChange = (page: number) => {
 }
 
 // 查看用户详情
-const handleView = async (row: NoAdminUserPageResponse) => {
+const handleView = async (row: PostAuthUserPages200DataRecordsItem) => {
   if (!row.id) return
   try {
     // UnwrapResult 自动解包: ResultUserInfoResponse -> UserInfoResponse
@@ -314,7 +334,7 @@ const handleView = async (row: NoAdminUserPageResponse) => {
 }
 
 // 分配角色
-const handleAssignRole = async (row: NoAdminUserPageResponse) => {
+const handleAssignRole = async (row: PostAuthUserPages200DataRecordsItem) => {
   if (!row.id) return
   try {
     // UnwrapResult 自动解包: ResultListRoleResponse -> RoleResponse[]
@@ -357,7 +377,9 @@ const handleSaveRoles = async () => {
 }
 
 // 重置密码
-const handleResetPassword = async (row: NoAdminUserPageResponse) => {
+const handleResetPassword = async (
+  row: PostAuthUserPages200DataRecordsItem,
+) => {
   if (!row.id) return
   try {
     await ElMessageBox.confirm(
@@ -376,6 +398,30 @@ const handleResetPassword = async (row: NoAdminUserPageResponse) => {
   } catch (error) {
     if (error !== 'cancel') {
       console.error('密码重置失败:', error)
+    }
+  }
+}
+
+// 禁用用户
+const handleForbidUser = async (row: PostAuthUserPages200DataRecordsItem) => {
+  if (!row.id) return
+  try {
+    await ElMessageBox.confirm(
+      `确定要禁用用户 "${row.realName || row.username}" 吗？禁用后该用户将无法登录系统。`,
+      '禁用用户',
+      {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning',
+      },
+    )
+    await userApi.putAuthUserForbidUserId(row.id)
+    ElMessage.success('用户已禁用')
+    fetchUserList()
+  } catch (error) {
+    if (error !== 'cancel') {
+      console.error('禁用用户失败:', error)
+      ElMessage.error('禁用用户失败')
     }
   }
 }

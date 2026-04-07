@@ -11,10 +11,10 @@ import type {
 } from 'axios';
 
 import type {
+  PostAuthUserPages200,
   ResultBoolean,
   ResultListPermissionTreeNodeResponse,
   ResultListRoleResponse,
-  ResultPageResultNoAdminUserPageResponse,
   ResultUserInfoResponse,
   UpdateUserRolesRequest,
   UserPagesRequest
@@ -80,7 +80,7 @@ const putAuthUserUpdateRoles = (
 const postAuthUserPages = (
     userPagesRequest: UserPagesRequest,
  ) => {
-      return customInstance<ResultPageResultNoAdminUserPageResponse>(
+      return customInstance<PostAuthUserPages200>(
       {url: `/auth/user/pages`, method: 'POST',
       headers: {'Content-Type': 'application/json', },
       data: userPagesRequest
@@ -100,9 +100,23 @@ const getAuthUserUserId = (
     },
       );
     }
-  return {getAuthUserUserIdRoles,getAuthUserUserIdPermissions,putAuthUserUpdateRoles,postAuthUserPages,getAuthUserUserId}};
+  /**
+ * 禁用用户
+[user:forbid] 禁用用户
+ * @summary 禁用用户
+ */
+const putAuthUserForbidUserId = (
+    userId: number,
+ ) => {
+      return customInstance<ResultBoolean>(
+      {url: `/auth/user/forbid/${userId}`, method: 'PUT'
+    },
+      );
+    }
+  return {getAuthUserUserIdRoles,getAuthUserUserIdPermissions,putAuthUserUpdateRoles,postAuthUserPages,getAuthUserUserId,putAuthUserForbidUserId}};
 export type GetAuthUserUserIdRolesResult = NonNullable<Awaited<ReturnType<ReturnType<typeof get>['getAuthUserUserIdRoles']>>>
 export type GetAuthUserUserIdPermissionsResult = NonNullable<Awaited<ReturnType<ReturnType<typeof get>['getAuthUserUserIdPermissions']>>>
 export type PutAuthUserUpdateRolesResult = NonNullable<Awaited<ReturnType<ReturnType<typeof get>['putAuthUserUpdateRoles']>>>
 export type PostAuthUserPagesResult = NonNullable<Awaited<ReturnType<ReturnType<typeof get>['postAuthUserPages']>>>
 export type GetAuthUserUserIdResult = NonNullable<Awaited<ReturnType<ReturnType<typeof get>['getAuthUserUserId']>>>
+export type PutAuthUserForbidUserIdResult = NonNullable<Awaited<ReturnType<ReturnType<typeof get>['putAuthUserForbidUserId']>>>

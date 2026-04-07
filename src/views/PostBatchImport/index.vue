@@ -301,9 +301,9 @@
                         <div class="block-header">
                           <el-tag size="small" type="info">
                             {{
-                              block.type === 'text'
+                              block.type === ContentBlockType.TEXT
                                 ? '文本'
-                                : block.type === 'image'
+                                : block.type === ContentBlockType.IMAGE
                                   ? '图片'
                                   : '视频'
                             }}
@@ -320,7 +320,7 @@
                           />
                         </div>
                         <el-input
-                          v-if="block.type === 'text'"
+                          v-if="block.type === ContentBlockType.TEXT"
                           v-model="block.content"
                           type="textarea"
                           :autosize="{ minRows: 2, maxRows: 8 }"
@@ -441,6 +441,7 @@ import {
   parseRawDataToResult,
 } from '@/api/coze'
 import type { RewriteResult } from '@/api/coze'
+import { ContentBlockType } from '@/api/generated/.ts.schemas'
 import type {
   PostPublishRequest,
   ContentBlock,

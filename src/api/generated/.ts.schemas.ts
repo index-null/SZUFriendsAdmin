@@ -2592,9 +2592,9 @@ export type ContentBlockType = typeof ContentBlockType[keyof typeof ContentBlock
 
 
 export const ContentBlockType = {
-  text: 'text',
-  image: 'image',
-  video: 'video',
+  TEXT: 'TEXT',
+  IMAGE: 'IMAGE',
+  VIDEO: 'VIDEO',
 } as const;
 
 export interface ContentBlock {
@@ -2609,44 +2609,23 @@ export interface ContentBlock {
    * @maxLength 5000
    */
   content?: string;
-  /**
-   * 资源URL（type=image/video时使用）
-资源URL（当type=image或video时使用）
-   * @nullable
-   */
-  url?: string | null;
-  /**
-   * 缩略图URL（type=image时使用）
-缩略图URL（仅当type=image时使用）
-   * @nullable
-   */
-  thumbnail?: string | null;
-  /**
-   * 宽度（像素）
-   * @nullable
-   */
-  width?: number | null;
-  /**
-   * 高度（像素）
-   * @nullable
-   */
-  height?: number | null;
-  /**
-   * 文件大小（字节）
-   * @nullable
-   */
-  fileSize?: number | null;
-  /**
-   * 视频封面URL（type=video时使用）
-视频封面URL（仅当type=video时使用）
-   * @nullable
-   */
-  coverUrl?: string | null;
-  /**
-   * 视频时长（秒）
-   * @nullable
-   */
-  duration?: number | null;
+  /** 资源URL（type=image/video时使用）
+资源URL（当type=image或video时使用） */
+  url?: string;
+  /** 缩略图URL（type=image时使用）
+缩略图URL（仅当type=image时使用） */
+  thumbnail?: string;
+  /** 宽度（像素） */
+  width?: number;
+  /** 高度（像素） */
+  height?: number;
+  /** 文件大小（字节） */
+  fileSize?: number;
+  /** 视频封面URL（type=video时使用）
+视频封面URL（仅当type=video时使用） */
+  coverUrl?: string;
+  /** 视频时长（秒） */
+  duration?: number;
 }
 
 export interface ClassQueryRequest {
@@ -3191,6 +3170,12 @@ export interface UserPagesRequest {
   size?: number;
   /** 真实姓名 */
   realName?: string;
+  /** 用户类型（1-学生，2-教师，3-校友 4-游客 5-管理员） */
+  userType?: number;
+  /** 状态（0-禁用，1-启用） */
+  status?: number;
+  /** 手机号 */
+  phone?: string;
 }
 
 export interface ResultOperationLogEntity {
@@ -3462,6 +3447,17 @@ export interface ResultPageResultFeedbackResponse {
   timestamp?: number;
 }
 
+export interface ResultPostPublishRequest {
+  /** 响应状态码 */
+  code?: number;
+  /** 响应消息 */
+  message?: string;
+  /** 响应数据 */
+  data?: PostPublishRequest;
+  /** 时间戳 */
+  timestamp?: number;
+}
+
 export interface ResultBoolean {
   /** 响应状态码 */
   code?: number;
@@ -3679,6 +3675,15 @@ export interface FeedbackPageRequest {
   /** 是否星标（0-否，1-是）
 是否星标 */
   star?: number;
+}
+
+export interface PostGenerateRequest {
+  /** 帖子提示词（主题/需求描述） */
+  prompt: string;
+  /** 模板编码（不传则由AI自动从启用模板中选择） */
+  templateCode?: string;
+  /** 图片链接列表（可选，若传入则会生成image内容块） */
+  imageUrls?: string[];
 }
 
 export interface RegisterRequest {
@@ -4076,6 +4081,8 @@ export interface NoAdminUserPageResponse {
   phone?: string;
   /** 当前工作单位 */
   companyName?: string;
+  /** 状态（0-禁用，1-启用） */
+  status?: number;
   /** 校友档案信息 */
   alumniInfos?: AlumniPageResponse[];
 }
@@ -5051,13 +5058,6 @@ export type GetManagerAlumniNameParams = {
 name: string;
 };
 
-export type PostAgentPostGenerateParams = {
-/**
- * 帖子主题 帖子主题
- */
-topic: string;
-};
-
 export type PostAgentFormatParams = {
 /**
  * 姓名 姓名
@@ -5104,6 +5104,13 @@ export type PostAgentChatParams = {
 message: string;
 };
 
+export type PostAgentPostTagsGenerateParams = {
+/**
+ * 帖子内容提示词 帖子内容提示词
+ */
+content: string;
+};
+
 export type GetManagerDictCheckParams = {
 /**
  * 字典类型
@@ -5120,6 +5127,54 @@ dictType: string;
  * 字典项名称
  */
 label: string;
+};
+
+export type PostAuthUserPages200DataRecordsItemAlumniInfosItem = {
+  id: number;
+  name: string;
+  number: string;
+  identity: number;
+  grade: number;
+  alumniType: number;
+  collegeName: string;
+  collegeId: number;
+  className: string;
+  classId: number;
+  major: string;
+  status: number;
+};
+
+export type PostAuthUserPages200DataRecordsItem = {
+  id: number;
+  username: string;
+  realName: string;
+  gender: number;
+  /** @nullable */
+  avatar: string | null;
+  userType: number;
+  /** @nullable */
+  email: string | null;
+  phone: string;
+  /** @nullable */
+  companyName: string | null;
+  status: number;
+  alumniInfos: PostAuthUserPages200DataRecordsItemAlumniInfosItem[];
+};
+
+export type PostAuthUserPages200Data = {
+  records: PostAuthUserPages200DataRecordsItem[];
+  total: number;
+  current: number;
+  size: number;
+  pages: number;
+};
+
+export type PostAuthUserPages200 = {
+  code: number;
+  message: string;
+  data: PostAuthUserPages200Data;
+  timestamp: number;
+  success: boolean;
 };
 
 export type GetCommunityPostsLikedParams = {
