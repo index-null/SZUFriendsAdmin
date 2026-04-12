@@ -68,7 +68,7 @@
             >
           </template>
         </el-table-column>
-        <el-table-column label="操作" width="260" align="center" fixed="right">
+        <el-table-column label="操作" width="340" align="center" fixed="right">
           <template #default="{ row }">
             <el-button
               v-if="hasPermission('admin-user:details')"
@@ -87,6 +87,15 @@
               link
               @click="handleEdit(row)"
               >编辑</el-button
+            >
+            <el-button
+              v-if="hasPermission('user:assign-role')"
+              type="warning"
+              size="small"
+              :icon="Setting"
+              link
+              @click="handleAssignRole(row)"
+              >分配角色</el-button
             >
             <el-button
               v-if="hasPermission('admin-user:reset-password')"
@@ -223,6 +232,41 @@
         >
       </template>
     </el-dialog>
+
+    <!-- 分配角色对话框 -->
+    <el-dialog
+      v-model="roleDialogVisible"
+      title="分配角色"
+      width="500px"
+      :close-on-click-modal="false"
+    >
+      <el-form :model="roleForm" label-width="80px">
+        <el-form-item label="用户名">
+          <el-text>{{ roleForm.username }}</el-text>
+        </el-form-item>
+        <el-form-item label="选择角色">
+          <el-checkbox-group v-model="roleForm.roleIds">
+            <el-checkbox
+              v-for="role in allRoles"
+              :key="role.id"
+              :label="role.id"
+              :value="role.id"
+            >
+              {{ role.roleName }}
+            </el-checkbox>
+          </el-checkbox-group>
+        </el-form-item>
+      </el-form>
+      <template #footer>
+        <el-button @click="roleDialogVisible = false">取消</el-button>
+        <el-button
+          type="primary"
+          :loading="roleSubmitting"
+          @click="handleSaveRoles"
+          >确定</el-button
+        >
+      </template>
+    </el-dialog>
   </div>
 </template>
 
@@ -236,18 +280,25 @@ import {
   Edit,
   Lock,
   User,
+  Setting,
 } from '@element-plus/icons-vue'
 import { usePermission, useDict } from '@/stores'
 import { DICT_TYPE } from '@/utils/dict'
 import { useCollegeMap } from '@/composables/useCollegeMap'
 import { get as getAdminApi } from '@/api/generated/管理员管理/管理员管理'
+import { get as getUserApi } from '@/api/generated/用户管理/用户管理'
+import { get as getRoleApi } from '@/api/generated/用户认证控制器-角色管理/用户认证控制器-角色管理'
 import type {
   AdminUserPageResponse,
   AdminUserDetailsResponse,
   AdminUserUpdateRequest,
+  RoleResponse,
+  UpdateUserRolesRequest,
 } from '@/api/generated/.ts.schemas'
 
 const adminApi = getAdminApi()
+const userApi = getUserApi()
+const roleApi = getRoleApi()
 
 const { hasPermission } = usePermission()
 
@@ -310,6 +361,16 @@ const editFormRules = {
 }
 
 const submitting = ref(false)
+
+// 角色分配
+const roleDialogVisible = ref(false)
+const roleForm = reactive({
+  userId: 0,
+  username: '',
+  roleIds: [] as number[],
+})
+const allRoles = ref<RoleResponse[]>([])
+const roleSubmitting = ref(false)
 
 // 获取管理员列表
 const fetchAdminList = async () => {
@@ -430,6 +491,61 @@ const handleSaveEdit = async () => {
   })
 }
 
+// 获取所有角色
+const fetchAllRoles = async () => {
+  try {
+    const response = await roleApi.getAuthRoleList()
+    if (response && Array.isArray(response)) {
+      allRoles.value = response.sort(
+        (a, b) => (a.sortOrder ?? 0) - (b.sortOrder ?? 0),
+      )
+    }
+  } catch (error) {
+    console.error('获取角色列表失败:', error)
+  }
+}
+
+// 分配角色
+const handleAssignRole = async (row: AdminUserPageResponse) => {
+  if (!row.id) return
+  try {
+    const response = await userApi.getAuthUserUserIdRoles(row.id)
+    if (response && Array.isArray(response)) {
+      roleForm.userId = row.id
+      roleForm.username = row.username || ''
+      roleForm.roleIds = response
+        .map((role) => role.id)
+        .filter((id): id is number => id !== undefined)
+      roleDialogVisible.value = true
+    } else {
+      ElMessage.error('获取用户角色失败')
+    }
+  } catch (error) {
+    console.error('获取用户角色失败:', error)
+    ElMessage.error('获取用户角色失败')
+  }
+}
+
+// 保存角色
+const handleSaveRoles = async () => {
+  roleSubmitting.value = true
+  try {
+    const request: UpdateUserRolesRequest = {
+      userId: roleForm.userId,
+      roleIds: roleForm.roleIds,
+    }
+    await userApi.putAuthUserUpdateRoles(request)
+    ElMessage.success('角色分配成功')
+    roleDialogVisible.value = false
+    fetchAdminList()
+  } catch (error) {
+    console.error('角色分配失败:', error)
+    ElMessage.error('角色分配失败')
+  } finally {
+    roleSubmitting.value = false
+  }
+}
+
 // 重置密码
 const handleResetPassword = async (row: AdminUserPageResponse) => {
   if (!row.id) return
@@ -477,6 +593,7 @@ const getCollegeTag = (collegeId?: number) => {
 onMounted(() => {
   if (hasPermission('admin-user:page')) {
     fetchAdminList()
+    fetchAllRoles()
   } else {
     ElMessage.warning('您没有权限访问管理员管理')
   }

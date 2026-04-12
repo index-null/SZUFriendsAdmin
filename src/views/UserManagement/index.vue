@@ -77,7 +77,7 @@
             </el-tag>
           </template>
         </el-table-column>
-        <el-table-column label="操作" width="340" align="center" fixed="right">
+        <el-table-column label="操作" width="260" align="center" fixed="right">
           <template #default="{ row }">
             <el-button
               v-if="hasPermission('user:view')"
@@ -87,24 +87,6 @@
               link
               @click="handleView(row)"
               >查看</el-button
-            >
-            <el-button
-              v-if="hasPermission('user:assign-role')"
-              type="warning"
-              size="small"
-              :icon="Setting"
-              link
-              @click="handleAssignRole(row)"
-              >分配角色</el-button
-            >
-            <el-button
-              v-if="hasPermission('user:reset-password')"
-              type="danger"
-              size="small"
-              :icon="Lock"
-              link
-              @click="handleResetPassword(row)"
-              >重置密码</el-button
             >
             <el-button
               v-if="hasPermission('user:change-status') && row.status === 1"
@@ -145,38 +127,6 @@
       v-model:visible="detailDrawerVisible"
       :user-detail="currentUser"
     />
-
-    <!-- 分配角色对话框 -->
-    <el-dialog
-      v-model="roleDialogVisible"
-      title="分配角色"
-      width="500px"
-      :close-on-click-modal="false"
-    >
-      <el-form :model="roleForm" label-width="80px">
-        <el-form-item label="用户名">
-          <el-text>{{ roleForm.username }}</el-text>
-        </el-form-item>
-        <el-form-item label="选择角色">
-          <el-checkbox-group v-model="roleForm.roleIds">
-            <el-checkbox
-              v-for="role in allRoles"
-              :key="role.id"
-              :label="role.id"
-              :value="role.id"
-            >
-              {{ role.roleName }}
-            </el-checkbox>
-          </el-checkbox-group>
-        </el-form-item>
-      </el-form>
-      <template #footer>
-        <el-button @click="roleDialogVisible = false">取消</el-button>
-        <el-button type="primary" :loading="submitting" @click="handleSaveRoles"
-          >确定</el-button
-        >
-      </template>
-    </el-dialog>
   </div>
 </template>
 
@@ -187,8 +137,6 @@ import {
   Search,
   RefreshRight,
   View,
-  Setting,
-  Lock,
   User,
   CircleClose,
   CircleCheck,
@@ -196,14 +144,11 @@ import {
 import { usePermission, useDict } from '@/stores'
 import { DICT_TYPE } from '@/utils/dict'
 import { get as getUserApi } from '@/api/generated/用户管理/用户管理'
-import { get as getRoleApi } from '@/api/generated/用户认证控制器-角色管理/用户认证控制器-角色管理'
 import UserDetailDrawer from './components/UserDetailDrawer.vue'
 import type {
   PostAuthUserPages200DataRecordsItem,
   UserPagesRequest,
   UserInfoResponse,
-  RoleResponse,
-  UpdateUserRolesRequest,
   AlumniPageResponse,
 } from '@/api/generated/.ts.schemas'
 
@@ -220,7 +165,6 @@ const { getLabel: getGenderLabel } = useDict(DICT_TYPE.GENDER)
 
 // API 实例
 const userApi = getUserApi()
-const roleApi = getRoleApi()
 
 // 搜索表单
 const searchForm = reactive({
@@ -241,16 +185,6 @@ const loading = ref(false)
 // 用户详情
 const detailDrawerVisible = ref(false)
 const currentUser = ref<UserDetailType | null>(null)
-
-// 角色分配
-const roleDialogVisible = ref(false)
-const roleForm = reactive({
-  userId: 0,
-  username: '',
-  roleIds: [] as number[],
-})
-const allRoles = ref<RoleResponse[]>([])
-const submitting = ref(false)
 
 // 获取用户列表
 const fetchUserList = async () => {
@@ -279,20 +213,6 @@ const fetchUserList = async () => {
     pagination.total = 0
   } finally {
     loading.value = false
-  }
-}
-
-// 获取所有角色
-const fetchAllRoles = async () => {
-  try {
-    const response = await roleApi.getAuthRoleList()
-    if (response && Array.isArray(response)) {
-      allRoles.value = response.sort(
-        (a, b) => (a.sortOrder ?? 0) - (b.sortOrder ?? 0),
-      )
-    }
-  } catch (error) {
-    console.error('获取角色列表失败:', error)
   }
 }
 
@@ -343,75 +263,6 @@ const handleView = async (row: PostAuthUserPages200DataRecordsItem) => {
   }
 }
 
-// 分配角色
-const handleAssignRole = async (row: PostAuthUserPages200DataRecordsItem) => {
-  if (!row.id) return
-  try {
-    // UnwrapResult 自动解包: ResultListRoleResponse -> RoleResponse[]
-    const response = await userApi.getAuthUserUserIdRoles(row.id)
-    if (response && Array.isArray(response)) {
-      roleForm.userId = row.id
-      roleForm.username = row.username || ''
-      roleForm.roleIds = response
-        .map((role) => role.id)
-        .filter((id): id is number => id !== undefined)
-      roleDialogVisible.value = true
-    } else {
-      ElMessage.error('获取用户角色失败')
-    }
-  } catch (error) {
-    console.error('获取用户角色失败:', error)
-    ElMessage.error('获取用户角色失败')
-  }
-}
-
-// 保存角色
-const handleSaveRoles = async () => {
-  submitting.value = true
-  try {
-    const request: UpdateUserRolesRequest = {
-      userId: roleForm.userId,
-      roleIds: roleForm.roleIds,
-    }
-    await userApi.putAuthUserUpdateRoles(request)
-    // 更新成功
-    ElMessage.success('角色分配成功')
-    roleDialogVisible.value = false
-    fetchUserList()
-  } catch (error) {
-    console.error('角色分配失败:', error)
-    ElMessage.error('角色分配失败')
-  } finally {
-    submitting.value = false
-  }
-}
-
-// 重置密码
-const handleResetPassword = async (
-  row: PostAuthUserPages200DataRecordsItem,
-) => {
-  if (!row.id) return
-  try {
-    await ElMessageBox.confirm(
-      `确定要重置用户 "${row.username}" 的密码吗？密码将被重置为默认密码。`,
-      '重置密码',
-      {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning',
-      },
-    )
-
-    // TODO: 等待后端提供重置密码接口
-    // await userApi.putAuthUserUserIdResetPassword(row.id)
-    ElMessage.warning('重置密码功能暂未开放，请联系管理员')
-  } catch (error) {
-    if (error !== 'cancel') {
-      console.error('密码重置失败:', error)
-    }
-  }
-}
-
 // 改变用户状态
 const handleChangeStatus = async (
   row: PostAuthUserPages200DataRecordsItem,
@@ -456,7 +307,6 @@ const getUserTypeTag = (type?: number) => {
 onMounted(() => {
   if (hasPermission('user:page')) {
     fetchUserList()
-    fetchAllRoles()
   } else {
     ElMessage.warning('您没有权限访问用户管理')
   }
