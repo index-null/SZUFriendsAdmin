@@ -36,6 +36,7 @@ export default {
           'css-backdrop-filter', // 忽略backdrop-filter警告
           'css-math-functions', // 忽略CSS数学函数警告
           'css3-cursors', // 忽略CSS3光标警告
+          'css3-cursors-grab', // 忽略 grab/grabbing 光标警告
         ],
         ignorePartialSupport: true,
         severity: 'warning', // 改为警告而不是错误

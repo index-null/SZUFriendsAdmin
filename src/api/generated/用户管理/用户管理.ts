@@ -14,6 +14,7 @@ import type {
   PostAuthUserPages200,
   ResultBoolean,
   ResultListPermissionTreeNodeResponse,
+  ResultListPublishPostUserInfoResponse,
   ResultListRoleResponse,
   ResultUserInfoResponse,
   UpdateUserRolesRequest,
@@ -114,10 +115,24 @@ const putAuthUserStatusUserIdStatus = (
     },
       );
     }
-  return {getAuthUserUserIdRoles,getAuthUserUserIdPermissions,putAuthUserUpdateRoles,postAuthUserPages,getAuthUserUserId,putAuthUserStatusUserIdStatus}};
+  /**
+ * 获取后台发帖用户
+获取后台发帖用户
+ * @summary 获取后台发帖用户
+ */
+const getAuthUserPublishPost = (
+    
+ ) => {
+      return customInstance<ResultListPublishPostUserInfoResponse>(
+      {url: `/auth/user/publish-post`, method: 'GET'
+    },
+      );
+    }
+  return {getAuthUserUserIdRoles,getAuthUserUserIdPermissions,putAuthUserUpdateRoles,postAuthUserPages,getAuthUserUserId,putAuthUserStatusUserIdStatus,getAuthUserPublishPost}};
 export type GetAuthUserUserIdRolesResult = NonNullable<Awaited<ReturnType<ReturnType<typeof get>['getAuthUserUserIdRoles']>>>
 export type GetAuthUserUserIdPermissionsResult = NonNullable<Awaited<ReturnType<ReturnType<typeof get>['getAuthUserUserIdPermissions']>>>
 export type PutAuthUserUpdateRolesResult = NonNullable<Awaited<ReturnType<ReturnType<typeof get>['putAuthUserUpdateRoles']>>>
 export type PostAuthUserPagesResult = NonNullable<Awaited<ReturnType<ReturnType<typeof get>['postAuthUserPages']>>>
 export type GetAuthUserUserIdResult = NonNullable<Awaited<ReturnType<ReturnType<typeof get>['getAuthUserUserId']>>>
 export type PutAuthUserStatusUserIdStatusResult = NonNullable<Awaited<ReturnType<ReturnType<typeof get>['putAuthUserStatusUserIdStatus']>>>
+export type GetAuthUserPublishPostResult = NonNullable<Awaited<ReturnType<ReturnType<typeof get>['getAuthUserPublishPost']>>>

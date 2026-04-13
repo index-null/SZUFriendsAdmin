@@ -14,6 +14,7 @@ import type {
   GetCommunityPostsLikedParams,
   GetCommunityPostsPostsParams,
   GetCommunityPostsPublishedParams,
+  PostPublishAdminRequest,
   PostPublishRequest,
   PostQueryRequest,
   ResultListLong,
@@ -253,7 +254,23 @@ const postCommunityPostsRobotBatch = (
     },
       );
     }
-  return {getCommunityPostsTemplatesTemplateCode,postCommunityPosts,getCommunityPostsPostId,putCommunityPostsPostId,deleteCommunityPostsPostId,postCommunityPostsPage,putCommunityPostsPostIdTop,putCommunityPostsPostIdUntop,postCommunityPostsPostIdLike,deleteCommunityPostsPostIdLike,getCommunityPostsLiked,getCommunityPostsPublished,postCommunityPostsPostIdShare,getCommunityPostsPosts,postCommunityPostsRobotBatch}};
+  /**
+ * 管理员选择 特定用户 发布帖子
+管理员选择特定用户发布帖子
+管理员选择特定用户发布帖子，支持图文混排
+ * @summary 管理员选择特定用户发布帖子
+ */
+const postCommunityPostsAdmin = (
+    postPublishAdminRequest: PostPublishAdminRequest,
+ ) => {
+      return customInstance<ResultLong>(
+      {url: `/community/posts/admin`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: postPublishAdminRequest
+    },
+      );
+    }
+  return {getCommunityPostsTemplatesTemplateCode,postCommunityPosts,getCommunityPostsPostId,putCommunityPostsPostId,deleteCommunityPostsPostId,postCommunityPostsPage,putCommunityPostsPostIdTop,putCommunityPostsPostIdUntop,postCommunityPostsPostIdLike,deleteCommunityPostsPostIdLike,getCommunityPostsLiked,getCommunityPostsPublished,postCommunityPostsPostIdShare,getCommunityPostsPosts,postCommunityPostsRobotBatch,postCommunityPostsAdmin}};
 export type GetCommunityPostsTemplatesTemplateCodeResult = NonNullable<Awaited<ReturnType<ReturnType<typeof get>['getCommunityPostsTemplatesTemplateCode']>>>
 export type PostCommunityPostsResult = NonNullable<Awaited<ReturnType<ReturnType<typeof get>['postCommunityPosts']>>>
 export type GetCommunityPostsPostIdResult = NonNullable<Awaited<ReturnType<ReturnType<typeof get>['getCommunityPostsPostId']>>>
@@ -269,3 +286,4 @@ export type GetCommunityPostsPublishedResult = NonNullable<Awaited<ReturnType<Re
 export type PostCommunityPostsPostIdShareResult = NonNullable<Awaited<ReturnType<ReturnType<typeof get>['postCommunityPostsPostIdShare']>>>
 export type GetCommunityPostsPostsResult = NonNullable<Awaited<ReturnType<ReturnType<typeof get>['getCommunityPostsPosts']>>>
 export type PostCommunityPostsRobotBatchResult = NonNullable<Awaited<ReturnType<ReturnType<typeof get>['postCommunityPostsRobotBatch']>>>
+export type PostCommunityPostsAdminResult = NonNullable<Awaited<ReturnType<ReturnType<typeof get>['postCommunityPostsAdmin']>>>

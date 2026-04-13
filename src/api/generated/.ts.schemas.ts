@@ -1843,6 +1843,15 @@ export interface ResultListLong {
   timestamp?: number;
 }
 
+export interface PublishPostUserInfoResponse {
+  /** 用户ID */
+  id?: number;
+  /** 昵称 */
+  nickname?: string;
+  /** 头像URL */
+  avatar?: string;
+}
+
 export interface ResultString {
   /** 响应状态码 */
   code?: number;
@@ -2441,6 +2450,17 @@ export interface SubmitFeedbackRequest {
   /** 图片列表（可选）
 图片 URL 列表 */
   images?: string[];
+}
+
+export interface ResultListPublishPostUserInfoResponse {
+  /** 响应状态码 */
+  code?: number;
+  /** 响应消息 */
+  message?: string;
+  /** 响应数据 */
+  data?: PublishPostUserInfoResponse[];
+  /** 时间戳 */
+  timestamp?: number;
 }
 
 export interface PermissionTreeNodeResponse {
@@ -3456,6 +3476,41 @@ export interface ResultPostPublishRequest {
   data?: PostPublishRequest;
   /** 时间戳 */
   timestamp?: number;
+}
+
+export interface PostPublishAdminRequest {
+  /**
+   * 帖子标题
+   * @maxLength 100
+   */
+  title: string;
+  /**
+   * 封面图片
+   * @maxLength 500
+   */
+  cover?: string;
+  /**
+   * 内容块数组
+   * @minItems 1
+   * @maxItems 20
+   */
+  contentBlocks: ContentBlock[];
+  /** 所属班级ID */
+  classId?: number;
+  /** 帖子类型/模板编码（如：NORMAL-普通动态，MARKET-闲置集市，ACTIVITY-活动招募等） */
+  postType: string;
+  /** 扩展字段，TemplateFieldInfo为字段信息，TemplateFieldInfo.value是值 */
+  extendedFields?: TemplateFieldInfo[];
+  /** 发帖地点 */
+  location?: string;
+  /** 经度 */
+  longitude?: number;
+  /** 纬度 */
+  latitude?: number;
+  /** 标签列表，获取标签项在字典（post_tag） */
+  tags?: string[];
+  /** 特定用户id */
+  userId?: number;
 }
 
 export interface ResultBoolean {

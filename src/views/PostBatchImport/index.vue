@@ -291,48 +291,8 @@
                     </el-select>
                   </el-form-item>
 
-                  <el-form-item label="内容块">
-                    <div class="content-blocks-editor">
-                      <div
-                        v-for="(block, bIndex) in item.result.contentBlocks"
-                        :key="bIndex"
-                        class="block-item"
-                      >
-                        <div class="block-header">
-                          <el-tag size="small" type="info">
-                            {{
-                              block.type === ContentBlockType.TEXT
-                                ? '文本'
-                                : block.type === ContentBlockType.IMAGE
-                                  ? '图片'
-                                  : '视频'
-                            }}
-                          </el-tag>
-                          <span class="block-order">{{
-                            block.order || bIndex + 1
-                          }}</span>
-                          <el-button
-                            type="danger"
-                            size="small"
-                            :icon="Delete"
-                            circle
-                            @click="removeBlock(item.result!, bIndex)"
-                          />
-                        </div>
-                        <el-input
-                          v-if="block.type === ContentBlockType.TEXT"
-                          v-model="block.content"
-                          type="textarea"
-                          :autosize="{ minRows: 2, maxRows: 8 }"
-                          resize="vertical"
-                        />
-                        <el-input
-                          v-else
-                          v-model="block.url"
-                          placeholder="资源 URL"
-                        />
-                      </div>
-                    </div>
+                  <el-form-item label="内容块" class="content-blocks-form-item">
+                    <ContentBlockEditor v-model="item.result.contentBlocks" />
                   </el-form-item>
                 </el-form>
 
@@ -441,11 +401,11 @@ import {
   parseRawDataToResult,
 } from '@/api/coze'
 import type { RewriteResult } from '@/api/coze'
-import { ContentBlockType } from '@/api/generated/.ts.schemas'
 import type {
   PostPublishRequest,
   ContentBlock,
 } from '@/api/generated/.ts.schemas'
+import ContentBlockEditor from '@/components/ContentBlockEditor.vue'
 
 const router = useRouter()
 const postApi = getPostApi()
@@ -555,14 +515,6 @@ const handleSelectAll = (val: boolean | string | number) => {
     if (item.result) {
       item.selected = !!val
     }
-  })
-}
-
-const removeBlock = (result: RewriteResult, blockIndex: number) => {
-  result.contentBlocks.splice(blockIndex, 1)
-  // 重新编号
-  result.contentBlocks.forEach((block, i) => {
-    block.order = i + 1
   })
 }
 
@@ -1141,39 +1093,10 @@ $gap: 12px;
   }
 }
 
-// 内容块编辑器
-.content-blocks-editor {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  width: 100%;
-}
-
-.block-item {
-  background: #f9fafb;
-  border-radius: 6px;
-  padding: 10px;
-  border: 1px solid #e4e7ed;
-
-  html.dark & {
-    background: #1a1a1a;
-    border-color: #363636;
-  }
-
-  .block-header {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    margin-bottom: 8px;
-
-    .block-order {
-      font-size: 12px;
-      color: #909399;
-    }
-
-    .el-button {
-      margin-left: auto;
-    }
+// 内容块编辑器（全宽覆盖）
+.content-blocks-form-item {
+  :deep(.el-form-item__content) {
+    display: block;
   }
 }
 

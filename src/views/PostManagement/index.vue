@@ -65,6 +65,13 @@
         <div class="filter-right">
           <ViewModeToggle v-model="viewMode" />
           <el-button :icon="RefreshRight" @click="handleReset">重置</el-button>
+          <el-button
+            type="primary"
+            :icon="EditPen"
+            @click="adminPostDialogVisible = true"
+          >
+            管理员发帖
+          </el-button>
         </div>
       </div>
     </el-card>
@@ -469,6 +476,9 @@
         </div>
       </div>
     </el-drawer>
+
+    <!-- 管理员发帖弹窗 -->
+    <AdminPostDialog v-model="adminPostDialogVisible" @success="fetchPosts" />
   </div>
 </template>
 
@@ -488,12 +498,14 @@ import {
   Bottom,
   Delete,
   Location,
+  EditPen,
 } from '@element-plus/icons-vue'
 import { useDict } from '@/stores'
 import { DICT_TYPE } from '@/utils/dict'
 import { get as getPostApi } from '@/api/generated/帖子管理/帖子管理'
 import ContentBlockRenderer from '@/components/ContentBlockRenderer.vue'
 import ViewModeToggle from '@/components/ViewModeToggle.vue'
+import AdminPostDialog from './AdminPostDialog.vue'
 import type {
   PostResponse,
   PostQueryRequest,
@@ -503,6 +515,7 @@ import type {
 const postApi = getPostApi()
 
 const viewMode = ref<'table' | 'card'>('table')
+const adminPostDialogVisible = ref(false)
 
 // 使用字典
 const { getLabel: getTagLabel, dictOptions: tagOptions } = useDict(
