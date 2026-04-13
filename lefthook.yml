@@ -1,0 +1,26 @@
+pre-commit:
+  parallel: true
+  commands:
+    eslint:
+      glob: "*.{js,jsx,ts,tsx,vue}"
+      run: pnpm exec eslint --fix {staged_files}
+      stage_fixed: true
+    prettier-scripts:
+      glob: "*.{js,jsx,ts,tsx,vue}"
+      run: pnpm exec prettier --write {staged_files}
+      stage_fixed: true
+    prettier-assets:
+      glob: "*.{json,md,css,scss,html}"
+      run: pnpm exec prettier --write {staged_files}
+      stage_fixed: true
+    stylelint:
+      glob: "*.{css,scss,vue}"
+      run: pnpm exec stylelint --fix {staged_files}
+      stage_fixed: true
+    type-check:
+      run: pnpm run type-check
+
+commit-msg:
+  commands:
+    valid:
+      run: echo "commit message ok"
