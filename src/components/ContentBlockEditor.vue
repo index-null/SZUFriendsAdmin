@@ -24,13 +24,13 @@
                     (v: ContentBlockType) => changeBlockType(index, v)
                   "
                 >
-                  <el-radio-button :value="ContentBlockType.TEXT"
+                  <el-radio-button :value="ContentBlockType.text"
                     >文本</el-radio-button
                   >
-                  <el-radio-button :value="ContentBlockType.IMAGE"
+                  <el-radio-button :value="ContentBlockType.image"
                     >图片</el-radio-button
                   >
-                  <el-radio-button :value="ContentBlockType.VIDEO"
+                  <el-radio-button :value="ContentBlockType.video"
                     >视频</el-radio-button
                   >
                 </el-radio-group>
@@ -63,7 +63,7 @@
 
               <!-- 文本块 -->
               <el-input
-                v-if="item.block.type === ContentBlockType.TEXT"
+                v-if="item.block.type === ContentBlockType.text"
                 :model-value="item.block.content"
                 type="textarea"
                 :autosize="{ minRows: 3, maxRows: 12 }"
@@ -76,7 +76,7 @@
 
               <!-- 图片块 -->
               <div
-                v-else-if="item.block.type === ContentBlockType.IMAGE"
+                v-else-if="item.block.type === ContentBlockType.image"
                 class="cbe-media-block"
               >
                 <div v-if="item.block.url" class="cbe-media-preview">
@@ -122,7 +122,7 @@
 
               <!-- 视频块 -->
               <div
-                v-else-if="item.block.type === ContentBlockType.VIDEO"
+                v-else-if="item.block.type === ContentBlockType.video"
                 class="cbe-media-block"
               >
                 <div
@@ -177,7 +177,7 @@
           <el-button
             plain
             size="small"
-            @click="addBlock(ContentBlockType.TEXT)"
+            @click="addBlock(ContentBlockType.text)"
           >
             <el-icon><Document /></el-icon>
             添加文本
@@ -185,7 +185,7 @@
           <el-button
             plain
             size="small"
-            @click="addBlock(ContentBlockType.IMAGE)"
+            @click="addBlock(ContentBlockType.image)"
           >
             <el-icon><Picture /></el-icon>
             添加图片
@@ -193,7 +193,7 @@
           <el-button
             plain
             size="small"
-            @click="addBlock(ContentBlockType.VIDEO)"
+            @click="addBlock(ContentBlockType.video)"
           >
             <el-icon><VideoPlay /></el-icon>
             添加视频
@@ -293,7 +293,7 @@ const previewBlocks = computed<ContentBlock[]>(() =>
   internalBlocks.value
     .filter((item) => {
       const b = item.block
-      if (b.type === ContentBlockType.TEXT) return !!b.content?.trim()
+      if (b.type === ContentBlockType.text) return !!b.content?.trim()
       return !!b.url
     })
     .map((item) => item.block),
@@ -306,7 +306,7 @@ const addBlock = (type: ContentBlockType) => {
     block: {
       type,
       order: internalBlocks.value.length + 1,
-      content: type === ContentBlockType.TEXT ? '' : undefined,
+      content: type === ContentBlockType.text ? '' : undefined,
       url: undefined,
     },
     uploading: false,
@@ -348,9 +348,9 @@ const changeBlockType = (index: number, type: ContentBlockType) => {
     ...item.block,
     type,
     content:
-      type === ContentBlockType.TEXT ? (item.block.content ?? '') : undefined,
+      type === ContentBlockType.text ? (item.block.content ?? '') : undefined,
     url:
-      type !== ContentBlockType.TEXT
+      type !== ContentBlockType.text
         ? (item.block.url ?? undefined)
         : undefined,
   }
@@ -378,7 +378,7 @@ const handleFileChange = async (index: number, event: Event) => {
   if (!file) return
 
   const isVideo =
-    internalBlocks.value[index]?.block.type === ContentBlockType.VIDEO
+    internalBlocks.value[index]?.block.type === ContentBlockType.video
   const maxMB = isVideo ? 100 : 10
   if (file.size > maxMB * 1024 * 1024) {
     ElMessage.error(`文件大小不能超过 ${maxMB}MB`)

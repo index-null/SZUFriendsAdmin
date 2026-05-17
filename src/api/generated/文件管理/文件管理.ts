@@ -11,6 +11,7 @@ import type {
 } from 'axios';
 
 import type {
+  PostManagerFileDeleteBody,
   PostManagerFileUploadBody,
   PostManagerFileUploadParams,
   ResultString,
@@ -59,6 +60,20 @@ const getManagerFileDownloadFileKey = (
     },
       );
     }
-  return {postManagerFileUpload,getManagerFileDownloadFileKey}};
+  /**
+ * @summary 删除 cos上的文件
+ */
+const postManagerFileDelete = (
+    postManagerFileDeleteBody: PostManagerFileDeleteBody,
+ ) => {
+      return customInstance<ResultVoid>(
+      {url: `/manager/file/delete`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: postManagerFileDeleteBody
+    },
+      );
+    }
+  return {postManagerFileUpload,getManagerFileDownloadFileKey,postManagerFileDelete}};
 export type PostManagerFileUploadResult = NonNullable<Awaited<ReturnType<ReturnType<typeof get>['postManagerFileUpload']>>>
 export type GetManagerFileDownloadFileKeyResult = NonNullable<Awaited<ReturnType<ReturnType<typeof get>['getManagerFileDownloadFileKey']>>>
+export type PostManagerFileDeleteResult = NonNullable<Awaited<ReturnType<ReturnType<typeof get>['postManagerFileDelete']>>>

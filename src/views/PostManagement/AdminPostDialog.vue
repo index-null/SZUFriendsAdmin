@@ -177,7 +177,7 @@ const publishUsers = ref<PublishPostUserInfoResponse[]>([])
 const coverInputRef = ref<HTMLInputElement>()
 
 const defaultBlocks = (): ContentBlock[] => [
-  { type: ContentBlockType.TEXT, order: 1, content: '' },
+  { type: ContentBlockType.text, order: 1, content: '' },
 ]
 
 const form = reactive({
@@ -200,7 +200,7 @@ const rules: FormRules = {
     {
       validator: (_rule, value: ContentBlock[], callback) => {
         const valid = value.filter((b) =>
-          b.type === ContentBlockType.TEXT ? !!b.content?.trim() : !!b.url,
+          b.type === ContentBlockType.text ? !!b.content?.trim() : !!b.url,
         )
         if (valid.length === 0) {
           callback(new Error('至少需要一个有内容的块'))
@@ -271,13 +271,13 @@ const handleSubmit = async () => {
 
   // 过滤空 blocks
   const contentBlocks = form.contentBlocks.filter((b) =>
-    b.type === ContentBlockType.TEXT ? !!b.content?.trim() : !!b.url,
+    b.type === ContentBlockType.text ? !!b.content?.trim() : !!b.url,
   )
 
   // 封面：有则用，无则取第一张图片 block 的 url
   const cover =
     form.cover ||
-    contentBlocks.find((b) => b.type === ContentBlockType.IMAGE)?.url ||
+    contentBlocks.find((b) => b.type === ContentBlockType.image)?.url ||
     undefined
 
   submitting.value = true

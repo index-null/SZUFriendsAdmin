@@ -11,6 +11,7 @@ import type {
 } from 'axios';
 
 import type {
+  MapString,
   ResultBoolean,
   ResultProfileResponse,
   UpdateProfileRequest
@@ -22,6 +23,20 @@ import { customInstance } from '../../mutator';
 
   export const get = (axiosInstance: AxiosInstance = axios.default) => {
 /**
+ * 多媒体内容安全识别(异步)
+ * @summary 提交修改头像
+ */
+const postAuthProfileAvatar = (
+    mapString: MapString,
+ ) => {
+      return customInstance<ResultBoolean>(
+      {url: `/auth/profile/avatar`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: mapString
+    },
+      );
+    }
+  /**
  * 用户资料 + 校友信息
  * @summary 获取个人资料
  */
@@ -34,7 +49,7 @@ const getAuthProfile = (
       );
     }
   /**
- * @summary 修改个人资料
+ * @summary 修改个人资料(文本)
  */
 const postAuthProfile = (
     updateProfileRequest: UpdateProfileRequest,
@@ -46,6 +61,7 @@ const postAuthProfile = (
     },
       );
     }
-  return {getAuthProfile,postAuthProfile}};
+  return {postAuthProfileAvatar,getAuthProfile,postAuthProfile}};
+export type PostAuthProfileAvatarResult = NonNullable<Awaited<ReturnType<ReturnType<typeof get>['postAuthProfileAvatar']>>>
 export type GetAuthProfileResult = NonNullable<Awaited<ReturnType<ReturnType<typeof get>['getAuthProfile']>>>
 export type PostAuthProfileResult = NonNullable<Awaited<ReturnType<ReturnType<typeof get>['postAuthProfile']>>>

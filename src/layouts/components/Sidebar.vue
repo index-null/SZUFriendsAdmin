@@ -142,7 +142,9 @@
           <el-sub-menu
             v-if="
               hasPermission('feedback:page') ||
-              hasPermission('operation-log:page')
+              hasPermission('operation-log:page') ||
+              hasPermission('score-rule:page') ||
+              hasPermission('score-log:page')
             "
             index="ops-management"
           >
@@ -163,6 +165,20 @@
             >
               <el-icon><Tickets /></el-icon>
               <template #title>操作日志</template>
+            </el-menu-item>
+            <el-menu-item
+              v-if="hasPermission('score-rule:page')"
+              index="/score-rule-management"
+            >
+              <el-icon><Setting /></el-icon>
+              <template #title>积分规则配置</template>
+            </el-menu-item>
+            <el-menu-item
+              v-if="hasPermission('score-log:page')"
+              index="/score-log-management"
+            >
+              <el-icon><Wallet /></el-icon>
+              <template #title>积分流水查询</template>
             </el-menu-item>
           </el-sub-menu>
 
@@ -259,6 +275,7 @@ import {
   Upload,
   Suitcase,
   SuitcaseLine,
+  Wallet,
 } from '@element-plus/icons-vue'
 import { usePermission } from '@/stores'
 

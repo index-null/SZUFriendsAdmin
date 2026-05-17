@@ -25,6 +25,9 @@ const RecommendManagement = () =>
   import('../views/RecommendManagement/index.vue')
 const PostBatchImport = () => import('../views/PostBatchImport/index.vue')
 const FeedbackManagement = () => import('../views/FeedbackManagement/index.vue')
+const ScoreRuleManagement = () =>
+  import('../views/ScoreRuleManagement/index.vue')
+const ScoreLogManagement = () => import('../views/ScoreLogManagement/index.vue')
 const Profile = () => import('../views/Profile/index.vue')
 const NotFound = () => import('../views/NotFound.vue')
 
@@ -265,6 +268,30 @@ const routes: RouteRecordRaw[] = [
       requiresAuth: true,
       permission: 'feedback:page',
       showInMenu: true,
+    },
+  },
+  // 积分规则管理
+  {
+    path: '/score-rule-management',
+    name: 'ScoreRuleManagement',
+    component: ScoreRuleManagement,
+    meta: {
+      title: '积分规则配置',
+      requiresAuth: true,
+      permission: 'score-rule:page',
+      showInMenu: false, // 不在主菜单显示，放在子菜单中
+    },
+  },
+  // 积分流水查询
+  {
+    path: '/score-log-management',
+    name: 'ScoreLogManagement',
+    component: ScoreLogManagement,
+    meta: {
+      title: '积分流水查询',
+      requiresAuth: true,
+      permission: 'score-log:page',
+      showInMenu: false, // 不在主菜单显示，放在子菜单中
     },
   },
   // 个人资料

@@ -27,7 +27,7 @@
             >
               <el-avatar
                 :size="120"
-                :src="formData.avatar"
+                :src="avatarUrl"
                 class="profile-avatar"
                 :class="{
                   'avatar-dragging': isDragging,
@@ -437,16 +437,16 @@ const editMode = reactive({
   bio: false,
 })
 
-// 头像上传相关状态
+// 头像相关
+const avatarUrl = ref('') // 单独存储头像 URL
 const fileInputRef = ref<HTMLInputElement>()
 const uploadingAvatar = ref(false)
 const uploadProgress = ref(0)
 const isDragging = ref(false)
 
-// 表单数据
+// 表单数据（不包含 avatar）
 const formData = ref<UpdateProfileRequest & { username?: string }>({
   nickname: '',
-  avatar: '',
   email: '',
   phone: '',
   gender: 0,
@@ -479,10 +479,12 @@ const loadProfile = async () => {
     const data = (await profileApi.getAuthProfile()) as ProfileResponse
 
     if (data?.userInfo) {
+      // 设置头像 URL（单独管理）
+      avatarUrl.value = data.userInfo.avatar || ''
+
       // 设置基本信息
       formData.value = {
         nickname: data.userInfo.nickname || '',
-        avatar: data.userInfo.avatar || '',
         email: data.userInfo.email || '',
         phone: data.userInfo.phone || '',
         gender: data.userInfo.gender || 0,
@@ -580,10 +582,10 @@ const handleFileUpload = async (file: File) => {
     uploadProgress.value = 100
 
     // 更新头像 URL
-    formData.value.avatar = uploadedUrl
+    avatarUrl.value = uploadedUrl
 
-    // 保存到后端
-    await profileApi.postAuthProfile({
+    // 保存到后端（使用专门的头像上传 API）
+    await profileApi.postAuthProfileAvatar({
       avatar: uploadedUrl,
     })
 
@@ -635,10 +637,9 @@ const cancelEdit = (section: keyof typeof editMode) => {
 // 保存资料
 const saveProfile = async () => {
   try {
-    // 准备提交的数据
+    // 准备提交的数据（不包含 avatar，头像使用专门的 API 更新）
     const submitData: UpdateProfileRequest = {
       nickname: formData.value.nickname,
-      avatar: formData.value.avatar,
       email: formData.value.email,
       phone: formData.value.phone,
       gender: formData.value.gender,
@@ -674,7 +675,7 @@ const saveProfile = async () => {
     // 同步更新 userStore 中的关键信息
     userStore.updateUserInfo({
       nickname: submitData.nickname,
-      avatar: submitData.avatar,
+      avatar: avatarUrl.value,
     })
 
     // 关闭所有编辑模式

@@ -1546,7 +1546,32 @@ export interface AlumniPageResponse {
   status?: number;
 }
 
-export interface AlumniLocationResponse {
+/**
+ * 定位类型
+ */
+export type MyLocationResponseLocationType = typeof MyLocationResponseLocationType[keyof typeof MyLocationResponseLocationType];
+
+
+export const MyLocationResponseLocationType = {
+  GPS: 'GPS',
+  BASE_STATION: 'BASE_STATION',
+  WIFI: 'WIFI',
+  MANUAL: 'MANUAL',
+} as const;
+
+/**
+ * 可见级别
+ */
+export type MyLocationResponseVisibilityLevel = typeof MyLocationResponseVisibilityLevel[keyof typeof MyLocationResponseVisibilityLevel];
+
+
+export const MyLocationResponseVisibilityLevel = {
+  PRECISE: 'PRECISE',
+  DISTRICT: 'DISTRICT',
+  CITY: 'CITY',
+} as const;
+
+export interface MyLocationResponse {
   /** 用户ID */
   userId?: number;
   /** 姓名 */
@@ -1555,22 +1580,18 @@ export interface AlumniLocationResponse {
   avatar?: string;
   /** 公司 */
   company?: string;
-  /** 邮箱 */
-  email?: string;
-  /** 手机号 */
-  phone?: string;
   /** 职位 */
   position?: string;
   /** 行业 */
   industry?: string;
-  /** 所属学院ID列表 */
-  collegeIds?: number[];
-  /** 经度（模糊后） */
+  /** 经度（GCJ02坐标系） */
   longitude?: number;
-  /** 纬度（模糊后） */
+  /** 纬度（GCJ02坐标系） */
   latitude?: number;
-  /** 距离（米） */
-  distance?: number;
+  /** 模糊经度 */
+  fuzzyLongitude?: number;
+  /** 模糊纬度 */
+  fuzzyLatitude?: number;
   /** 省份 */
   province?: string;
   /** 城市 */
@@ -1579,6 +1600,14 @@ export interface AlumniLocationResponse {
   district?: string;
   /** 详细地址 */
   address?: string;
+  /** 定位类型 */
+  locationType?: MyLocationResponseLocationType;
+  /** 定位精度（米） */
+  accuracy?: number;
+  /** 是否对外可见 */
+  isVisible?: boolean;
+  /** 可见级别 */
+  visibilityLevel?: MyLocationResponseVisibilityLevel;
 }
 
 export interface UserInfoResponse {
@@ -1610,7 +1639,7 @@ export interface UserInfoResponse {
   industry?: string;
   /** ==================== 位置信息 ====================
 位置信息 */
-  locationResponse?: AlumniLocationResponse;
+  locationResponse?: MyLocationResponse;
   /** 个人简介/一句话介绍 */
   bio?: string;
   /** 生日 */
@@ -1775,6 +1804,68 @@ export interface TopCommentResponse {
   isTopComment?: boolean | null;
 }
 
+export interface AlumniLocationResponse {
+  /** 用户ID */
+  userId?: number;
+  /** 姓名 */
+  name?: string;
+  /** 头像 */
+  avatar?: string;
+  /**
+   * 公司
+   * @nullable
+   */
+  company?: string | null;
+  /**
+   * 邮箱
+   * @nullable
+   */
+  email?: string | null;
+  /** 手机号 */
+  phone?: string;
+  /**
+   * 职位
+   * @nullable
+   */
+  position?: string | null;
+  /**
+   * 行业
+   * @nullable
+   */
+  industry?: string | null;
+  /**
+   * 所属学院ID列表
+   * @nullable
+   */
+  collegeIds?: number[] | null;
+  /** 经度（模糊后） */
+  longitude?: number;
+  /** 纬度（模糊后） */
+  latitude?: number;
+  /**
+   * 距离（米）
+   * @nullable
+   */
+  distance?: number | null;
+  /**
+   * 省份
+   * @nullable
+   */
+  province?: string | null;
+  /**
+   * 城市
+   * @nullable
+   */
+  city?: string | null;
+  /**
+   * 区县
+   * @nullable
+   */
+  district?: string | null;
+  /** 详细地址 */
+  address?: string;
+}
+
 export interface CardResponse {
   /** 是否为好友 */
   isFriend?: boolean;
@@ -1850,6 +1941,59 @@ export interface PublishPostUserInfoResponse {
   nickname?: string;
   /** 头像URL */
   avatar?: string;
+}
+
+export interface ScoreRulePageResponse {
+  /** 主键 ID */
+  id?: number;
+  /** 行为唯一标识 */
+  actionCode?: string;
+  /** 行为中文名称 */
+  actionName?: string;
+  /** 单次变动积分 */
+  score?: number;
+  /** 限制类型：0 无限制 1 每日一次 2 每日限次 3 终身仅一次 */
+  limitType?: number;
+  /** 每日限次时有效，最大可参与次数 */
+  dailyMaxTimes?: number;
+  /** 状态 1 启用 0 关闭 */
+  status?: number;
+  /** 排序序号 */
+  sort?: number;
+  /** 备注 */
+  remark?: string;
+  /** 创建时间 */
+  createTime?: string;
+  /** 更新时间 */
+  updateTime?: string;
+}
+
+export interface ScoreLogPageResponse {
+  /** 流水主键 ID */
+  id?: number;
+  /** 用户 ID */
+  userId?: number;
+  /** 关联行为标识 */
+  actionCode?: string;
+  /** 变动积分 */
+  changeScore?: number;
+  /** 变动后剩余可用积分 */
+  afterScore?: number;
+  /** 关联业务 ID */
+  relationId?: number;
+  /** 流水类型：1 系统奖励 2 积分消耗 3 后台人工操作 */
+  logType?: number;
+  /** 流水备注 */
+  remark?: string;
+  /** 创建时间 */
+  createTime?: string;
+}
+
+export interface ScoreRuleDictResponse {
+  /** 行为唯一标识：例如 post 发帖/share 转发/comment 评论/register 注册 */
+  actionCode?: string;
+  /** 行为中文名称 */
+  actionName?: string;
 }
 
 export interface ResultString {
@@ -2197,8 +2341,6 @@ export interface LocationUpdateRequest {
 export interface UpdateProfileRequest {
   /** 昵称 */
   nickname?: string;
-  /** 头像URL */
-  avatar?: string;
   /** 邮箱 */
   email?: string;
   /** 手机号 */
@@ -2463,6 +2605,65 @@ export interface ResultListPublishPostUserInfoResponse {
   timestamp?: number;
 }
 
+export interface WxMediaCheckDetail {
+  /** 策略类型 */
+  strategy?: string;
+  /** 错误码，仅当该值为 0 时，该项结果有效 */
+  errcode?: number;
+  /** 检测建议
+pass：正常
+risky：违规
+review：疑似违规 */
+  suggest?: string;
+  /** 命中标签枚举值
+100：正常
+20001：时政
+20002：色情
+20006：违法犯罪
+21000：其他 */
+  label?: number;
+  /** 置信度，0-100
+越高代表代表越有可能属于当前返回的标签 */
+  prob?: number;
+}
+
+export interface PageResultScoreRulePageResponse {
+  /** 数据列表 */
+  records?: ScoreRulePageResponse[];
+  /** 总记录数 */
+  total?: number;
+  /** 当前页码 */
+  current?: number;
+  /** 每页大小 */
+  size?: number;
+  /** 总页数 */
+  pages?: number;
+}
+
+export interface PageResultScoreLogPageResponse {
+  /** 数据列表 */
+  records?: ScoreLogPageResponse[];
+  /** 总记录数 */
+  total?: number;
+  /** 当前页码 */
+  current?: number;
+  /** 每页大小 */
+  size?: number;
+  /** 总页数 */
+  pages?: number;
+}
+
+export interface ResultListScoreRuleDictResponse {
+  /** 响应状态码 */
+  code?: number;
+  /** 响应消息 */
+  message?: string;
+  /** 响应数据 */
+  data?: ScoreRuleDictResponse[];
+  /** 时间戳 */
+  timestamp?: number;
+}
+
 export interface PermissionTreeNodeResponse {
   /** 权限ID */
   id?: number;
@@ -2612,9 +2813,9 @@ export type ContentBlockType = typeof ContentBlockType[keyof typeof ContentBlock
 
 
 export const ContentBlockType = {
-  TEXT: 'TEXT',
-  IMAGE: 'IMAGE',
-  VIDEO: 'VIDEO',
+  text: 'text',
+  image: 'image',
+  video: 'video',
 } as const;
 
 export interface ContentBlock {
@@ -2672,9 +2873,32 @@ export interface ResultPageResultAlumniPageResponse {
   timestamp?: number;
 }
 
+export interface UserAvatarAuditEntity {
+  /** 主键ID */
+  id?: number;
+  /** 创建时间 */
+  createTime?: string;
+  /** 更新时间 */
+  updateTime?: string;
+  /** 用户 id */
+  userId?: number;
+  /** 待审核的新头像地址 */
+  tempAvatar?: string;
+  /** 状态（0 - 审核中 1 - 通过 2 - 违规） */
+  status?: number;
+  /** 微信安全识别任务id */
+  traceId?: string;
+  /** 违规状态下 用户是否关闭提示 0 否 1 是 */
+  closed?: number;
+  /** 审核时间 */
+  auditTime?: string;
+}
+
 export interface ProfileResponse {
   /** 用户信息 */
   userInfo?: UserInfoResponse;
+  /** 用户头像审核信息 */
+  avatarAudit?: UserAvatarAuditEntity;
   /** 校友档案信息 */
   alumniInfos?: AlumniPageResponse[];
 }
@@ -2869,6 +3093,51 @@ export interface FeedbackResponse {
   updateTime?: string;
 }
 
+export interface WxMediaCheckResult {
+  /** 综合结果建议
+pass：正常
+risky：违规
+review：疑似违规，需要人工审核 */
+  suggest?: string;
+  /** 命中标签枚举值
+100：正常
+20001：时政
+20002：色情
+20006：违法犯罪
+21000：其他 */
+  label?: number;
+  /** 详细检测结果数组 */
+  detail?: WxMediaCheckDetail[];
+}
+
+export interface ResultPageResultScoreRulePageResponse {
+  /** 响应状态码 */
+  code?: number;
+  /** 响应消息 */
+  message?: string;
+  /** 响应数据 */
+  data?: PageResultScoreRulePageResponse;
+  /** 时间戳 */
+  timestamp?: number;
+}
+
+export interface ScoreLogPagesRequest {
+  /** 当前页码 */
+  current?: number;
+  /** 每页大小 */
+  size?: number;
+  /** 真实姓名 */
+  realName?: string;
+  /** 行为标识 */
+  actionCode?: string;
+  /** 流水类型：1 系统奖励 2 积分消耗 3 后台人工操作 */
+  logType?: number;
+  /** 开始时间 */
+  startTime?: string;
+  /** 结束时间 */
+  endTime?: string;
+}
+
 export interface ResultLoginResponse {
   /** 响应状态码 */
   code?: number;
@@ -2912,6 +3181,8 @@ export interface ClassPagesRequest {
 
 export interface MapString {
   key?: string;
+  /** 头像 URL */
+  avatar?: string;
 }
 
 export interface ResultPageResultUserPageVO {
@@ -3166,6 +3437,43 @@ export interface PageResultFeedbackResponse {
   pages?: number;
 }
 
+export interface WxMediaCheckPushResult {
+  /** 小程序的 username */
+  ToUserName?: string;
+  /** 平台推送服务 UserName */
+  FromUserName?: string;
+  /** 发送时间（时间戳） */
+  CreateTime?: number;
+  /** 消息类型，默认为：event */
+  MsgType?: string;
+  /** 事件类型，默认为：wxa_media_check */
+  Event?: string;
+  /** 小程序的 appid */
+  appid?: string;
+  /** 任务 id，用于匹配单次请求 */
+  trace_id?: string;
+  /** 接口版本号，可用于区分接口版本 */
+  version?: number;
+  /** 错误码，仅当该值为 0 时，结果有效
+-1008 表示下载媒体文件失败 */
+  errcode?: number;
+  /** 检测结果（综合结果） */
+  result?: WxMediaCheckResult;
+}
+
+export interface ScoreRulePagesRequest {
+  /** 当前页码 */
+  current?: number;
+  /** 每页大小 */
+  size?: number;
+  /** 行为中文名称 */
+  actionName?: string;
+  /** 0 无限制 1 每日一次 2 每日限次 3 终身仅一次 */
+  limitType?: number;
+  /** 状态 1 启用 0 关闭 */
+  status?: number;
+}
+
 export interface LoginRequest {
   /** 用户名 */
   username?: string;
@@ -3173,6 +3481,17 @@ export interface LoginRequest {
   password?: string;
   /** 微信小程序登录凭证 */
   wxMpCode?: string;
+}
+
+export interface ResultBoolean {
+  /** 响应状态码 */
+  code?: number;
+  /** 响应消息 */
+  message?: string;
+  /** 响应数据 */
+  data?: boolean;
+  /** 时间戳 */
+  timestamp?: number;
 }
 
 export interface MimeType {
@@ -3286,8 +3605,11 @@ export interface PostResponse {
   createTime?: string;
   /** 昵称 */
   nickname?: string;
-  /** 头像URL */
-  avatar?: string;
+  /**
+   * 头像URL
+   * @nullable
+   */
+  avatar?: string | null;
   /** 用户类型（1-学生，2-教师，3-校友 4-游客 5-管理员） */
   userType?: number;
   /**
@@ -3513,17 +3835,6 @@ export interface PostPublishAdminRequest {
   userId?: number;
 }
 
-export interface ResultBoolean {
-  /** 响应状态码 */
-  code?: number;
-  /** 响应消息 */
-  message?: string;
-  /** 响应数据 */
-  data?: boolean;
-  /** 时间戳 */
-  timestamp?: number;
-}
-
 export interface ResultListString {
   /** 响应状态码 */
   code?: number;
@@ -3741,6 +4052,25 @@ export interface PostGenerateRequest {
   imageUrls?: string[];
 }
 
+export interface CreateScoreRuleRequest {
+  /** 行为唯一标识：例如 post 发帖/share 转发/comment 评论/register 注册 */
+  actionCode: string;
+  /** 行为中文名称 */
+  actionName: string;
+  /** 单次变动积分，正数 */
+  score: number;
+  /** 0 无限制 1 每日一次 2 每日限次 3 终身仅一次 */
+  limitType: number;
+  /** 每日限次时有效，最大可参与次数，0=不限制 */
+  dailyMaxTimes: number;
+  /** 状态 1 启用 0 关闭 */
+  status: number;
+  /** 排序序号 */
+  sort: number;
+  /** 备注 */
+  remark?: string;
+}
+
 export interface RegisterRequest {
   /** 用户名（登录账号） */
   username: string;
@@ -3816,70 +4146,6 @@ export interface ResultListAlumniLocationResponse {
   timestamp?: number;
 }
 
-/**
- * 定位类型
- */
-export type MyLocationResponseLocationType = typeof MyLocationResponseLocationType[keyof typeof MyLocationResponseLocationType];
-
-
-export const MyLocationResponseLocationType = {
-  GPS: 'GPS',
-  BASE_STATION: 'BASE_STATION',
-  WIFI: 'WIFI',
-  MANUAL: 'MANUAL',
-} as const;
-
-/**
- * 可见级别
- */
-export type MyLocationResponseVisibilityLevel = typeof MyLocationResponseVisibilityLevel[keyof typeof MyLocationResponseVisibilityLevel];
-
-
-export const MyLocationResponseVisibilityLevel = {
-  PRECISE: 'PRECISE',
-  DISTRICT: 'DISTRICT',
-  CITY: 'CITY',
-} as const;
-
-export interface MyLocationResponse {
-  /** 用户ID */
-  userId?: number;
-  /** 姓名 */
-  name?: string;
-  /** 头像 */
-  avatar?: string;
-  /** 公司 */
-  company?: string;
-  /** 职位 */
-  position?: string;
-  /** 行业 */
-  industry?: string;
-  /** 经度（GCJ02坐标系） */
-  longitude?: number;
-  /** 纬度（GCJ02坐标系） */
-  latitude?: number;
-  /** 模糊经度 */
-  fuzzyLongitude?: number;
-  /** 模糊纬度 */
-  fuzzyLatitude?: number;
-  /** 省份 */
-  province?: string;
-  /** 城市 */
-  city?: string;
-  /** 区县 */
-  district?: string;
-  /** 详细地址 */
-  address?: string;
-  /** 定位类型 */
-  locationType?: MyLocationResponseLocationType;
-  /** 定位精度（米） */
-  accuracy?: number;
-  /** 是否对外可见 */
-  isVisible?: boolean;
-  /** 可见级别 */
-  visibilityLevel?: MyLocationResponseVisibilityLevel;
-}
-
 export interface PageResultAuthRequestPageResponse {
   /** 数据列表 */
   records?: AuthRequestPageResponse[];
@@ -3924,6 +4190,27 @@ export interface ResultFeedbackResponse {
   data?: FeedbackResponse;
   /** 时间戳 */
   timestamp?: number;
+}
+
+export interface UpdateScoreRuleRequest {
+  /** 主键 ID */
+  id: number;
+  /** 行为唯一标识：例如 post 发帖/share 转发/comment 评论/register 注册 */
+  actionCode: string;
+  /** 行为中文名称 */
+  actionName: string;
+  /** 单次变动积分，正数 */
+  score: number;
+  /** 0 无限制 1 每日一次 2 每日限次 3 终身仅一次 */
+  limitType: number;
+  /** 每日限次时有效，最大可参与次数，0=不限制 */
+  dailyMaxTimes: number;
+  /** 状态 1 启用 0 关闭 */
+  status: number;
+  /** 排序序号 */
+  sort: number;
+  /** 备注 */
+  remark?: string;
 }
 
 export interface DictItemEntity {
@@ -5326,6 +5613,10 @@ export type PostManagerFileUploadBody = {
   file?: Blob;
 };
 
+export type PostManagerFileDeleteBody = {
+  cosKey?: string;
+};
+
 export type PostCommunityPostsModerationPostIdApproveParams = {
 /**
  * 通过原因 通过原因
@@ -5380,5 +5671,35 @@ export type PostCommunityFeedbackFeedbackIdReplyParams = {
  * 回复内容 回复内容
  */
 replyContent: string;
+};
+
+export type PostAuthTestWxCheckTextSecurityParams = {
+content: string;
+openid: string;
+};
+
+export type PostAuthTestWxCheckMediaSecurityParams = {
+mediaUrl: string;
+mediaType: number;
+openid: string;
+};
+
+export type GetCommunityWxCallbackParams = {
+/**
+ * 签名
+ */
+signature: string;
+/**
+ * 时间戳
+ */
+timestamp: string;
+/**
+ * 随机数
+ */
+nonce: string;
+/**
+ * 随机字符串
+ */
+echostr: string;
 };
 
