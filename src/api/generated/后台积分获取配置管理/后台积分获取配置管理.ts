@@ -87,17 +87,17 @@ const deleteManagerScoreRuleId = (
 获取所有的积分规则标识 - 名称字典
  * @summary 获取所有的积分规则标识 - 名称字典
  */
-const postManagerScoreRuleDict = (
+const getManagerScoreRuleDict = (
     
  ) => {
       return customInstance<ResultListScoreRuleDictResponse>(
-      {url: `/manager/score-rule/dict`, method: 'POST'
+      {url: `/manager/score-rule/dict`, method: 'GET'
     },
       );
     }
-  return {postManagerScoreRulePage,postManagerScoreRule,putManagerScoreRule,deleteManagerScoreRuleId,postManagerScoreRuleDict}};
+  return {postManagerScoreRulePage,postManagerScoreRule,putManagerScoreRule,deleteManagerScoreRuleId,getManagerScoreRuleDict}};
 export type PostManagerScoreRulePageResult = NonNullable<Awaited<ReturnType<ReturnType<typeof get>['postManagerScoreRulePage']>>>
 export type PostManagerScoreRuleResult = NonNullable<Awaited<ReturnType<ReturnType<typeof get>['postManagerScoreRule']>>>
 export type PutManagerScoreRuleResult = NonNullable<Awaited<ReturnType<ReturnType<typeof get>['putManagerScoreRule']>>>
 export type DeleteManagerScoreRuleIdResult = NonNullable<Awaited<ReturnType<ReturnType<typeof get>['deleteManagerScoreRuleId']>>>
-export type PostManagerScoreRuleDictResult = NonNullable<Awaited<ReturnType<ReturnType<typeof get>['postManagerScoreRuleDict']>>>
+export type GetManagerScoreRuleDictResult = NonNullable<Awaited<ReturnType<ReturnType<typeof get>['getManagerScoreRuleDict']>>>

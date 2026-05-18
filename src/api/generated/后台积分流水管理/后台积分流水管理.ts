@@ -11,7 +11,9 @@ import type {
 } from 'axios';
 
 import type {
+  ManualScoreOperationRequest,
   PageResultScoreLogPageResponse,
+  ResultBoolean,
   ScoreLogPagesRequest
 } from '../.ts.schemas';
 
@@ -35,5 +37,22 @@ const postManagerScoreLogPage = (
     },
       );
     }
-  return {postManagerScoreLogPage}};
+  /**
+ * 后台手工触发积分变更
+注：实际积分校验与落账由 ScoreOperationAspect 在权限校验后统一执行。
+后台手工触发积分变更
+ * @summary 后台手工触发积分变更
+ */
+const postManagerScoreLogOperate = (
+    manualScoreOperationRequest: ManualScoreOperationRequest,
+ ) => {
+      return customInstance<ResultBoolean>(
+      {url: `/manager/score-log/operate`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: manualScoreOperationRequest
+    },
+      );
+    }
+  return {postManagerScoreLogPage,postManagerScoreLogOperate}};
 export type PostManagerScoreLogPageResult = NonNullable<Awaited<ReturnType<ReturnType<typeof get>['postManagerScoreLogPage']>>>
+export type PostManagerScoreLogOperateResult = NonNullable<Awaited<ReturnType<ReturnType<typeof get>['postManagerScoreLogOperate']>>>

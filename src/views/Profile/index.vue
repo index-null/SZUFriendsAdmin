@@ -587,7 +587,7 @@ const handleFileUpload = async (file: File) => {
     // 保存到后端（使用专门的头像上传 API）
     await profileApi.postAuthProfileAvatar({
       avatar: uploadedUrl,
-    })
+    } as any)
 
     ElMessage.success('头像更新成功')
 
@@ -726,6 +726,7 @@ html.dark .profile-page {
   margin: 0 0 8px 0;
   background: linear-gradient(135deg, var(--brand-primary) 0%, #990033 100%);
   -webkit-background-clip: text;
+  -moz-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
@@ -733,6 +734,7 @@ html.dark .profile-page {
 html.dark .page-title {
   background: linear-gradient(135deg, #409eff 0%, #67c23a 100%);
   -webkit-background-clip: text;
+  -moz-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }

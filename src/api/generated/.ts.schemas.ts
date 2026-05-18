@@ -1989,11 +1989,15 @@ export interface ScoreLogPageResponse {
   createTime?: string;
 }
 
-export interface ScoreRuleDictResponse {
-  /** 行为唯一标识：例如 post 发帖/share 转发/comment 评论/register 注册 */
-  actionCode?: string;
-  /** 行为中文名称 */
-  actionName?: string;
+export interface UserScoreSummaryResponse {
+  /** 用户ID */
+  userId?: number;
+  /** 当前可用积分 */
+  availableScore?: number;
+  /** 累计获得积分 */
+  totalIncome?: number;
+  /** 累计消耗积分 */
+  totalExpend?: number;
 }
 
 export interface ResultString {
@@ -2653,13 +2657,13 @@ export interface PageResultScoreLogPageResponse {
   pages?: number;
 }
 
-export interface ResultListScoreRuleDictResponse {
+export interface ResultUserScoreSummaryResponse {
   /** 响应状态码 */
   code?: number;
   /** 响应消息 */
   message?: string;
   /** 响应数据 */
-  data?: ScoreRuleDictResponse[];
+  data?: UserScoreSummaryResponse;
   /** 时间戳 */
   timestamp?: number;
 }
@@ -3181,8 +3185,6 @@ export interface ClassPagesRequest {
 
 export interface MapString {
   key?: string;
-  /** 头像 URL */
-  avatar?: string;
 }
 
 export interface ResultPageResultUserPageVO {
@@ -3835,6 +3837,26 @@ export interface PostPublishAdminRequest {
   userId?: number;
 }
 
+export interface ManualScoreOperationRequest {
+  /** 积分归属用户ID */
+  userId: number;
+  /** 关联业务ID，默认0 */
+  relationId?: number;
+  /** 积分流水备注 */
+  remark?: string;
+}
+
+export interface ResultPageResultScoreLogPageResponse {
+  /** 响应状态码 */
+  code?: number;
+  /** 响应消息 */
+  message?: string;
+  /** 响应数据 */
+  data?: PageResultScoreLogPageResponse;
+  /** 时间戳 */
+  timestamp?: number;
+}
+
 export interface ResultListString {
   /** 响应状态码 */
   code?: number;
@@ -4057,7 +4079,7 @@ export interface CreateScoreRuleRequest {
   actionCode: string;
   /** 行为中文名称 */
   actionName: string;
-  /** 单次变动积分，正数 */
+  /** 单次变动积分（正数表示加分，负数表示减分，不能为0） */
   score: number;
   /** 0 无限制 1 每日一次 2 每日限次 3 终身仅一次 */
   limitType: number;
@@ -4069,6 +4091,21 @@ export interface CreateScoreRuleRequest {
   sort: number;
   /** 备注 */
   remark?: string;
+}
+
+export interface UserScoreLogPageRequest {
+  /** 当前页码 */
+  current?: number;
+  /** 每页大小 */
+  size?: number;
+  /** 行为标识 */
+  actionCode?: string;
+  /** 流水类型：1 系统奖励 2 积分消耗 3 后台人工操作 */
+  logType?: number;
+  /** 开始时间 */
+  startTime?: string;
+  /** 结束时间 */
+  endTime?: string;
 }
 
 export interface RegisterRequest {
@@ -4199,7 +4236,7 @@ export interface UpdateScoreRuleRequest {
   actionCode: string;
   /** 行为中文名称 */
   actionName: string;
-  /** 单次变动积分，正数 */
+  /** 单次变动积分（正数表示加分，负数表示减分，不能为0） */
   score: number;
   /** 0 无限制 1 每日一次 2 每日限次 3 终身仅一次 */
   limitType: number;
@@ -4509,6 +4546,13 @@ export interface TemplateConfigRequest {
   isEnabled?: boolean;
 }
 
+export interface ScoreRuleDictResponse {
+  /** 行为唯一标识：例如 post 发帖/share 转发/comment 评论/register 注册 */
+  actionCode?: string;
+  /** 行为中文名称 */
+  actionName?: string;
+}
+
 export interface GrantPermissionsRequest {
   /** 角色ID */
   roleId: number;
@@ -4636,6 +4680,17 @@ export interface PageResultFriendRequestResponse {
   size?: number;
   /** 总页数 */
   pages?: number;
+}
+
+export interface ResultListScoreRuleDictResponse {
+  /** 响应状态码 */
+  code?: number;
+  /** 响应消息 */
+  message?: string;
+  /** 响应数据 */
+  data?: ScoreRuleDictResponse[];
+  /** 时间戳 */
+  timestamp?: number;
 }
 
 export interface ResultListPermissionTreeNodeResponse {

@@ -83,7 +83,9 @@
           align="center"
         >
           <template #default="{ row }">
-            <el-tag type="success">+{{ row.score }}</el-tag>
+            <el-tag :type="row.score > 0 ? 'success' : 'danger'">
+              {{ row.score > 0 ? '+' : '' }}{{ row.score }}
+            </el-tag>
           </template>
         </el-table-column>
         <el-table-column
@@ -199,9 +201,9 @@
         <el-form-item label="单次积分" prop="score">
           <el-input-number
             v-model="form.score"
-            :min="1"
+            :min="-9999"
             :max="9999"
-            placeholder="请输入单次积分"
+            placeholder="正数加分，负数减分，不能为0"
             style="width: 100%"
           />
         </el-form-item>
@@ -333,7 +335,19 @@ const form = reactive<CreateScoreRuleRequest & { id?: number }>({
 const rules = {
   actionCode: [{ required: true, message: '请输入行为标识', trigger: 'blur' }],
   actionName: [{ required: true, message: '请输入行为名称', trigger: 'blur' }],
-  score: [{ required: true, message: '请输入单次积分', trigger: 'blur' }],
+  score: [
+    { required: true, message: '请输入单次积分', trigger: 'blur' },
+    {
+      validator: (_rule: any, value: number, callback: any) => {
+        if (value === 0) {
+          callback(new Error('积分不能为0'))
+        } else {
+          callback()
+        }
+      },
+      trigger: 'blur',
+    },
+  ],
   limitType: [{ required: true, message: '请选择限制类型', trigger: 'change' }],
 }
 

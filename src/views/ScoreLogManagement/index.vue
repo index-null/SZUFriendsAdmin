@@ -234,7 +234,7 @@ const getLogTypeLabel = (type?: number) => {
 // 获取规则字典
 const fetchRuleDict = async () => {
   try {
-    const response = await scoreRuleApi.postManagerScoreRuleDict()
+    const response = await scoreRuleApi.getManagerScoreRuleDict()
     if (response?.length) {
       ruleDict.value = response || []
     }
