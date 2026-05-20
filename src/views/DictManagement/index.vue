@@ -356,8 +356,8 @@ const rules: FormRules = {
   dictType: [
     { required: true, message: '请输入字典类型', trigger: 'blur' },
     {
-      pattern: /^[a-z_]+$/,
-      message: '只能包含小写字母和下划线',
+      pattern: /^[a-zA-Z_]+$/,
+      message: '只能包含英文字母和下划线',
       trigger: 'blur',
     },
   ],
