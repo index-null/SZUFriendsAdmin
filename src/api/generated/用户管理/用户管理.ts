@@ -11,11 +11,13 @@ import type {
 } from 'axios';
 
 import type {
+  CreatePublishPostUserRequest,
   PostAuthUserPages200,
   ResultBoolean,
   ResultListPermissionTreeNodeResponse,
   ResultListPublishPostUserInfoResponse,
   ResultListRoleResponse,
+  ResultPublishPostUserInfoResponse,
   ResultUserInfoResponse,
   UpdateUserRolesRequest,
   UserPagesRequest
@@ -102,16 +104,17 @@ const getAuthUserUserId = (
       );
     }
   /**
- * 改变用户状态
-[user:change-status] 改变用户状态
- * @summary 改变用户状态
+ * 创建后台发帖用户
+创建后台发帖用户
+ * @summary 创建后台发帖用户
  */
-const putAuthUserStatusUserIdStatus = (
-    userId: number,
-    status: number,
+const postAuthUserPublishPost = (
+    createPublishPostUserRequest: CreatePublishPostUserRequest,
  ) => {
-      return customInstance<ResultBoolean>(
-      {url: `/auth/user/status/${userId}/${status}`, method: 'PUT'
+      return customInstance<ResultPublishPostUserInfoResponse>(
+      {url: `/auth/user/publish-post`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: createPublishPostUserRequest
     },
       );
     }
@@ -128,11 +131,26 @@ const getAuthUserPublishPost = (
     },
       );
     }
-  return {getAuthUserUserIdRoles,getAuthUserUserIdPermissions,putAuthUserUpdateRoles,postAuthUserPages,getAuthUserUserId,putAuthUserStatusUserIdStatus,getAuthUserPublishPost}};
+  /**
+ * 改变用户状态
+[user:change-status] 改变用户状态
+ * @summary 改变用户状态
+ */
+const putAuthUserStatusUserIdStatus = (
+    userId: number,
+    status: number,
+ ) => {
+      return customInstance<ResultBoolean>(
+      {url: `/auth/user/status/${userId}/${status}`, method: 'PUT'
+    },
+      );
+    }
+  return {getAuthUserUserIdRoles,getAuthUserUserIdPermissions,putAuthUserUpdateRoles,postAuthUserPages,getAuthUserUserId,postAuthUserPublishPost,getAuthUserPublishPost,putAuthUserStatusUserIdStatus}};
 export type GetAuthUserUserIdRolesResult = NonNullable<Awaited<ReturnType<ReturnType<typeof get>['getAuthUserUserIdRoles']>>>
 export type GetAuthUserUserIdPermissionsResult = NonNullable<Awaited<ReturnType<ReturnType<typeof get>['getAuthUserUserIdPermissions']>>>
 export type PutAuthUserUpdateRolesResult = NonNullable<Awaited<ReturnType<ReturnType<typeof get>['putAuthUserUpdateRoles']>>>
 export type PostAuthUserPagesResult = NonNullable<Awaited<ReturnType<ReturnType<typeof get>['postAuthUserPages']>>>
 export type GetAuthUserUserIdResult = NonNullable<Awaited<ReturnType<ReturnType<typeof get>['getAuthUserUserId']>>>
-export type PutAuthUserStatusUserIdStatusResult = NonNullable<Awaited<ReturnType<ReturnType<typeof get>['putAuthUserStatusUserIdStatus']>>>
+export type PostAuthUserPublishPostResult = NonNullable<Awaited<ReturnType<ReturnType<typeof get>['postAuthUserPublishPost']>>>
 export type GetAuthUserPublishPostResult = NonNullable<Awaited<ReturnType<ReturnType<typeof get>['getAuthUserPublishPost']>>>
+export type PutAuthUserStatusUserIdStatusResult = NonNullable<Awaited<ReturnType<ReturnType<typeof get>['putAuthUserStatusUserIdStatus']>>>

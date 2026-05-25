@@ -1973,6 +1973,10 @@ export interface ScoreLogPageResponse {
   id?: number;
   /** 用户 ID */
   userId?: number;
+  /** 真实姓名 */
+  realName?: string;
+  /** 手机号 */
+  phone?: string;
   /** 关联行为标识 */
   actionCode?: string;
   /** 变动积分 */
@@ -1998,6 +2002,27 @@ export interface UserScoreSummaryResponse {
   totalIncome?: number;
   /** 累计消耗积分 */
   totalExpend?: number;
+}
+
+export interface UserScorePageResponse {
+  /** 主键 ID */
+  id?: number;
+  /** 用户 ID */
+  userId?: number;
+  /** 真实姓名 */
+  realName?: string;
+  /** 手机号 */
+  phone?: string;
+  /** 可用积分 */
+  availableScore?: number;
+  /** 累计收入积分 */
+  totalIncome?: number;
+  /** 累计支出积分 */
+  totalExpend?: number;
+  /** 创建时间 */
+  createTime?: string;
+  /** 更新时间 */
+  updateTime?: string;
 }
 
 export interface ResultString {
@@ -2668,6 +2693,30 @@ export interface ResultUserScoreSummaryResponse {
   timestamp?: number;
 }
 
+export interface PageResultUserScorePageResponse {
+  /** 数据列表 */
+  records?: UserScorePageResponse[];
+  /** 总记录数 */
+  total?: number;
+  /** 当前页码 */
+  current?: number;
+  /** 每页大小 */
+  size?: number;
+  /** 总页数 */
+  pages?: number;
+}
+
+export interface ResultPublishPostUserInfoResponse {
+  /** 响应状态码 */
+  code?: number;
+  /** 响应消息 */
+  message?: string;
+  /** 响应数据 */
+  data?: PublishPostUserInfoResponse;
+  /** 时间戳 */
+  timestamp?: number;
+}
+
 export interface PermissionTreeNodeResponse {
   /** 权限ID */
   id?: number;
@@ -3130,8 +3179,12 @@ export interface ScoreLogPagesRequest {
   current?: number;
   /** 每页大小 */
   size?: number;
+  /** 用户ID 第一优先级 从用户积分明细跳转使用 */
+  userId?: number;
   /** 真实姓名 */
   realName?: string;
+  /** 手机号 */
+  phone?: string;
   /** 行为标识 */
   actionCode?: string;
   /** 流水类型：1 系统奖励 2 积分消耗 3 后台人工操作 */
@@ -3140,6 +3193,26 @@ export interface ScoreLogPagesRequest {
   startTime?: string;
   /** 结束时间 */
   endTime?: string;
+}
+
+export interface ResultPageResultUserScorePageResponse {
+  /** 响应状态码 */
+  code?: number;
+  /** 响应消息 */
+  message?: string;
+  /** 响应数据 */
+  data?: PageResultUserScorePageResponse;
+  /** 时间戳 */
+  timestamp?: number;
+}
+
+export interface CreatePublishPostUserRequest {
+  /** 昵称 */
+  nickname?: string;
+  /** 头像 URL */
+  avatar?: string;
+  /** 个人简介 */
+  bio?: string;
 }
 
 export interface ResultLoginResponse {
@@ -3474,6 +3547,17 @@ export interface ScoreRulePagesRequest {
   limitType?: number;
   /** 状态 1 启用 0 关闭 */
   status?: number;
+}
+
+export interface UserScorePagesRequest {
+  /** 当前页码 */
+  current?: number;
+  /** 每页大小 */
+  size?: number;
+  /** 真实姓名 */
+  realName?: string;
+  /** 手机号 */
+  phone?: string;
 }
 
 export interface LoginRequest {

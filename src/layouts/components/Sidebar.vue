@@ -144,7 +144,8 @@
               hasPermission('feedback:page') ||
               hasPermission('operation-log:page') ||
               hasPermission('score-rule:page') ||
-              hasPermission('score-log:page')
+              hasPermission('score-log:page') ||
+              hasPermission('score-user:page')
             "
             index="ops-management"
           >
@@ -179,6 +180,13 @@
             >
               <el-icon><Wallet /></el-icon>
               <template #title>积分流水查询</template>
+            </el-menu-item>
+            <el-menu-item
+              v-if="hasPermission('score-user:page')"
+              index="/user-score-management"
+            >
+              <el-icon><Coin /></el-icon>
+              <template #title>用户积分管理</template>
             </el-menu-item>
           </el-sub-menu>
 
@@ -276,6 +284,7 @@ import {
   Suitcase,
   SuitcaseLine,
   Wallet,
+  Coin,
 } from '@element-plus/icons-vue'
 import { usePermission } from '@/stores'
 

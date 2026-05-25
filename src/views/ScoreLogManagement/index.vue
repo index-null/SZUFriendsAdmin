@@ -11,6 +11,15 @@
             @keyup.enter="handleSearch"
           />
         </el-form-item>
+        <el-form-item label="手机号">
+          <el-input
+            v-model="searchForm.phone"
+            placeholder="请输入手机号"
+            clearable
+            @clear="handleSearch"
+            @keyup.enter="handleSearch"
+          />
+        </el-form-item>
         <el-form-item label="行为标识">
           <el-select
             v-model="searchForm.actionCode"
@@ -85,6 +94,12 @@
           prop="realName"
           label="用户姓名"
           width="120"
+          align="center"
+        />
+        <el-table-column
+          prop="phone"
+          label="手机号"
+          width="150"
           align="center"
         />
         <el-table-column
@@ -172,7 +187,8 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, onMounted } from 'vue'
+import { ref, reactive, onMounted, watch } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus'
 import { Search, RefreshRight } from '@element-plus/icons-vue'
 import { usePermission } from '@/stores'
@@ -190,15 +206,21 @@ const { hasPermission } = usePermission()
 const scoreRuleApi = getScoreRuleApi()
 const scoreLogApi = getScoreLogApi()
 
+// 路由
+const route = useRoute()
+const router = useRouter()
+
 // 规则字典（用于下拉框）
 const ruleDict = ref<ScoreRuleDictResponse[]>([])
 
 // 搜索表单
 const searchForm = reactive({
   realName: '',
+  phone: '',
   actionCode: undefined as string | undefined,
   logType: undefined as number | undefined,
   timeRange: undefined as string[] | undefined,
+  userId: undefined as number | undefined,
 })
 
 // 分页参数
@@ -250,7 +272,9 @@ const fetchLogList = async () => {
     const params: ScoreLogPagesRequest = {
       current: pagination.current,
       size: pagination.size,
+      userId: searchForm.userId,
       realName: searchForm.realName || undefined,
+      phone: searchForm.phone || undefined,
       actionCode: searchForm.actionCode,
       logType: searchForm.logType,
       startTime: searchForm.timeRange ? searchForm.timeRange[0] : undefined,
@@ -286,9 +310,12 @@ const handleSearch = () => {
 // 重置
 const handleReset = () => {
   searchForm.realName = ''
+  searchForm.phone = ''
   searchForm.actionCode = undefined
   searchForm.logType = undefined
   searchForm.timeRange = undefined
+  searchForm.userId = undefined
+  router.replace({ query: {} })
   pagination.current = 1
   fetchLogList()
 }
@@ -305,15 +332,35 @@ const handleCurrentChange = (page: number) => {
   fetchLogList()
 }
 
+// 从路由参数读取 userId
+const loadUserIdFromRoute = () => {
+  const userId = route.query.userId
+  if (userId) {
+    searchForm.userId = Number(userId)
+  } else {
+    searchForm.userId = undefined
+  }
+}
+
 // 初始化
 onMounted(() => {
   if (hasPermission('score-log:page')) {
+    loadUserIdFromRoute()
     fetchRuleDict()
     fetchLogList()
   } else {
     ElMessage.warning('您没有权限访问积分流水管理')
   }
 })
+
+// 监听路由参数变化
+watch(
+  () => route.query.userId,
+  () => {
+    loadUserIdFromRoute()
+    handleSearch()
+  },
+)
 </script>
 
 <style scoped>

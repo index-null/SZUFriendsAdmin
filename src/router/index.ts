@@ -30,6 +30,8 @@ const ScoreRuleManagement = () =>
 const ScoreLogManagement = () => import('../views/ScoreLogManagement/index.vue')
 const Profile = () => import('../views/Profile/index.vue')
 const NotFound = () => import('../views/NotFound.vue')
+const UserScoreManagement = () =>
+  import('../views/UserScoreManagement/index.vue')
 
 /**
  * 路由配置
@@ -292,6 +294,18 @@ const routes: RouteRecordRaw[] = [
       requiresAuth: true,
       permission: 'score-log:page',
       showInMenu: false, // 不在主菜单显示，放在子菜单中
+    },
+  },
+  // 用户积分管理
+  {
+    path: '/user-score-management',
+    name: 'UserScoreManagement',
+    component: UserScoreManagement,
+    meta: {
+      title: '用户积分管理',
+      requiresAuth: true,
+      permission: 'score-user:page',
+      showInMenu: true,
     },
   },
   // 个人资料
