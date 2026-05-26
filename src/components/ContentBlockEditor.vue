@@ -79,21 +79,53 @@
                 v-else-if="item.block.type === ContentBlockType.image"
                 class="cbe-media-block"
               >
-                <div v-if="item.block.url" class="cbe-media-preview">
-                  <img :src="item.block.url" alt="图片预览" />
+                <!-- 已上传：显示图片网格 -->
+                <div
+                  v-if="getBlockUrls(item).length > 0"
+                  class="cbe-media-preview cbe-media-grid-preview"
+                  @dragover.prevent="onDragOver(index, $event)"
+                  @dragleave.prevent="onDragLeave(index, $event)"
+                  @drop.prevent="onDrop(index, $event)"
+                >
+                  <div
+                    v-for="(url, urlIdx) in getBlockUrls(item)"
+                    :key="urlIdx"
+                    class="cbe-media-grid-item"
+                  >
+                    <img :src="url" :alt="`图片 ${urlIdx + 1}`" />
+                    <el-button
+                      class="media-remove-btn"
+                      type="danger"
+                      circle
+                      size="small"
+                      :icon="Close"
+                      @click="removeBlockUrl(index, urlIdx)"
+                    />
+                  </div>
+                  <div class="cbe-media-grid-add" @click="triggerUpload(index)">
+                    <el-icon><Plus /></el-icon>
+                    <span>添加</span>
+                  </div>
                   <el-button
                     class="media-replace-btn"
                     size="small"
                     @click="triggerUpload(index)"
                   >
-                    替换
+                    上传更多
                   </el-button>
                 </div>
+                <!-- 未上传：占位符 + 拖拽支持 -->
                 <div
                   v-else
                   class="cbe-media-placeholder"
-                  :class="{ 'is-uploading': item.uploading }"
+                  :class="{
+                    'is-uploading': item.uploading,
+                    'is-dragover': item.dragover,
+                  }"
                   @click="triggerUpload(index)"
+                  @dragover.prevent="onDragOver(index, $event)"
+                  @dragleave.prevent="onDragLeave(index, $event)"
+                  @drop.prevent="onDrop(index, $event)"
                 >
                   <el-icon v-if="!item.uploading" class="placeholder-icon"
                     ><Picture
@@ -102,10 +134,10 @@
                     ><Loading
                   /></el-icon>
                   <span>{{
-                    item.uploading ? '上传中...' : '点击上传图片'
+                    item.uploading ? '上传中...' : '点击或拖入图片'
                   }}</span>
                   <span class="placeholder-hint"
-                    >支持 JPG / PNG / WebP，单张不超过 10MB</span
+                    >支持 JPG / PNG / WebP，单张不超过 10MB，可多选</span
                   >
                 </div>
                 <input
@@ -115,6 +147,7 @@
                   "
                   type="file"
                   accept="image/*"
+                  multiple
                   style="display: none"
                   @change="(e) => handleFileChange(index, e)"
                 />
@@ -125,24 +158,53 @@
                 v-else-if="item.block.type === ContentBlockType.video"
                 class="cbe-media-block"
               >
+                <!-- 已上传：显示视频网格 -->
                 <div
-                  v-if="item.block.url"
-                  class="cbe-media-preview cbe-video-preview"
+                  v-if="getBlockUrls(item).length > 0"
+                  class="cbe-media-preview cbe-media-grid-preview cbe-video-grid"
+                  @dragover.prevent="onDragOver(index, $event)"
+                  @dragleave.prevent="onDragLeave(index, $event)"
+                  @drop.prevent="onDrop(index, $event)"
                 >
-                  <video :src="item.block.url" controls />
+                  <div
+                    v-for="(url, urlIdx) in getBlockUrls(item)"
+                    :key="urlIdx"
+                    class="cbe-media-grid-item cbe-video-grid-item"
+                  >
+                    <video :src="url" controls preload="metadata" />
+                    <el-button
+                      class="media-remove-btn"
+                      type="danger"
+                      circle
+                      size="small"
+                      :icon="Close"
+                      @click="removeBlockUrl(index, urlIdx)"
+                    />
+                  </div>
+                  <div class="cbe-media-grid-add" @click="triggerUpload(index)">
+                    <el-icon><Plus /></el-icon>
+                    <span>添加</span>
+                  </div>
                   <el-button
                     class="media-replace-btn"
                     size="small"
                     @click="triggerUpload(index)"
                   >
-                    替换
+                    上传更多
                   </el-button>
                 </div>
+                <!-- 未上传：占位符 + 拖拽支持 -->
                 <div
                   v-else
                   class="cbe-media-placeholder"
-                  :class="{ 'is-uploading': item.uploading }"
+                  :class="{
+                    'is-uploading': item.uploading,
+                    'is-dragover': item.dragover,
+                  }"
                   @click="triggerUpload(index)"
+                  @dragover.prevent="onDragOver(index, $event)"
+                  @dragleave.prevent="onDragLeave(index, $event)"
+                  @drop.prevent="onDrop(index, $event)"
                 >
                   <el-icon v-if="!item.uploading" class="placeholder-icon"
                     ><VideoPlay
@@ -151,10 +213,10 @@
                     ><Loading
                   /></el-icon>
                   <span>{{
-                    item.uploading ? '上传中...' : '点击上传视频'
+                    item.uploading ? '上传中...' : '点击或拖入视频'
                   }}</span>
                   <span class="placeholder-hint"
-                    >支持 MP4 / WebM，建议不超过 100MB</span
+                    >支持 MP4 / WebM，建议不超过 100MB，可多选</span
                   >
                 </div>
                 <input
@@ -164,6 +226,7 @@
                   "
                   type="file"
                   accept="video/*"
+                  multiple
                   style="display: none"
                   @change="(e) => handleFileChange(index, e)"
                 />
@@ -230,6 +293,8 @@ import {
   Loading,
   Document,
   Grid,
+  Close,
+  Plus,
 } from '@element-plus/icons-vue'
 import { ElMessage } from 'element-plus'
 import { get as getFileApi } from '@/api/generated/文件管理/文件管理'
@@ -242,6 +307,8 @@ interface InternalItem {
   key: string
   block: ContentBlock
   uploading: boolean
+  dragover: boolean
+  urls: string[] // 支持多个 url（用于一个块上传多个文件）
 }
 
 const props = defineProps<{
@@ -263,7 +330,22 @@ const genKey = () => `k${Date.now()}${keySeq++}`
 const internalBlocks = ref<InternalItem[]>([])
 
 const toInternal = (blocks: ContentBlock[]): InternalItem[] =>
-  blocks.map((b) => ({ key: genKey(), block: { ...b }, uploading: false }))
+  blocks.map((b) => ({
+    key: genKey(),
+    block: { ...b },
+    uploading: false,
+    dragover: false,
+    urls: b.url ? [b.url] : [],
+  }))
+
+// 获取 block 中的所有 url（兼容单 url 和多 urls）
+const getBlockUrls = (item: InternalItem): string[] => {
+  // 优先使用 InternalItem 的 urls 数组
+  if (item.urls && item.urls.length > 0) return item.urls
+  // 兼容旧的单 url 字段
+  if (item.block.url) return [item.block.url]
+  return []
+}
 
 // 初始化 & 外部 v-model 变更同步（仅当外部主动替换整个数组时）
 let skipNextWatch = false
@@ -280,24 +362,57 @@ watch(
 )
 
 // 向外 emit（reorder order 字段）
+// 如果 block 有多个 url，拆分成多个 ContentBlock
 const emitUpdate = () => {
   skipNextWatch = true
-  emit(
-    'update:modelValue',
-    internalBlocks.value.map((item, i) => ({ ...item.block, order: i + 1 })),
-  )
+  const result: ContentBlock[] = []
+  internalBlocks.value.forEach((item) => {
+    const urls =
+      item.urls?.length > 0 ? item.urls : item.block.url ? [item.block.url] : []
+    if (urls.length > 1) {
+      // 多文件：拆分成多个 block
+      urls.forEach((url, _idx) => {
+        result.push({
+          ...item.block,
+          url,
+          order: result.length + 1,
+        })
+      })
+    } else {
+      // 单文件或文本
+      result.push({ ...item.block, order: result.length + 1 })
+    }
+  })
+  emit('update:modelValue', result)
 }
 
-// 预览用 blocks
-const previewBlocks = computed<ContentBlock[]>(() =>
-  internalBlocks.value
-    .filter((item) => {
-      const b = item.block
-      if (b.type === ContentBlockType.text) return !!b.content?.trim()
-      return !!b.url
-    })
-    .map((item) => item.block),
-)
+// 预览用 blocks（多 url 时拆分成多个 block）
+// 每个 block 都正确设置 order，确保与左侧编辑区顺序一致
+const previewBlocks = computed<ContentBlock[]>(() => {
+  const result: ContentBlock[] = []
+  internalBlocks.value.forEach((item) => {
+    const b = item.block
+    if (b.type === ContentBlockType.text) {
+      if (b.content?.trim()) {
+        result.push({ ...b, order: result.length + 1 })
+      }
+    } else {
+      // 媒体块：如果有多个 url，拆分成多个 block
+      const urls = item.urls?.length > 0 ? item.urls : b.url ? [b.url] : []
+      if (urls.length > 0) {
+        urls.forEach((url) => {
+          result.push({
+            ...b,
+            url,
+            content: undefined,
+            order: result.length + 1,
+          })
+        })
+      }
+    }
+  })
+  return result
+})
 
 // ── 操作 ──
 const addBlock = (type: ContentBlockType) => {
@@ -310,6 +425,8 @@ const addBlock = (type: ContentBlockType) => {
       url: undefined,
     },
     uploading: false,
+    dragover: false,
+    urls: [],
   })
   emitUpdate()
 }
@@ -374,30 +491,134 @@ const triggerUpload = (index: number) => {
 
 const handleFileChange = async (index: number, event: Event) => {
   const input = event.target as HTMLInputElement
-  const file = input.files?.[0]
-  if (!file) return
-
-  const isVideo =
-    internalBlocks.value[index]?.block.type === ContentBlockType.video
-  const maxMB = isVideo ? 100 : 10
-  if (file.size > maxMB * 1024 * 1024) {
-    ElMessage.error(`文件大小不能超过 ${maxMB}MB`)
-    return
-  }
+  const files = input.files
+  if (!files || files.length === 0) return
 
   const item = internalBlocks.value[index]
   if (!item) return
+
+  const isVideo = item.block.type === ContentBlockType.video
+  const maxMB = isVideo ? 100 : 10
+
+  // 验证所有文件
+  for (const file of Array.from(files)) {
+    if (file.size > maxMB * 1024 * 1024) {
+      ElMessage.error(`文件 ${file.name} 大小不能超过 ${maxMB}MB`)
+      return
+    }
+  }
+
   item.uploading = true
+  const uploadedUrls: string[] = []
 
   try {
-    const url = await fileApi.postManagerFileUpload({ file })
-    item.block = { ...item.block, url }
+    // 逐个上传文件
+    for (const file of Array.from(files)) {
+      const url = await fileApi.postManagerFileUpload({ file })
+      uploadedUrls.push(url)
+    }
+
+    // 更新 urls 数组
+    if (!item.urls) item.urls = []
+    item.urls = [...item.urls, ...uploadedUrls]
+
+    // 兼容单 url 字段（用于预览等）
+    if (item.urls.length > 0) {
+      item.block = { ...item.block, url: item.urls[0] }
+    }
+
+    emitUpdate()
+  } catch {
+    ElMessage.error('文件上传失败，请重试')
+  } finally {
+    item.uploading = false
+    if (input) input.value = ''
+  }
+}
+
+// ── 拖拽上传 ──
+const onDragOver = (index: number, _event: DragEvent) => {
+  const item = internalBlocks.value[index]
+  if (item) item.dragover = true
+}
+
+const onDragLeave = (index: number, event: DragEvent) => {
+  // 只有当鼠标真正离开元素时才移除效果
+  const relatedTarget = event.relatedTarget as Node | null
+  const target = event.currentTarget as HTMLElement
+  if (!relatedTarget || !target.contains(relatedTarget)) {
+    const item = internalBlocks.value[index]
+    if (item) item.dragover = false
+  }
+}
+
+const onDrop = async (index: number, event: DragEvent) => {
+  const item = internalBlocks.value[index]
+  if (!item) return
+
+  item.dragover = false
+  const files = event.dataTransfer?.files
+  if (!files || files.length === 0) return
+
+  const isVideo = item.block.type === ContentBlockType.video
+  const maxMB = isVideo ? 100 : 10
+
+  // 验证所有文件
+  for (const file of Array.from(files)) {
+    if (file.size > maxMB * 1024 * 1024) {
+      ElMessage.error(`文件 ${file.name} 大小不能超过 ${maxMB}MB`)
+      return
+    }
+    // 检查文件类型
+    if (isVideo && !file.type.startsWith('video/')) {
+      ElMessage.error(`文件 ${file.name} 不是有效的视频文件`)
+      return
+    }
+    if (!isVideo && !file.type.startsWith('image/')) {
+      ElMessage.error(`文件 ${file.name} 不是有效的图片文件`)
+      return
+    }
+  }
+
+  item.uploading = true
+  const uploadedUrls: string[] = []
+
+  try {
+    for (const file of Array.from(files)) {
+      const url = await fileApi.postManagerFileUpload({ file })
+      uploadedUrls.push(url)
+    }
+
+    if (!item.urls) item.urls = []
+    item.urls = [...item.urls, ...uploadedUrls]
+
+    if (item.urls.length > 0) {
+      item.block = { ...item.block, url: item.urls[0] }
+    }
+
     emitUpdate()
   } catch {
     ElMessage.error('文件上传失败，请重试')
   } finally {
     item.uploading = false
   }
+}
+
+// ── 删除某个 url ──
+const removeBlockUrl = (index: number, urlIdx: number) => {
+  const item = internalBlocks.value[index]
+  if (!item || !item.urls) return
+
+  item.urls.splice(urlIdx, 1)
+
+  // 更新 block.url
+  if (item.urls.length > 0) {
+    item.block = { ...item.block, url: item.urls[0] }
+  } else {
+    item.block = { ...item.block, url: undefined }
+  }
+
+  emitUpdate()
 }
 
 // ── Sortable ──
@@ -554,6 +775,12 @@ onBeforeUnmount(() => {
     background: var(--el-color-primary-light-9);
   }
 
+  &.is-dragover {
+    border-color: var(--el-color-primary);
+    background: var(--el-color-primary-light-8);
+    box-shadow: 0 0 0 3px var(--el-color-primary-light-7);
+  }
+
   .placeholder-icon {
     font-size: 26px;
     color: var(--el-text-color-placeholder);
@@ -592,6 +819,7 @@ onBeforeUnmount(() => {
     background: rgba(0, 0, 0, 0.55);
     color: #fff;
     border: none;
+    z-index: 10;
 
     &:hover {
       background: rgba(0, 0, 0, 0.75);
@@ -600,6 +828,81 @@ onBeforeUnmount(() => {
 
   &:hover .media-replace-btn {
     opacity: 1;
+  }
+}
+
+// 多文件网格预览
+.cbe-media-grid-preview {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 8px;
+  min-height: 100px;
+
+  .cbe-media-grid-item {
+    position: relative;
+    width: calc(33.333% - 6px);
+    aspect-ratio: 1;
+    border-radius: 6px;
+    overflow: hidden;
+    border: 1px solid var(--el-border-color-lighter);
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .media-remove-btn {
+      position: absolute;
+      top: 4px;
+      right: 4px;
+      opacity: 0;
+      transition: opacity 0.2s;
+      z-index: 10;
+      padding: 4px;
+    }
+
+    &:hover .media-remove-btn {
+      opacity: 1;
+    }
+  }
+
+  .cbe-media-grid-add {
+    width: calc(33.333% - 6px);
+    aspect-ratio: 1;
+    border: 1.5px dashed var(--el-border-color);
+    border-radius: 6px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    cursor: pointer;
+    transition:
+      border-color 0.2s,
+      background 0.2s;
+    color: var(--el-text-color-placeholder);
+
+    &:hover {
+      border-color: var(--el-color-primary);
+      background: var(--el-color-primary-light-9);
+      color: var(--el-color-primary);
+    }
+
+    .el-icon {
+      font-size: 24px;
+    }
+
+    span {
+      font-size: 12px;
+    }
   }
 }
 
